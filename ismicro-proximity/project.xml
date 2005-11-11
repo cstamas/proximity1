@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project>
+
+  <extend>${basedir}/../ismicro-root/project.xml</extend>
+
+  <!-- a unique name for this project -->
+  <id>ismicro-proximity</id>
+
+  <!-- a short but descriptive name for the project -->
+  <name>ISmicro Proximity</name>
+
+  <!-- The version of the project under development -->
+  <currentVersion>1.0.0-SNAPSHOT</currentVersion>
+
+  <!-- the year the project started -->
+  <inceptionYear>2005</inceptionYear>
+
+  <package>hu.ismicro.commons.proximity</package>
+
+  <logo/>
+
+  <url>https://is-micro.myip.hu/projects/ismicro-commons/proximity/</url>
+  <issueTrackingUrl>mailto:office@is-micro.hu</issueTrackingUrl>
+  <siteAddress>is-micro.myip.hu</siteAddress>
+  <siteDirectory>/srv/projects/ismicro-commons/www/proximity</siteDirectory>
+  <distributionDirectory>/srv/projects/ismicro-commons/deploy/proximity</distributionDirectory>
+
+  <repository>
+    <connection>scm:svn:${maven.username}@https://is-micro.myip.hu/repos/ismicro/trunk/ismicro-proximity/</connection>
+    <developerConnection>scm:svn:${maven.username}@https://is-micro.myip.hu/repos/ismicro/trunk/ismicro-proximity/</developerConnection>
+    <url>https://is-micro.myip.hu/viewcvs/ismicro/trunk/ismicro-proximity/</url>
+  </repository>
+
+  <!-- jar files the project is dependent on -->
+  <dependencies/>
+
+  <!-- build information for the project -->
+  <build/>
+  
+  <reports>
+     <report>maven-multiproject-plugin</report>
+     <report>maven-changes-plugin</report>
+     <report>maven-changelog-plugin</report>
+     <report>maven-developer-activity-plugin</report>
+     <report>maven-file-activity-plugin</report>
+     <report>maven-license-plugin</report>
+     <report>maven-linkcheck-plugin</report>
+  </reports>
+
+</project>

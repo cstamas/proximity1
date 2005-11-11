@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project>
+
+    <body>
+        <links>
+            <item name="Maven" href="http://maven.apache.org/" />
+            <item name="ISmicro Commons Projects" href=".." />
+        </links>
+
+        <menu name="Documentation">
+            <item name="Developers guide" href="404.html">
+            </item>
+        </menu>
+
+<!--
+        <menu name="Database">
+            <item name="Documentation (HTML)" href="database/index.html"/>
+            <item name="Documentation (PDF)" href="database.pdf"/>
+            <item name="Scheme DDL SQL" href="database.sql"/>
+            <item name="Quick reference" href="database-summary.html"/>
+        </menu>
+-->
+<!--
+        <menu name="Documentation">
+        </menu>
+-->
+    </body>
+
+</project>
