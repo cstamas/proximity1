@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="ismicro-proximity-wrapper" basedir="." default="usage">
+	
+    <property name="noget" value="true"/>
+    <property name="suffix" value=""/>
+
+    <property file="project.properties" />
+
+    <property name="libdir" value="${basedir}/lib"/>
+
+    <import file="build-prj.xml"/>
+	
+    <fileset id="includedJars" dir="${basedir}/lib">
+      <include name="**/*.jar"/>
+    </fileset>
+	
+	<target name="usage" description="o Usage info">
+		<echo>${final.name} ANT build (${final.name})</echo>
+		<echo/>
+		<echo>Defined targets are:</echo>
+		<echo/>
+		<echo>clean         - make cleanroom</echo>
+		<echo>javadoc       - generate JavaDoc</echo>
+		<echo>test          - Run the test cases</echo>
+		<echo>jar           - Create all needed binaries</echo>
+		<echo>dist          - Create dist (javadoc, jars...)</echo>
+		<echo></echo>
+	</target>
+	
+</project>

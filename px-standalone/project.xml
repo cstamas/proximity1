@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project>
+
+  <extend>${basedir}/../ismicro-root/project.xml</extend>
+
+  <!-- a unique name for this project -->
+  <id>ismicro-proximity</id>
+
+  <!-- a short but descriptive name for the project -->
+  <name>ISmicro Proximity</name>
+
+  <!-- The version of the project under development -->
+  <currentVersion>1.0.0-SNAPSHOT</currentVersion>
+
+  <!-- the year the project started -->
+  <inceptionYear>2005</inceptionYear>
+
+  <package>hu.ismicro.commons.proximity</package>
+
+  <logo/>
+
+  <url>https://is-micro.myip.hu/projects/ismicro-commons/proximity/</url>
+  <issueTrackingUrl>mailto:office@is-micro.hu</issueTrackingUrl>
+  <siteAddress>is-micro.myip.hu</siteAddress>
+  <siteDirectory>/srv/projects/ismicro-commons/www/proximity</siteDirectory>
+  <distributionDirectory>/srv/projects/ismicro-commons/deploy/proximity</distributionDirectory>
+
+  <repository>
+    <connection>scm:svn:${maven.username}@https://is-micro.myip.hu/repos/ismicro/trunk/ismicro-proximity/</connection>
+    <developerConnection>scm:svn:${maven.username}@https://is-micro.myip.hu/repos/ismicro/trunk/ismicro-proximity/</developerConnection>
+    <url>https://is-micro.myip.hu/viewcvs/ismicro/trunk/ismicro-proximity/</url>
+  </repository>
+
+  <!-- jar files the project is dependent on -->
+  <dependencies>
+    <dependency>
+      <groupId>ismicro</groupId>
+      <artifactId>ismicro-root</artifactId>
+      <version>1.0.1</version>
+      <type>jar</type>
+      <url>https://is-micro.myip.hu/projects/ismicro-commons/</url>
+    </dependency>
+
+    <dependency>
+      <groupId>log4j</groupId>
+      <artifactId>log4j</artifactId>
+      <version>1.2.11</version>
+      <type>jar</type>
+      <url>http://logging.apache.org/log4j/</url>
+    </dependency>
+
+    <dependency>
+      <groupId>springframework</groupId>
+      <artifactId>spring-core</artifactId>
+      <version>1.2.5</version>
+      <type>jar</type>
+      <url>http://www.springframework.org/</url>
+    </dependency>
+    <dependency>
+      <groupId>springframework</groupId>
+      <artifactId>spring-beans</artifactId>
+      <version>1.2.5</version>
+      <type>jar</type>
+      <url>http://www.springframework.org/</url>
+    </dependency>
+    <dependency>
+      <groupId>springframework</groupId>
+      <artifactId>spring-context</artifactId>
+      <version>1.2.5</version>
+      <type>jar</type>
+      <url>http://www.springframework.org/</url>
+    </dependency>
+    <dependency>
+      <groupId>springframework</groupId>
+      <artifactId>spring-dao</artifactId>
+      <version>1.2.5</version>
+      <type>jar</type>
+      <url>http://www.springframework.org/</url>
+    </dependency>
+    <dependency>
+      <groupId>springframework</groupId>
+      <artifactId>spring-aop</artifactId>
+      <version>1.2.5</version>
+      <type>jar</type>
+      <url>http://www.springframework.org/</url>
+    </dependency>
+    <dependency>
+      <groupId>springframework</groupId>
+      <artifactId>spring-jdbc</artifactId>
+      <version>1.2.5</version>
+      <type>jar</type>
+      <url>http://www.springframework.org/</url>
+    </dependency>
+    <dependency>
+      <groupId>springframework</groupId>
+      <artifactId>spring-orm</artifactId>
+      <version>1.2.5</version>
+      <type>jar</type>
+      <url>http://www.springframework.org/</url>
+    </dependency>
+    <dependency>
+      <groupId>springframework</groupId>
+      <artifactId>spring-hibernate</artifactId>
+      <version>1.2.5</version>
+      <type>jar</type>
+      <url>http://www.springframework.org/</url>
+    </dependency>
+    <dependency>
+      <groupId>springframework</groupId>
+      <artifactId>spring-mock</artifactId>
+      <version>1.2.5</version>
+      <type>jar</type>
+      <url>http://www.springframework.org/</url>
+    </dependency>
+    <dependency>
+      <groupId>acegisecurity</groupId>
+      <artifactId>acegi-security</artifactId>
+      <version>0.8.3</version>
+      <type>jar</type>
+      <url>http://acegisecurity.sourceforge.net/</url>
+    </dependency>
+
+    <!-- Hibernate3 stuff -->    
+    <dependency>
+      <groupId>hibernate</groupId>
+      <artifactId>hibernate</artifactId>
+      <version>3.0.5</version>
+      <type>jar</type>
+      <url>http://www.hibernate.org/</url>
+    </dependency>
+    <dependency>
+      <groupId>hibernate</groupId>
+      <artifactId>antlr</artifactId>
+      <version>2.7.5H3</version>
+      <type>jar</type>
+      <url>http://www.hibernate.org/</url>
+    </dependency>
+    <dependency>
+      <groupId>j2ee</groupId>
+      <artifactId>jta</artifactId>
+      <version>1.0.1B</version>
+      <type>jar</type>
+      <url>http://java.sun.com/j2ee/transactions/index.jsp</url>
+    </dependency>
+    <dependency>
+      <groupId>cglib</groupId>
+      <artifactId>cglib</artifactId>
+      <version>2.1</version>
+      <type>jar</type>
+      <url>http://cglib.sourceforge.net/</url>
+    </dependency>
+    <dependency>
+      <groupId>ehcache</groupId>
+      <artifactId>ehcache</artifactId>
+      <version>1.1</version>
+      <type>jar</type>
+      <url>http://ehcache.sourceforge.net/</url>
+    </dependency>
+    <dependency>
+      <groupId>commons-logging</groupId>
+      <artifactId>commons-logging</artifactId>
+      <version>1.0.4</version>
+      <type>jar</type>
+      <url>http://jakarta.apache.org/commons/logging/</url>
+    </dependency>
+    <dependency>
+      <groupId>commons-collections</groupId>
+      <artifactId>commons-collections</artifactId>
+      <version>2.1.1</version>
+      <type>jar</type>
+      <url>http://jakarta.apache.org/commons/collections/</url>
+    </dependency>
+    <dependency>
+      <groupId>xerces</groupId>
+      <artifactId>xercesImpl</artifactId>
+      <version>2.7.1</version>
+      <type>jar</type>
+      <url>http://xml.apache.org/xerces2-j/</url>
+    </dependency>
+    <dependency>
+      <groupId>xerces</groupId>
+      <artifactId>xmlParserAPIs</artifactId>
+      <version>2.6.2</version>
+      <type>jar</type>
+      <url>http://xml.apache.org/xerces2-j/</url>
+    </dependency>
+    <dependency>
+      <groupId>asm</groupId>
+      <artifactId>asm</artifactId>
+      <version>1.5.3</version>
+      <type>jar</type>
+      <url>http://asm.objectweb.org/</url>
+    </dependency>
+    <dependency>
+      <groupId>asm</groupId>
+      <artifactId>asm-attrs</artifactId>
+      <version>1.5.3</version>
+      <type>jar</type>
+      <url>http://asm.objectweb.org/</url>
+    </dependency>
+    <dependency>
+      <groupId>dom4j</groupId>
+      <artifactId>dom4j</artifactId>
+      <version>1.6.1</version>
+      <type>jar</type>
+      <url>http://www.dom4j.org/</url>
+    </dependency>
+    
+    <!-- For testing -->
+    <dependency>
+      <groupId>oracle</groupId>
+      <artifactId>ojdbc14</artifactId>
+      <version>10.1.0</version>
+      <type>jar</type>
+      <url>http://www.oracle.com/</url>
+    </dependency>
+    
+  </dependencies>
+
+  <!-- build information for the project -->
+  <build>
+    <nagEmailAddress>staff@is-micro.myip.hu</nagEmailAddress>
+    <sourceDirectory>src/java</sourceDirectory>
+    <unitTestSourceDirectory>test/java</unitTestSourceDirectory>
+
+    <resources>
+	  <resource>
+        <directory>${basedir}/src/hibernate</directory>
+	    <includes>
+    	  <include>**/*.hbm.xml</include>
+        </includes>
+	  </resource>
+	</resources>
+    
+    <unitTest>
+      <includes>
+        <include>**/*Test.java</include>
+      </includes>
+      <excludes>
+        <exclude>**/NaughtyTest.java</exclude>
+        <exclude>**/Abstract*.java</exclude>
+      </excludes>
+      <resources>
+	    <resource>
+          <directory>${basedir}/test/java</directory>
+          <includes>
+    	    <include>**/*.xml</include>
+          </includes>
+	    </resource>
+  	  </resources>
+    </unitTest>
+
+  </build>
+  
+  <reports>
+     <report>maven-checkstyle-plugin</report>
+     <report>maven-changes-plugin</report>
+     <report>maven-javadoc-plugin</report>
+     <report>maven-jxr-plugin</report>
+     <report>maven-junit-report-plugin</report>
+     <report>maven-tasklist-plugin</report>
+     <report>maven-jdepend-plugin</report>
+     <report>maven-jcoverage-plugin</report>
+     <report>maven-license-plugin</report>
+  </reports>
+
+</project>
