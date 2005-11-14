@@ -5,5 +5,9 @@ import java.util.List;
 public interface Proximity {
     
     void setRepositories(List repositories);
+    
+    Artifact getArtifact(String path);
+    
+    List getArtifacts(String path);
 
 }
