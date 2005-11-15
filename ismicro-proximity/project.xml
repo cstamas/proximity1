@@ -2,7 +2,11 @@
 
 <project>
 
-  <extend>${basedir}/../ismicro-root/project.xml</extend>
+  <!-- the version of maven's project object model -->
+  <pomVersion>3</pomVersion>
+
+  <!-- a unique name for this group of project -->
+  <groupId>ismicro</groupId>
 
   <!-- a unique name for this project -->
   <id>ismicro-proximity</id>
@@ -13,10 +17,21 @@
   <!-- The version of the project under development -->
   <currentVersion>1.0.0-SNAPSHOT</currentVersion>
 
+  <!-- details about the organization that 'owns' the project -->
+  <organization>
+    <name>ISmicro Kft</name>
+    <url>http://www.is-micro.hu/</url>
+    <logo>http://www.is-micro.hu/images/ism_o.png</logo>
+  </organization>
+
   <!-- the year the project started -->
   <inceptionYear>2005</inceptionYear>
 
   <package>hu.ismicro.commons.proximity</package>
+
+  <description>Maven Proximity Application.</description>
+
+  <shortDescription>Maven Proximity Application.</shortDescription>
 
   <logo/>
 
@@ -31,6 +46,43 @@
     <developerConnection>scm:svn:${maven.username}@https://is-micro.myip.hu/repos/ismicro/trunk/ismicro-proximity/</developerConnection>
     <url>https://is-micro.myip.hu/viewcvs/ismicro/trunk/ismicro-proximity/</url>
   </repository>
+
+  <!-- any mailing lists for the project -->
+  <mailingLists>
+    <mailingList>
+      <name>ISmicro Commons Project</name>
+      <subscribe>staff@is-micro.hu</subscribe>
+      <unsubscribe></unsubscribe>
+      <archive></archive>
+    </mailingList>
+  </mailingLists>
+  
+  <!-- who the developers are for the project -->
+  <developers>
+    <developer>
+      <id>cstamas</id>
+      <name>CSERVENAK, Tamas</name>
+      <email>cservenak@is-micro.hu</email>
+      <organization>ISmicro</organization>
+      <roles>
+        <role>Developer</role>
+      </roles>
+      <timezone>2</timezone>
+      <properties>ICQ: xxxxxxxxx</properties>
+    </developer>
+
+    <developer>
+      <id>szuzso</id>
+      <name>SZUNYOG, Zsolt</name>
+      <email>szunyog@is-micro.hu</email>
+      <organization>ISmicro</organization>
+      <roles>
+        <role>Developer</role>
+      </roles>
+      <timezone>2</timezone>
+      <properties>ICQ: xxxxxxxxx, alias: cstamas</properties>
+    </developer>
+  </developers>
 
   <!-- jar files the project is dependent on -->
   <dependencies/>

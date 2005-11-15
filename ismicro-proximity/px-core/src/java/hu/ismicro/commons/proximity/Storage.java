@@ -4,8 +4,8 @@ public interface Storage {
 
     boolean containsArtifact(String key);
 
-    void storeArtifact(String key, Artifact af);
-
     Artifact retrieveArtifact(String key);
+
+    void storeArtifact(String key, Artifact af);
 
 }
