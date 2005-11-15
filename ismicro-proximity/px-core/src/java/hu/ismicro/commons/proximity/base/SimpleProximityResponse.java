@@ -15,4 +15,8 @@ public class SimpleProximityResponse implements ProximityResponse {
         return item;
     }
 
+    public void mergeResponses(ProximityResponse another) {
+        throw new UnsupportedOperationException("SimpleProximityResponse is not mergeable!");
+    }
+
 }

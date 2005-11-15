@@ -3,6 +3,7 @@ package hu.ismicro.commons.proximity.remote;
 import hu.ismicro.commons.proximity.Item;
 import hu.ismicro.commons.proximity.base.SimpleProxiedItem;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -44,11 +45,9 @@ public class HttpClientRemotePeer extends AbstractRemotePeer {
         } catch (IOException ex) {
             logger.error("Tranport error while executing " + method.getName() + " method with query string "
                     + method.getQueryString(), ex);
-        } finally {
-            method.releaseConnection();
         }
         logger.info("Received response code " + resultCode + " for executing " + method.getName()
-                + " method with query string " + method.getQueryString());
+                + " method with query string " + method.getPath());
         return resultCode;
     }
 
@@ -76,34 +75,35 @@ public class HttpClientRemotePeer extends AbstractRemotePeer {
         return followRedirection;
     }
 
-    public URL getRemoteUrl() {
-        return this.remoteUrl;
+    public String getRemoteUrl() {
+        return this.remoteUrl.toString();
     }
 
-    public void setRemoteUrl(URL url) {
-        if (!url.getPath().endsWith("/")) {
+    public void setRemoteUrl(String url) throws MalformedURLException {
+        if (!url.endsWith("/")) {
             throw new IllegalArgumentException("The URL is not ending with '/' (slash)!");
         }
-        this.remoteUrl = url;
+        this.remoteUrl = new URL(url);
     }
 
     public boolean containsItem(String path) {
-        HeadMethod head = new HeadMethod(path);
+        HeadMethod head = new HeadMethod(getRemoteUrl() + path);
         head.setFollowRedirects(isFollowRedirection());
         int response = executeMethod(head);
         return response == HttpStatus.SC_OK;
     }
 
     public Item retrieveItem(String path) {
+        GetMethod get = new GetMethod(getRemoteUrl() + path);
+        get.setFollowRedirects(isFollowRedirection());
         try {
-            GetMethod get = new GetMethod(path);
-            get.setFollowRedirects(isFollowRedirection());
             int response = executeMethod(get);
             if (response == HttpStatus.SC_OK) {
                 SimpleProxiedItem result = new SimpleProxiedItem();
                 result.setPath(path);
                 result.setOriginatingUrl(new URL(getRemoteUrl() + path));
-                result.setStream(get.getResponseBodyAsStream());
+                result.setStream(new ByteArrayInputStream(get.getResponseBody()));
+                logger.info("Received content with Length: " + get.getResponseContentLength());
                 return result;
             } else {
                 logger.error("The method execution returned result code " + response);
@@ -115,6 +115,8 @@ public class HttpClientRemotePeer extends AbstractRemotePeer {
         } catch (IOException ex) {
             logger.error("IO Error during response stream handling!", ex);
             return null;
+        } finally {
+            get.releaseConnection();
         }
     }
 

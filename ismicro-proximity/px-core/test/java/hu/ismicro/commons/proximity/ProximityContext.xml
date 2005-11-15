@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+
+	<bean id="proximity" class="hu.ismicro.commons.proximity.base.ProximityImpl">
+		<property name="repositories">
+			<list>
+				<ref local="ibiblio"/>
+				<ref local="ismicro"/>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="ibiblio" class="hu.ismicro.commons.proximity.base.SimpleRepository">
+		<property name="name" value="www-ibiblio-org"/>
+		<property name="storage" ref="ibiblioFSStorage"/>
+		<property name="remotePeer" ref="ibiblioRemotePeer"/>
+	</bean>
+
+	<bean id="ibiblioFSStorage" class="hu.ismicro.commons.proximity.storage.FileSystemStorage">
+		<property name="baseDir" value="/home/cstamas/tmp/proximity/ibiblio"/>
+	</bean>
+	
+	<bean id="ibiblioRemotePeer" class="hu.ismicro.commons.proximity.remote.HttpClientRemotePeer">
+		<property name="remoteUrl" value="http://www.ibiblio.org/maven/"/>
+		<property name="connectionTimeout" value="30000"/>
+	</bean>
+
+	<bean id="ismicro" class="hu.ismicro.commons.proximity.base.SimpleRepository">
+		<property name="name" value="ISmicro Local"/>
+		<property name="storage" ref="ismicroFSStorage"/>
+	</bean>
+
+	<bean id="ismicroFSStorage" class="hu.ismicro.commons.proximity.storage.FileSystemStorage">
+		<property name="baseDir" value="/home/cstamas/tmp/proximity/ismicro"/>
+	</bean>
+
+</beans>
