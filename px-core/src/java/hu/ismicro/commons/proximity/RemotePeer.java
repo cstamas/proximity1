@@ -1,7 +1,5 @@
 package hu.ismicro.commons.proximity;
 
-public interface RemotePeer {
+public interface RemotePeer extends Storage {
     
-    void setUrl(String url);
-
 }

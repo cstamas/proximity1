@@ -2,5 +2,8 @@
 <classpath>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="src" path="px-core/src/java"/>
+	<classpathentry kind="var" path="MAVEN_REPO/commons-httpclient/jars/commons-httpclient-3.0-rc4.jar"/>
+	<classpathentry kind="var" path="MAVEN_REPO/commons-logging/jars/commons-logging-1.0.4.jar"/>
+	<classpathentry kind="var" path="MAVEN_REPO/ehcache/jars/ehcache-1.1.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

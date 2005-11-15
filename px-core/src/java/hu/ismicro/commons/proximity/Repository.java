@@ -9,5 +9,7 @@ public interface Repository {
     void setStorage(Storage storage);
     
     void setRemotePeer(RemotePeer peer);
+    
+    void setArtifactCache();
 
 }
