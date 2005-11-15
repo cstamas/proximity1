@@ -6,8 +6,6 @@ public interface Proximity {
     
     void setRepositories(List repositories);
     
-    Artifact getArtifact(String path);
+    ProximityResponse handleRequest(ProximityRequest request) throws ProximityException;
     
-    List getArtifacts(String path);
-
 }

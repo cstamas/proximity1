@@ -4,12 +4,12 @@ public interface Repository {
     
     String getName();
     
-    int getPriority();
-    
     void setStorage(Storage storage);
     
     void setRemotePeer(RemotePeer peer);
     
-    void setArtifactCache();
-
+    void setRepositoryLogic(RepositoryLogic logic);
+    
+    ProximityResponse handleRequest(ProximityRequest request) throws ProximityException;
+    
 }
