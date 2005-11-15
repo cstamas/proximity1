@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+
+<!--
+   | For more configuration infromation and examples see the Jakarta Log4j
+   | owebsite: http://jakarta.apache.org/log4j
+ -->
+
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/" debug="false">
+
+   <!-- A time/date based rolling appender -->
+   <appender name="FILE" class="org.apache.log4j.DailyRollingFileAppender">
+      <!--  errorHandler class="org.jboss.logging.util.OnlyOnceErrorHandler"/-->
+      <param name="File" value="application.log"/>
+      <param name="Append" value="false"/>
+
+      <param name="DatePattern" value="'.'yyyy-MM-dd"/>
+
+      <layout class="org.apache.log4j.PatternLayout">
+         <param name="ConversionPattern" value="%4d{yyyy-MM-dd HH:mm:ss.SSS} %-5p [%t:%x] - %c: %m%n"/>
+      </layout>
+   </appender>
+   
+   <appender name="XMLFILE" class="org.apache.log4j.DailyRollingFileAppender">
+      <param name="File" value="application.xml.log"/>
+      <param name="Append" value="false"/>
+
+      <!-- Rollover at midnight each day -->
+      <param name="DatePattern" value="'.'yyyy-MM-dd"/>
+
+      <layout class="org.apache.log4j.xml.XMLLayout" />
+   </appender>
+
+   <!-- ============================== -->
+   <!-- Append messages to the console -->
+   <!-- ============================== -->
+
+   <appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
+      <!-- errorHandler class="org.jboss.logging.util.OnlyOnceErrorHandler"/ -->
+      <param name="Target" value="System.out"/>
+      <param name="Threshold" value="DEBUG"/>
+
+      <layout class="org.apache.log4j.PatternLayout">
+         <param name="ConversionPattern" value="%-5p [%c] %m%n"/>
+      </layout>
+   </appender>
+
+   <!-- ============================== -->
+   <!-- Append messages to the syslog  -->
+   <!-- ============================== -->
+
+   <appender name="SYSLOG" class="org.apache.log4j.net.SyslogAppender">
+      <param name="SyslogHost" value="localhost" />
+      <param name="Facility" value="ipsconsolidator" />
+      <layout class="org.apache.log4j.PatternLayout">
+        <param name="ConversionPattern" value="%p [%c] [%x] - %m" />
+      </layout>
+   </appender>
+
+   <!-- ======================= -->
+   <!-- Setup the some category -->
+   <!-- ======================= -->
+
+   <category name="hu.ismicro.commons" additivity="true">
+     <level value="DEBUG" />
+   </category>
+
+   <!-- ======================= -->
+   <!-- Setup the Root category -->
+   <!-- ======================= -->
+
+   <root>
+      <level value="INFO" />
+
+      <appender-ref ref="CONSOLE"/>
+<!--
+      <appender-ref ref="FILE"/>
+      <appender-ref ref="XMLFILE"/>
+      <appender-ref ref="SYSLOG"/>
+-->
+   </root>
+   
+
+</log4j:configuration>

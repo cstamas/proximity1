@@ -79,9 +79,13 @@ public class SimpleRepository implements Repository {
                 }
 
             }
-            SimpleProximityResponse response = new SimpleProximityResponse();
-            response.setItem(item);
-            return response;
+            if (item != null) {
+                SimpleProximityResponse response = new SimpleProximityResponse();
+                response.setItem(item);
+                return response;
+            } else {
+                return null;
+            }
         }
     }
 

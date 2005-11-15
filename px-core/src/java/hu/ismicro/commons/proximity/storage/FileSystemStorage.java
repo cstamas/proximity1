@@ -47,8 +47,9 @@ public class FileSystemStorage extends AbstractStorage {
 
     public void storeItem(Item item) {
         try {
-            File target = new File(baseDir, item.getPath());
-            FileOutputStream os = new FileOutputStream(target);
+            File file = new File(baseDir, item.getPath());
+            file.getParentFile().mkdirs();
+            FileOutputStream os = new FileOutputStream(file);
             byte[] buffer = new byte[8192];
             int read;
             while (item.getStream().available() != 0) {

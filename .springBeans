@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beansProjectDescription>
+	<configs>
+		<config>px-core/test/java/hu/ismicro/commons/proximity/ProximityContext.xml</config>
+	</configs>
+	<configSets>
+		<configSet>
+			<name>test</name>
+			<allowBeanDefinitionOverriding>false</allowBeanDefinitionOverriding>
+			<incomplete>false</incomplete>
+			<configs>
+				<config>px-core/test/java/hu/ismicro/commons/proximity/ProximityContext.xml</config>
+			</configs>
+		</configSet>
+	</configSets>
+</beansProjectDescription>

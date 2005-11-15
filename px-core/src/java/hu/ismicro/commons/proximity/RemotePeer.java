@@ -1,9 +1,9 @@
 package hu.ismicro.commons.proximity;
 
-import java.net.URL;
+import java.net.MalformedURLException;
 
 public interface RemotePeer extends Storage {
     
-    void setRemoteUrl(URL url);
+    void setRemoteUrl(String url) throws MalformedURLException;
     
 }

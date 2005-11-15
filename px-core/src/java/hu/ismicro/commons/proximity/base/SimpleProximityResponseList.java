@@ -1,6 +1,7 @@
 package hu.ismicro.commons.proximity.base;
 
 import hu.ismicro.commons.proximity.Item;
+import hu.ismicro.commons.proximity.ProximityResponse;
 import hu.ismicro.commons.proximity.ProximityResponseList;
 
 import java.util.ArrayList;
@@ -8,7 +9,7 @@ import java.util.List;
 
 public class SimpleProximityResponseList implements ProximityResponseList {
     
-    private List items; 
+    private List items;
 
     public Item getItem() {
         throw new UnsupportedOperationException("SimpleProximityResponseList does not support getItem() method.");
@@ -23,6 +24,14 @@ public class SimpleProximityResponseList implements ProximityResponseList {
             this.items = new ArrayList();
         }
         return items;
+    }
+
+    public void mergeResponses(ProximityResponse another) {
+        if (another instanceof ProximityResponseList) {
+            this.getItems().addAll(((ProximityResponseList)another).getItems());
+        } else {
+            throw new IllegalArgumentException(this.getClass().getName() + " is not mergeable with class " + another.getClass().getName());
+        }
     }
 
 }
