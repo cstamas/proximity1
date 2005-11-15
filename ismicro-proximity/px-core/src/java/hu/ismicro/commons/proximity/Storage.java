@@ -1,11 +1,15 @@
 package hu.ismicro.commons.proximity;
 
+import java.util.List;
+
 public interface Storage {
 
-    boolean containsArtifact(String key);
+    boolean containsItem(String path);
 
-    Artifact retrieveArtifact(String key);
-
-    void storeArtifact(String key, Artifact af);
+    Item retrieveItem(String path);
+    
+    void storeItem(Item item);
+    
+    List listItems(String path);
 
 }
