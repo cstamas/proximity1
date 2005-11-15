@@ -18,11 +18,18 @@ public class ProximityIntegrationTest extends AbstractProximityIntegrationTest {
         return proximity;
     }
     
-    public void testSimple() {
+    public void testSimpleArtifact() {
         SimpleProximityRequest request = new SimpleProximityRequest();
         request.setPath("antlr/jars/antlr-2.7.1.jar");
         ProximityResponse response = proximity.handleRequest(request);
-        logger.info(response.getClass());
+        logger.info("Got response of type " + response.getClass() + ":" + response);
+    }
+
+    public void testSimpleDir() {
+        SimpleProximityRequest request = new SimpleProximityRequest();
+        request.setPath("/");
+        ProximityResponse response = proximity.handleRequest(request);
+        logger.info("Got response of type " + response.getClass() + ":" + response);
     }
 
 }

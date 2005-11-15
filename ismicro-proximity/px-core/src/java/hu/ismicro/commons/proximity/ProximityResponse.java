@@ -5,6 +5,8 @@ public interface ProximityResponse {
     
     Item getItem();
     
+    boolean isMergeableResponse();
+    
     void mergeResponses(ProximityResponse another);
 
 }

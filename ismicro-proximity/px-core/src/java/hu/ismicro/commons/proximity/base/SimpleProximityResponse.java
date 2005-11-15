@@ -15,8 +15,19 @@ public class SimpleProximityResponse implements ProximityResponse {
         return item;
     }
 
+	public boolean isMergeableResponse() {
+		return false;
+	}
+
     public void mergeResponses(ProximityResponse another) {
         throw new UnsupportedOperationException("SimpleProximityResponse is not mergeable!");
+    }
+
+    public String toString() {
+    	StringBuffer sb = new StringBuffer(this.getClass().getName() + "[");
+    	sb.append(getItem().getPath());
+    	sb.append("]");
+    	return sb.toString();
     }
 
 }
