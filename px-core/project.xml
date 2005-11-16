@@ -84,40 +84,10 @@
     </dependency>
     <dependency>
       <groupId>springframework</groupId>
-      <artifactId>spring-dao</artifactId>
-      <version>1.2.5</version>
-      <type>jar</type>
-      <url>http://www.springframework.org/</url>
-    </dependency>
-    <dependency>
-      <groupId>springframework</groupId>
       <artifactId>spring-aop</artifactId>
       <version>1.2.5</version>
       <type>jar</type>
       <url>http://www.springframework.org/</url>
-    </dependency>
-    <dependency>
-      <groupId>springframework</groupId>
-      <artifactId>spring-jdbc</artifactId>
-      <version>1.2.5</version>
-      <type>jar</type>
-      <url>http://www.springframework.org/</url>
-    </dependency>
-    <dependency>
-      <groupId>acegisecurity</groupId>
-      <artifactId>acegi-security</artifactId>
-      <version>0.8.3</version>
-      <type>jar</type>
-      <url>http://acegisecurity.sourceforge.net/</url>
-    </dependency>
-
-    <!-- For testing -->
-    <dependency>
-      <groupId>oracle</groupId>
-      <artifactId>ojdbc14</artifactId>
-      <version>10.1.0</version>
-      <type>jar</type>
-      <url>http://www.oracle.com/</url>
     </dependency>
     <dependency>
       <groupId>springframework</groupId>
