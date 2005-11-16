@@ -14,11 +14,11 @@
 
 	<bean id="ibiblio" class="hu.ismicro.commons.proximity.base.SimpleRepository">
 		<property name="name" value="www-ibiblio-org"/>
-		<property name="storage" ref="ibiblioFSStorage"/>
+		<property name="writableStorage" ref="ibiblioFSStorage"/>
 		<property name="remotePeer" ref="ibiblioRemotePeer"/>
 	</bean>
 
-	<bean id="ibiblioFSStorage" class="hu.ismicro.commons.proximity.storage.FileSystemStorage">
+	<bean id="ibiblioFSStorage" class="hu.ismicro.commons.proximity.storage.WritableFileSystemStorage">
 		<property name="baseDir" value="/home/cstamas/tmp/proximity/ibiblio"/>
 	</bean>
 	

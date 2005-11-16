@@ -3,9 +3,6 @@ package hu.ismicro.commons.proximity.base;
 import hu.ismicro.commons.proximity.BrowsingNotAllowedException;
 import hu.ismicro.commons.proximity.Item;
 import hu.ismicro.commons.proximity.ItemNotFoundException;
-import hu.ismicro.commons.proximity.ProximityException;
-import hu.ismicro.commons.proximity.ProximityRequest;
-import hu.ismicro.commons.proximity.ProximityResponse;
 import hu.ismicro.commons.proximity.RemotePeer;
 import hu.ismicro.commons.proximity.Repository;
 import hu.ismicro.commons.proximity.RepositoryLogic;
@@ -13,6 +10,7 @@ import hu.ismicro.commons.proximity.Storage;
 import hu.ismicro.commons.proximity.WritableRemotePeer;
 import hu.ismicro.commons.proximity.WritableStorage;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
@@ -25,11 +23,11 @@ public class SimpleRepository implements Repository {
     private String name;
 
     private Storage storage;
-    
+
     private WritableStorage writableStorage;
 
     private RemotePeer remotePeer;
-    
+
     private WritableRemotePeer writableRemotePeer;
 
     private RepositoryLogic repositoryLogic;
@@ -94,46 +92,41 @@ public class SimpleRepository implements Repository {
         return browsingAllowed;
     }
 
-    public ProximityResponse handleRequest(ProximityRequest request) throws ProximityException {
-        if (request.getPath().endsWith("/")) {
-            if (isBrowsingAllowed()) {
-                List items = null;
-                if (getStorage() != null) {
-                    items = getStorage().listItems(request.getPath());
-                }
-                SimpleProximityResponseList response = new SimpleProximityResponseList();
-                response.setItems(items);
-                return response;
-
-            } else {
-                throw new BrowsingNotAllowedException(getName());
+    public Item retrieveItem(String path) {
+        Item item = null;
+        if (getStorage() != null) {
+            if (getStorage().containsItem(path)) {
+                logger.info("Found " + path + " item in storage of repository " + getName());
+                item = getStorage().retrieveItem(path);
             }
+        }
+        if (item == null && getRemotePeer() != null) {
+            if (getRemotePeer().containsItem(path)) {
+                logger.info("Found " + path + " item in remote peer of repository " + getName());
+                item = getRemotePeer().retrieveItem(path);
+                if (getWritableStorage() != null) {
+                    getWritableStorage().storeItem(item);
+                    retrieveItem(path);
+                }
+            }
+
+        }
+        if (item != null) {
+            return item;
         } else {
-            Item item = null;
-            if (getStorage() != null) {
-                if (getStorage().containsItem(request.getPath())) {
-                    logger.info("Found " + request.getPath() + " item in storage of repository " + getName());
-                    item = getStorage().retrieveItem(request.getPath());
-                }
-            }
-            if (item == null && getRemotePeer() != null) {
-                if (getRemotePeer().containsItem(request.getPath())) {
-                    logger.info("Found " + request.getPath() + " item in remote peer of repository " + getName());
-                    item = getRemotePeer().retrieveItem(request.getPath());
-                    if (getWritableStorage() != null) {
-                        getWritableStorage().storeItem(item);
-                        handleRequest(request);
-                    }
-                }
+            throw new ItemNotFoundException(path);
+        }
+    }
 
+    public List listItems(String path) {
+        if (isBrowsingAllowed()) {
+            List items = new ArrayList();
+            if (getStorage() != null) {
+                items.addAll(getStorage().listItems(path));
             }
-            if (item != null) {
-                SimpleProximityResponse response = new SimpleProximityResponse();
-                response.setItem(item);
-                return response;
-            } else {
-                throw new ItemNotFoundException(request.getPath());
-            }
+            return items;
+        } else {
+            throw new BrowsingNotAllowedException(getName());
         }
     }
 

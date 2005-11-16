@@ -6,14 +6,18 @@ import java.io.InputStream;
 import java.net.URL;
 
 public class SimpleProxiedItem implements ProxiedItem {
-
+    
     private String repositoryName;
+
+    private String storageName;
 
     private URL originatingUrl;
 
     private String path;
 
     private InputStream stream;
+    
+    private boolean directory;
 
     public void setRepositoryName(String repositoryName) {
         this.repositoryName = repositoryName;
@@ -21,6 +25,14 @@ public class SimpleProxiedItem implements ProxiedItem {
 
     public String getRepositoryName() {
         return repositoryName;
+    }
+
+    public void setStorageName(String storageName) {
+        this.storageName = storageName;
+    }
+
+    public String getStorageName() {
+        return storageName;
     }
 
     public void setOriginatingUrl(URL originatingUrl) {
@@ -45,6 +57,18 @@ public class SimpleProxiedItem implements ProxiedItem {
 
     public InputStream getStream() {
         return stream;
+    }
+
+    public void setDirectory(boolean directory) {
+        this.directory = directory;
+    }
+
+    public boolean isDirectory() {
+        return directory;
+    }
+
+    public String toString() {
+        return "["+getStorageName()+(isDirectory() ? ",D" : ",F") +"]:"+getPath();
     }
 
 }

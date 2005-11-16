@@ -1,6 +1,6 @@
 package hu.ismicro.commons.proximity;
 
-import hu.ismicro.commons.proximity.base.SimpleProximityRequest;
+import java.util.List;
 
 public class ProximityIntegrationTest extends AbstractProximityIntegrationTest {
     
@@ -19,17 +19,17 @@ public class ProximityIntegrationTest extends AbstractProximityIntegrationTest {
     }
     
     public void testSimpleArtifact() {
-        SimpleProximityRequest request = new SimpleProximityRequest();
-        request.setPath("antlr/jars/antlr-2.7.1.jar");
-        ProximityResponse response = proximity.handleRequest(request);
-        logger.info("Got response of type " + response.getClass() + ":" + response);
+        Item item = proximity.retrieveItem("antlr/jars/antlr-2.7.1.jar");
+        logger.info("Got response of type " + item.getClass() + ":" + item);
     }
 
     public void testSimpleDir() {
-        SimpleProximityRequest request = new SimpleProximityRequest();
-        request.setPath("/");
-        ProximityResponse response = proximity.handleRequest(request);
-        logger.info("Got response of type " + response.getClass() + ":" + response);
+        List items = proximity.listItems("/");
+        logger.info("Got response of type " + items.getClass() + ":" + items);
+        items = proximity.listItems("/ismicro");
+        logger.info("Got response of type " + items.getClass() + ":" + items);
+        items = proximity.listItems("/ismicro/jars");
+        logger.info("Got response of type " + items.getClass() + ":" + items);
     }
 
 }

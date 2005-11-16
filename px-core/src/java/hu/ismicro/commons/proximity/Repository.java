@@ -1,5 +1,7 @@
 package hu.ismicro.commons.proximity;
 
+import java.util.List;
+
 public interface Repository {
 
     String getName();
@@ -10,6 +12,8 @@ public interface Repository {
 
     void setRepositoryLogic(RepositoryLogic logic);
 
-    ProximityResponse handleRequest(ProximityRequest request) throws ProximityException;
+    Item retrieveItem(String path);
+    
+    List listItems(String path);
 
 }

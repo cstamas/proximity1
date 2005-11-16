@@ -36,7 +36,9 @@ public class FileSystemStorage extends AbstractStorage {
             File target = new File(getBaseDir(), path);
             SimpleProxiedItem result = new SimpleProxiedItem();
             result.setPath(path);
+            result.setStorageName(getBaseDir().getPath());
             result.setOriginatingUrl(null);
+            result.setDirectory(false);
             result.setStream(new FileInputStream(target));
             return result;
         } catch (FileNotFoundException ex) {
@@ -46,29 +48,29 @@ public class FileSystemStorage extends AbstractStorage {
     }
 
     public List listItems(String path) {
-        logger.info("Listing " + path + " in " + getBaseDir());
         if (!path.endsWith("/")) {
-            throw new IllegalArgumentException("Cannot list a non-dir with FS Storage!");
-        } else {
-            List result = new ArrayList();
-            File target = null;
-            if (path.equals("/")) {
-                target = getBaseDir();
-            } else {
-                target = new File(getBaseDir(), path);
-            }
-            if (target.exists()) {
-                File[] files = target.listFiles();
-                for (int i = 0; i < files.length; i++) {
-                    if (files[i].isFile()) {
-                        SimpleProxiedItem item = new SimpleProxiedItem();
-                        item.setPath(path + files[i].getName());
-                        result.add(item);
-                    }
-                }
-            }
-            return result;
+            path = path + "/";
         }
+        logger.info("Listing " + path + " in " + getBaseDir());
+        List result = new ArrayList();
+        File target = null;
+        if (path.equals("/")) {
+            target = getBaseDir();
+        } else {
+            target = new File(getBaseDir(), path);
+        }
+        if (target.exists()) {
+            File[] files = target.listFiles();
+            for (int i = 0; i < files.length; i++) {
+                SimpleProxiedItem item = new SimpleProxiedItem();
+                item.setPath(path + files[i].getName());
+                item.setStorageName(getBaseDir().getPath());
+                item.setOriginatingUrl(null);
+                item.setDirectory(files[i].isDirectory());
+                result.add(item);
+            }
+        }
+        return result;
     }
 
 }
