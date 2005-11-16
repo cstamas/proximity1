@@ -6,6 +6,8 @@ public interface Proximity {
 
     void setRepositories(List repositories);
 
+    List getRepositories();
+
     void addRepository(Repository repository);
 
     void removeRepository(String repoName);

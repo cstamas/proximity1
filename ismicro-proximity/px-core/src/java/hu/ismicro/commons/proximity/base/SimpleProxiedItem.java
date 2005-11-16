@@ -3,6 +3,7 @@ package hu.ismicro.commons.proximity.base;
 
 import java.io.InputStream;
 import java.net.URL;
+import java.util.Date;
 
 public class SimpleProxiedItem implements ProxiedItem {
     
@@ -17,6 +18,10 @@ public class SimpleProxiedItem implements ProxiedItem {
     private InputStream stream;
     
     private boolean directory;
+    
+    private long size;
+    
+    private Date lastModified;
 
     public void setRepositoryName(String repositoryName) {
         this.repositoryName = repositoryName;
@@ -49,6 +54,19 @@ public class SimpleProxiedItem implements ProxiedItem {
     public String getPath() {
         return path;
     }
+    
+    public String getName() {
+        if (!"/".equals(getPath())) {
+            String path = getPath();
+            if (path.endsWith("/")) {
+                path = path.substring(0, path.length()-1);
+            }
+            String[] explodedPath = path.split("/");
+            return explodedPath[explodedPath.length-1];
+        } else {
+            return getPath();
+        }
+    }
 
     public void setStream(InputStream stream) {
         this.stream = stream;
@@ -64,6 +82,22 @@ public class SimpleProxiedItem implements ProxiedItem {
 
     public boolean isDirectory() {
         return directory;
+    }
+
+    public void setSize(long size) {
+        this.size = size;
+    }
+
+    public long getSize() {
+        return size;
+    }
+
+    public void setLastModified(Date lastModified) {
+        this.lastModified = lastModified;
+    }
+
+    public Date getLastModified() {
+        return lastModified;
     }
 
     public String toString() {

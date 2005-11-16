@@ -1,0 +1,231 @@
+body {
+     background: white;
+     background-position: top right;
+     background-repeat: no-repeat;
+     margin: 0px;
+     font-family: Trebuchet MS, Bitstream Vera Sans, Helvetica, Arial;
+}
+
+body td {
+     padding: 0px;
+     font-size: 14px;
+     vertical-align: top;
+}
+
+table {
+  padding:0px;
+  width: 100%;
+  margin-top: -2px;
+  margin-left: -2px;
+  margin-right: 0px;
+}
+
+.contentBox {
+     width: 100%;
+     vertical-align: top;
+     padding: 6px;
+}
+
+.headerBand {
+     border-bottom: 1px solid #aaaaaa;
+     vertical-align: top;
+     margin: 0px;
+     padding: 0px;
+#     background: #eeeeee;
+}
+
+.topBar {
+     vertical-align: bottom;
+     padding: 3px;
+}
+
+.footerBand {
+     border-top: 1px solid #aaaaaa;
+     vertical-align: top;
+     margin: 0px;
+     padding: 0px;
+#     background: #eeeeee;
+}
+
+.leftBand {
+     vertical-align: top;
+     width: 140px;
+#     padding: 3px;
+#     background: #eeeeee;
+}
+
+.menuroot {
+     font-size: 12px;
+     list-style-type: none;
+     padding-left: 15px;
+     margin: 3px;
+#     width: 140px;
+     padding: 3px;
+}
+
+.mainmenutitle {
+#     display: block;
+     background: #d0d0d0;
+     margin-top:5px;
+     margin-bottom:5px;
+     padding:2px;
+     font-size: 14pt;
+     font-weight: normal;
+}
+
+.mainmenu {
+     background: #eeeeee;
+     width: 140px;
+     margin: 3px;
+     padding: 6px;
+#     font-weight: bold;
+#     font-style: italic;
+     border-top: 1px solid #aaaaaa;
+     border-bottom: 1px solid #aaaaaa;
+     border-left: 1px solid #aaaaaa;
+     border-right: 1px solid #aaaaaa;
+}
+
+.menutitle {
+     margin-top: 6px;
+     border-top: 1px solid #aaaaaa;
+#     font-weight: bold;
+     font-style: italic;
+}
+
+.menuitem {
+     list-style-type: none;
+     font-weight: normal;
+     font-style: normal;
+}
+
+.menuseparator {
+     margin-top: 3px;
+     border-top: 1px solid #aaaaaa;
+}
+
+.submenu {
+     padding-left: 15px;
+     list-style-type: none;
+     font-weight: normal;
+     font-style: normal;
+}
+
+.tda td {
+     padding: 4px;
+     background: #eeeeee;
+}
+
+.tdb td {
+     padding: 4px;
+     background: #dddddd;
+}
+
+.command {
+#  background-image: url(/ds-web/images/cmd-corner.png);
+#  background-repeat: no-repeat;
+#  background-position: -4px;
+     padding-left: 3px;
+     padding-right: 3px;
+     background: #eeeeee;
+     border: 1px #c2c2c2 solid;
+}
+
+.command:hover {
+     background: #dddddd;
+     text-decoration: none;
+}
+
+.errorlist {
+     border: solid red 2px;
+     padding: 5px;
+     margin-bottom: 15px;
+     background: #eeeeee;
+     color: red;
+}
+
+.center {
+     text-align: center;
+}
+
+.right {
+     text-align: right;
+}
+
+.left {
+     text-align: left;
+}
+
+#### UNUSED, cstamas to clean!
+
+.floatRight {
+     float: right;
+     display: float;
+     border: 1px #c2c2c2 solid;
+}
+
+a {
+  text-decoration: none;
+}
+a:link {
+  color:#36a;
+}
+a:visited  {
+  color:#47a;
+}
+a:active, a:hover {
+  color:#69c;
+}
+
+.topbar {
+     background-color: #dddddd;
+     height:75px;
+     margin: 0px 0px 0px 0px;
+     padding: 0px 0px 0px 0px;
+}
+
+h2, .header {
+#     display: block;
+     background: #d0d0d0;
+     width: 100%;
+#     border-top: 1px;
+#     border-bottom:1px;
+     border: solid #999999 2px;
+     margin-right: -2px;
+     margin-left: -2px;
+     margin-top: -2px;
+#     margin-bottom:5px;
+     padding: 2px;
+#     padding-right:36px;
+
+     font-size: 18pt;
+     font-weight: normal;
+}
+
+h3 {
+     display: block;
+     background: #d0d0d0;
+#     width: 100%;
+     border-top:1px;
+     border-bottom:1px;
+     border: solid #999999 2px;
+#     margin-left: -22px;
+     margin-top:5px;
+     margin-bottom:5px;
+     padding:2px;
+#     padding-right:36px;
+
+     font-size: 14pt;
+     font-weight: normal;
+}
+
+.title {
+     font-size: 25pt;
+     color: yellow;
+}
+
+a:hover {
+     color: #8800ff;
+     border-bottom: none;
+     text-decoration: underline;
+}
