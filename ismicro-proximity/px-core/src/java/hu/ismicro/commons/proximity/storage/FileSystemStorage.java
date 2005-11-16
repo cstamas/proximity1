@@ -1,6 +1,6 @@
 package hu.ismicro.commons.proximity.storage;
 
-import hu.ismicro.commons.proximity.ProxiedItem;
+import hu.ismicro.commons.proximity.base.ProxiedItem;
 import hu.ismicro.commons.proximity.base.SimpleProxiedItem;
 
 import java.io.File;

@@ -3,7 +3,7 @@ package hu.ismicro.commons.proximity.remote;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import hu.ismicro.commons.proximity.RemotePeer;
+import hu.ismicro.commons.proximity.base.RemotePeer;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

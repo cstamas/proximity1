@@ -5,9 +5,9 @@ import java.util.List;
 public interface Proximity {
 
     void setRepositories(List repositories);
-    
+
     void addRepository(Repository repository);
-    
+
     void removeRepository(String repoName);
 
     /**
@@ -27,9 +27,10 @@ public interface Proximity {
      * @param repo
      * @return the wanted item
      * @throws ItemNotFoundException
-     *             if Proximity has not found the item in the given repos
+     *             if Proximity has not found the item in the given repos.
+     * @throws NoSuchRepositoryException
      */
-    Item retrieveItemFromRepository(String path, String repo) throws ItemNotFoundException;
+    Item retrieveItemFromRepository(String path, String repo) throws NoSuchRepositoryException, ItemNotFoundException;
 
     /**
      * Returns an aggregated List of all items in all configured Repositories.
@@ -51,7 +52,9 @@ public interface Proximity {
      * @return
      * @throws BrowsingNotAllowedException
      *             if the repos is forbidden for listing.
+     * @throws NoSuchRepositoryException
      */
-    List listItemsFromRepository(String path, String repo) throws BrowsingNotAllowedException;
+    List listItemsFromRepository(String path, String repo) throws NoSuchRepositoryException,
+            BrowsingNotAllowedException;
 
 }

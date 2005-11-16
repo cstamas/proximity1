@@ -1,8 +1,8 @@
 package hu.ismicro.commons.proximity.storage;
 
 import hu.ismicro.commons.proximity.Item;
-import hu.ismicro.commons.proximity.StorageException;
-import hu.ismicro.commons.proximity.WritableStorage;
+import hu.ismicro.commons.proximity.base.StorageException;
+import hu.ismicro.commons.proximity.base.WritableStorage;
 
 import java.io.File;
 import java.io.FileOutputStream;

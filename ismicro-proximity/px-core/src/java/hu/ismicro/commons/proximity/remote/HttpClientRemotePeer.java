@@ -1,7 +1,7 @@
 package hu.ismicro.commons.proximity.remote;
 
 import hu.ismicro.commons.proximity.Item;
-import hu.ismicro.commons.proximity.ProxiedItem;
+import hu.ismicro.commons.proximity.base.ProxiedItem;
 import hu.ismicro.commons.proximity.base.SimpleProxiedItem;
 
 import java.io.ByteArrayInputStream;

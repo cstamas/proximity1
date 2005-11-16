@@ -1,4 +1,5 @@
-package hu.ismicro.commons.proximity;
+package hu.ismicro.commons.proximity.base;
+
 
 import java.util.List;
 

@@ -1,5 +1,11 @@
 package hu.ismicro.commons.proximity;
 
+
+import hu.ismicro.commons.proximity.base.ProxiedItem;
+import hu.ismicro.commons.proximity.base.RemotePeer;
+import hu.ismicro.commons.proximity.base.RepositoryLogic;
+import hu.ismicro.commons.proximity.base.Storage;
+
 import java.util.List;
 
 public interface Repository {
