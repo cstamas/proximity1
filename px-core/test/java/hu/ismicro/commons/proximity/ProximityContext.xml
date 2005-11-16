@@ -20,6 +20,8 @@
 
 	<bean id="ibiblioFSStorage" class="hu.ismicro.commons.proximity.storage.WritableFileSystemStorage">
 		<property name="baseDir" value="/home/cstamas/tmp/proximity/ibiblio"/>
+		<property name="storeMetadata" value="true"/>
+		<property name="storeOriginatingUrls" value="true"/>
 	</bean>
 	
 	<bean id="ibiblioRemotePeer" class="hu.ismicro.commons.proximity.remote.HttpClientRemotePeer">

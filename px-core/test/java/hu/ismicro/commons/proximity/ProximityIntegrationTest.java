@@ -19,8 +19,10 @@ public class ProximityIntegrationTest extends AbstractProximityIntegrationTest {
     }
     
     public void testSimpleArtifact() {
-        Item item = proximity.retrieveItem("antlr/jars/antlr-2.7.1.jar");
+        Item item = proximity.retrieveItem("/antlr/jars/antlr-2.7.1.jar");
         logger.info("Got response of type " + item.getClass() + ":" + item);
+        List items = proximity.listItems("/antlr/jars");
+        logger.info("Got response of type " + items.getClass() + ":" + items);
     }
 
     public void testSimpleDir() {
