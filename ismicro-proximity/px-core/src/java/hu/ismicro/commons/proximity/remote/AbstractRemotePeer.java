@@ -22,7 +22,7 @@ public abstract class AbstractRemotePeer implements RemotePeer {
         if (!url.endsWith("/")) {
             throw new IllegalArgumentException("The URL is not ending with '/' (slash)!");
         }
-        this.remoteUrl = new URL(url);
+        this.remoteUrl = new URL(url.substring(0,url.length()-1));
     }
 
 }

@@ -99,6 +99,8 @@ public class SimpleRepository implements Repository {
             if (getStorage().containsItem(path)) {
                 logger.info("Found " + path + " item in storage of repository " + getName());
                 item = getStorage().retrieveItem(path);
+            } else {
+                logger.info("Not found " + path + " item in storage of repository " + getName());
             }
         }
         if (item == null && getRemotePeer() != null) {
@@ -107,8 +109,12 @@ public class SimpleRepository implements Repository {
                 item = getRemotePeer().retrieveItem(path);
                 if (getWritableStorage() != null) {
                     getWritableStorage().storeItem(item);
-                    retrieveItem(path);
+                    ProxiedItem localItem = getWritableStorage().retrieveItem(item.getPath());
+                    localItem.setOriginatingUrl(item.getOriginatingUrl());
+                    item = localItem;
                 }
+            } else {
+                logger.info("Not found " + path + " item in remote peer of repository " + getName());
             }
 
         }
