@@ -49,7 +49,7 @@
 	</bean>
 
 	<bean id="ibiblioFSStorage" class="hu.ismicro.commons.proximity.storage.WritableFileSystemStorage">
-		<property name="baseDir" value="/home/cstamas/tmp/proximity/ibiblio"/>
+		<property name="baseDir" value="${ibiblioFSStorage.baseDir}"/>
 		<property name="storeMetadata" value="true"/>
 	</bean>
 	
@@ -69,7 +69,7 @@
 	</bean>
 
 	<bean id="codehausFSStorage" class="hu.ismicro.commons.proximity.storage.WritableFileSystemStorage">
-		<property name="baseDir" value="/home/cstamas/tmp/proximity/codehaus"/>
+		<property name="baseDir" value="${codehausFSStorage.baseDir}"/>
 		<property name="storeMetadata" value="true"/>
 	</bean>
 	
@@ -88,7 +88,7 @@
 	</bean>
 
 	<bean id="ismicroFSStorage" class="hu.ismicro.commons.proximity.storage.FileSystemStorage">
-		<property name="baseDir" value="/home/cstamas/tmp/proximity/ismicro"/>
+		<property name="baseDir" value="${ismicroFSStorage.baseDir}"/>
 	</bean>
 
     <!--
@@ -102,7 +102,7 @@
 	</bean>
 
 	<bean id="extNonFreeFSStorage" class="hu.ismicro.commons.proximity.storage.FileSystemStorage">
-		<property name="baseDir" value="/home/cstamas/tmp/proximity/ext-non-free"/>
+		<property name="baseDir" value="${extNonFreeFSStorage.baseDir}"/>
 	</bean>
 
     <!--
@@ -116,7 +116,7 @@
 	</bean>
 
 	<bean id="extFreeFSStorage" class="hu.ismicro.commons.proximity.storage.FileSystemStorage">
-		<property name="baseDir" value="/home/cstamas/tmp/proximity/ext-free"/>
+		<property name="baseDir" value="${extFreeFSStorage.baseDir}"/>
 	</bean>
 
 </beans>
