@@ -6,14 +6,14 @@
 	<classpathentry kind="var" path="MAVEN_REPO/commons-logging/jars/commons-logging-1.0.4.jar"/>
 	<classpathentry kind="var" path="MAVEN_REPO/ehcache/jars/ehcache-1.1.jar"/>
 	<classpathentry kind="src" path="px-core/test/java"/>
-	<classpathentry kind="var" path="MAVEN_REPO/springframework/jars/spring-aop-1.2.5.jar"/>
-	<classpathentry kind="var" path="MAVEN_REPO/springframework/jars/spring-beans-1.2.5.jar"/>
-	<classpathentry kind="var" path="MAVEN_REPO/springframework/jars/spring-context-1.2.5.jar"/>
-	<classpathentry kind="var" path="MAVEN_REPO/springframework/jars/spring-core-1.2.5.jar"/>
-	<classpathentry kind="var" path="MAVEN_REPO/springframework/jars/spring-mock-1.2.5.jar"/>
 	<classpathentry sourcepath="ECLIPSE_HOME/plugins/org.eclipse.jdt.source_3.1.1/src/org.junit_3.8.1/junitsrc.zip" kind="var" path="JUNIT_HOME/junit.jar"/>
 	<classpathentry kind="var" path="MAVEN_REPO/commons-codec/jars/commons-codec-1.3.jar"/>
 	<classpathentry kind="var" path="MAVEN_REPO/commons-collections/jars/commons-collections-2.1.1.jar"/>
 	<classpathentry kind="var" path="MAVEN_REPO/log4j/jars/log4j-1.2.11.jar"/>
+	<classpathentry kind="var" path="MAVEN_REPO/springframework/jars/spring-aop-1.2.5.jar"/>
+	<classpathentry kind="var" path="MAVEN_REPO/springframework/jars/spring-mock-1.2.5.jar"/>
+	<classpathentry kind="var" path="MAVEN_REPO/springframework/jars/spring-beans-1.2.5.jar"/>
+	<classpathentry kind="var" path="MAVEN_REPO/springframework/jars/spring-context-1.2.5.jar"/>
+	<classpathentry kind="var" path="MAVEN_REPO/springframework/jars/spring-core-1.2.5.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
