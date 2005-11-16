@@ -5,7 +5,7 @@ public class ItemNotFoundException extends ProximityException {
     private String path;
 
     public ItemNotFoundException(String path) {
-        super();
+        super("Item not found on path " + path);
         this.path = path;
     }
 
