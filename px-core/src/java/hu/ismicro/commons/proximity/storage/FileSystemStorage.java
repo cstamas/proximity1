@@ -6,8 +6,6 @@ import hu.ismicro.commons.proximity.base.SimpleProxiedItem;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,14 +26,14 @@ public class FileSystemStorage extends AbstractStorage {
 
     public boolean containsItem(String path) {
         logger.info("Checking for existence of " + path + " in " + getBaseDir());
-        File target = new File(baseDir, path);
+        File target = new File(getBaseDir(), path);
         return target.exists();
     }
 
     public Item retrieveItem(String path) {
         logger.info("Retrieving " + path + " in " + getBaseDir());
         try {
-            File target = new File(baseDir, path);
+            File target = new File(getBaseDir(), path);
             SimpleProxiedItem result = new SimpleProxiedItem();
             result.setPath(path);
             result.setOriginatingUrl(null);
@@ -47,26 +45,6 @@ public class FileSystemStorage extends AbstractStorage {
         }
     }
 
-    public void storeItem(Item item) {
-        logger.info("Storing " + item.getPath() + " in " + getBaseDir());
-        try {
-            File file = new File(baseDir, item.getPath());
-            file.getParentFile().mkdirs();
-            FileOutputStream os = new FileOutputStream(file);
-            byte[] buffer = new byte[8192];
-            int read;
-            while (item.getStream().available() != 0) {
-                read = item.getStream().read(buffer);
-                os.write(buffer, 0, read);
-            }
-            os.flush();
-            os.close();
-            item.getStream().close();
-        } catch (IOException ex) {
-            logger.error("IOException in FS storage " + getBaseDir(), ex);
-        }
-    }
-
     public List listItems(String path) {
         logger.info("Listing " + path + " in " + getBaseDir());
         if (!path.endsWith("/")) {
@@ -75,9 +53,9 @@ public class FileSystemStorage extends AbstractStorage {
             List result = new ArrayList();
             File target = null;
             if (path.equals("/")) {
-                target = baseDir;
+                target = getBaseDir();
             } else {
-                target = new File(baseDir, path);
+                target = new File(getBaseDir(), path);
             }
             if (target.exists()) {
                 File[] files = target.listFiles();

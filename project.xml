@@ -72,6 +72,18 @@
     </developer>
 
     <developer>
+      <id>btamas</id>
+      <name>BARATH, Tamas</name>
+      <email>btamas@is-micro.myip.hu</email>
+      <organization>ISmicro</organization>
+      <roles>
+        <role>Developer</role>
+      </roles>
+      <timezone>2</timezone>
+      <properties>ICQ: xxxxxxxxx</properties>
+    </developer>
+
+    <developer>
       <id>szuzso</id>
       <name>SZUNYOG, Zsolt</name>
       <email>szunyog@is-micro.hu</email>
@@ -80,7 +92,7 @@
         <role>Developer</role>
       </roles>
       <timezone>2</timezone>
-      <properties>ICQ: xxxxxxxxx, alias: cstamas</properties>
+      <properties>ICQ: xxxxxxxxx</properties>
     </developer>
   </developers>
 

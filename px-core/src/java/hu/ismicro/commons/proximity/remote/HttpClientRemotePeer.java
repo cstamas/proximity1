@@ -22,8 +22,6 @@ import org.apache.commons.httpclient.params.HttpMethodParams;
 
 public class HttpClientRemotePeer extends AbstractRemotePeer {
 
-    private URL remoteUrl;
-
     private HttpClient httpClient = new HttpClient(new SimpleHttpConnectionManager());
 
     private HttpMethodRetryHandler httpRetryHandler = new DefaultHttpMethodRetryHandler();
@@ -73,17 +71,6 @@ public class HttpClientRemotePeer extends AbstractRemotePeer {
 
     public boolean isFollowRedirection() {
         return followRedirection;
-    }
-
-    public String getRemoteUrl() {
-        return this.remoteUrl.toString();
-    }
-
-    public void setRemoteUrl(String url) throws MalformedURLException {
-        if (!url.endsWith("/")) {
-            throw new IllegalArgumentException("The URL is not ending with '/' (slash)!");
-        }
-        this.remoteUrl = new URL(url);
     }
 
     public boolean containsItem(String path) {
