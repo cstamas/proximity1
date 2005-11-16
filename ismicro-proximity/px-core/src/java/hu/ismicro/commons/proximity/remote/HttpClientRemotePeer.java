@@ -88,7 +88,9 @@ public class HttpClientRemotePeer extends AbstractRemotePeer {
             if (response == HttpStatus.SC_OK) {
                 SimpleProxiedItem result = new SimpleProxiedItem();
                 result.setPath(path);
+                result.setStorageName(getRemoteUrl());
                 result.setOriginatingUrl(new URL(getRemoteUrl() + path));
+                result.setDirectory(false);
                 result.setStream(new ByteArrayInputStream(get.getResponseBody()));
                 logger.info("Received content with Length: " + get.getResponseContentLength());
                 return result;

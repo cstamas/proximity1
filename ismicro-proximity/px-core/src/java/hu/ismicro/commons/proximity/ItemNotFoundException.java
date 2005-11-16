@@ -1,16 +1,19 @@
 package hu.ismicro.commons.proximity;
 
+/**
+ * Thrown by repository if the requested item is not found.
+ * 
+ * @author cstamas
+ *
+ */
 public class ItemNotFoundException extends ProximityException {
-
-    private String path;
 
     public ItemNotFoundException(String path) {
         super("Item not found on path " + path);
-        this.path = path;
     }
 
-    public String getPath() {
-        return this.path;
+    public ItemNotFoundException(String path, String repo) {
+        super("Item not found on path " + path + " in repository " + repo);
     }
 
 }

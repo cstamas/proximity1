@@ -7,5 +7,7 @@ public interface Item {
     String getPath();
 
     InputStream getStream();
+    
+    boolean isDirectory();
 
 }

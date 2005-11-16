@@ -5,6 +5,8 @@ import java.net.URL;
 public interface ProxiedItem extends Item {
 
     String getRepositoryName();
+    
+    String getStorageName();
 
     URL getOriginatingUrl();
 

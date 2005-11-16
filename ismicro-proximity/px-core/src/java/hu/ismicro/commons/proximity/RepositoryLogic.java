@@ -2,6 +2,8 @@ package hu.ismicro.commons.proximity;
 
 public interface RepositoryLogic {
 
-    void orchestrateRequest(ProximityRequest request, Repository repository);
+    void orchestrateItemRequest(String path, Repository repository);
+
+    void orchestrateListRequest(String path, Repository repository);
 
 }
