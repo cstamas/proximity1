@@ -13,7 +13,14 @@
 
 <section name="ISmicro Commons Proximity">
 
-<p>Proximity component is a proxy-like pure Java application.</p>
+<p>Proximity Core component is a proxy-like pure Java application.</p>
+
+<p>The Core is just a bunch of beans, with dependencies for only the needed
+transport and storage. Core dependencies are: commons-codec, commons-collections,
+commons-httpclient and commons-logging (needed by previous components and
+by Core itself). For detailed deps look here: 
+<a href="dependencies.html">maven deps report</a>. <b>NOTE: The spring-* deps
+are needed for integration tests only!</b></p>
 
 <subsection name="Project reports">
 <p>Navigate with links on the left to examine current project status, various project reports

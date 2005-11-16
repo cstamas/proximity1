@@ -1,9 +1,13 @@
-ismicro-users
-=============
+ismicro-proximity
+=================
 
-A Commons project aimed to make users storage and administration
-back-end independent and unified.
+A Commons project for generic proxying with pluggable proxy logic.
 
-This package is generic, but is focused primarily on Spring Bean
-support as it is built upon Spring Framework.
+One of primary use will be as webapp to serve as maven proxy on
+company's intranet. As for reducing outgoing traffic (caching ibiblio and other
+maven repos), aggregating more repositories (reducing config) with acting
+as one logical repository while proxying more remote reposes and as for 
+publishing in-house maven artifacts which are not uploadable to ibiblio 
+(like commercial projects...).
 
+Have fun!
