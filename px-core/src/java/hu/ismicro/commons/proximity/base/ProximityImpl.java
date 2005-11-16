@@ -15,40 +15,39 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 public class ProximityImpl implements Proximity {
-	
-	protected Log logger = LogFactory.getLog(this.getClass());
 
-	private List repositories;
+    protected Log logger = LogFactory.getLog(this.getClass());
 
-	public void setRepositories(List repositories) {
-		this.repositories = repositories;
-	}
+    private List repositories;
 
-	public List getRepositories() {
-		return repositories;
-	}
+    public void setRepositories(List repositories) {
+        this.repositories = repositories;
+    }
 
-	public ProximityResponse handleRequest(ProximityRequest request)
-			throws ProximityException {
-		ProximityResponse response = null;
-		for (Iterator i = repositories.iterator(); i.hasNext();) {
-			Repository repo = (Repository) i.next();
-			try {
-				if (response == null) {
-					response = repo.handleRequest(request);
-					if (!response.isMergeableResponse()) {
-						return response;
-					}
-				} else {
-					response.mergeResponses(repo.handleRequest(request));
-				}
-			} catch (BrowsingNotAllowedException ex) {
-				logger.info("Browsing of repository " + repo.getName() + " is forbidden!");
-			} catch (ItemNotFoundException ex) {
-				logger.info("Item " + request.getPath() + " not found in repository " + repo.getName());
-			}
-		}
-		return response;
-	}
+    public List getRepositories() {
+        return repositories;
+    }
+
+    public ProximityResponse handleRequest(ProximityRequest request) throws ProximityException {
+        ProximityResponse response = null;
+        for (Iterator i = repositories.iterator(); i.hasNext();) {
+            Repository repo = (Repository) i.next();
+            try {
+                if (response == null) {
+                    response = repo.handleRequest(request);
+                    if (!response.isMergeableResponse()) {
+                        return response;
+                    }
+                } else {
+                    response.mergeResponses(repo.handleRequest(request));
+                }
+            } catch (BrowsingNotAllowedException ex) {
+                logger.info("Browsing of repository " + repo.getName() + " is forbidden!");
+            } catch (ItemNotFoundException ex) {
+                logger.info("Item " + request.getPath() + " not found in repository " + repo.getName());
+            }
+        }
+        return response;
+    }
 
 }
