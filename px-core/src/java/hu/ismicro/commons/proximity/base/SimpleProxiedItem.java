@@ -1,6 +1,5 @@
 package hu.ismicro.commons.proximity.base;
 
-import hu.ismicro.commons.proximity.ProxiedItem;
 
 import java.io.InputStream;
 import java.net.URL;

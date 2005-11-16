@@ -2,13 +2,7 @@ package hu.ismicro.commons.proximity.base;
 
 import hu.ismicro.commons.proximity.BrowsingNotAllowedException;
 import hu.ismicro.commons.proximity.ItemNotFoundException;
-import hu.ismicro.commons.proximity.ProxiedItem;
-import hu.ismicro.commons.proximity.RemotePeer;
 import hu.ismicro.commons.proximity.Repository;
-import hu.ismicro.commons.proximity.RepositoryLogic;
-import hu.ismicro.commons.proximity.Storage;
-import hu.ismicro.commons.proximity.WritableRemotePeer;
-import hu.ismicro.commons.proximity.WritableStorage;
 
 import java.util.ArrayList;
 import java.util.Iterator;

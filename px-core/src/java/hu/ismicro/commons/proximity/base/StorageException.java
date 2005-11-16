@@ -1,4 +1,6 @@
-package hu.ismicro.commons.proximity;
+package hu.ismicro.commons.proximity.base;
+
+import hu.ismicro.commons.proximity.ProximityException;
 
 public class StorageException extends ProximityException {
     
