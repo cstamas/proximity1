@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+
+    <!--
+      - Infrastructure, not really a BL beans
+    -->
+    <bean id="messageSource"
+        class="org.springframework.context.support.ResourceBundleMessageSource">
+        <property name="basenames">
+            <list>
+                <value>messages</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+      <property name="locations">
+        <list>
+          <value>/WEB-INF/proximity.properties</value>
+        </list>
+      </property>
+    </bean>
+
+    <!--
+      - Central proximity bean.
+    -->
+	<bean id="proximity" class="hu.ismicro.commons.proximity.base.ProximityImpl">
+		<property name="repositories">
+			<list>
+				<ref local="ismicro"/>
+				<ref local="extNonFree"/>
+				<ref local="extFree"/>
+				<ref local="ibiblio"/>
+				<ref local="codehaus"/>
+			</list>
+		</property>
+	</bean>
+
+    <!--
+      - IBIBLIO Repository (with writable storage and remote peer)
+      - A standard maven repository.
+    -->
+	<bean id="ibiblio" class="hu.ismicro.commons.proximity.base.SimpleRepository">
+		<property name="name" value="www-ibiblio-org"/>
+		<property name="writableStorage" ref="ibiblioFSStorage"/>
+		<property name="remotePeer" ref="ibiblioRemotePeer"/>
+	</bean>
+
+	<bean id="ibiblioFSStorage" class="hu.ismicro.commons.proximity.storage.WritableFileSystemStorage">
+		<property name="baseDir" value="/home/cstamas/tmp/proximity/ibiblio"/>
+		<property name="storeMetadata" value="true"/>
+	</bean>
+	
+	<bean id="ibiblioRemotePeer" class="hu.ismicro.commons.proximity.remote.HttpClientRemotePeer">
+		<property name="remoteUrl" value="http://www.ibiblio.org/maven/"/>
+		<property name="connectionTimeout" value="30000"/>
+	</bean>
+
+    <!--
+      - Codehaus Repository (with writable storage and remote peer)
+      - A standard maven repository.
+    -->
+	<bean id="codehaus" class="hu.ismicro.commons.proximity.base.SimpleRepository">
+		<property name="name" value="dist-codehaus-org"/>
+		<property name="writableStorage" ref="codehausFSStorage"/>
+		<property name="remotePeer" ref="codehausRemotePeer"/>
+	</bean>
+
+	<bean id="codehausFSStorage" class="hu.ismicro.commons.proximity.storage.WritableFileSystemStorage">
+		<property name="baseDir" value="/home/cstamas/tmp/proximity/codehaus"/>
+		<property name="storeMetadata" value="true"/>
+	</bean>
+	
+	<bean id="codehausRemotePeer" class="hu.ismicro.commons.proximity.remote.HttpClientRemotePeer">
+		<property name="remoteUrl" value="http://dist.codehaus.org/"/>
+		<property name="connectionTimeout" value="30000"/>
+	</bean>
+
+    <!--
+      - ISMicro Repository (with read-only storage and without remote peer)
+      - A maven repository for publishing in-house artifacts.
+    -->
+	<bean id="ismicro" class="hu.ismicro.commons.proximity.base.SimpleRepository">
+		<property name="name" value="ISmicro Local"/>
+		<property name="storage" ref="ismicroFSStorage"/>
+	</bean>
+
+	<bean id="ismicroFSStorage" class="hu.ismicro.commons.proximity.storage.FileSystemStorage">
+		<property name="baseDir" value="/home/cstamas/tmp/proximity/ismicro"/>
+	</bean>
+
+    <!--
+      - EXT NonFree Repository (with read-only storage and without remote peer)
+      - A maven repository for in-house use for publishing non-free artifacts 
+      - not deployed on standard maven repositories (oracle JDBC, J2EE, etc...).
+    -->
+	<bean id="extNonFree" class="hu.ismicro.commons.proximity.base.SimpleRepository">
+		<property name="name" value="External NonFree"/>
+		<property name="storage" ref="extNonFreeFSStorage"/>
+	</bean>
+
+	<bean id="extNonFreeFSStorage" class="hu.ismicro.commons.proximity.storage.FileSystemStorage">
+		<property name="baseDir" value="/home/cstamas/tmp/proximity/ext-non-free"/>
+	</bean>
+
+    <!--
+      - EXT Free Repository (with read-only storage and without remote peer)
+      - A maven repository for in-house use for publishing artifacts 
+      - not deployed on standard maven repositories (dwr, etc...).
+    -->
+	<bean id="extFree" class="hu.ismicro.commons.proximity.base.SimpleRepository">
+		<property name="name" value="External Free"/>
+		<property name="storage" ref="extFreeFSStorage"/>
+	</bean>
+
+	<bean id="extFreeFSStorage" class="hu.ismicro.commons.proximity.storage.FileSystemStorage">
+		<property name="baseDir" value="/home/cstamas/tmp/proximity/ext-free"/>
+	</bean>
+
+</beans>

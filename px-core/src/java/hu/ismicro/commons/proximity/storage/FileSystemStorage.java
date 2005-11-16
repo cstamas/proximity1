@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class FileSystemStorage extends AbstractStorage {
@@ -38,8 +39,13 @@ public class FileSystemStorage extends AbstractStorage {
             result.setPath(path);
             result.setStorageName(getBaseDir().getPath());
             result.setOriginatingUrl(null);
-            result.setDirectory(false);
-            result.setStream(new FileInputStream(target));
+            if (target.isDirectory()) {
+                result.setDirectory(true);
+                result.setStream(null);
+            } else {
+                result.setDirectory(false);
+                result.setStream(new FileInputStream(target));
+            }
             return result;
         } catch (FileNotFoundException ex) {
             logger.error("FileNotFound in FS storage " + getBaseDir(), ex);
@@ -60,13 +66,26 @@ public class FileSystemStorage extends AbstractStorage {
             target = new File(getBaseDir(), path);
         }
         if (target.exists()) {
-            File[] files = target.listFiles();
-            for (int i = 0; i < files.length; i++) {
+            if (target.isDirectory()) {
+                File[] files = target.listFiles();
+                for (int i = 0; i < files.length; i++) {
+                    SimpleProxiedItem item = new SimpleProxiedItem();
+                    item.setPath(path + files[i].getName());
+                    item.setStorageName(getBaseDir().getPath());
+                    item.setOriginatingUrl(null);
+                    item.setDirectory(files[i].isDirectory());
+                    item.setSize(files[i].isDirectory() ? 0 : files[i].length());
+                    item.setLastModified(new Date(files[i].lastModified()));
+                    result.add(item);
+                }
+            } else {
                 SimpleProxiedItem item = new SimpleProxiedItem();
-                item.setPath(path + files[i].getName());
+                item.setPath(path);
                 item.setStorageName(getBaseDir().getPath());
                 item.setOriginatingUrl(null);
-                item.setDirectory(files[i].isDirectory());
+                item.setDirectory(true);
+                item.setSize(target.length());
+                item.setLastModified(new Date(target.lastModified()));
                 result.add(item);
             }
         }

@@ -8,6 +8,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.httpclient.DefaultHttpMethodRetryHandler;
@@ -92,6 +93,8 @@ public class HttpClientRemotePeer extends AbstractRemotePeer {
                 result.setStorageName(getRemoteUrl());
                 result.setOriginatingUrl(new URL(getRemoteUrl() + path));
                 result.setDirectory(false);
+                result.setSize(get.getResponseContentLength());
+                result.setLastModified(new Date());
                 result.setStream(new ByteArrayInputStream(get.getResponseBody()));
                 logger.info("Received content with Length: " + get.getResponseContentLength());
                 return result;

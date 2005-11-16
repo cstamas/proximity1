@@ -1,0 +1,14 @@
+<h2>Proximity WEBAPP</h2>
+
+<p>The Proximity is a general Proxy "like" engine with pluggable proxying 
+engine.</p>
+
+<p>One of primary use will be as webapp to serve as maven proxy on our
+companys intranet. As for reducing outgoing traffic (caching ibiblio and other
+maven repos), aggregating more repositories (reducing config) with acting
+as one logical repository while proxying more remote reposes and as for 
+publishing in-house maven artifacts which are not uploadable to ibiblio 
+(like commercial projects...).</p>
+
+<p>Have fun!</p>
+

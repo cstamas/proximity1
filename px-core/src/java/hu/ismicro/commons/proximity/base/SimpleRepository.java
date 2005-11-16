@@ -101,7 +101,7 @@ public class SimpleRepository implements Repository {
             if (getRemotePeer().containsItem(path)) {
                 logger.info("Found " + path + " item in remote peer of repository " + getName());
                 item = getRemotePeer().retrieveItem(path);
-                if (getWritableStorage() != null) {
+                if (!item.isDirectory() && getWritableStorage() != null) {
                     getWritableStorage().storeItem(item);
                     ProxiedItem localItem = getWritableStorage().retrieveItem(item.getPath());
                     localItem.setOriginatingUrl(item.getOriginatingUrl());
