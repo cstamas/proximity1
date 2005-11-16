@@ -1,6 +1,7 @@
 package hu.ismicro.commons.proximity.remote;
 
 import hu.ismicro.commons.proximity.Item;
+import hu.ismicro.commons.proximity.ProxiedItem;
 import hu.ismicro.commons.proximity.base.SimpleProxiedItem;
 
 import java.io.ByteArrayInputStream;
@@ -80,7 +81,7 @@ public class HttpClientRemotePeer extends AbstractRemotePeer {
         return response == HttpStatus.SC_OK;
     }
 
-    public Item retrieveItem(String path) {
+    public ProxiedItem retrieveItem(String path) {
         GetMethod get = new GetMethod(getRemoteUrl() + path);
         get.setFollowRedirects(isFollowRedirection());
         try {

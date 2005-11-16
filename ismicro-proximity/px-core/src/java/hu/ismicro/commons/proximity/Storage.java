@@ -6,7 +6,7 @@ public interface Storage {
     
     boolean containsItem(String path);
 
-    Item retrieveItem(String path);
+    ProxiedItem retrieveItem(String path);
 
     List listItems(String path);
 

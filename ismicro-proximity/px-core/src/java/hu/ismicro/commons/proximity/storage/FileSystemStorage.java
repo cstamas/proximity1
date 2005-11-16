@@ -1,6 +1,6 @@
 package hu.ismicro.commons.proximity.storage;
 
-import hu.ismicro.commons.proximity.Item;
+import hu.ismicro.commons.proximity.ProxiedItem;
 import hu.ismicro.commons.proximity.base.SimpleProxiedItem;
 
 import java.io.File;
@@ -30,7 +30,7 @@ public class FileSystemStorage extends AbstractStorage {
         return target.exists();
     }
 
-    public Item retrieveItem(String path) {
+    public ProxiedItem retrieveItem(String path) {
         logger.info("Retrieving " + path + " in " + getBaseDir());
         try {
             File target = new File(getBaseDir(), path);

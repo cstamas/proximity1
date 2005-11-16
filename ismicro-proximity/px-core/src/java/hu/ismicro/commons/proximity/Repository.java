@@ -12,7 +12,7 @@ public interface Repository {
 
     void setRepositoryLogic(RepositoryLogic logic);
 
-    Item retrieveItem(String path);
+    ProxiedItem retrieveItem(String path);
     
     List listItems(String path);
 

@@ -1,8 +1,8 @@
 package hu.ismicro.commons.proximity.base;
 
 import hu.ismicro.commons.proximity.BrowsingNotAllowedException;
-import hu.ismicro.commons.proximity.Item;
 import hu.ismicro.commons.proximity.ItemNotFoundException;
+import hu.ismicro.commons.proximity.ProxiedItem;
 import hu.ismicro.commons.proximity.RemotePeer;
 import hu.ismicro.commons.proximity.Repository;
 import hu.ismicro.commons.proximity.RepositoryLogic;
@@ -11,6 +11,7 @@ import hu.ismicro.commons.proximity.WritableRemotePeer;
 import hu.ismicro.commons.proximity.WritableStorage;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
@@ -92,8 +93,8 @@ public class SimpleRepository implements Repository {
         return browsingAllowed;
     }
 
-    public Item retrieveItem(String path) {
-        Item item = null;
+    public ProxiedItem retrieveItem(String path) {
+        ProxiedItem item = null;
         if (getStorage() != null) {
             if (getStorage().containsItem(path)) {
                 logger.info("Found " + path + " item in storage of repository " + getName());
@@ -112,6 +113,7 @@ public class SimpleRepository implements Repository {
 
         }
         if (item != null) {
+            item.setRepositoryName(getName());
             return item;
         } else {
             throw new ItemNotFoundException(path);
@@ -123,6 +125,10 @@ public class SimpleRepository implements Repository {
             List items = new ArrayList();
             if (getStorage() != null) {
                 items.addAll(getStorage().listItems(path));
+            }
+            for (Iterator i = items.iterator(); i.hasNext(); ) {
+                ProxiedItem item = (ProxiedItem) i.next();
+                item.setRepositoryName(getName());
             }
             return items;
         } else {

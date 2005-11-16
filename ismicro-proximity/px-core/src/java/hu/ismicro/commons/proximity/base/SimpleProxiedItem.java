@@ -68,7 +68,7 @@ public class SimpleProxiedItem implements ProxiedItem {
     }
 
     public String toString() {
-        return "["+getStorageName()+(isDirectory() ? ",D" : ",F") +"]:"+getPath();
+        return "["+getRepositoryName()+":"+getStorageName()+(isDirectory() ? ":D" : ":F") +"]:"+getPath();
     }
 
 }
