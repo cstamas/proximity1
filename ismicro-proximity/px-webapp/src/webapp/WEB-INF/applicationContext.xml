@@ -46,6 +46,9 @@
 		<property name="name" value="www-ibiblio-org"/>
 		<property name="writableStorage" ref="ibiblioFSStorage"/>
 		<property name="remotePeer" ref="ibiblioRemotePeer"/>
+		<property name="repositoryRetrievalLogic">
+			<bean class="hu.ismicro.commons.proximity.logic.MavenSnapshotAwareLocalLookupRemoteLookupLocalStoreRetrievalLogic"/>
+		</property>
 	</bean>
 
 	<bean id="ibiblioFSStorage" class="hu.ismicro.commons.proximity.storage.WritableFileSystemStorage">
@@ -66,6 +69,9 @@
 		<property name="name" value="dist-codehaus-org"/>
 		<property name="writableStorage" ref="codehausFSStorage"/>
 		<property name="remotePeer" ref="codehausRemotePeer"/>
+		<property name="repositoryRetrievalLogic">
+			<bean class="hu.ismicro.commons.proximity.logic.MavenSnapshotAwareLocalLookupRemoteLookupLocalStoreRetrievalLogic"/>
+		</property>
 	</bean>
 
 	<bean id="codehausFSStorage" class="hu.ismicro.commons.proximity.storage.WritableFileSystemStorage">

@@ -2,7 +2,7 @@ package hu.ismicro.commons.proximity.base;
 
 import hu.ismicro.commons.proximity.BrowsingNotAllowedException;
 import hu.ismicro.commons.proximity.ItemNotFoundException;
-import hu.ismicro.commons.proximity.Repository;
+import hu.ismicro.commons.proximity.logic.LocalLookupRemoteLookupLocalStoreRetrievalLogic;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -11,7 +11,7 @@ import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-public class SimpleRepository implements Repository {
+public class SimpleRepository implements InnerRepository {
 
     protected Log logger = LogFactory.getLog(this.getClass());
 
@@ -25,7 +25,7 @@ public class SimpleRepository implements Repository {
 
     private WritableRemotePeer writableRemotePeer;
 
-    private RepositoryLogic repositoryLogic;
+    private RepositoryRetrievalLogic repositoryRetrievalLogic = new LocalLookupRemoteLookupLocalStoreRetrievalLogic();
 
     private boolean browsingAllowed = true;
 
@@ -71,12 +71,12 @@ public class SimpleRepository implements Repository {
         return writableRemotePeer;
     }
 
-    public void setRepositoryLogic(RepositoryLogic repositoryLogic) {
-        this.repositoryLogic = repositoryLogic;
+    public void setRepositoryRetrievalLogic(RepositoryRetrievalLogic repositoryLogic) {
+        this.repositoryRetrievalLogic = repositoryLogic;
     }
 
-    public RepositoryLogic getRepositoryLogic() {
-        return repositoryLogic;
+    public RepositoryRetrievalLogic getRepositoryRetrievalLogic() {
+        return repositoryRetrievalLogic;
     }
 
     public void setBrowsingAllowed(boolean browsingAllowed) {
@@ -88,30 +88,7 @@ public class SimpleRepository implements Repository {
     }
 
     public ProxiedItem retrieveItem(String path) {
-        ProxiedItem item = null;
-        if (getStorage() != null) {
-            if (getStorage().containsItem(path)) {
-                logger.info("Found " + path + " item in storage of repository " + getName());
-                item = getStorage().retrieveItem(path);
-            } else {
-                logger.info("Not found " + path + " item in storage of repository " + getName());
-            }
-        }
-        if (item == null && getRemotePeer() != null) {
-            if (getRemotePeer().containsItem(path)) {
-                logger.info("Found " + path + " item in remote peer of repository " + getName());
-                item = getRemotePeer().retrieveItem(path);
-                if (!item.isDirectory() && getWritableStorage() != null) {
-                    getWritableStorage().storeItem(item);
-                    ProxiedItem localItem = getWritableStorage().retrieveItem(item.getPath());
-                    localItem.setOriginatingUrl(item.getOriginatingUrl());
-                    item = localItem;
-                }
-            } else {
-                logger.info("Not found " + path + " item in remote peer of repository " + getName());
-            }
-
-        }
+        ProxiedItem item = repositoryRetrievalLogic.orchestrateItemRequest(path, this);
         if (item != null) {
             item.setRepositoryName(getName());
             return item;
@@ -126,7 +103,7 @@ public class SimpleRepository implements Repository {
             if (getStorage() != null) {
                 items.addAll(getStorage().listItems(path));
             }
-            for (Iterator i = items.iterator(); i.hasNext(); ) {
+            for (Iterator i = items.iterator(); i.hasNext();) {
                 ProxiedItem item = (ProxiedItem) i.next();
                 item.setRepositoryName(getName());
             }
