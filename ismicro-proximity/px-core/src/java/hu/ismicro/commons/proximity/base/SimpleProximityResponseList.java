@@ -9,7 +9,7 @@ import java.util.Iterator;
 import java.util.List;
 
 public class SimpleProximityResponseList implements ProximityResponseList {
-    
+
     private List items;
 
     public Item getItem() {
@@ -27,28 +27,29 @@ public class SimpleProximityResponseList implements ProximityResponseList {
         return items;
     }
 
-	public boolean isMergeableResponse() {
-		return true;
-	}
+    public boolean isMergeableResponse() {
+        return true;
+    }
 
     public void mergeResponses(ProximityResponse another) {
         if (another instanceof ProximityResponseList) {
-            this.getItems().addAll(((ProximityResponseList)another).getItems());
+            this.getItems().addAll(((ProximityResponseList) another).getItems());
         } else {
-            throw new IllegalArgumentException(this.getClass().getName() + " is not mergeable with class " + another.getClass().getName());
+            throw new IllegalArgumentException(this.getClass().getName() + " is not mergeable with class "
+                    + another.getClass().getName());
         }
     }
-    
+
     public String toString() {
-    	StringBuffer sb = new StringBuffer(this.getClass().getName() + "[");
-    	for (Iterator i = getItems().iterator(); i.hasNext(); ) {
-    		if (!sb.toString().endsWith("[")) {
-    			sb.append(",");
-    		}
-    		sb.append(((Item)i.next()).getPath());
-    	}
-    	sb.append("]");
-    	return sb.toString();
+        StringBuffer sb = new StringBuffer(this.getClass().getName() + "[");
+        for (Iterator i = getItems().iterator(); i.hasNext();) {
+            if (!sb.toString().endsWith("[")) {
+                sb.append(",");
+            }
+            sb.append(((Item) i.next()).getPath());
+        }
+        sb.append("]");
+        return sb.toString();
     }
 
 }

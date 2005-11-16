@@ -13,7 +13,7 @@
   <!-- The version of the project under development -->
   <currentVersion>1.0.0-SNAPSHOT</currentVersion>
 
-  <package>hu.ismicro.commons.proximity.core</package>
+  <package>hu.ismicro.commons.proximity</package>
 
   <!-- jar files the project is dependent on -->
   <dependencies>
@@ -132,18 +132,9 @@
   <!-- build information for the project -->
   <build>
     <nagEmailAddress>staff@is-micro.myip.hu</nagEmailAddress>
-    <sourceDirectory>src/java</sourceDirectory>
-    <unitTestSourceDirectory>test/java</unitTestSourceDirectory>
+    <sourceDirectory>${basedir}/src/java</sourceDirectory>
+    <unitTestSourceDirectory>${basedir}/test/java</unitTestSourceDirectory>
 
-    <resources>
-	  <resource>
-        <directory>${basedir}/src/hibernate</directory>
-	    <includes>
-    	  <include>**/*.hbm.xml</include>
-        </includes>
-	  </resource>
-	</resources>
-    
     <unitTest>
       <includes>
         <include>**/*Test.java</include>
@@ -161,7 +152,6 @@
 	    </resource>
   	  </resources>
     </unitTest>
-
   </build>
   
   <reports>

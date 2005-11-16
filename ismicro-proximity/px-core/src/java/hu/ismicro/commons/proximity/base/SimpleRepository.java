@@ -17,101 +17,100 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 public class SimpleRepository implements Repository {
-	
-	protected Log logger = LogFactory.getLog(this.getClass());
 
-	private String name;
+    protected Log logger = LogFactory.getLog(this.getClass());
 
-	private Storage storage;
+    private String name;
 
-	private RemotePeer remotePeer;
+    private Storage storage;
 
-	private RepositoryLogic repositoryLogic;
+    private RemotePeer remotePeer;
 
-	private boolean browsingAllowed = true;
+    private RepositoryLogic repositoryLogic;
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    private boolean browsingAllowed = true;
 
-	public String getName() {
-		return name;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public void setStorage(Storage storage) {
-		this.storage = storage;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public Storage getStorage() {
-		return storage;
-	}
+    public void setStorage(Storage storage) {
+        this.storage = storage;
+    }
 
-	public void setRemotePeer(RemotePeer remotePeer) {
-		this.remotePeer = remotePeer;
-	}
+    public Storage getStorage() {
+        return storage;
+    }
 
-	public RemotePeer getRemotePeer() {
-		return remotePeer;
-	}
+    public void setRemotePeer(RemotePeer remotePeer) {
+        this.remotePeer = remotePeer;
+    }
 
-	public void setRepositoryLogic(RepositoryLogic repositoryLogic) {
-		this.repositoryLogic = repositoryLogic;
-	}
+    public RemotePeer getRemotePeer() {
+        return remotePeer;
+    }
 
-	public RepositoryLogic getRepositoryLogic() {
-		return repositoryLogic;
-	}
+    public void setRepositoryLogic(RepositoryLogic repositoryLogic) {
+        this.repositoryLogic = repositoryLogic;
+    }
 
-	public void setBrowsingAllowed(boolean browsingAllowed) {
-		this.browsingAllowed = browsingAllowed;
-	}
+    public RepositoryLogic getRepositoryLogic() {
+        return repositoryLogic;
+    }
 
-	public boolean isBrowsingAllowed() {
-		return browsingAllowed;
-	}
+    public void setBrowsingAllowed(boolean browsingAllowed) {
+        this.browsingAllowed = browsingAllowed;
+    }
 
-	public ProximityResponse handleRequest(ProximityRequest request)
-			throws ProximityException {
-		if (request.getPath().endsWith("/")) {
-			if (isBrowsingAllowed()) {
-				List items = null;
-				if (getStorage() != null) {
-					items = getStorage().listItems(request.getPath());
-				}
-				SimpleProximityResponseList response = new SimpleProximityResponseList();
-				response.setItems(items);
-				return response;
+    public boolean isBrowsingAllowed() {
+        return browsingAllowed;
+    }
 
-			} else {
-				throw new BrowsingNotAllowedException();
-			}
-		} else {
-			Item item = null;
-			if (getStorage() != null) {
-				if (getStorage().containsItem(request.getPath())) {
-					logger.info("Found " + request.getPath() + " item in storage.");
-					item = getStorage().retrieveItem(request.getPath());
-				}
-			}
-			if (item == null && getRemotePeer() != null) {
-				if (getRemotePeer().containsItem(request.getPath())) {
-					logger.info("Found " + request.getPath() + " item in remote peer.");
-					item = getRemotePeer().retrieveItem(request.getPath());
-					if (getStorage() != null) {
-						getStorage().storeItem(item);
-						handleRequest(request);
-					}
-				}
+    public ProximityResponse handleRequest(ProximityRequest request) throws ProximityException {
+        if (request.getPath().endsWith("/")) {
+            if (isBrowsingAllowed()) {
+                List items = null;
+                if (getStorage() != null) {
+                    items = getStorage().listItems(request.getPath());
+                }
+                SimpleProximityResponseList response = new SimpleProximityResponseList();
+                response.setItems(items);
+                return response;
 
-			}
-			if (item != null) {
-				SimpleProximityResponse response = new SimpleProximityResponse();
-				response.setItem(item);
-				return response;
-			} else {
-				throw new ItemNotFoundException(request.getPath());
-			}
-		}
-	}
+            } else {
+                throw new BrowsingNotAllowedException();
+            }
+        } else {
+            Item item = null;
+            if (getStorage() != null) {
+                if (getStorage().containsItem(request.getPath())) {
+                    logger.info("Found " + request.getPath() + " item in storage.");
+                    item = getStorage().retrieveItem(request.getPath());
+                }
+            }
+            if (item == null && getRemotePeer() != null) {
+                if (getRemotePeer().containsItem(request.getPath())) {
+                    logger.info("Found " + request.getPath() + " item in remote peer.");
+                    item = getRemotePeer().retrieveItem(request.getPath());
+                    if (getStorage() != null) {
+                        getStorage().storeItem(item);
+                        handleRequest(request);
+                    }
+                }
+
+            }
+            if (item != null) {
+                SimpleProximityResponse response = new SimpleProximityResponse();
+                response.setItem(item);
+                return response;
+            } else {
+                throw new ItemNotFoundException(request.getPath());
+            }
+        }
+    }
 
 }

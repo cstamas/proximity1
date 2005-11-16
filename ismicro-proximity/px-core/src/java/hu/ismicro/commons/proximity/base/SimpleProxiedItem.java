@@ -6,13 +6,13 @@ import java.io.InputStream;
 import java.net.URL;
 
 public class SimpleProxiedItem implements ProxiedItem {
-    
+
     private String repositoryName;
-    
+
     private URL originatingUrl;
-    
+
     private String path;
-    
+
     private InputStream stream;
 
     public void setRepositoryName(String repositoryName) {
