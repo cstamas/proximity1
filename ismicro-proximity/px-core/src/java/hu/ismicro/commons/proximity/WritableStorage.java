@@ -6,4 +6,6 @@ public interface WritableStorage extends Storage {
 
     void deleteItem(Item item);
 
+    void setStoreMetadata(boolean storeMetadata);
+
 }

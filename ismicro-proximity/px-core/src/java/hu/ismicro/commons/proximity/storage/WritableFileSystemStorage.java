@@ -5,7 +5,6 @@ import hu.ismicro.commons.proximity.StorageException;
 import hu.ismicro.commons.proximity.WritableStorage;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -14,22 +13,12 @@ public class WritableFileSystemStorage extends FileSystemStorage implements Writ
 
     private boolean storeMetadata = false;
 
-    private boolean storeOriginatingUrls = false;
-
     public void setStoreMetadata(boolean storeMetadata) {
         this.storeMetadata = storeMetadata;
     }
 
     public boolean isStoreMetadata() {
         return storeMetadata;
-    }
-
-    public void setStoreOriginatingUrls(boolean storeOriginatingUrls) {
-        this.storeOriginatingUrls = storeOriginatingUrls;
-    }
-
-    public boolean isStoreOriginatingUrls() {
-        return storeOriginatingUrls;
     }
 
     public void storeItem(Item item) {
@@ -67,22 +56,20 @@ public class WritableFileSystemStorage extends FileSystemStorage implements Writ
     }
 
     protected void storeMetadata(Item item) {
+        logger.debug("Storing metadata for item " + item.getPath());
         try {
-            if (isStoreOriginatingUrls() && item.getOriginatingUrl() != null) {
-                logger.debug("Storing metadata for item " + item.getPath());
-                PrintWriter fw = new PrintWriter(new File(getBaseDir(), item.getPath() + ".url"));
-                fw.println(item.getOriginatingUrl().toString());
-                fw.close();
-            } else {
-                logger.debug("Not storing metadata for item " + item.getPath() + " as currently configured.");
+            PrintWriter fw = new PrintWriter(new File(getBaseDir(), item.getPath() + ".METADATA"));
+            if (item.getOriginatingUrl() != null) {
+                fw.println("url="+item.getOriginatingUrl().toString());
             }
-        } catch (FileNotFoundException ex) {
+            fw.close();
+        } catch (IOException ex) {
             logger.error("Could not store metadata for item " + item.getPath() + ", continuing silently.", ex);
         }
     }
 
     protected void deleteMetadata(Item item) {
-        File file = new File(getBaseDir(), item.getPath() + ".url");
+        File file = new File(getBaseDir(), item.getPath() + ".METADATA");
         if (file.exists()) {
             if (!file.delete()) {
                 logger.error("Could not delete metadata for item " + item.getPath() + ", continuing silently.");
