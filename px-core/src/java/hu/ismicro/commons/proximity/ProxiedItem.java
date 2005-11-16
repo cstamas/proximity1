@@ -4,10 +4,10 @@ import java.net.URL;
 
 public interface ProxiedItem extends Item {
 
-    String getRepositoryName();
+    void setRepositoryName(String name);
     
-    String getStorageName();
+    void setStorageName(String name);
 
-    URL getOriginatingUrl();
-
+    void setOriginatingUrl(URL url);
+    
 }
