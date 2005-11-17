@@ -24,7 +24,7 @@
     </bean>
 
     <!--
-      - Central proximity bean.
+      - Central proximity bean and it's helper.
     -->
 	<bean id="proximity" class="hu.ismicro.commons.proximity.base.ProximityImpl">
 		<property name="repositories">
@@ -36,6 +36,10 @@
 				<ref local="codehaus"/>
 			</list>
 		</property>
+	</bean>
+
+	<bean id="proximitySupport" class="hu.ismicro.commons.proximity.base.ProximitySupportImpl">
+		<property name="proximity" ref="proximity"/>
 	</bean>
 
     <!--

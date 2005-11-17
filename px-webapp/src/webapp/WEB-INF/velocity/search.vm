@@ -1,3 +1,29 @@
 <h2>#springMessage("search.title")</h2>
 
-<p>Not implemented yet.</p>
+<script type="text/javascript" src="#springUrl('/dwr/interface/proximitySupport.js')"></script>
+<script type="text/javascript" src="#springUrl('/search.js')"></script>
+
+<p class="center">Search all repositories (regexp):<br/>
+<input id="searchAll" type="text" value="" size="50"/>
+<input type="button" onclick="doSearchAll()" value="#springMessage('search.all')"/>
+</p>
+
+<p class="center">Search selected repositories (regexp):<br/>
+<select id="searchRepos"></select>
+</select>
+<input id="searchSelected" type="text" value="" size="50"/>
+<input type="button" onclick="doSearchSelected()" value="#springMessage('search.selected')"/>
+</p>
+
+<table>
+	<thead>
+		<tr class="tdb">
+			<td>&nbsp;</td>
+			<td><b>#springMessage("item.path")</b></td>
+			<td><b>#springMessage("item.size")</b></td>
+			<td><b>#springMessage("item.lastModified")</b></td>
+			<td><b>#springMessage("item.repositoryName")</b></td>
+		</tr>
+	</thead>
+	<tbody id="results"> </tbody>
+</table>

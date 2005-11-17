@@ -1,17 +1,17 @@
 <table>
-  <tr>
-	<td class="leftBand">
-		<div class="mainmenu">
-			<img src="http://www.is-micro.hu/images/ism_o.png"/>
-		</div>
-	</td>
-    <td class="topBar">
-		<div class="right">
-			<a href="#springUrl('/')">Documentation</a> | 
-			<a href="#springUrl('/search.do')">Repository search</a> | 
-			<a href="#springUrl('/stats.do')">Repository statistics</a> | 
-			<a href="#springUrl('/repository')">Repository browsing</a>
-		</div>
-	</td>
-  </tr>
+	<tr>
+		<td class="leftBand">
+			<div class="mainmenu">
+				<img src="http://www.is-micro.hu/images/ism_o.png"/>
+			</div>
+		</td>
+		<td class="topBar">
+			<div class="right">
+				<a href="#springUrl('/')">Documentation</a> | 
+				<a href="#springUrl('/search.do')">Repository search</a> | 
+				<a href="#springUrl('/stats.do')">Repository statistics</a> | 
+				<a href="#springUrl('/repository')">Repository browsing</a>
+			</div>
+		</td>
+	</tr>
 </table>
