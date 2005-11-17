@@ -1,14 +1,39 @@
-<h2>Proximity WEBAPP</h2>
+<h2>Proximity</h2>
 
 <p>The Proximity is a general Proxy "like" engine with pluggable proxying 
 engine.</p>
 
 <p>One of primary use will be as webapp to serve as maven proxy on our
-companys intranet. As for reducing outgoing traffic (caching ibiblio and other
-maven repos), aggregating more repositories (reducing config) with acting
-as one logical repository while proxying more remote reposes and as for 
-publishing in-house maven artifacts which are not uploadable to ibiblio 
-(like commercial projects...).</p>
+company's intranet. As for reducing outgoing traffic (caching ibiblio and other
+maven repos), aggregating more repositories (reducing project config) with acting
+as one logical repository and for publishing in-house and other external maven 
+artifacts which are not uploadable to ibiblio (like commercial projects, J2EE
+Jars, etc...).</p>
+
+<h3>How to use (Maven 1)</h3>
+
+<p>All you have to do is install this WAR on some Servlet container that has
+access to outer world (for reaching ibiblio, codehaus, etc. This is NOT mandatory
+since you can use Proximity to serve only your own artifacts!). Second, configure 
+Maven to use this repository (use appropriate URLs, these below are just samples!)
+instead the default at Ibiblio:</p>
+
+<tt>maven -Dmaven.repo.remote=http://is-micro.myip.hu/proximity/repository clean jar</tt>
+
+<p>Alternatively, you can place the following line in <b>build.properties</b>:</p>
+
+<tt>maven.repo.remote=http://is-micro.myip.hu/proximity/repository</tt>
+
+<h3>How to use (Maven 2)</h3>
+
+<p>TODO (for tips see Maven 1 section)</p>
+
+<h3>How to use (anything other)</h3>
+
+<p>Proximity is general Proxy like application, it is <b>NOT</b> just Maven proxy.
+Proximity have pluggable proxying logic, and the main reason for creating Proximity
+was to solve Maven proxying on our intranet. But Proximity became a little bit
+more, than "just" a Maven proxy.</p>
 
 <p>Have fun!</p>
 

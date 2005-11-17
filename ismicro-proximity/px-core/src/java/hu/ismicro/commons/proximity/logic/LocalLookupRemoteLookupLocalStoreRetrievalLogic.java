@@ -21,6 +21,7 @@ public class LocalLookupRemoteLookupLocalStoreRetrievalLogic extends AbstractRep
                 logger.info("Found " + path + " item in remote peer of repository " + repository.getName());
                 item = repository.getRemotePeer().retrieveItem(path);
                 if (!item.isDirectory() && repository.getWritableStorage() != null) {
+                    logger.info("Storing " + path + " item in writable storage of repository " + repository.getName());
                     repository.getWritableStorage().storeItem(item);
                     ProxiedItem localItem = repository.getWritableStorage().retrieveItem(item.getPath());
                     localItem.setOriginatingUrl(item.getOriginatingUrl());

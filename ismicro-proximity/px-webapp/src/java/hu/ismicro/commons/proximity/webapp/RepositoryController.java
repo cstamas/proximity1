@@ -60,6 +60,7 @@ public class RepositoryController extends MultiActionController {
             result.put("requestPathList", explodeUriToList(requestURI));
             return new ModelAndView("repository/repositoryList", result);
         } else {
+            // TODO: Made this proper (content type by ext, size, etc...)
             InputStream is = item.getStream();
             OutputStream os = response.getOutputStream();
             response.setContentType("application/octet-stream");

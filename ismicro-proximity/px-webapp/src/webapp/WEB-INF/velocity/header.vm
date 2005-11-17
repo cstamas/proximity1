@@ -7,7 +7,7 @@
 	</td>
     <td class="topBar">
 		<div class="right">
-			<a href="#springUrl('/')">Support pages</a> | 
+			<a href="#springUrl('/')">Documentation</a> | 
 			<a href="#springUrl('/search.do')">Repository search</a> | 
 			<a href="#springUrl('/stats.do')">Repository statistics</a> | 
 			<a href="#springUrl('/repository')">Repository browsing</a>
