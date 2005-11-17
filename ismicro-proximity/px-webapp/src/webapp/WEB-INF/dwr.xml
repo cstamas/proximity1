@@ -7,12 +7,19 @@
   <allow>
     <convert
       converter="bean"
-      match="hu.ismicro.commons.proximity.base.*"/>
+      match="hu.ismicro.commons.proximity.*"/>
  
     <create
       creator="spring"
       javascript="proximity">
       <param name="beanName" value="proximity"/>
     </create>
+
+    <create
+      creator="spring"
+      javascript="proximitySupport">
+      <param name="beanName" value="proximitySupport"/>
+    </create>
+
   </allow>
 </dwr>
