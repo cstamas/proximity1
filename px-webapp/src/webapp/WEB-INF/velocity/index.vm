@@ -10,7 +10,11 @@ as one logical repository and for publishing in-house and other external maven
 artifacts which are not uploadable to ibiblio (like commercial projects, J2EE
 Jars, etc...).</p>
 
-<h3>How to use (Maven 1)</h3>
+<h3>How to use</h3>
+
+<p>Follows a few simple scenarios for using Proximity server:</p>
+
+<h4>With Maven 1</h4>
 
 <p>All you have to do is install this WAR on some Servlet container that has
 access to outer world (for reaching ibiblio, codehaus, etc. This is NOT mandatory
@@ -24,16 +28,28 @@ instead the default at Ibiblio:</p>
 
 <tt>maven.repo.remote=http://is-micro.myip.hu/proximity/repository</tt>
 
-<h3>How to use (Maven 2)</h3>
+<h4>With Maven 2</h4>
 
-<p>TODO (for tips see Maven 1 section)</p>
+<p>TODO (Untested, but see see Maven 1 section for tips).</p>
 
-<h3>How to use (anything other)</h3>
+<h4>With anything other</h4>
 
 <p>Proximity is general Proxy like application, it is <b>NOT</b> just Maven proxy.
 Proximity have pluggable proxying logic, and the main reason for creating Proximity
 was to solve Maven proxying on our intranet. But Proximity became a little bit
 more, than "just" a Maven proxy.</p>
+
+<h3>To be implemented</h3>
+
+<p>Features to be implemented:</p>
+
+<ul>
+	<li>Search (with regex or more "user friendly" version of it)</li>
+	<li>Stats</li>
+	<li>IP blocking of proxying (to be able to server/browse on a public machine
+		but act as proxy for internal LAN only).</li>
+	<li>...and more stuff.</li>
+</ul>
 
 <p>Have fun!</p>
 

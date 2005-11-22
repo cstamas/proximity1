@@ -64,35 +64,35 @@
     <dependency>
       <groupId>springframework</groupId>
       <artifactId>spring-core</artifactId>
-      <version>1.2.5</version>
+      <version>1.2.6</version>
       <type>jar</type>
       <url>http://www.springframework.org/</url>
     </dependency>
     <dependency>
       <groupId>springframework</groupId>
       <artifactId>spring-beans</artifactId>
-      <version>1.2.5</version>
+      <version>1.2.6</version>
       <type>jar</type>
       <url>http://www.springframework.org/</url>
     </dependency>
     <dependency>
       <groupId>springframework</groupId>
       <artifactId>spring-context</artifactId>
-      <version>1.2.5</version>
+      <version>1.2.6</version>
       <type>jar</type>
       <url>http://www.springframework.org/</url>
     </dependency>
     <dependency>
       <groupId>springframework</groupId>
       <artifactId>spring-aop</artifactId>
-      <version>1.2.5</version>
+      <version>1.2.6</version>
       <type>jar</type>
       <url>http://www.springframework.org/</url>
     </dependency>
     <dependency>
       <groupId>springframework</groupId>
       <artifactId>spring-mock</artifactId>
-      <version>1.2.5</version>
+      <version>1.2.6</version>
       <type>jar</type>
       <url>http://www.springframework.org/</url>
     </dependency>
