@@ -156,6 +156,12 @@ table {
      text-align: left;
 }
 
+#versionLabel {
+     text-align: right;
+     vertical-align: top;
+     font-size: 10px;
+}
+
 #### UNUSED, cstamas to clean!
 
 .floatRight {
@@ -216,6 +222,23 @@ h3 {
 #     padding-right:36px;
 
      font-size: 14pt;
+     font-weight: normal;
+}
+
+h4 {
+     display: block;
+     background: #d0d0d0;
+#     width: 100%;
+     border-top:1px;
+     border-bottom:1px;
+     border: solid #999999 2px;
+#     margin-left: -22px;
+     margin-top:5px;
+     margin-bottom:5px;
+     padding:2px;
+#     padding-right:36px;
+
+     font-size: 12pt;
      font-weight: normal;
 }
 

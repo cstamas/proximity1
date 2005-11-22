@@ -3,40 +3,49 @@
 <div class="left">
 	<b>#springMessage("repositorylist.pathLinks")</b>&nbsp;
 	<a href="#springUrl('/repository')">#springMessage("repositorylist.root")</a>
+
 #foreach($path in $requestPathList)
 	&nbsp;&gt;&nbsp;
 	<a href="#springUrl('/repository')$path">$path</a>
 #end
+
 </div>
 
 <table>
-  <tr class="tdb">
-    <td>&nbsp;</td>
-	<td><a href="#springUrl('/repository')${requestUri}?orderBy=name"><b>#springMessage("item.path")</b></a></td>
-    <td><a href="#springUrl('/repository')${requestUri}?orderBy=size"><b>#springMessage("item.size")</b></a></td>
-    <td><a href="#springUrl('/repository')${requestUri}?orderBy=lastModified"><b>#springMessage("item.lastModified")</b></a></td>
-    <td><a href="#springUrl('/repository')${requestUri}?orderBy=repositoryName"><b>#springMessage("item.repositoryName")</b></a></td>
-  </tr>
+	<thead>
+		<tr class="tdb">
+			<td>&nbsp;</td>
+			<td><a href="#springUrl('/repository')${requestUri}?orderBy=name"><b>#springMessage("item.path")</b></a></td>
+			<td><a href="#springUrl('/repository')${requestUri}?orderBy=size"><b>#springMessage("item.size")</b></a></td>
+			<td><a href="#springUrl('/repository')${requestUri}?orderBy=lastModified"><b>#springMessage("item.lastModified")</b></a></td>
+			<td><a href="#springUrl('/repository')${requestUri}?orderBy=repositoryName"><b>#springMessage("item.repositoryName")</b></a></td>
+		</tr>
+	</thead>
+	
+	<tbody>
   
-  #foreach($item in $items)
-  <tr class="tda">
-    <td>
-		#if(${item.isDirectory()})
-			<img src="#springUrl('/images/directory.png')"/>&nbsp;
-		#else
-			<img src="#springUrl('/images/file.png')"/>&nbsp;
+		#foreach($item in $items)
+			<tr class="tda">
+				<td>
+					#if(${item.isDirectory()})
+						<img src="#springUrl('/images/directory.png')"/>&nbsp;
+					#else
+						<img src="#springUrl('/images/file.png')"/>&nbsp;
+					#end
+				</td>
+				<td><a href="#springUrl('/repository')${item.path}?repositoryId=${item.repositoryName}">${item.name}</a>&nbsp;</td>
+				<td>
+					#if(${item.isDirectory()})
+						&nbsp;
+					#else
+						${item.size}&nbsp;
+					#end
+				</td>
+				<td>$vtldatetool.format('medium',${item.lastModified})&nbsp;</td>
+				<td>${item.repositoryName}&nbsp;</td>
+			</tr>
 		#end
-	</td>
-	<td><a href="#springUrl('/repository')${item.path}?repositoryId=${item.repositoryName}">${item.name}</a>&nbsp;</td>
-    <td>
-		#if(${item.isDirectory()})
-			&nbsp;
-		#else
-			${item.size}&nbsp;
-		#end
-	</td>
-    <td>$vtldatetool.format('medium',${item.lastModified})&nbsp;</td>
-    <td>${item.repositoryName}&nbsp;</td>
-  </tr>
-  #end
+  
+	</tbody>
+	
 </table>
