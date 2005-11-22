@@ -9,8 +9,7 @@
         </links>
 
         <menu name="Module navigation">
-            <item name="PX Core" href="multiproject/px-core/index.html"/>
-            <item name="PX Webapp" href="multiproject/px-webapp/index.html"/>
+            <item name="Overview" href="../../projects-overview.html"/>
         </menu>
 
         <menu name="Documentation">
