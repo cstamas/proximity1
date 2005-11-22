@@ -8,6 +8,11 @@
             <item name="ISmicro Commons Projects" href=".." />
         </links>
 
+        <menu name="Module navigation">
+            <item name="PX Core" href="multiproject/px-core/index.html"/>
+            <item name="PX Webapp" href="multiproject/px-webapp/index.html"/>
+        </menu>
+
         <menu name="Documentation">
             <item name="Developers guide" href="404.html">
             </item>
