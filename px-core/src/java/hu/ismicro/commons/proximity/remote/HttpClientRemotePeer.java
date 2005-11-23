@@ -1,10 +1,8 @@
 package hu.ismicro.commons.proximity.remote;
 
-import hu.ismicro.commons.proximity.Item;
 import hu.ismicro.commons.proximity.base.ProxiedItem;
 import hu.ismicro.commons.proximity.base.SimpleProxiedItem;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -21,6 +19,8 @@ import org.apache.commons.httpclient.SimpleHttpConnectionManager;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.HeadMethod;
 import org.apache.commons.httpclient.params.HttpMethodParams;
+import org.apache.commons.httpclient.util.DateParseException;
+import org.apache.commons.httpclient.util.DateUtil;
 
 public class HttpClientRemotePeer extends AbstractRemotePeer {
 
@@ -94,8 +94,9 @@ public class HttpClientRemotePeer extends AbstractRemotePeer {
                 result.setOriginatingUrl(new URL(getRemoteUrl() + path));
                 result.setDirectory(false);
                 result.setSize(get.getResponseContentLength());
-                result.setLastModified(new Date());
-                result.setStream(new ByteArrayInputStream(get.getResponseBody()));
+                result.setLastModified(makeDateFromString(get.getResponseHeader("Last-Modified") != null ? get
+                        .getResponseHeader("Last-Modified").getValue() : null));
+                result.setStream(get.getResponseBodyAsStream());
                 logger.info("Received content with Length: " + get.getResponseContentLength());
                 return result;
             } else {
@@ -113,12 +114,23 @@ public class HttpClientRemotePeer extends AbstractRemotePeer {
         }
     }
 
-    public void storeItem(Item item) {
-        throw new UnsupportedOperationException("RemotePeer is unable to store items.");
-    }
-
     public List listItems(String path) {
         throw new UnsupportedOperationException("RemotePeer is not listable.");
+    }
+
+    protected Date makeDateFromString(String date) {
+        Date result = null;
+        if (date == null) {
+            result = new Date();
+        } else {
+            try {
+                result = DateUtil.parseDate(date);
+            } catch (DateParseException ex) {
+                logger.warn("Could not parse date " + date + ", using NOW");
+                result = new Date();
+            }
+        }
+        return result;
     }
 
 }

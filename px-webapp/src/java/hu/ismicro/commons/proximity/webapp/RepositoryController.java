@@ -63,7 +63,6 @@ public class RepositoryController extends MultiActionController {
             // TODO: Made this proper (content type by ext, size, etc...)
             InputStream is = item.getStream();
             OutputStream os = response.getOutputStream();
-            response.setContentType("application/octet-stream");
             byte[] buffer = new byte[8192];
             int read = 0;
             int cumRead = 0;
@@ -72,7 +71,9 @@ public class RepositoryController extends MultiActionController {
                 os.write(buffer, 0, read);
                 cumRead = cumRead + read;
             }
+            response.setContentType("application/octet-stream");
             response.setContentLength(cumRead);
+            response.setDateHeader("Last-Modified", item.getLastModified().getTime());
             return null;
         }
     }
