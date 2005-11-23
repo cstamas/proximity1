@@ -23,7 +23,7 @@
 				<form action="#springUrl('/search.do')">
 					#springMessage('search.regexp'):<br/>
 					<input id="searchSelectedRegexp" type="text" name="searchSelectedRegexp" value="" size="50"/>
-					<select id="searchSelectedRepos">
+					<select id="searchSelectedRepos" name="searchSelectedRepos">
 						#foreach($repository in $repositories)
 							<option value="${repository.name}">${repository.name}</option>
 						#end
