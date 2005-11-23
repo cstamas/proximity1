@@ -36,6 +36,7 @@ public class WritableFileSystemStorage extends FileSystemStorage implements Writ
             os.flush();
             os.close();
             item.getStream().close();
+            file.setLastModified(item.getLastModified().getTime());
             if (isStoreMetadata()) {
                 storeMetadata(item);
             }
@@ -61,6 +62,9 @@ public class WritableFileSystemStorage extends FileSystemStorage implements Writ
             PrintWriter fw = new PrintWriter(new File(getBaseDir(), item.getPath() + ".METADATA"));
             if (item.getOriginatingUrl() != null) {
                 fw.println("url="+item.getOriginatingUrl().toString());
+            }
+            if (item.getLastModified() != null) {
+                fw.println("lastModified="+item.getLastModified().toString());
             }
             fw.close();
         } catch (IOException ex) {
