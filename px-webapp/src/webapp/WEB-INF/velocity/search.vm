@@ -3,21 +3,41 @@
 <script type="text/javascript" src="#springUrl('/dwr/interface/proximitySupport.js')"></script>
 <script type="text/javascript" src="#springUrl('/search.js')"></script>
 
-<form action="#springUrl('/search.do')">
-	<p class="center">#springMessage('search.all') (#springMessage('search.regexp')):<br/>
-		<input id="searchAllRegexp" type="text" value="" size="50"/>
-		<input type="submit" name="searchAll" value="#springMessage('search.all')"/>
-	</p>
+<table>
+	<thead>
+		<tr class="tdb">
+			<td>#springMessage('search.all')</td>
+			<td>#springMessage('search.selected')</td>
+		</tr>
+	</thead>
+	<tbody>
+		<tr class="tda">
+			<td>
+				<form action="#springUrl('/search.do')">
+					#springMessage('search.regexp'):<br/>
+					<input id="searchAllRegexp" type="text" name="searchAllRegexp" value="" size="50"/>
+					<input type="submit" name="searchAll" value="#springMessage('search.all')"/>
+				</form>
+			</td>
+			<td>
+				<form action="#springUrl('/search.do')">
+					#springMessage('search.regexp'):<br/>
+					<input id="searchSelectedRegexp" type="text" name="searchSelectedRegexp" value="" size="50"/>
+					<select id="searchSelectedRepos">
+						#foreach($repository in $repositories)
+							<option value="${repository.name}">${repository.name}</option>
+						#end
+					</select>
+					<input type="submit" name="searchSelected" value="#springMessage('search.selected')"/>
+				</form>
+			</td>
+		</tr>
+	</tbody>
+</table>
 
-	<p class="center">#springMessage('search.selected') (#springMessage('search.regexp')):<br/>
-		<select id="searchSelectedRepos"></select>
-		<input id="searchSelectedRegexp" type="text" value="" size="50"/>
-		<input type="submit" name="searchSelected" value="#springMessage('search.selected')"/>
-	</p>
-</form>
+<p/>
 
 <table>
-
 	<thead>
 		<tr class="tdb">
 			<td>&nbsp;</td>
