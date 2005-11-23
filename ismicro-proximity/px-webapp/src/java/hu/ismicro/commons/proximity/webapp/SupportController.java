@@ -2,6 +2,10 @@ package hu.ismicro.commons.proximity.webapp;
 
 import hu.ismicro.commons.proximity.Proximity;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -27,7 +31,11 @@ public class SupportController extends MultiActionController {
 
     public ModelAndView search(HttpServletRequest request, HttpServletResponse response) throws Exception {
         logger.debug("Got request for search");
-        return new ModelAndView("search");
+        List repositories = proximity.getRepositories();
+        Map context = new HashMap();
+        context.put("repositories", repositories);
+        // results
+        return new ModelAndView("search", context);
     }
 
     public ModelAndView stats(HttpServletRequest request, HttpServletResponse response) throws Exception {
