@@ -3,7 +3,9 @@ package hu.ismicro.commons.proximity.remote;
 import hu.ismicro.commons.proximity.base.ProxiedItem;
 import hu.ismicro.commons.proximity.base.SimpleProxiedItem;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Date;
@@ -21,6 +23,8 @@ import org.apache.commons.httpclient.methods.HeadMethod;
 import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.apache.commons.httpclient.util.DateParseException;
 import org.apache.commons.httpclient.util.DateUtil;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.output.ByteArrayOutputStream;
 
 public class HttpClientRemotePeer extends AbstractRemotePeer {
 
@@ -96,7 +100,12 @@ public class HttpClientRemotePeer extends AbstractRemotePeer {
                 result.setSize(get.getResponseContentLength());
                 result.setLastModified(makeDateFromString(get.getResponseHeader("Last-Modified") != null ? get
                         .getResponseHeader("Last-Modified").getValue() : null));
-                result.setStream(get.getResponseBodyAsStream());
+
+                // a little stream acrobatics
+                ByteArrayOutputStream bos = new ByteArrayOutputStream((int) result.getSize()); 
+                IOUtils.copy(get.getResponseBodyAsStream(), bos);
+                InputStream is = new ByteArrayInputStream(bos.toByteArray());
+                result.setStream(is);
                 logger.info("Received content with Length: " + get.getResponseContentLength());
                 return result;
             } else {
