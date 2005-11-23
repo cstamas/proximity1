@@ -28,7 +28,7 @@ public class SimpleRepository implements InnerRepository {
     private RepositoryRetrievalLogic repositoryRetrievalLogic = new LocalLookupRemoteLookupLocalStoreRetrievalLogic();
 
     private boolean browsingAllowed = true;
-
+    
     public void setName(String name) {
         this.name = name;
     }
@@ -112,5 +112,5 @@ public class SimpleRepository implements InnerRepository {
             throw new BrowsingNotAllowedException(getName());
         }
     }
-
+    
 }
