@@ -39,6 +39,8 @@ public class FileSystemStorage extends AbstractStorage {
             result.setPath(path);
             result.setStorageName(getBaseDir().getPath());
             result.setOriginatingUrl(null);
+            result.setLastModified(new Date(target.lastModified()));
+            result.setSize(target.length());
             if (target.isDirectory()) {
                 result.setDirectory(true);
                 result.setStream(null);

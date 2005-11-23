@@ -1,6 +1,7 @@
 package hu.ismicro.commons.proximity.webapp;
 
 import hu.ismicro.commons.proximity.Item;
+import hu.ismicro.commons.proximity.ItemNotFoundException;
 import hu.ismicro.commons.proximity.Proximity;
 
 import java.io.InputStream;
@@ -33,47 +34,55 @@ public class RepositoryController extends MultiActionController {
     public ModelAndView repositoryList(HttpServletRequest request, HttpServletResponse response) throws Exception {
         String requestURI = request.getRequestURI().substring(
                 request.getContextPath().length() + request.getServletPath().length());
+        logger.info("Got repository request on URI " + requestURI);
         String orderBy = request.getParameter("orderBy") == null ? "name" : request.getParameter("orderBy");
         String targetRepository = request.getParameter("repositoryId");
-        
-        Item item = null;
-        if (targetRepository == null) {
-            logger.info("Got request for repository on URI: " + requestURI);
-            item = proximity.retrieveItem(requestURI);
-        } else {
-            logger.info("Got request for repository on URI: " + requestURI + " from repository id " + targetRepository);
-            item = proximity.retrieveItemFromRepository(requestURI, targetRepository);
-        }
 
-        if (item.isDirectory()) {
-            List items = null;
+        Item item = null;
+        try {
             if (targetRepository == null) {
-                items = proximity.listItems(requestURI);
+                logger.info("Got request for repository on URI: " + requestURI);
+                item = proximity.retrieveItem(requestURI);
             } else {
-                items = proximity.listItemsFromRepository(requestURI, targetRepository);
+                logger.info("Got request for repository on URI: " + requestURI + " from repository id "
+                        + targetRepository);
+                item = proximity.retrieveItemFromRepository(requestURI, targetRepository);
             }
-            PropertyComparator.sort(items, new MutableSortDefinition(orderBy, true, true));
-            Map result = new HashMap();
-            result.put("items", items);
-            result.put("orderBy", orderBy);
-            result.put("requestUri", requestURI);
-            result.put("requestPathList", explodeUriToList(requestURI));
-            return new ModelAndView("repository/repositoryList", result);
-        } else {
-            // TODO: Made this proper (content type by ext, size, etc...)
-            InputStream is = item.getStream();
-            OutputStream os = response.getOutputStream();
-            byte[] buffer = new byte[8192];
-            int read = 0;
-            int cumRead = 0;
-            while (is.available() > 0) {
-                read = is.read(buffer);
-                os.write(buffer, 0, read);
-                cumRead = cumRead + read;
+
+            if (item.isDirectory()) {
+                List items = null;
+                if (targetRepository == null) {
+                    items = proximity.listItems(requestURI);
+                } else {
+                    items = proximity.listItemsFromRepository(requestURI, targetRepository);
+                }
+                PropertyComparator.sort(items, new MutableSortDefinition(orderBy, true, true));
+                Map result = new HashMap();
+                result.put("items", items);
+                result.put("orderBy", orderBy);
+                result.put("requestUri", requestURI);
+                result.put("requestPathList", explodeUriToList(requestURI));
+                return new ModelAndView("repository/repositoryList", result);
+            } else {
+                // TODO: Made this proper (content type by ext, size, etc...)
+                response.setContentType("application/octet-stream");
+                response.setContentLength((int)item.getSize());
+                response.setDateHeader("Last-Modified", item.getLastModified().getTime());
+                InputStream is = item.getStream();
+                OutputStream os = response.getOutputStream();
+                byte[] buffer = new byte[8192];
+                int read = 0;
+                int cumRead = 0;
+                while (is.available() > 0) {
+                    read = is.read(buffer);
+                    os.write(buffer, 0, read);
+                    cumRead = cumRead + read;
+                }
+                return null;
             }
-            response.setContentType("application/octet-stream");
-            response.setContentLength(cumRead);
-            response.setDateHeader("Last-Modified", item.getLastModified().getTime());
+        } catch (ItemNotFoundException ex) {
+            logger.info("Item not found on URI " + requestURI);
+            response.sendError(HttpServletResponse.SC_NOT_FOUND);
             return null;
         }
     }
