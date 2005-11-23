@@ -9,6 +9,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import org.apache.commons.io.IOUtils;
+
 public class WritableFileSystemStorage extends FileSystemStorage implements WritableStorage {
 
     private boolean storeMetadata = false;
@@ -27,15 +29,10 @@ public class WritableFileSystemStorage extends FileSystemStorage implements Writ
             File file = new File(getBaseDir(), item.getPath());
             file.getParentFile().mkdirs();
             FileOutputStream os = new FileOutputStream(file);
-            byte[] buffer = new byte[8192];
-            int read;
-            while (item.getStream().available() != 0) {
-                read = item.getStream().read(buffer);
-                os.write(buffer, 0, read);
-            }
+            IOUtils.copy(item.getStream(), os);
+            item.getStream().close();
             os.flush();
             os.close();
-            item.getStream().close();
             file.setLastModified(item.getLastModified().getTime());
             if (isStoreMetadata()) {
                 storeMetadata(item);

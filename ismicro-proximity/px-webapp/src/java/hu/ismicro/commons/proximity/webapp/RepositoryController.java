@@ -14,6 +14,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.support.MutableSortDefinition;
 import org.springframework.beans.support.PropertyComparator;
 import org.springframework.web.servlet.ModelAndView;
@@ -70,14 +71,8 @@ public class RepositoryController extends MultiActionController {
                 response.setDateHeader("Last-Modified", item.getLastModified().getTime());
                 InputStream is = item.getStream();
                 OutputStream os = response.getOutputStream();
-                byte[] buffer = new byte[8192];
-                int read = 0;
-                int cumRead = 0;
-                while (is.available() > 0) {
-                    read = is.read(buffer);
-                    os.write(buffer, 0, read);
-                    cumRead = cumRead + read;
-                }
+                IOUtils.copy(is, os);
+                is.close();
                 return null;
             }
         } catch (ItemNotFoundException ex) {
