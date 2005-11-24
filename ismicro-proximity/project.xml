@@ -42,8 +42,8 @@
   <distributionDirectory>/srv/projects/ismicro-commons/deploy/proximity</distributionDirectory>
 
   <repository>
-    <connection>scm:svn:${maven.username}@https://is-micro.myip.hu/repos/ismicro/trunk/ismicro-proximity/</connection>
-    <developerConnection>scm:svn:${maven.username}@https://is-micro.myip.hu/repos/ismicro/trunk/ismicro-proximity/</developerConnection>
+    <connection>scm:svn:https://is-micro.myip.hu/repos/ismicro/trunk/ismicro-proximity/</connection>
+    <developerConnection>scm:svn:https://is-micro.myip.hu/repos/ismicro/trunk/ismicro-proximity/</developerConnection>
     <url>https://is-micro.myip.hu/viewcvs/ismicro/trunk/ismicro-proximity/</url>
   </repository>
 
