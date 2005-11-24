@@ -11,7 +11,7 @@
   <artifactId>ismicro-proximity</artifactId>
   
   <!-- POM packaging -->
-  <packaging>jar</packaging>
+  <packaging>pom</packaging>
 
   <!-- a short but descriptive name for the project -->
   <name>ISmicro Proximity</name>
@@ -33,7 +33,13 @@
   <ciManagement>
   	<system>Continuum</system>
   	<url>https://intranet.is-micro.hu/continuum/</url>
-  </ciManagement>
+    <notifiers>
+      <notifier>
+        <configuration>
+          <address>ismicro-commons@is-micro.myip.hu</address>
+        </configuration>
+      </notifier>
+    </notifiers>  </ciManagement>
 
   <!-- the year the project started -->
   <inceptionYear>2005</inceptionYear>
@@ -117,11 +123,41 @@
   <dependencies/>
 
   <!-- build information for the project -->
-  <build/>
-  
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <artifactId>maven-release-plugin</artifactId>
+          <configuration>
+            <tagBase>https://is-micro.myip.hu.org/repos/ismicro/tags</tagBase>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
+    
   <modules>
 	<module>px-core</module>
 	<module>px-webapp</module>
   </modules>
+  
+  <distributionManagement>
+    <repository>
+      <id>ismicro</id>
+      <name>ISmicro Central Repository</name>
+      <url>scp://ford.is-micro.hu/srv/projects/ismicro-commons/deploy/proximity</url>
+    </repository>
+    <snapshotRepository>
+      <id>ismicro</id>
+      <name>ISmicro Central Development Repository</name>
+      <url>scp://ford.is-micro.hu/srv/projects/ismicro-commons/deploy/proximity</url>
+    </snapshotRepository>
+    <site>
+      <id>website</id>
+      <url>scp://ford.is-micro.hu/srv/projects/ismicro-commons/www/proximity</url>
+    </site>
+  </distributionManagement>
+  
+  <reporting/>
   
 </project>
