@@ -15,10 +15,18 @@
 
 <p>Proximity component is a proxy-like pure Java application.</p>
 
+<p>Proximity consists of PX Core module, which is <b>environment and
+transport independent</b>, so it is capable to run in J2SE and
+J2EE environment too.</p>
+
+<p>The PX Webapp is a thin module (2 classes + some Velocity templates!) based 
+on Spring IoC framework and it's MVC implementation, and makes the Proximity 
+Servlet implementation.</p>
+
 <subsection name="Using Proximity as corporate Maven proxy">
 <p>The initial goal to develop Proximity was to make some alternative to
 the existing <a href="http://maven-proxy.codehaus.org">maven-proxy</a> 
-application on codehaus.</p>
+application on Codehaus.</p>
 <p>The Proximity has the following features, that enables it to act as
 Maven-aware caching proxy:</p>
 
@@ -31,6 +39,17 @@ traffic.</li>
 <li>The flexibility to define repositories allows administrator to include
 a local only repository to publish in-house artifacts, or other commercial
 artifacts that are not found or ibiblio or other mainstream maven repo.</li>
+</ul>
+
+<p>In contrast to the maven-proxy implementation:</p>
+<ul>
+<li>Proximity Core is transport and environment independent (no javax.* deps) and
+embeddable in any environment (one example is PX Webapp + Spring).</li>
+<li>More flexible, see <a href="configuration.html">configuration</a>.</li>
+<li>Flexible logic implementations. Some repo may have different retrieval
+logic, as per Repos configuration allows.</li>
+<li>Not fighting against WAR deployment (I need WAR, since one Tomcat
+already runs in my office).</li>
 </ul>
 
 <p>You can see Proximity in action <a href="/proximity">here</a>!</p>
