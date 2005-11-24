@@ -1,0 +1,135 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+  <!-- Parent POM -->
+  <parent>
+	<groupId>ismicro</groupId>
+	<artifactId>ismicro-proximity</artifactId>
+	<version>1.0.0-SNAPSHOT</version>
+  </parent>
+
+  <!-- the version of maven's project object model -->
+  <modelVersion>4.0.0</modelVersion>
+  
+  <!-- a unique name for this project -->
+  <artifactId>px-core</artifactId>
+  
+  <!-- POM packaging -->
+  <packaging>jar</packaging>
+
+  <!-- a short but descriptive name for the project -->
+  <name>ISmicro Proximity Core</name>
+
+  <!-- The version of the project under development -->
+  <version>1.0.0-SNAPSHOT</version>
+
+  <dependencies>
+
+    <dependency>
+      <groupId>ehcache</groupId>
+      <artifactId>ehcache</artifactId>
+      <version>1.1</version>
+      <type>jar</type>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>commons-logging</groupId>
+      <artifactId>commons-logging</artifactId>
+      <version>1.0.4</version>
+      <type>jar</type>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>commons-collections</groupId>
+      <artifactId>commons-collections</artifactId>
+      <version>2.1.1</version>
+      <type>jar</type>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>commons-codec</groupId>
+      <artifactId>commons-codec</artifactId>
+      <version>1.3</version>
+      <type>jar</type>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>commons-io</groupId>
+      <artifactId>commons-io</artifactId>
+      <version>1.1</version>
+      <type>jar</type>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>commons-httpclient</groupId>
+      <artifactId>commons-httpclient</artifactId>
+      <version>3.0-rc4</version>
+      <type>jar</type>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>log4j</groupId>
+      <artifactId>log4j</artifactId>
+      <version>1.2.11</version>
+      <type>jar</type>
+      <scope>runtime</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>springframework</groupId>
+      <artifactId>spring-core</artifactId>
+      <version>1.2.6</version>
+      <type>jar</type>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>springframework</groupId>
+      <artifactId>spring-beans</artifactId>
+      <version>1.2.6</version>
+      <type>jar</type>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>springframework</groupId>
+      <artifactId>spring-context</artifactId>
+      <version>1.2.6</version>
+      <type>jar</type>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>springframework</groupId>
+      <artifactId>spring-aop</artifactId>
+      <version>1.2.6</version>
+      <type>jar</type>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>springframework</groupId>
+      <artifactId>spring-mock</artifactId>
+      <version>1.2.6</version>
+      <type>jar</type>
+      <scope>test</scope>
+    </dependency>
+    
+  </dependencies>
+
+  <distributionManagement>
+    <repository>
+      <id>ismicro</id>
+      <name>ISmicro Central Repository</name>
+      <url>scp://ford.is-micro.hu/srv/projects/ismicro-commons/deploy/proximity</url>
+    </repository>
+    <snapshotRepository>
+      <id>ismicro</id>
+      <name>ISmicro Central Development Repository</name>
+      <url>scp://ford.is-micro.hu/srv/projects/ismicro-commons/deploy/proximity</url>
+    </snapshotRepository>
+    <site>
+      <id>website</id>
+      <url>scp://ford.is-micro.hu/srv/projects/ismicro-commons/www/proximity</url>
+    </site>
+  </distributionManagement>
+  
+  <reporting/>
+  
+</project>

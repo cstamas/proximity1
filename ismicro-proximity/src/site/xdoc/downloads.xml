@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<document>
+
+  <properties>
+    <author email="cservenak@is-micro.hu">CSERVENAK, Tamas</author>
+    <title>Project Downloads</title>
+  </properties>
+
+  <meta name="keyword" content="ismicro java"/>
+
+<body>
+
+<section name="Downloads">
+
+<p>The project has released no artifacts yet. Look in submodules for releases.</p>
+
+<p>General deployment area is <a href="/projects/ismicro-commons/deploy/proximity/">here</a>.</p>
+
+<!--
+<p>The project has released the following artifacts:</p>
+
+<subsection name="Release 1.0.0">
+<p>Released: 2005-09-24</p>
+<p>SVN URL: /tags/ismicro-proximity-1.0.0</p>
+<p>See <a href="changes-report.html">changes</a>.</p>
+<p>This is a release of the ISmicro Commons Proximity project:</p>
+<ul>
+<li>The application binary 
+<a href="/projects/ismicro-commons/deploy/proximity/ismicro-proximity-1.0.0.zip">[ZIP]</a>
+<a href="/projects/ismicro-commons/deploy/proximity/ismicro-proximity-1.0.0.tar.gz">[TAR]</a>
+</li>
+<li>The application source
+<a href="/projects/ismicro-commons/deploy/proximity/ismicro-proximity-1.0.0-src.zip">[ZIP]</a>
+<a href="/projects/ismicro-commons/deploy/proximity/ismicro-proximity-1.0.0-src.tar.gz">[TAR]</a>
+</li>
+</ul>
+</subsection>
+-->
+
+</section>
+
+</body>
+</document>

@@ -1,0 +1,155 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+  <!-- Parent POM -->
+  <parent>
+	<groupId>ismicro</groupId>
+	<artifactId>ismicro-proximity</artifactId>
+	<version>1.0.0-SNAPSHOT</version>
+  </parent>
+  
+  <!-- the version of maven's project object model -->
+  <modelVersion>4.0.0</modelVersion>
+
+  <!-- a unique name for this project -->
+  <artifactId>px-webapp</artifactId>
+  
+  <!-- POM packaging -->
+  <packaging>war</packaging>
+
+  <!-- a short but descriptive name for the project -->
+  <name>ISmicro Proximity Webapp</name>
+
+  <!-- The version of the project under development -->
+  <version>1.0.0-SNAPSHOT</version>
+
+  <dependencies>
+
+    <dependency>
+      <groupId>ismicro</groupId>
+      <artifactId>px-core</artifactId>
+      <version>1.0.0-SNAPSHOT</version>
+      <type>jar</type>
+      <scope>runtime</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>springframework</groupId>
+      <artifactId>spring-core</artifactId>
+      <version>1.2.6</version>
+      <type>jar</type>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>springframework</groupId>
+      <artifactId>spring-beans</artifactId>
+      <version>1.2.6</version>
+      <type>jar</type>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>springframework</groupId>
+      <artifactId>spring-context</artifactId>
+      <version>1.2.6</version>
+      <type>jar</type>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>springframework</groupId>
+      <artifactId>spring-aop</artifactId>
+      <version>1.2.6</version>
+      <type>jar</type>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>springframework</groupId>
+      <artifactId>spring-support</artifactId>
+      <version>1.2.6</version>
+      <type>jar</type>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>springframework</groupId>
+      <artifactId>spring-web</artifactId>
+      <version>1.2.6</version>
+      <type>jar</type>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>springframework</groupId>
+      <artifactId>spring-webmvc</artifactId>
+      <version>1.2.6</version>
+      <type>jar</type>
+      <scope>runtime</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>dwr</groupId>
+      <artifactId>dwr</artifactId>
+      <version>1.0</version>
+      <type>jar</type>
+      <scope>runtime</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>velocity</groupId>
+      <artifactId>velocity</artifactId>
+      <version>1.4</version>
+      <type>jar</type>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>velocity-tools</groupId>
+      <artifactId>velocity-tools-generic</artifactId>
+      <version>1.1</version>
+      <type>jar</type>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>velocity-tools</groupId>
+      <artifactId>velocity-tools-view</artifactId>
+      <version>1.1</version>
+      <type>jar</type>
+      <scope>runtime</scope>
+    </dependency>
+
+    <!-- Compile time -->
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>servlet-api</artifactId>
+      <version>2.4</version>
+      <type>jar</type>
+      <scope>compile</scope>
+    </dependency>
+
+    <!-- For testing -->
+    <dependency>
+      <groupId>springframework</groupId>
+      <artifactId>spring-mock</artifactId>
+      <version>1.2.6</version>
+      <type>jar</type>
+      <scope>test</scope>
+    </dependency>
+    
+  </dependencies>
+
+  <distributionManagement>
+    <repository>
+      <id>ismicro</id>
+      <name>ISmicro Central Repository</name>
+      <url>scp://ford.is-micro.hu/srv/projects/ismicro-commons/deploy/proximity</url>
+    </repository>
+    <snapshotRepository>
+      <id>ismicro</id>
+      <name>ISmicro Central Development Repository</name>
+      <url>scp://ford.is-micro.hu/srv/projects/ismicro-commons/deploy/proximity</url>
+    </snapshotRepository>
+    <site>
+      <id>website</id>
+      <url>scp://ford.is-micro.hu/srv/projects/ismicro-commons/www/proximity</url>
+    </site>
+  </distributionManagement>
+  
+  <reporting/>
+  
+</project>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Proximity">
+
+  <bannerLeft>
+    <name>ISmicro</name>
+    <src>http://www.is-micro.hu/images/ism_o.png</src>
+    <href>http://www.is-micro.hu/</href>
+  </bannerLeft>
+
+  <bannerRight>
+    <name>Proximity</name>
+  </bannerRight>
+
+  <body>
+
+    <links>
+      <item name="Maven" href="http://maven.apache.org/"/>
+      <item name="ISmicro Commons Projects" href=".." />
+    </links>
+
+    <menu name="Documentation">
+      <item name="Configuration" href="configuration.html"/>
+      <item name="Developers guide" href="developers.html"/>
+    </menu>
+
+    ${reports}
+
+  </body>
+</project>
