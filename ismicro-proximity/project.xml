@@ -36,7 +36,7 @@
   <logo/>
 
   <url>https://is-micro.myip.hu/projects/ismicro-commons/proximity/</url>
-  <issueTrackingUrl>mailto:office@is-micro.hu</issueTrackingUrl>
+  <issueTrackingUrl>https://is-micro.myip.hu/mantis/</issueTrackingUrl>
   <siteAddress>is-micro.myip.hu</siteAddress>
   <siteDirectory>/srv/projects/ismicro-commons/www/proximity</siteDirectory>
   <distributionDirectory>/srv/projects/ismicro-commons/deploy/proximity</distributionDirectory>
