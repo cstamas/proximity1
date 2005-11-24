@@ -15,6 +15,28 @@
 
 <p>Proximity component is a proxy-like pure Java application.</p>
 
+<subsection name="Using Proximity as corporate Maven proxy">
+<p>The initial goal to develop Proximity was to make some alternative to
+the existing <a href="http://maven-proxy.codehaus.org">maven-proxy</a> 
+application on codehaus.</p>
+<p>The Proximity has the following features, that enables it to act as
+Maven-aware caching proxy:</p>
+
+<ul>
+<li>With pluggable proxying logic it is able to handle snapshot releases in 
+"maven-way" (there is a Logic implementation out-of-the-box)</li>
+<li>It is possible to define more remote repositories, thus Proximity is
+aggregating these repositores and also is caching the and reduces outbound
+traffic.</li>
+<li>The flexibility to define repositories allows administrator to include
+a local only repository to publish in-house artifacts, or other commercial
+artifacts that are not found or ibiblio or other mainstream maven repo.</li>
+</ul>
+
+<p>You can see Proximity in action <a href="/proximity">here</a>!</p>
+
+</subsection>
+
 <subsection name="Project reports">
 <p>Navigate with links on the left to examine current project status, various project reports
 and latest changes.</p>
