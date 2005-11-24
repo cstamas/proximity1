@@ -70,11 +70,11 @@ and may be used to publish artifacts (TODO).</p>
 <p>Briefly, we have Proximity configured with five repositories (in this order):</p>
 
 <ol>
-<li>ismicro -in-house artifacts,</li>
+<li>ismicro - in-house artifacts,</li>
 <li>extNonFree - Oracle JDBC, J2EE stuff,</li>
-<li>extFree - stuff not found on ibiblio and other places, like DWR</li>
-<li>ibiblio, </li>
-<li>codehaus.</li>
+<li>extFree - stuff not (yet?) found on ibiblio and other places, like DWR</li>
+<li>ibiblio - official repo, </li>
+<li>codehaus - codehaus repo.</li>
 </ol>
 
 <p>Our configuration of Proximity as Maven proxy follows (infrastructure
