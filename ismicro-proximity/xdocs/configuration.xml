@@ -28,6 +28,19 @@ Repository KNOWS it is REMOTE.</li>
 <li><b>RepositoryRetrievalLogic</b> - orchestrates the retrieval.</li>
 </ul>
 
+<p>Proximity out-of-the-box offers one remote peer implementation based
+on Jakarta Commons HttpClient and two storage implementation: one read-only
+file system storage (useful for locally offered artifacts) and writable file 
+system storage (useful for caching remote storages).</p>
+
+<p>Currently two (pretty naive) logic implementation exists: one simple 
+proxy like (crude, without timeout or something) and "maven aware" that
+currently just fetches SNAPSHOT artifacts from remote peer even if it
+exists locally.</p>
+
+<p>See <a href="multiproject/px-core/xref/index.html">source</a> for more
+info.</p>
+
 <subsection name="Proximity">
 
 <p>Handles one or more repository. The simple and clean implementation, using
