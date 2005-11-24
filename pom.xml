@@ -1,0 +1,127 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+  <!-- the version of maven's project object model -->
+  <modelVersion>4.0.0</modelVersion>
+
+  <!-- a unique name for this group of project -->
+  <groupId>ismicro</groupId>
+
+  <!-- a unique name for this project -->
+  <artifactId>ismicro-proximity</artifactId>
+  
+  <!-- POM packaging -->
+  <packaging>jar</packaging>
+
+  <!-- a short but descriptive name for the project -->
+  <name>ISmicro Proximity</name>
+
+  <!-- The version of the project under development -->
+  <version>1.0.0-SNAPSHOT</version>
+
+  <!-- The description -->
+  <description>Maven Proximity Application.</description>
+
+  <!-- The project site url -->
+  <url>https://is-micro.myip.hu/projects/ismicro-commons/proximity/</url>
+
+  <issueManagement>
+  	<system>Mantis</system>
+  	<url>https://is-micro.myip.hu/mantis/</url>
+  </issueManagement>
+  
+  <ciManagement>
+  	<system>Continuum</system>
+  	<url>https://intranet.is-micro.hu/continuum/</url>
+  </ciManagement>
+
+  <!-- the year the project started -->
+  <inceptionYear>2005</inceptionYear>
+
+  <!-- any mailing lists for the project -->
+  <mailingLists>
+    <mailingList>
+      <name>ISmicro Commons Project</name>
+      <subscribe>ismicro-commons@is-micro.myip.hu</subscribe>
+      <unsubscribe></unsubscribe>
+      <post>ismicro-commons@is-micro.myip.hu</post>
+      <archive>http://ford.is-micro.hu/pipermail/ismicro-commons/</archive>
+    </mailingList>
+  </mailingLists>
+
+  <!-- who the developers are for the project -->
+  <developers>
+    <developer>
+      <id>cstamas</id>
+      <name>CSERVENAK, Tamas</name>
+      <email>cservenak@is-micro.hu</email>
+      <url>https://is-micro.myip.hu/~cstamas</url>
+      <organization>ISmicro</organization>
+      <organizationUrl>http://www.is-micro.hu/</organizationUrl>
+      <roles>
+        <role>Developer</role>
+      </roles>
+      <timezone>2</timezone>
+    </developer>
+
+    <developer>
+      <id>btamas</id>
+      <name>BARATH, Tamas</name>
+      <email>btamas@is-micro.myip.hu</email>
+      <url>https://is-micro.myip.hu/~btamas</url>
+      <organization>ISmicro</organization>
+      <organizationUrl>http://www.is-micro.hu/</organizationUrl>
+      <roles>
+        <role>Developer</role>
+      </roles>
+      <timezone>2</timezone>
+    </developer>
+
+    <developer>
+      <id>szuzso</id>
+      <name>SZUNYOG, Zsolt</name>
+      <email>szunyog@is-micro.hu</email>
+      <url>https://is-micro.myip.hu/~szuzso</url>
+      <organization>ISmicro</organization>
+      <organizationUrl>http://www.is-micro.hu/</organizationUrl>
+      <roles>
+        <role>Developer</role>
+      </roles>
+      <timezone>2</timezone>
+    </developer>
+  </developers>
+
+  <!--  The project licence -->
+  <licenses>
+    <license>
+      <name>The Apache Software License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+
+  <!-- SCM -->
+  <scm>
+    <connection>scm:svn:https://is-micro.myip.hu/repos/ismicro/trunk/ismicro-proximity/</connection>
+    <developerConnection>scm:svn:https://is-micro.myip.hu/repos/ismicro/trunk/ismicro-proximity/</developerConnection>
+    <url>https://is-micro.myip.hu/viewcvs/ismicro/trunk/ismicro-proximity/</url>
+  </scm>
+
+  <!-- details about the organization that 'owns' the project -->
+  <organization>
+    <name>ISmicro Kft</name>
+    <url>http://www.is-micro.hu/</url>
+  </organization>
+
+  <!-- jar files the project is dependent on -->
+  <dependencies/>
+
+  <!-- build information for the project -->
+  <build/>
+  
+  <modules>
+	<module>px-core</module>
+	<module>px-webapp</module>
+  </modules>
+  
+</project>
