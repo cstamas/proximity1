@@ -13,7 +13,10 @@
 
 <section name="ISmicro Commons Proximity">
 
-<p>Proximity component is a proxy-like pure Java application.</p>
+<p>Proximity Webapp component is a J2EE Servlet deployment of Proximity.</p>
+
+<p>PX Webapp is built upont Spring IoC and MVC implementation as a thin layer
+around PX Core. It consists of the controller classes and few Velocity templates.</p>
 
 <subsection name="Project reports">
 <p>Navigate with links on the left to examine current project status, various project reports
