@@ -1,27 +1,26 @@
 package hu.ismicro.commons.proximity;
 
 import java.io.InputStream;
-import java.net.URL;
-import java.util.Date;
 
+/**
+ * The Item abstraction, with content.
+ * 
+ * @author cstamas
+ *
+ */
 public interface Item {
-
-    String getPath();
     
-    String getName();
+    /**
+     * Returns the Item properties.
+     * 
+     * @return
+     */
+    ItemProperties getProperties();
 
+    /**
+     * Returns the content of the Item.
+     * @return
+     */
     InputStream getStream();
     
-    boolean isDirectory();
-
-    String getRepositoryName();
-
-    String getStorageName();
-
-    URL getOriginatingUrl();
-    
-    long getSize();
-    
-    Date getLastModified();
-
 }

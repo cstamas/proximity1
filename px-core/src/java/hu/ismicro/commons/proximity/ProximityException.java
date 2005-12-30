@@ -1,6 +1,6 @@
 package hu.ismicro.commons.proximity;
 
-public abstract class ProximityException extends RuntimeException {
+public abstract class ProximityException extends Exception {
     
     public ProximityException(String msg) {
         super(msg);

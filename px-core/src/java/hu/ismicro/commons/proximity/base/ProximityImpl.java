@@ -1,6 +1,5 @@
 package hu.ismicro.commons.proximity.base;
 
-import hu.ismicro.commons.proximity.BrowsingNotAllowedException;
 import hu.ismicro.commons.proximity.Item;
 import hu.ismicro.commons.proximity.ItemNotFoundException;
 import hu.ismicro.commons.proximity.NoSuchRepositoryException;
