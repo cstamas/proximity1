@@ -95,7 +95,7 @@ public class HttpClientRemotePeer extends AbstractRemoteStorage {
 		try {
 			int response = executeMethod(get);
 			if (response == HttpStatus.SC_OK) {
-				return constructItemPropertiesFromGetResponse(originatingUrlString, get);
+				return constructItemPropertiesFromGetResponse(path, originatingUrlString, get);
 			} else {
 				logger.error("The method execution returned result code " + response);
 				throw new StorageException("The method execution returned result code " + response);
@@ -114,7 +114,7 @@ public class HttpClientRemotePeer extends AbstractRemoteStorage {
 		try {
 			int response = executeMethod(get);
 			if (response == HttpStatus.SC_OK) {
-				ProxiedItemProperties properties = constructItemPropertiesFromGetResponse(originatingUrlString, get);
+				ProxiedItemProperties properties = constructItemPropertiesFromGetResponse(path, originatingUrlString, get);
 
 				ProxiedItem result = new ProxiedItem();
 				result.setProperties(properties);
@@ -163,7 +163,7 @@ public class HttpClientRemotePeer extends AbstractRemoteStorage {
 		return result;
 	}
 
-	protected ProxiedItemProperties constructItemPropertiesFromGetResponse(String originatingUrlString,
+	protected ProxiedItemProperties constructItemPropertiesFromGetResponse(String path, String originatingUrlString,
 			GetMethod executedMethod) throws MalformedURLException {
 		Header locationHeader = executedMethod.getResponseHeader("location");
 		Header lastModifiedHeader = executedMethod.getResponseHeader("last-modified");
@@ -175,10 +175,10 @@ public class HttpClientRemotePeer extends AbstractRemoteStorage {
 		URL originatingUrl = new URL(originatingUrlString);
 
 		ProxiedItemProperties result = new ProxiedItemProperties();
-		result.setAbsolutePath(PathHelper.changePathLevel(originatingUrl.getPath(), PathHelper.PATH_PARENT));
+		result.setAbsolutePath(PathHelper.changePathLevel(path, PathHelper.PATH_PARENT));
 		// TODO: ibiblio behaves like this, check for others
-		result.setDirectory(lastModifiedHeader != null);
-		result.setFile(lastModifiedHeader == null);
+		result.setDirectory(lastModifiedHeader == null);
+		result.setFile(lastModifiedHeader != null);
 		result.setLastModified(makeDateFromString(lastModifiedHeader.getValue()));
 		result.setName(PathHelper.getFileName(originatingUrl.getPath()));
 		result.setMetadata(ItemProperties.METADATA_ORIGINATING_URL, originatingUrl.toString());

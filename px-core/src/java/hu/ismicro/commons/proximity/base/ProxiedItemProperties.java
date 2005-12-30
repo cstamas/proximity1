@@ -88,5 +88,9 @@ public class ProxiedItemProperties implements ItemProperties {
 		}
 		return metadataMap;
 	}
+	
+	public String toString() {
+		return getName() + "[" + getSize() + "]";
+	}
 
 }

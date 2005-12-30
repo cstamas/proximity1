@@ -1,7 +1,6 @@
 package hu.ismicro.commons.proximity.webapp;
 
 import hu.ismicro.commons.proximity.Proximity;
-import hu.ismicro.commons.proximity.ProximitySupport;
 
 import java.util.HashMap;
 import java.util.List;
@@ -18,22 +17,12 @@ public class SupportController extends MultiActionController {
 
     private Proximity proximity;
 
-    private ProximitySupport proximitySupport;
-
     public void setProximity(Proximity proximity) {
         this.proximity = proximity;
     }
 
     public Proximity getProximity() {
         return proximity;
-    }
-
-    public void setProximitySupport(ProximitySupport proximitySupport) {
-        this.proximitySupport = proximitySupport;
-    }
-
-    public ProximitySupport getProximitySupport() {
-        return proximitySupport;
     }
 
     public ModelAndView index(HttpServletRequest request, HttpServletResponse response) throws Exception {

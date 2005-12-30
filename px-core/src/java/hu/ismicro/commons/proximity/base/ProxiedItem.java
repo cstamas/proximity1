@@ -26,5 +26,9 @@ public class ProxiedItem implements Item {
     public void setStream(InputStream stream) {
         this.stream = stream;
     }
+    
+    public String toString() {
+    		return getProperties().toString();
+    }
 
 }
