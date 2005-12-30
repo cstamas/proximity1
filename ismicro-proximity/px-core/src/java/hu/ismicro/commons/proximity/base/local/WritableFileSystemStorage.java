@@ -14,6 +14,10 @@ import org.apache.commons.io.IOUtils;
 
 public class WritableFileSystemStorage extends ReadOnlyFileSystemStorage {
 
+	public boolean isWritable() {
+		return true;
+	}
+
 	public void storeItem(Item item) throws StorageException {
 		if (!item.getProperties().isFile()) {
 			throw new IllegalArgumentException("Only files can be stored!");

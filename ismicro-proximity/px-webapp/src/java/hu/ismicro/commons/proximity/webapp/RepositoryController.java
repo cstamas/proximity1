@@ -50,7 +50,7 @@ public class RepositoryController extends MultiActionController {
                 item = proximity.retrieveItemFromRepository(requestURI, targetRepository);
             }
 
-            if (item.isDirectory()) {
+            if (item.getProperties().isDirectory()) {
                 List items = null;
                 if (targetRepository == null) {
                     items = proximity.listItems(requestURI);
@@ -67,8 +67,8 @@ public class RepositoryController extends MultiActionController {
             } else {
                 // TODO: Made this proper (content type by ext, size, etc...)
                 response.setContentType("application/octet-stream");
-                response.setContentLength((int)item.getSize());
-                response.setDateHeader("Last-Modified", item.getLastModified().getTime());
+                response.setContentLength((int)item.getProperties().getSize());
+                response.setDateHeader("Last-Modified", item.getProperties().getLastModified().getTime());
                 InputStream is = item.getStream();
                 OutputStream os = response.getOutputStream();
                 IOUtils.copy(is, os);

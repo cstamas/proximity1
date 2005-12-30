@@ -48,8 +48,7 @@ public class ReadOnlyFileSystemStorage extends AbstractStorage {
 	public void setBaseDir(String baseDirPath) {
 		File baseDirFile = new File(baseDirPath);
 		if (!(baseDirFile.exists() && baseDirFile.isDirectory())) {
-			throw new IllegalArgumentException(
-					"The supplied parameter does not exists or is not a directory!");
+			throw new IllegalArgumentException("The supplied parameter does not exists or is not a directory!");
 		}
 		this.baseDir = baseDirPath;
 	}
@@ -58,8 +57,7 @@ public class ReadOnlyFileSystemStorage extends AbstractStorage {
 		if (isMetadataAware()) {
 			return PathHelper.changePathLevel(baseDir, getMetadataPrefix());
 		} else {
-			throw new IllegalStateException(
-					"The storage is configured as metadata-unaware!");
+			throw new IllegalStateException("The storage is configured as metadata-unaware!");
 		}
 	}
 
@@ -72,77 +70,68 @@ public class ReadOnlyFileSystemStorage extends AbstractStorage {
 	}
 
 	public boolean containsItem(String path) {
-		logger.info("Checking for existence of " + path + " in "
-				+ getStorageBaseDir());
-		File target = new File(PathHelper
-				.walkThePath(getStorageBaseDir(), path));
+		logger.info("Checking for existence of " + path + " in " + getStorageBaseDir());
+		File target = new File(PathHelper.walkThePath(getStorageBaseDir(), path));
+		logger.debug("Checking for existence of " + target.getPath());
 		return target.exists();
 	}
 
-	public ProxiedItemProperties retrieveItemProperties(String path)
-			throws StorageException {
-		logger.info("Retrieving " + path + " properties in "
-				+ getStorageBaseDir());
-		File target = new File(PathHelper
-				.walkThePath(getStorageBaseDir(), path));
+	public ProxiedItemProperties retrieveItemProperties(String path) throws StorageException {
+		logger.info("Retrieving " + path + " properties in " + getStorageBaseDir());
+		File target = new File(PathHelper.walkThePath(getStorageBaseDir(), path));
 		return constructItemProperties(target, path);
 	}
 
-	public ProxiedItem retrieveItem(String path) throws ItemNotFoundException,
-			StorageException {
+	public ProxiedItem retrieveItem(String path) throws ItemNotFoundException, StorageException {
 		logger.info("Retrieving " + path + " in " + getStorageBaseDir());
 		try {
-			File target = new File(PathHelper.walkThePath(getStorageBaseDir(),
-					path));
-			ProxiedItemProperties properties = constructItemProperties(target,
-					path);
+			File target = new File(PathHelper.walkThePath(getStorageBaseDir(), path));
+			ProxiedItemProperties properties = constructItemProperties(target, path);
 			ProxiedItem result = new ProxiedItem();
 			result.setProperties(properties);
 			result.setStream(new FileInputStream(target));
 			return result;
 		} catch (FileNotFoundException ex) {
-			logger.error("FileNotFound in FS storage [" + getStorageBaseDir()
-					+ "] for path [" + path + "]", ex);
-			throw new ItemNotFoundException("FileNotFound in FS storage ["
-					+ getStorageBaseDir() + "] for path [" + path + "]");
+			logger.error("FileNotFound in FS storage [" + getStorageBaseDir() + "] for path [" + path + "]", ex);
+			throw new ItemNotFoundException("FileNotFound in FS storage [" + getStorageBaseDir() + "] for path ["
+					+ path + "]");
 		}
 	}
 
 	public List listItems(String path) {
 		logger.info("Listing " + path + " in " + getStorageBaseDir());
 		List result = new ArrayList();
-		String targetPath = PathHelper.absolutizePathFromBase(
-				getStorageBaseDir(), path);
+		String targetPath = PathHelper.walkThePath(getStorageBaseDir(), path);
 		File target = new File(targetPath);
 		if (target.exists()) {
 			if (target.isDirectory()) {
 				File[] files = target.listFiles();
 				for (int i = 0; i < files.length; i++) {
-					ProxiedItemProperties item = constructItemProperties(
-							files[i], PathHelper.changePathLevel(path,
-									PathHelper.getFileName(files[i].getPath())));
+					ProxiedItemProperties item = constructItemProperties(files[i], PathHelper.changePathLevel(path,
+							PathHelper.getFileName(files[i].getPath())));
 					result.add(item);
 				}
 			} else {
-				ProxiedItemProperties item = constructItemProperties(target,
-						targetPath);
+				ProxiedItemProperties item = constructItemProperties(target, targetPath);
 				result.add(item);
 			}
 		}
 		return result;
 	}
 
-	protected ProxiedItemProperties constructItemProperties(File target,
-			String path) {
+	protected ProxiedItemProperties constructItemProperties(File target, String path) {
 		ProxiedItemProperties result = new ProxiedItemProperties();
-		result.setAbsolutePath(PathHelper.absolutizePathFromBase(
-				PathHelper.PATH_SEPARATOR, PathHelper.changePathLevel(path,
-						PathHelper.PATH_PARENT)));
+		result.setAbsolutePath(PathHelper.absolutizePathFromBase(PathHelper.PATH_SEPARATOR, PathHelper.changePathLevel(
+				path, PathHelper.PATH_PARENT)));
 		result.setDirectory(target.isDirectory());
 		result.setFile(target.isFile());
 		result.setLastModified(new Date(target.lastModified()));
 		result.setName(PathHelper.getFileName(path));
-		result.setSize(target.length());
+		if (target.isFile()) {
+			result.setSize(target.length());
+		} else {
+			result.setSize(0);
+		}
 		if (isMetadataAware()) {
 			fillInMetadata(result);
 		}
@@ -151,15 +140,12 @@ public class ReadOnlyFileSystemStorage extends AbstractStorage {
 
 	protected void fillInMetadata(ProxiedItemProperties iProps) {
 		try {
-			String itemPath = PathHelper.walkThePath(iProps.getAbsolutePath(),
-					iProps.getName());
-			File target = new File(PathHelper.walkThePath(getMetadataBaseDir(),
-					itemPath));
+			String itemPath = PathHelper.walkThePath(iProps.getAbsolutePath(), iProps.getName());
+			File target = new File(PathHelper.walkThePath(getMetadataBaseDir(), itemPath));
 			if (target.exists()) {
 				Properties metadata = new Properties();
 				metadata.load(new FileInputStream(target));
-				for (Enumeration i = metadata.propertyNames(); i
-						.hasMoreElements();) {
+				for (Enumeration i = metadata.propertyNames(); i.hasMoreElements();) {
 					String key = (String) i.nextElement();
 					String value = metadata.getProperty(key);
 					iProps.setMetadata(key, value);

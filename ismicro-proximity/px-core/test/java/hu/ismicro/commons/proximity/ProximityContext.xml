@@ -12,28 +12,29 @@
 		</property>
 	</bean>
 
-	<bean id="ibiblio" class="hu.ismicro.commons.proximity.base.SimpleRepository">
-		<property name="name" value="www-ibiblio-org"/>
-		<property name="writableStorage" ref="ibiblioFSStorage"/>
-		<property name="remotePeer" ref="ibiblioRemotePeer"/>
+	<bean id="ibiblio" class="hu.ismicro.commons.proximity.base.RepositoryImpl">
+		<property name="id" value="www-ibiblio-org"/>
+		<property name="localStorage" ref="ibiblioFSStorage"/>
+		<property name="remoteStorage" ref="ibiblioHTTPPeer"/>
 	</bean>
 
-	<bean id="ibiblioFSStorage" class="hu.ismicro.commons.proximity.storage.WritableFileSystemStorage">
+	<bean id="ibiblioFSStorage" class="hu.ismicro.commons.proximity.base.local.WritableFileSystemStorage">
 		<property name="baseDir" value="/home/cstamas/tmp/proximity/ibiblio"/>
 	</bean>
 	
-	<bean id="ibiblioRemotePeer" class="hu.ismicro.commons.proximity.remote.HttpClientRemotePeer">
+	<bean id="ibiblioHTTPPeer" class="hu.ismicro.commons.proximity.base.remote.HttpClientRemotePeer">
 		<property name="remoteUrl" value="http://www.ibiblio.org/maven/"/>
 		<property name="connectionTimeout" value="30000"/>
 	</bean>
 
-	<bean id="ismicro" class="hu.ismicro.commons.proximity.base.SimpleRepository">
-		<property name="name" value="ISmicro Local"/>
-		<property name="storage" ref="ismicroFSStorage"/>
+	<bean id="ismicro" class="hu.ismicro.commons.proximity.base.RepositoryImpl">
+		<property name="id" value="ISmicro Local"/>
+		<property name="localStorage" ref="ismicroFSStorage"/>
 	</bean>
 
-	<bean id="ismicroFSStorage" class="hu.ismicro.commons.proximity.storage.ReadOnlyFileSystemStorage">
+	<bean id="ismicroFSStorage" class="hu.ismicro.commons.proximity.base.local.ReadOnlyFileSystemStorage">
 		<property name="baseDir" value="/home/cstamas/tmp/proximity/ismicro"/>
+		<property name="metadataAware" value="false"/>
 	</bean>
 
 </beans>
