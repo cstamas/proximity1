@@ -1,90 +1,92 @@
 package hu.ismicro.commons.proximity.base;
 
-import java.net.URL;
-import java.util.Date;
-
 import hu.ismicro.commons.proximity.ItemProperties;
 
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
 public class ProxiedItemProperties implements ItemProperties {
-    
-    private String absolutePath;
-    
-    private String name;
-    
-    private boolean directory;
-    
-    private boolean file;
-    
-    private long size;
-    
-    private Date lastModified;
-    
-    private URL originatingUrl;
-    
-    private String repositoryId;
 
-    public String getAbsolutePath() {
-        return absolutePath;
-    }
+	private String absolutePath;
 
-    public void setAbsolutePath(String absolutePath) {
-        this.absolutePath = absolutePath;
-    }
+	private String name;
 
-    public boolean isDirectory() {
-        return directory;
-    }
+	private boolean directory;
 
-    public void setDirectory(boolean directory) {
-        this.directory = directory;
-    }
+	private boolean file;
 
-    public boolean isFile() {
-        return file;
-    }
+	private long size;
 
-    public void setFile(boolean file) {
-        this.file = file;
-    }
+	private Date lastModified;
 
-    public Date getLastModified() {
-        return lastModified;
-    }
+	private Map metadataMap;
 
-    public void setLastModified(Date lastModified) {
-        this.lastModified = lastModified;
-    }
+	public String getAbsolutePath() {
+		return absolutePath;
+	}
 
-    public String getName() {
-        return name;
-    }
+	public void setAbsolutePath(String absolutePath) {
+		this.absolutePath = absolutePath;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public boolean isDirectory() {
+		return directory;
+	}
 
-    public URL getOriginatingUrl() {
-        return originatingUrl;
-    }
+	public void setDirectory(boolean directory) {
+		this.directory = directory;
+	}
 
-    public void setOriginatingUrl(URL originatingUrl) {
-        this.originatingUrl = originatingUrl;
-    }
+	public boolean isFile() {
+		return file;
+	}
 
-    public String getRepositoryId() {
-        return repositoryId;
-    }
+	public void setFile(boolean file) {
+		this.file = file;
+	}
 
-    public void setRepositoryId(String repositoryId) {
-        this.repositoryId = repositoryId;
-    }
+	public Date getLastModified() {
+		return lastModified;
+	}
 
-    public long getSize() {
-        return size;
-    }
+	public void setLastModified(Date lastModified) {
+		this.lastModified = lastModified;
+	}
 
-    public void setSize(long size) {
-        this.size = size;
-    }
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public long getSize() {
+		return size;
+	}
+
+	public void setSize(long size) {
+		this.size = size;
+	}
+
+	public String getMetadata(String key) {
+		return (String) getMetadataMap().get(key);
+	}
+
+	public void setMetadata(String key, String value) {
+		getMetadataMap().put(key, value);
+	}
+	
+	public Map getAllMetadata() {
+		return getMetadataMap();
+	}
+	
+	protected Map getMetadataMap() {
+		if (metadataMap == null) {
+			metadataMap = new HashMap();
+		}
+		return metadataMap;
+	}
 
 }

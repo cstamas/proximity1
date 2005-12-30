@@ -1,7 +1,7 @@
 package hu.ismicro.commons.proximity;
 
-import java.net.URL;
 import java.util.Date;
+import java.util.Map;
 
 /**
  * Interface for Item properties abstraction.
@@ -10,6 +10,12 @@ import java.util.Date;
  *
  */
 public interface ItemProperties {
+	
+	public static final String METADATA_ORIGINATING_URL = "origin.url";
+	
+	public static final String METADATA_OWNING_REPOSITORY = "repository.id";
+
+	public static final String METADATA_EXPIRES = "expires";
 
     /**
      * Returns the absolute path of the item. Using this path appended
@@ -56,18 +62,26 @@ public interface ItemProperties {
     Date getLastModified();
 
     /**
-     * Returns the full originating URL from where this item were fetched,
-     * if applicable. Result is null if there is no info about item source.
-     *  
-     * @return full URL or null if no info.
-     */
-    URL getOriginatingUrl();
-
-    /**
-     * Returns the Id of the owning repository.
+     * Returns the metadata value.
      * 
-     * @return The Id of the owning repository.
+     * @param key
+     * @return
      */
-    String getRepositoryId();
+    String getMetadata(String key);
     
+    /**
+     * Sets a metadata value.
+     * 
+     * @param key
+     * @param value
+     */
+    void setMetadata(String key, String value);
+    
+    /**
+     * Returns all metadata in a map.
+     * 
+     * @return
+     */
+    Map getAllMetadata();
+
 }

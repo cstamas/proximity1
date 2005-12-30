@@ -2,6 +2,7 @@ package hu.ismicro.commons.proximity.base;
 
 import hu.ismicro.commons.proximity.Item;
 import hu.ismicro.commons.proximity.ItemNotFoundException;
+import hu.ismicro.commons.proximity.ItemProperties;
 import hu.ismicro.commons.proximity.NoSuchRepositoryException;
 import hu.ismicro.commons.proximity.Proximity;
 import hu.ismicro.commons.proximity.Repository;
@@ -40,59 +41,87 @@ public class ProximityImpl implements Proximity {
     }
 
     public void addRepository(Repository repository) {
-        repositories.put(repository.getName(), repository);
-        logger.info("Added repository " + repository.getName());
+        repositories.put(repository.getId(), repository);
+        logger.info("Added repository " + repository.getId());
     }
 
-    public void removeRepository(String repoName) {
-        if (repositories.containsKey(repoName)) {
-            repositories.remove(repoName);
-            logger.info("Removed repository " + repoName);
+    public void removeRepository(String repoId) throws NoSuchRepositoryException {
+        if (repositories.containsKey(repoId)) {
+            repositories.remove(repoId);
+            logger.info("Removed repository " + repoId);
         } else {
-            throw new NoSuchRepositoryException(repoName);
+            throw new NoSuchRepositoryException(repoId);
         }
     }
 
-    public Item retrieveItem(String path) {
+	public ItemProperties retrieveItemProperties(String path) throws ItemNotFoundException {
         for (Iterator i = repositories.keySet().iterator(); i.hasNext();) {
-            String repo = (String) i.next();
+            String reposId = (String) i.next();
             try {
-                Item item = retrieveItemFromRepository(path, repo);
-                return item;
+                Repository repo = (Repository) repositories.get(reposId);
+                return repo.retrieveItemProperties(path);
             } catch (ItemNotFoundException ex) {
-                logger.info("Item " + path + " not found in repository " + repo);
+                logger.info("Item " + path + " not found in repository " + reposId);
+            }
+        }
+        throw new ItemNotFoundException(path);
+	}
+
+	public Item retrieveItem(String path) throws ItemNotFoundException {
+        for (Iterator i = repositories.keySet().iterator(); i.hasNext();) {
+            String reposId = (String) i.next();
+            try {
+                Repository repo = (Repository) repositories.get(reposId);
+                return repo.retrieveItem(path);
+            } catch (ItemNotFoundException ex) {
+                logger.info("Item " + path + " not found in repository " + reposId);
             }
         }
         throw new ItemNotFoundException(path);
     }
 
-    public Item retrieveItemFromRepository(String path, String repoName) {
-        if (repositories.containsKey(repoName)) {
-            Repository repo = (Repository) repositories.get(repoName);
+	public ItemProperties retrieveItemPropertiesFromRepository(String path, String reposId) throws NoSuchRepositoryException, ItemNotFoundException {
+        if (repositories.containsKey(reposId)) {
+            Repository repo = (Repository) repositories.get(reposId);
+            return repo.retrieveItemProperties(path);
+        }
+        throw new NoSuchRepositoryException(reposId);
+	}
+
+	public Item retrieveItemFromRepository(String path, String reposId) throws NoSuchRepositoryException, ItemNotFoundException {
+        if (repositories.containsKey(reposId)) {
+            Repository repo = (Repository) repositories.get(reposId);
             return repo.retrieveItem(path);
         }
-        throw new NoSuchRepositoryException(repoName);
+        throw new NoSuchRepositoryException(reposId);
     }
 
     public List listItems(String path) {
         List response = new ArrayList();
         for (Iterator i = repositories.keySet().iterator(); i.hasNext();) {
-            String repo = (String) i.next();
-            try {
-                response.addAll(listItemsFromRepository(path, repo));
-            } catch (BrowsingNotAllowedException ex) {
-                logger.info("Browsing of repository " + repo + " is forbidden!");
-            }
+            String reposId = (String) i.next();
+            Repository repo = (Repository) repositories.get(reposId);
+            response.addAll(repo.listItems(path));
         }
         return response;
     }
 
-    public List listItemsFromRepository(String path, String repoName) {
-        if (repositories.containsKey(repoName)) {
-            Repository repo = (Repository) repositories.get(repoName);
+    public List listItemsFromRepository(String path, String reposId) throws NoSuchRepositoryException {
+        if (repositories.containsKey(reposId)) {
+            Repository repo = (Repository) repositories.get(reposId);
             return repo.listItems(path);
         }
-        throw new NoSuchRepositoryException(repoName);
+        throw new NoSuchRepositoryException(reposId);
     }
+
+	public List searchItem(String regexp) {
+		// TODO
+		throw new UnsupportedOperationException("Not yet implemented");
+	}
+
+	public List searchItemFromRepository(String reposId, String regexp) throws NoSuchRepositoryException {
+		// TODO
+		throw new UnsupportedOperationException("Not yet implemented");
+	}
 
 }
