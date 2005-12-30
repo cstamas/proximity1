@@ -4,6 +4,7 @@ import hu.ismicro.commons.proximity.ItemNotFoundException;
 import hu.ismicro.commons.proximity.ItemProperties;
 import hu.ismicro.commons.proximity.Repository;
 import hu.ismicro.commons.proximity.RepositoryLogic;
+import hu.ismicro.commons.proximity.base.logic.DefaultProxyingLogic;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +22,7 @@ public class RepositoryImpl implements Repository {
 
 	private Storage remoteStorage;
 
-	private RepositoryLogic repositoryLogic;
+	private RepositoryLogic repositoryLogic = new DefaultProxyingLogic();
 
 	public String getId() {
 		return id;
@@ -52,6 +53,9 @@ public class RepositoryImpl implements Repository {
 	}
 
 	public void setRepositoryLogic(RepositoryLogic repositoryLogic) {
+		if (repositoryLogic == null) {
+			throw new IllegalArgumentException("The logic may be not null");
+		}
 		this.repositoryLogic = repositoryLogic;
 	}
 
@@ -59,29 +63,33 @@ public class RepositoryImpl implements Repository {
 		ProxiedItemProperties result = null;
 		try {
 			if (getLocalStorage() != null) {
-				if (getLocalStorage().containsItem(path)) {
-					logger.info("Found " + path + " item in storage of repository " + getId());
-					result = getLocalStorage().retrieveItemProperties(path);
-				} else {
-					logger.info("Not found " + path + " item in storage of repository " + getId());
+				if (getRepositoryLogic().shouldCheckForLocalCopy(path)) {
+					if (getLocalStorage().containsItem(path)) {
+						logger.info("Found " + path + " item in storage of repository " + getId());
+						result = getLocalStorage().retrieveItemProperties(path);
+					} else {
+						logger.info("Not found " + path + " item in storage of repository " + getId());
+					}
 				}
 			}
-			if (result == null && getRemoteStorage() != null) {
+			if (getRepositoryLogic().shouldCheckForRemoteCopy(path, result != null) && getRemoteStorage() != null) {
 				if (getRemoteStorage().containsItem(path)) {
 					logger.info("Found " + path + " item in remote storage of repository " + getId());
 					result = getRemoteStorage().retrieveItemProperties(path);
 					result.setMetadata(ItemProperties.METADATA_OWNING_REPOSITORY, getId());
+					getRepositoryLogic().fillInMetadata(result);
 					if (!result.isDirectory() && getLocalStorage().isWritable()) {
-						logger.info("Storing " + path + " item in writable storage of repository " + getId());
-						getLocalStorage().storeItemProperties(result);
-						ProxiedItemProperties localItem = getLocalStorage().retrieveItemProperties(
-								PathHelper.walkThePath(result.getAbsolutePath(), result.getName()));
-						result = localItem;
+						if (getRepositoryLogic().shouldStoreLocallyAfterRemoteRetrieval(result)) {
+							logger.info("Storing " + path + " item in writable storage of repository " + getId());
+							getLocalStorage().storeItemProperties(result);
+							ProxiedItemProperties localItem = getLocalStorage().retrieveItemProperties(
+									PathHelper.walkThePath(result.getAbsolutePath(), result.getName()));
+							result = localItem;
+						}
 					}
 				} else {
 					logger.info("Not found " + path + " item in remote peer of repository " + getId());
 				}
-
 			}
 			if (result == null) {
 				throw new ItemNotFoundException(path);
@@ -96,25 +104,30 @@ public class RepositoryImpl implements Repository {
 		ProxiedItem result = null;
 		try {
 			if (getLocalStorage() != null) {
-				if (getLocalStorage().containsItem(path)) {
-					logger.info("Found " + path + " item in storage of repository " + getId());
-					result = getLocalStorage().retrieveItem(path);
-				} else {
-					logger.info("Not found " + path + " item in storage of repository " + getId());
+				if (getRepositoryLogic().shouldCheckForLocalCopy(path)) {
+					if (getLocalStorage().containsItem(path)) {
+						logger.info("Found " + path + " item in storage of repository " + getId());
+						result = getLocalStorage().retrieveItem(path);
+					} else {
+						logger.info("Not found " + path + " item in storage of repository " + getId());
+					}
 				}
 			}
-			if (result == null && getRemoteStorage() != null) {
+			if (getRepositoryLogic().shouldCheckForRemoteCopy(path, result != null) && getRemoteStorage() != null) {
 				if (getRemoteStorage().containsItem(path)) {
 					logger.info("Found " + path + " item in remote storage of repository " + getId());
 					result = getRemoteStorage().retrieveItem(path);
 					result.getProperties().setMetadata(ItemProperties.METADATA_OWNING_REPOSITORY, getId());
+					getRepositoryLogic().fillInMetadata(result.getProperties());
 					if (!result.getProperties().isDirectory() && getLocalStorage().isWritable()) {
-						logger.info("Storing " + path + " item in writable storage of repository " + getId());
-						getLocalStorage().storeItem(result);
-						ProxiedItem localItem = getLocalStorage().retrieveItem(
-								PathHelper.walkThePath(result.getProperties().getAbsolutePath(), result.getProperties()
-										.getName()));
-						result = localItem;
+						if (getRepositoryLogic().shouldStoreLocallyAfterRemoteRetrieval(result.getProperties())) {
+							logger.info("Storing " + path + " item in writable storage of repository " + getId());
+							getLocalStorage().storeItem(result);
+							ProxiedItem localItem = getLocalStorage().retrieveItem(
+									PathHelper.walkThePath(result.getProperties().getAbsolutePath(), result
+											.getProperties().getName()));
+							result = localItem;
+						}
 					}
 				} else {
 					logger.info("Not found " + path + " item in remote peer of repository " + getId());

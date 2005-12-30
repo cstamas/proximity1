@@ -6,7 +6,9 @@ public interface RepositoryLogic {
 	
 	boolean shouldCheckForRemoteCopy(String path, boolean locallyExists);
 	
-	boolean shouldStoreLocallyAfterRemoteRetrieval(Item item);
+	boolean shouldStoreLocallyAfterRemoteRetrieval(ItemProperties item);
+
+	boolean shouldIndex(ItemProperties item);
 	
 	void fillInMetadata(ItemProperties props);
 
