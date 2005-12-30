@@ -19,13 +19,6 @@
   <dependencies>
 
     <dependency>
-      <groupId>ehcache</groupId>
-      <artifactId>ehcache</artifactId>
-      <version>1.1</version>
-      <type>jar</type>
-      <url>http://ehcache.sourceforge.net/</url>
-    </dependency>
-    <dependency>
       <groupId>commons-logging</groupId>
       <artifactId>commons-logging</artifactId>
       <version>1.0.4</version>
@@ -56,16 +49,30 @@
     <dependency>
       <groupId>commons-httpclient</groupId>
       <artifactId>commons-httpclient</artifactId>
-      <version>3.0-rc4</version>
+      <version>3.0</version>
       <type>jar</type>
       <url>http://jakarta.apache.org/commons/httpclient/</url>
     </dependency>
     <dependency>
       <groupId>log4j</groupId>
       <artifactId>log4j</artifactId>
-      <version>1.2.11</version>
+      <version>1.2.12</version>
       <type>jar</type>
       <url>http://logging.apache.org/log4j/</url>
+    </dependency>
+    <dependency>
+      <groupId>lucene</groupId>
+      <artifactId>lucene</artifactId>
+      <version>1.4.3</version>
+      <type>jar</type>
+      <url>http://jakarta.apache.org/lucene/</url>
+    </dependency>
+    <dependency>
+      <groupId>ehcache</groupId>
+      <artifactId>ehcache</artifactId>
+      <version>1.1</version>
+      <type>jar</type>
+      <url>http://ehcache.sourceforge.net/</url>
     </dependency>
 
     <dependency>

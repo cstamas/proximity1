@@ -4,13 +4,22 @@ import java.util.List;
 
 public interface Proximity {
 
-    void setRepositories(List repositories);
-
+    /**
+     * Returns the List of Repositories configured within Proximity.
+     * 
+     * @return List of active repositories.
+     */
     List getRepositories();
 
-    void addRepository(Repository repository);
-
-    void removeRepository(String repoName);
+    /**
+     * Fetches a given item properties on the supplied path.
+     * 
+     * @param path
+     * @return the wanted ItemProperties
+     * @throws ItemNotFoundException
+     *             if Proximity has not found item on the path
+     */
+    ItemProperties retrieveItemProperties(String path) throws ItemNotFoundException;
 
     /**
      * Fetches a given item on the supplied path.
@@ -23,24 +32,37 @@ public interface Proximity {
     Item retrieveItem(String path) throws ItemNotFoundException;
 
     /**
+     * Fetches a given item properties from the given repository.
+     * 
+     * @param path
+     * @param reposId
+     * @return the wanted item properties
+     * @throws ItemNotFoundException
+     *             if Proximity has not found the item in the given repos.
+     * @throws NoSuchRepositoryException
+     */
+    ItemProperties retrieveItemPropertiesFromRepository(String path, String reposId) throws NoSuchRepositoryException,
+            ItemNotFoundException;
+
+    /**
      * Fetches a given item from the given repository.
      * 
      * @param path
-     * @param repo
+     * @param reposId
      * @return the wanted item
      * @throws ItemNotFoundException
      *             if Proximity has not found the item in the given repos.
      * @throws NoSuchRepositoryException
      */
-    Item retrieveItemFromRepository(String path, String repo) throws NoSuchRepositoryException, ItemNotFoundException;
+    Item retrieveItemFromRepository(String path, String reposId) throws NoSuchRepositoryException, ItemNotFoundException;
 
     /**
-     * Returns an aggregated List of all items in all configured Repositories.
-     * It will ALWAYS return List, at least a 0 length list. Will not return
-     * null or throw exception in normal circumstances.
+     * Returns an aggregated List of all item properties in all configured
+     * Repositories. It will ALWAYS return List, at least a 0 length list. Will
+     * not return null or throw exception in normal circumstances.
      * 
      * @param path
-     * @return Always returns List, at least an empty list.
+     * @return list of ItemProperties, possibly 0 length.
      */
     List listItems(String path);
 
@@ -50,13 +72,29 @@ public interface Proximity {
      * length list is returned.
      * 
      * @param path
-     * @param repo
-     * @return
+     * @param reposId
+     * @return list of ItemProperties, possibly 0 length.
      * @throws BrowsingNotAllowedException
      *             if the repos is forbidden for listing.
      * @throws NoSuchRepositoryException
      */
-    List listItemsFromRepository(String path, String repo) throws NoSuchRepositoryException,
-            BrowsingNotAllowedException;
+    List listItemsFromRepository(String path, String reposId) throws NoSuchRepositoryException;
+    
+    /**
+     * Searches for item.
+     * 
+     * @param regexp
+     * @return List of ItemProperties, possibly 0 lenth.
+     */
+    public List searchItem(String regexp);
+
+    /**
+     * Searches for Item in a given repos.
+     * 
+     * @param reposId
+     * @param regexp
+     * @return List of ItemProperties, possibly 0 lenth.
+     */
+    public List searchItemFromRepository(String reposId, String regexp) throws NoSuchRepositoryException;
 
 }

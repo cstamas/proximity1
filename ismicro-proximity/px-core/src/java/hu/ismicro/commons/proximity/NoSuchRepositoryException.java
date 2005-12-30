@@ -2,8 +2,8 @@ package hu.ismicro.commons.proximity;
 
 public class NoSuchRepositoryException extends ProximityException {
 
-    public NoSuchRepositoryException(String repoName) {
-        super("Repository with name " + repoName + " not found!");
+    public NoSuchRepositoryException(String repoId) {
+        super("Repository with name " + repoId + " not found!");
     }
 
 }

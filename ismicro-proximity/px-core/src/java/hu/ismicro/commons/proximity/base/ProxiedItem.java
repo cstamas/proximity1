@@ -1,20 +1,30 @@
 package hu.ismicro.commons.proximity.base;
 
 import hu.ismicro.commons.proximity.Item;
+import hu.ismicro.commons.proximity.ItemProperties;
 
-import java.net.URL;
-import java.util.Date;
+import java.io.InputStream;
 
-public interface ProxiedItem extends Item {
+public class ProxiedItem implements Item {
+    
+    private ItemProperties properties;
+    
+    private InputStream stream;
 
-    void setRepositoryName(String name);
-    
-    void setStorageName(String name);
+    public ItemProperties getProperties() {
+        return properties;
+    }
 
-    void setOriginatingUrl(URL url);
-    
-    void setSize(long size);
-    
-    void setLastModified(Date mod);
-    
+    public void setProperties(ItemProperties properties) {
+        this.properties = properties;
+    }
+
+    public InputStream getStream() {
+        return stream;
+    }
+
+    public void setStream(InputStream stream) {
+        this.stream = stream;
+    }
+
 }

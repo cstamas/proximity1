@@ -1,14 +1,27 @@
 package hu.ismicro.commons.proximity.base;
 
 
+import hu.ismicro.commons.proximity.Item;
+import hu.ismicro.commons.proximity.ItemNotFoundException;
+
 import java.util.List;
 
 public interface Storage {
     
-    boolean containsItem(String path);
+    String getId();
+    
+    boolean isWritable();
+    
+    boolean containsItem(String path) throws StorageException;
 
-    ProxiedItem retrieveItem(String path);
+    ProxiedItemProperties retrieveItemProperties(String path) throws ItemNotFoundException, StorageException;
+    
+    ProxiedItem retrieveItem(String path) throws ItemNotFoundException, StorageException;
 
-    List listItems(String path);
+    List listItems(String path) throws StorageException;
+
+    void storeItem(Item item) throws StorageException;
+
+    void deleteItem(String path) throws StorageException;
 
 }
