@@ -7,7 +7,7 @@ import hu.ismicro.commons.proximity.base.RemoteStorage;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-public abstract class AbstractRemotePeer extends AbstractStorage implements RemoteStorage {
+public abstract class AbstractRemoteStorage extends AbstractStorage implements RemoteStorage {
 
     private URL remoteUrl;
 
