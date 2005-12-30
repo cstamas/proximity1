@@ -1,6 +1,7 @@
 package hu.ismicro.commons.proximity.base;
 
 import hu.ismicro.commons.proximity.Item;
+import hu.ismicro.commons.proximity.ItemProperties;
 
 import java.util.List;
 
@@ -37,6 +38,10 @@ public abstract class AbstractStorage implements Storage {
 
 	public List listItems(String path) throws StorageException {
         throw new UnsupportedOperationException("The " + getClass().getName() + " storage is not listable!");
+	}
+
+	public void storeItemProperties(ItemProperties item) throws StorageException {
+        throw new UnsupportedOperationException("The " + getClass().getName() + " storage is ReadOnly!");
 	}
 
 	public void storeItem(Item item) throws StorageException {

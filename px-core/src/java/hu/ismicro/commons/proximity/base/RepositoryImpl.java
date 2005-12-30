@@ -70,6 +70,14 @@ public class RepositoryImpl implements Repository {
 				if (getRemoteStorage().containsItem(path)) {
 					logger.info("Found " + path + " item in remote storage of repository " + getId());
 					result = getRemoteStorage().retrieveItemProperties(path);
+					result.setMetadata(ItemProperties.METADATA_OWNING_REPOSITORY, getId());
+					if (!result.isDirectory() && getLocalStorage().isWritable()) {
+						logger.info("Storing " + path + " item in writable storage of repository " + getId());
+						getLocalStorage().storeItemProperties(result);
+						ProxiedItemProperties localItem = getLocalStorage().retrieveItemProperties(
+								PathHelper.walkThePath(result.getAbsolutePath(), result.getName()));
+						result = localItem;
+					}
 				} else {
 					logger.info("Not found " + path + " item in remote peer of repository " + getId());
 				}

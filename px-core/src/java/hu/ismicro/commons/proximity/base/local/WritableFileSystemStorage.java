@@ -15,6 +15,9 @@ import org.apache.commons.io.IOUtils;
 public class WritableFileSystemStorage extends ReadOnlyFileSystemStorage {
 
 	public void storeItem(Item item) throws StorageException {
+		if (!item.getProperties().isFile()) {
+			throw new IllegalArgumentException("Only files can be stored!");
+		}
 		logger.info("Storing item in [" + item.getProperties().getAbsolutePath() + "] with name ["
 				+ item.getProperties().getName() + "] in " + getStorageBaseDir());
 		try {
@@ -28,7 +31,7 @@ public class WritableFileSystemStorage extends ReadOnlyFileSystemStorage {
 			os.close();
 			file.setLastModified(item.getProperties().getLastModified().getTime());
 			if (isMetadataAware()) {
-				storeMetadata(item.getProperties());
+				storeItemProperties(item.getProperties());
 			}
 		} catch (IOException ex) {
 			logger.error("IOException in FS storage " + getStorageBaseDir(), ex);
@@ -36,7 +39,10 @@ public class WritableFileSystemStorage extends ReadOnlyFileSystemStorage {
 		}
 	}
 
-	protected void storeMetadata(ItemProperties iProps) throws StorageException {
+	public void storeItemProperties(ItemProperties iProps) throws StorageException {
+		if (!iProps.isFile()) {
+			throw new IllegalArgumentException("Only files can be stored!");
+		}
 		logger.info("Storing metadata in [" + iProps.getAbsolutePath() + "] with name ["
 				+ iProps.getName() + "] in " + getMetadataBaseDir());
 		try {
