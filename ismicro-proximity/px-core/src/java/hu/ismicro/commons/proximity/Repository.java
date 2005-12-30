@@ -2,8 +2,9 @@ package hu.ismicro.commons.proximity;
 
 
 import hu.ismicro.commons.proximity.base.ProxiedItem;
-import hu.ismicro.commons.proximity.base.RemotePeer;
+import hu.ismicro.commons.proximity.base.ProxiedItemProperties;
 import hu.ismicro.commons.proximity.base.Storage;
+import hu.ismicro.commons.proximity.base.StorageException;
 
 import java.util.List;
 
@@ -11,16 +12,16 @@ public interface Repository {
 
     String getId();
     
-    String getName();
+    void setLocalStorage(Storage storage);
 
-    void setStorage(Storage storage);
+    void setRemoteStorage(Storage storage);
 
-    void setRemotePeer(RemotePeer peer);
-
-    void setRepositoryRetrievalLogic(RepositoryRetrievalLogic logic);
+    void setRepositoryLogic(RepositoryLogic logic);
     
-    ProxiedItem retrieveItem(String path);
+    ProxiedItemProperties retrieveItemProperties(String path) throws ItemNotFoundException, StorageException;
+
+    ProxiedItem retrieveItem(String path) throws ItemNotFoundException, StorageException;
     
-    List listItems(String path);
+    List listItems(String path) throws StorageException;
 
 }
