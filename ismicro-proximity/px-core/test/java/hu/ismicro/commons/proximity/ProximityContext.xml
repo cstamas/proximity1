@@ -16,6 +16,9 @@
 		<property name="id" value="www-ibiblio-org"/>
 		<property name="localStorage" ref="ibiblioFSStorage"/>
 		<property name="remoteStorage" ref="ibiblioHTTPPeer"/>
+		<property name="repositoryLogic">
+			<bean class="hu.ismicro.commons.proximity.base.logic.MavenProxyLogic"/>
+		</property>
 	</bean>
 
 	<bean id="ibiblioFSStorage" class="hu.ismicro.commons.proximity.base.local.WritableFileSystemStorage">

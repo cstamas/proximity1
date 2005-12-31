@@ -48,6 +48,10 @@ public abstract class AbstractStorage implements Storage {
         throw new UnsupportedOperationException("The " + getClass().getName() + " storage is ReadOnly!");
 	}
 
+	public void deleteItemProperties(String path) throws StorageException {
+        throw new UnsupportedOperationException("The " + getClass().getName() + " storage is ReadOnly!");
+	}
+
 	public void deleteItem(String path) throws StorageException {
         throw new UnsupportedOperationException("The " + getClass().getName() + " storage is ReadOnly!");
 	}

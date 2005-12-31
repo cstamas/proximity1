@@ -83,6 +83,10 @@ public class HttpClientRemotePeer extends AbstractRemoteStorage {
 		return followRedirection;
 	}
 
+	public boolean containsItemProperties(String path) {
+		return containsItem(path);
+	}
+
 	public boolean containsItem(String path) {
 		HeadMethod head = new HeadMethod(getAbsoluteUrl(path));
 		int response = executeMethod(head);
@@ -91,11 +95,11 @@ public class HttpClientRemotePeer extends AbstractRemoteStorage {
 
 	public ProxiedItemProperties retrieveItemProperties(String path) throws ItemNotFoundException, StorageException {
 		String originatingUrlString = getAbsoluteUrl(path);
-		GetMethod get = new GetMethod(originatingUrlString);
+		HeadMethod method = new HeadMethod(originatingUrlString);
 		try {
-			int response = executeMethod(get);
+			int response = executeMethod(method);
 			if (response == HttpStatus.SC_OK) {
-				return constructItemPropertiesFromGetResponse(path, originatingUrlString, get);
+				return constructItemPropertiesFromGetResponse(path, originatingUrlString, method);
 			} else {
 				logger.error("The method execution returned result code " + response);
 				throw new StorageException("The method execution returned result code " + response);
@@ -104,7 +108,7 @@ public class HttpClientRemotePeer extends AbstractRemoteStorage {
 			logger.error("The path " + path + " is malformed!", ex);
 			throw new StorageException("The method execution got MalformedURLException!", ex);
 		} finally {
-			get.releaseConnection();
+			method.releaseConnection();
 		}
 	}
 
@@ -114,7 +118,8 @@ public class HttpClientRemotePeer extends AbstractRemoteStorage {
 		try {
 			int response = executeMethod(get);
 			if (response == HttpStatus.SC_OK) {
-				ProxiedItemProperties properties = constructItemPropertiesFromGetResponse(path, originatingUrlString, get);
+				ProxiedItemProperties properties = constructItemPropertiesFromGetResponse(path, originatingUrlString,
+						get);
 
 				ProxiedItem result = new ProxiedItem();
 				result.setProperties(properties);
@@ -164,7 +169,7 @@ public class HttpClientRemotePeer extends AbstractRemoteStorage {
 	}
 
 	protected ProxiedItemProperties constructItemPropertiesFromGetResponse(String path, String originatingUrlString,
-			GetMethod executedMethod) throws MalformedURLException {
+			HttpMethod executedMethod) throws MalformedURLException {
 		Header locationHeader = executedMethod.getResponseHeader("location");
 		Header lastModifiedHeader = executedMethod.getResponseHeader("last-modified");
 		if (locationHeader != null) {
@@ -181,9 +186,12 @@ public class HttpClientRemotePeer extends AbstractRemoteStorage {
 		result.setFile(lastModifiedHeader != null);
 		result.setLastModified(makeDateFromString(lastModifiedHeader.getValue()));
 		result.setName(PathHelper.getFileName(originatingUrl.getPath()));
+		if (result.isFile() && executedMethod instanceof GetMethod) {
+			result.setSize(((GetMethod) executedMethod).getResponseContentLength());
+		} else {
+			result.setSize(0);
+		}
 		result.setMetadata(ItemProperties.METADATA_ORIGINATING_URL, originatingUrl.toString());
-		result.setSize(result.isFile() ? executedMethod.getResponseContentLength() : 0);
-		logger.info("Received content with length: " + executedMethod.getResponseContentLength());
 		return result;
 	}
 
