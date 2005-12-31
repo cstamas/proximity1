@@ -8,66 +8,66 @@ import java.util.Map;
 
 public class ProxiedItemProperties implements ItemProperties {
 
-	private String absolutePath;
+	protected static final String METADATA_ABSOLUTE_PATH = "item.absolutePath";
 
-	private String name;
+	protected static final String METADATA_NAME = "item.name";
 
-	private boolean directory;
+	protected static final String METADATA_IS_DIRECTORY = "item.isDirectory";
 
-	private boolean file;
+	protected static final String METADATA_IS_FILE = "item.isFile";
 
-	private long size;
+	protected static final String METADATA_FILESIZE = "item.filesize";
 
-	private Date lastModified;
+	protected static final String METADATA_LAST_MODIFIED = "item.lastModified";
 
 	private Map metadataMap;
 
 	public String getAbsolutePath() {
-		return absolutePath;
+		return getMetadata(METADATA_ABSOLUTE_PATH);
 	}
 
 	public void setAbsolutePath(String absolutePath) {
-		this.absolutePath = absolutePath;
-	}
-
-	public boolean isDirectory() {
-		return directory;
-	}
-
-	public void setDirectory(boolean directory) {
-		this.directory = directory;
-	}
-
-	public boolean isFile() {
-		return file;
-	}
-
-	public void setFile(boolean file) {
-		this.file = file;
-	}
-
-	public Date getLastModified() {
-		return lastModified;
-	}
-
-	public void setLastModified(Date lastModified) {
-		this.lastModified = lastModified;
+		setMetadata(METADATA_ABSOLUTE_PATH, absolutePath);
 	}
 
 	public String getName() {
-		return name;
+		return getMetadata(METADATA_NAME);
 	}
 
 	public void setName(String name) {
-		this.name = name;
+		setMetadata(METADATA_NAME, name);
+	}
+
+	public boolean isDirectory() {
+		return Boolean.parseBoolean(getMetadata(METADATA_IS_DIRECTORY));
+	}
+
+	public void setDirectory(boolean directory) {
+		setMetadata(METADATA_IS_DIRECTORY, Boolean.toString(directory));
+	}
+
+	public boolean isFile() {
+		return Boolean.parseBoolean(getMetadata(METADATA_IS_FILE));
+	}
+
+	public void setFile(boolean file) {
+		setMetadata(METADATA_IS_FILE, Boolean.toString(file));
+	}
+
+	public Date getLastModified() {
+		return new Date(Long.parseLong(getMetadata(METADATA_LAST_MODIFIED)));
+	}
+
+	public void setLastModified(Date lastModified) {
+		setMetadata(METADATA_LAST_MODIFIED, Long.toString(lastModified.getTime()));
 	}
 
 	public long getSize() {
-		return size;
+		return Long.parseLong(getMetadata(METADATA_FILESIZE));
 	}
 
 	public void setSize(long size) {
-		this.size = size;
+		setMetadata(METADATA_FILESIZE, Long.toString(size));
 	}
 
 	public String getMetadata(String key) {
@@ -77,18 +77,18 @@ public class ProxiedItemProperties implements ItemProperties {
 	public void setMetadata(String key, String value) {
 		getMetadataMap().put(key, value);
 	}
-	
+
 	public Map getAllMetadata() {
 		return getMetadataMap();
 	}
-	
+
 	protected Map getMetadataMap() {
 		if (metadataMap == null) {
 			metadataMap = new HashMap();
 		}
 		return metadataMap;
 	}
-	
+
 	public String toString() {
 		return getName() + "[" + getSize() + "]";
 	}

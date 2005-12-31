@@ -13,6 +13,8 @@ public interface Storage {
     
     boolean isWritable();
     
+    boolean containsItemProperties(String path) throws StorageException;
+
     boolean containsItem(String path) throws StorageException;
 
     ProxiedItemProperties retrieveItemProperties(String path) throws ItemNotFoundException, StorageException;
@@ -24,6 +26,8 @@ public interface Storage {
     void storeItemProperties(ItemProperties item) throws StorageException;
 
     void storeItem(Item item) throws StorageException;
+
+    void deleteItemProperties(String path) throws StorageException;
 
     void deleteItem(String path) throws StorageException;
 

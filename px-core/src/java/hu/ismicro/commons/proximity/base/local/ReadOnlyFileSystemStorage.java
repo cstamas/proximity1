@@ -69,11 +69,14 @@ public class ReadOnlyFileSystemStorage extends AbstractStorage {
 		}
 	}
 
+	public boolean containsItemProperties(String path) {
+		logger.info("Checking for existence of " + path + " in " + getMetadataBaseDir());
+		return checkForExistence(getMetadataBaseDir(), path);
+	}
+
 	public boolean containsItem(String path) {
 		logger.info("Checking for existence of " + path + " in " + getStorageBaseDir());
-		File target = new File(PathHelper.walkThePath(getStorageBaseDir(), path));
-		logger.debug("Checking for existence of " + target.getPath());
-		return target.exists();
+		return checkForExistence(getStorageBaseDir(), path);
 	}
 
 	public ProxiedItemProperties retrieveItemProperties(String path) throws StorageException {
@@ -117,6 +120,11 @@ public class ReadOnlyFileSystemStorage extends AbstractStorage {
 			}
 		}
 		return result;
+	}
+	
+	protected boolean checkForExistence(String baseDir, String path) {
+		File target = new File(PathHelper.walkThePath(baseDir, path));
+		return target.exists();
 	}
 
 	protected ProxiedItemProperties constructItemProperties(File target, String path) {

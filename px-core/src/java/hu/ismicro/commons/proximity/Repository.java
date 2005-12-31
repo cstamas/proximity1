@@ -3,6 +3,7 @@ package hu.ismicro.commons.proximity;
 
 import hu.ismicro.commons.proximity.base.ProxiedItem;
 import hu.ismicro.commons.proximity.base.ProxiedItemProperties;
+import hu.ismicro.commons.proximity.base.RepositoryLogic;
 import hu.ismicro.commons.proximity.base.Storage;
 import hu.ismicro.commons.proximity.base.StorageException;
 
@@ -22,6 +23,14 @@ public interface Repository {
 
     ProxiedItem retrieveItem(String path) throws ItemNotFoundException, StorageException;
     
+    void deleteItemProperties(String path) throws StorageException;
+
+    void deleteItem(String path) throws StorageException;
+
+    void storeItemProperties(ItemProperties itemProps) throws StorageException;
+
+    void storeItem(Item item) throws StorageException;
+
     List listItems(String path) throws StorageException;
 
 }

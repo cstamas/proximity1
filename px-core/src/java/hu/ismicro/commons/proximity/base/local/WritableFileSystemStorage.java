@@ -60,6 +60,7 @@ public class WritableFileSystemStorage extends ReadOnlyFileSystemStorage {
 			metadata.store(os, null);
 			os.flush();
 			os.close();
+			target.setLastModified(iProps.getLastModified().getTime());
 		} catch (IOException ex) {
 			logger.error("IOException in FS storage " + getMetadataBaseDir(), ex);
 			throw new StorageException("IOException in FS storage " + getMetadataBaseDir(), ex);
@@ -74,12 +75,12 @@ public class WritableFileSystemStorage extends ReadOnlyFileSystemStorage {
 				throw new StorageException("Unable to delete file " + file.getPath());
 			}
 			if (isMetadataAware()) {
-				deleteMetadata(path);
+				deleteItemProperties(path);
 			}
 		}
 	}
 
-	public void deleteMetadata(String path) throws StorageException {
+	public void deleteItemProperties(String path) throws StorageException {
 		logger.info("Deleting " + path + " metadata in " + getMetadataBaseDir());
 		File file = new File(getMetadataBaseDir(), path);
 		if (file.exists()) {

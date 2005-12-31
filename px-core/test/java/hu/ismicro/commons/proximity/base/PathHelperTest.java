@@ -38,6 +38,7 @@ public class PathHelperTest extends TestCase {
     }
 
     public void testGetFileName() {
+        Assert.assertEquals("c", PathHelper.getFileName("c"));
         Assert.assertEquals("c", PathHelper.getFileName("/a/b/c"));
         Assert.assertEquals("aa", PathHelper.getFileName("aa///"));
         Assert.assertEquals("/", PathHelper.getFileName("///"));
