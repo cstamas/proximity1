@@ -21,5 +21,6 @@
 	<classpathentry kind="var" path="MAVEN_REPO/springframework/jars/spring-web-1.2.6.jar"/>
 	<classpathentry kind="var" path="MAVEN_REPO/springframework/jars/spring-webmvc-1.2.6.jar"/>
 	<classpathentry kind="var" path="MAVEN_REPO/commons-io/jars/commons-io-1.1.jar"/>
+	<classpathentry kind="var" path="MAVEN_REPO/lucene/jars/lucene-1.4.3.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
