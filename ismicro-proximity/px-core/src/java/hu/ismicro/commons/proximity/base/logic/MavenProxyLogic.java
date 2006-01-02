@@ -5,9 +5,13 @@ import hu.ismicro.commons.proximity.Repository;
 import hu.ismicro.commons.proximity.base.PathHelper;
 import hu.ismicro.commons.proximity.base.ProxiedItem;
 
-import java.util.Date;
-
-public class MavenProxyLogic extends DefaultProxyingLogic {
+/**
+ * Maven 1 and 2 aware proxy logic. It is configurable about
+ * expiring time for SNAPHSOTs, POMs and METADATAs. 
+ * @author cstamas
+ *
+ */
+public class MavenProxyLogic extends DefaultExpiringProxyingLogic {
 
 	private long snapshotExpirationPeriod = 86400 * 1000; // 24 hours
 
@@ -69,22 +73,21 @@ public class MavenProxyLogic extends DefaultProxyingLogic {
 		this.snapshotRefetch = snapshotRefetch;
 	}
 
-	public boolean shouldCheckForLocalCopy(String path) {
-		return true;
+	protected boolean isPom(String path) {
+		return PathHelper.getFileName(path).contains(".pom");
 	}
 
-	public ProxiedItem afterLocalCopyFound(ProxiedItem item, Repository repository) {
-		if (item.getProperties().getMetadata(ItemProperties.METADATA_EXPIRES) != null) {
-			logger.info("Item has expiration, using it.");
-			Date expires = new Date(Long.parseLong(item.getProperties().getMetadata(ItemProperties.METADATA_EXPIRES)));
-			if (expires.before(new Date(System.currentTimeMillis()))) {
-				repository.deleteItem(PathHelper.walkThePath(item.getProperties().getAbsolutePath(), item
-						.getProperties().getName()));
-				return null;
-			}
-		}
-		return item;
+	protected boolean isSnapshot(String path) {
+		return PathHelper.getFileName(path).contains("SNAPSHOT");
 	}
+
+	protected boolean isMetadata(String path) {
+		return PathHelper.getFileName(path).startsWith("maven-metadata.xml");
+	}
+
+	
+	// =========================================================================
+	// Logic iface
 
 	public boolean shouldCheckForRemoteCopy(String path, boolean locallyExists) {
 		if (!locallyExists) {
@@ -116,22 +119,6 @@ public class MavenProxyLogic extends DefaultProxyingLogic {
 					Long.toString(System.currentTimeMillis() + getSnapshotExpirationPeriod()));
 		}
 		return item;
-	}
-
-	public boolean shouldStoreLocallyAfterRemoteRetrieval(ItemProperties item) {
-		return true;
-	}
-
-	protected boolean isPom(String path) {
-		return PathHelper.getFileName(path).contains(".pom");
-	}
-
-	protected boolean isSnapshot(String path) {
-		return PathHelper.getFileName(path).contains("SNAPSHOT");
-	}
-
-	protected boolean isMetadata(String path) {
-		return PathHelper.getFileName(path).startsWith("maven-metadata.xml");
 	}
 
 }
