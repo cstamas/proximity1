@@ -22,26 +22,44 @@ public class DefaultProxyingLogic implements RepositoryLogic {
 
 	protected Log logger = LogFactory.getLog(this.getClass());
 
+	/**
+	 * Always returns true.
+	 */
 	public boolean shouldCheckForLocalCopy(String path) {
 		return true;
 	}
 
+	/**
+	 * Does nothing and returns item unmodified.
+	 */
 	public ProxiedItem afterLocalCopyFound(ProxiedItem item, Repository repository) {
 		return item;
 	}
 
+	/**
+	 * Always returns !locallyExists. 
+	 */
 	public boolean shouldCheckForRemoteCopy(String path, boolean locallyExists) {
 		return !locallyExists;
 	}
 
+	/**
+	 * Does nothing and returns item unmodified.
+	 */
 	public ProxiedItem afterRemoteCopyFound(ProxiedItem item, Repository repository) {
 		return item;
 	}
 
+	/**
+	 * Always returns true.
+	 */
 	public boolean shouldStoreLocallyAfterRemoteRetrieval(ItemProperties item) {
 		return true;
 	}
 
+	/**
+	 * Always returns !item.isDirectory().
+	 */
 	public boolean shouldIndex(ItemProperties item) {
 		return !item.isDirectory();
 	}

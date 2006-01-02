@@ -17,17 +17,54 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.Properties;
 
+/**
+ * Read-only storage implemented on plain file system.
+ * 
+ * <p>
+ * This implementation may be metadataAware, thus storing all metadata in the
+ * configured workdir suffixed by "metadata" and actual artifacts in the
+ * configured workdir suffixed by "storage" (these suffixes are customizable).
+ * 
+ * @author cstamas
+ * 
+ */
 public class ReadOnlyFileSystemStorage extends AbstractStorage {
 
+	/**
+	 * The default METADATA prefix.
+	 */
 	private static final String METADATA = "metadata";
 
+	/**
+	 * The default STORAGE prefix.
+	 */
 	private static final String STORAGE = "storage";
 
+	/**
+	 * The configured baseDir.
+	 */
 	private String baseDir;
+
+	/**
+	 * Is this storage metadata aware? Default value is TRUE.
+	 */
+	private boolean metadataAware = true;
 
 	private String metadataPrefix = METADATA;
 
 	private String storagePrefix = STORAGE;
+
+	/**
+	 * Is this storage metadata aware?
+	 * @return
+	 */
+	public boolean isMetadataAware() {
+		return metadataAware;
+	}
+
+	public void setMetadataAware(boolean metadataAware) {
+		this.metadataAware = metadataAware;
+	}
 
 	public String getMetadataPrefix() {
 		return metadataPrefix;
@@ -45,6 +82,12 @@ public class ReadOnlyFileSystemStorage extends AbstractStorage {
 		this.storagePrefix = storagePrefix;
 	}
 
+	/**
+	 * Sets the baseDir on the filesystem for this local FS storage.
+	 * The supplied String should be pointing to an existing directory.
+	 *  
+	 * @param baseDirPath
+	 */
 	public void setBaseDir(String baseDirPath) {
 		File baseDirFile = new File(baseDirPath);
 		if (!(baseDirFile.exists() && baseDirFile.isDirectory())) {
@@ -53,6 +96,13 @@ public class ReadOnlyFileSystemStorage extends AbstractStorage {
 		this.baseDir = baseDirPath;
 	}
 
+	/**
+	 * It this storage is metadata aware, it returns baseDir appended by
+	 * metadata suffix, otherwise it will throw IllegalStateException
+	 * because the storage is metadata unaware.
+	 *  
+	 * @return
+	 */
 	public String getMetadataBaseDir() {
 		if (isMetadataAware()) {
 			return PathHelper.changePathLevel(baseDir, getMetadataPrefix());
@@ -61,6 +111,12 @@ public class ReadOnlyFileSystemStorage extends AbstractStorage {
 		}
 	}
 
+	/**
+	 * If this storage is metadata aware, it returns baseDir appended by
+	 * storage suffix, otherwise it will return baseDir itself unmodified.
+	 * 
+	 * @return
+	 */
 	public String getStorageBaseDir() {
 		if (isMetadataAware()) {
 			return PathHelper.changePathLevel(baseDir, getStoragePrefix());
@@ -121,7 +177,7 @@ public class ReadOnlyFileSystemStorage extends AbstractStorage {
 		}
 		return result;
 	}
-	
+
 	protected boolean checkForExistence(String baseDir, String path) {
 		File target = new File(PathHelper.walkThePath(baseDir, path));
 		return target.exists();
@@ -150,7 +206,7 @@ public class ReadOnlyFileSystemStorage extends AbstractStorage {
 		try {
 			String itemPath = PathHelper.walkThePath(iProps.getAbsolutePath(), iProps.getName());
 			File target = new File(PathHelper.walkThePath(getMetadataBaseDir(), itemPath));
-			if (target.exists()) {
+			if (target.exists() && target.isFile()) {
 				Properties metadata = new Properties();
 				metadata.load(new FileInputStream(target));
 				for (Enumeration i = metadata.propertyNames(); i.hasMoreElements();) {

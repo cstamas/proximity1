@@ -12,6 +12,13 @@ import java.util.Properties;
 
 import org.apache.commons.io.IOUtils;
 
+/**
+ * Writable local storage. It overrides the "unsupported" implementations 
+ * from the AbstractStorage.
+ * 
+ * @author cstamas
+ *
+ */
 public class WritableFileSystemStorage extends ReadOnlyFileSystemStorage {
 
 	public boolean isWritable() {
