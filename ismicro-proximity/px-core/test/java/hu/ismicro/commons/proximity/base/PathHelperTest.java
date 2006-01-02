@@ -28,9 +28,11 @@ public class PathHelperTest extends TestCase {
 
     public void testWalkThePath() {
         Assert.assertEquals("/a/b/c", PathHelper.walkThePath("/a", "/b/c"));
+        Assert.assertEquals("/a/b/c", PathHelper.walkThePath("/a/", "/b/c"));
         Assert.assertEquals("/a/b/c", PathHelper.walkThePath("/", "a/b/c"));
         Assert.assertEquals("/a/b/c", PathHelper.walkThePath("/", "/a/b/c"));
         Assert.assertEquals("/a/b/c", PathHelper.walkThePath("/a/b/c", ""));
+        Assert.assertEquals("/a/b/c", PathHelper.walkThePath("/a/b/c", "/"));
         Assert.assertEquals("/a/b/c", PathHelper.walkThePath("", "/a/b/c"));
         Assert.assertEquals("/a/b/c", PathHelper.walkThePath("", "a/b/c"));
         Assert.assertEquals("http://a.c/a/b/c", PathHelper.walkThePath("http://a.c", "a/b/c"));
