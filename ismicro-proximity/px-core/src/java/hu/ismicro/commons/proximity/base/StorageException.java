@@ -1,5 +1,12 @@
 package hu.ismicro.commons.proximity.base;
 
+/**
+ * Generic storage exception thrown by given storage implementation (like 
+ * IOExceptions), and so. Denotes an unrecoverable system error.
+ *  
+ * @author cstamas
+ *
+ */
 public class StorageException extends RuntimeException {
 
 	public StorageException(String msg) {

@@ -7,6 +7,12 @@ import hu.ismicro.commons.proximity.base.RemoteStorage;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+/**
+ * This class is a base abstract class for remot storages.
+ * 
+ * @author cstamas
+ *
+ */
 public abstract class AbstractRemoteStorage extends AbstractStorage implements RemoteStorage {
 
     private URL remoteUrl;

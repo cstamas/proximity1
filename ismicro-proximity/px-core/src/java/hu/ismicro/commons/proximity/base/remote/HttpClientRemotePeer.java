@@ -30,6 +30,14 @@ import org.apache.commons.httpclient.util.DateUtil;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 
+/**
+ * Naive remote storage implementation based on Apache Commons HttpClient's
+ * library. It uses HTTP HEAD method for existence checking and HTTP GET for
+ * item retrieval.
+ * 
+ * @author cstamas
+ * 
+ */
 public class HttpClientRemotePeer extends AbstractRemoteStorage {
 
 	private HttpClient httpClient = new HttpClient(new SimpleHttpConnectionManager());

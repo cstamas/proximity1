@@ -7,6 +7,12 @@ import hu.ismicro.commons.proximity.ItemProperties;
 
 import java.util.List;
 
+/**
+ * A storage abstraction.
+ * 
+ * @author cstamas
+ *
+ */
 public interface Storage {
     
     String getId();

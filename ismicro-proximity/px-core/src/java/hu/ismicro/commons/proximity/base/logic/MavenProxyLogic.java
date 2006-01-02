@@ -6,24 +6,30 @@ import hu.ismicro.commons.proximity.base.PathHelper;
 import hu.ismicro.commons.proximity.base.ProxiedItem;
 
 /**
- * Maven 1 and 2 aware proxy logic. It is configurable about
- * expiring time for SNAPHSOTs, POMs and METADATAs. 
+ * Maven 1 and 2 aware proxy logic. It is configurable about expiring time for
+ * SNAPHSOTs, POMs and METADATAs.
+ * 
  * @author cstamas
- *
+ * 
  */
 public class MavenProxyLogic extends DefaultExpiringProxyingLogic {
 
+	/**
+	 * Expiration period of SNAPSHOT artifacts in mseconds or 0 to refetch
+	 * always.
+	 */
 	private long snapshotExpirationPeriod = 86400 * 1000; // 24 hours
 
-	private boolean snapshotRefetch = true;
-
+	/**
+	 * Expiration period of METADATA artifacts in mseconds or 0 to refetch
+	 * always.
+	 */
 	private long metadataExpirationPeriod = 86400 * 1000; // 24 hours
 
-	private boolean metadataRefetch = true;
-
+	/**
+	 * Expiration period of POM artifacts in mseconds or 0 to refetch always.
+	 */
 	private long pomExpirationPeriod = 86400 * 1000; // 24 hours
-
-	private boolean pomRefetch = true;
 
 	public long getMetadataExpirationPeriod() {
 		return metadataExpirationPeriod;
@@ -50,27 +56,15 @@ public class MavenProxyLogic extends DefaultExpiringProxyingLogic {
 	}
 
 	public boolean isMetadataRefetch() {
-		return metadataRefetch;
-	}
-
-	public void setMetadataRefetch(boolean metadataRefetch) {
-		this.metadataRefetch = metadataRefetch;
+		return this.metadataExpirationPeriod == 0;
 	}
 
 	public boolean isPomRefetch() {
-		return pomRefetch;
-	}
-
-	public void setPomRefetch(boolean pomRefetch) {
-		this.pomRefetch = pomRefetch;
+		return this.pomExpirationPeriod == 0;
 	}
 
 	public boolean isSnapshotRefetch() {
-		return snapshotRefetch;
-	}
-
-	public void setSnapshotRefetch(boolean snapshotRefetch) {
-		this.snapshotRefetch = snapshotRefetch;
+		return this.snapshotExpirationPeriod == 0;
 	}
 
 	protected boolean isPom(String path) {
@@ -85,7 +79,6 @@ public class MavenProxyLogic extends DefaultExpiringProxyingLogic {
 		return PathHelper.getFileName(path).startsWith("maven-metadata.xml");
 	}
 
-	
 	// =========================================================================
 	// Logic iface
 
@@ -106,17 +99,20 @@ public class MavenProxyLogic extends DefaultExpiringProxyingLogic {
 	}
 
 	public ProxiedItem afterRemoteCopyFound(ProxiedItem item, Repository repository) {
-		if (isPom(item.getProperties().getName()) && isPomRefetch()) {
+		if (isPom(item.getProperties().getName())) {
+			logger.info("Item is Maven 2 POM, setting expires on it to " + getPomExpirationPeriod()/1000 + " seconds.");
 			item.getProperties().setMetadata(ItemProperties.METADATA_EXPIRES,
 					Long.toString(System.currentTimeMillis() + getPomExpirationPeriod()));
-		}
-		if (isMetadata(item.getProperties().getName()) && isMetadataRefetch()) {
+		} else if (isMetadata(item.getProperties().getName())) {
+			logger.info("Item is Maven 2 Metadata, setting expires on it to " + getMetadataExpirationPeriod()/1000 + " seconds.");
 			item.getProperties().setMetadata(ItemProperties.METADATA_EXPIRES,
 					Long.toString(System.currentTimeMillis() + getMetadataExpirationPeriod()));
-		}
-		if (isSnapshot(item.getProperties().getName()) && isSnapshotRefetch()) {
+		} else if (isSnapshot(item.getProperties().getName())) {
+			logger.info("Item is Maven 1/2 Snapshot, setting expires on it to " + getSnapshotExpirationPeriod()/1000 + " seconds.");
 			item.getProperties().setMetadata(ItemProperties.METADATA_EXPIRES,
 					Long.toString(System.currentTimeMillis() + getSnapshotExpirationPeriod()));
+		} else {
+			item = super.afterRemoteCopyFound(item, repository);
 		}
 		return item;
 	}
