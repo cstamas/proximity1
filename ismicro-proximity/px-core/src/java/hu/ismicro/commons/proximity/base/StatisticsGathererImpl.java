@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class StatisticsGathererImpl implements StatisticsGatherer {
-    
+
     private static final String LOCAL_STATS = "local";
 
     private static final String REMOTE_STATS = "remote";
@@ -15,21 +15,25 @@ public class StatisticsGathererImpl implements StatisticsGatherer {
     private static final String PROPS_RETRIEVAL = "propertiesRetrieval";
 
     private static final String ITEM_RETRIEVAL = "retrieval";
-    
+
     private Map stats = new HashMap();
 
     public void localHit(Repository repo, ItemProperties ip, boolean propsOnly) {
-        addHit(LOCAL_STATS, ip, repo, propsOnly);
+        if (ip.isFile()) {
+            addHit(LOCAL_STATS, ip, repo, propsOnly);
+        }
     }
 
     public void remoteHit(Repository repo, ItemProperties ip, boolean propsOnly) {
-        addHit(REMOTE_STATS, ip, repo, propsOnly);
+        if (ip.isFile()) {
+            addHit(REMOTE_STATS, ip, repo, propsOnly);
+        }
     }
 
     public Map getStatistics() {
         return stats;
     }
-    
+
     protected void addHit(String LOCAL_OR_REMOTE_KEY, ItemProperties ip, Repository repo, boolean propsOnly) {
         if (!stats.containsKey(ip)) {
             stats.put(ip, new HashMap());
@@ -46,7 +50,8 @@ public class StatisticsGathererImpl implements StatisticsGatherer {
         if (!localStats.containsKey(propsOnly ? PROPS_RETRIEVAL : ITEM_RETRIEVAL)) {
             localStats.put(propsOnly ? PROPS_RETRIEVAL : ITEM_RETRIEVAL, new Integer(0));
         }
-        localStats.put(propsOnly ? PROPS_RETRIEVAL : ITEM_RETRIEVAL, new Integer(((Integer) localStats.get(propsOnly ? PROPS_RETRIEVAL : ITEM_RETRIEVAL)).intValue()+1));
+        localStats.put(propsOnly ? PROPS_RETRIEVAL : ITEM_RETRIEVAL, new Integer(((Integer) localStats
+                .get(propsOnly ? PROPS_RETRIEVAL : ITEM_RETRIEVAL)).intValue() + 1));
     }
 
 }

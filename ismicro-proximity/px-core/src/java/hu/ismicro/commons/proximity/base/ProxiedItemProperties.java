@@ -27,7 +27,14 @@ public class ProxiedItemProperties implements ItemProperties {
 	}
     
     public String getPath() {
-        return getAbsolutePath() + "/" + getName();
+        if (getName().equals("/")) {
+            return getName();
+        }
+        if (getAbsolutePath().endsWith("/")) {
+            return getAbsolutePath() + getName();
+        } else {
+            return getAbsolutePath() + "/" + getName();
+        }
     }
 
 	public boolean isDirectory() {
