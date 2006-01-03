@@ -118,7 +118,7 @@ public class LuceneIndexer implements Indexer {
                 } else {
                     termQ = new FuzzyQuery(new Term(key, ip.getMetadata(key)));
                 }
-                query.add(termQ, false, false);
+                query.add(termQ, true, false);
             }
             Hits hits = searcher.search(query);
             List result = new ArrayList(hits.length());

@@ -126,8 +126,13 @@ public class ReadOnlyFileSystemStorage extends AbstractStorage {
 	}
 
 	public boolean containsItemProperties(String path) {
-		logger.debug("Checking for existence of " + path + " in " + getMetadataBaseDir());
-		return checkForExistence(getMetadataBaseDir(), path);
+        if (isMetadataAware()) {
+            logger.debug("Checking for existence of " + path + " in " + getMetadataBaseDir());
+            return checkForExistence(getMetadataBaseDir(), path);
+        } else {
+            logger.debug("Checking for existence of " + path + " in " + getStorageBaseDir());
+            return checkForExistence(getStorageBaseDir(), path);
+        }
 	}
 
 	public boolean containsItem(String path) {
