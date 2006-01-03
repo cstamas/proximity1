@@ -146,7 +146,12 @@ public class RepositoryImpl implements Repository {
 	public List listItems(String path) throws StorageException {
 		List result = new ArrayList();
 		if (getLocalStorage() != null) {
-			result.addAll(getLocalStorage().listItems(path));
+            List list = getLocalStorage().listItems(path);
+            for (Iterator i = list.iterator(); i.hasNext(); ) {
+                ItemProperties ip = (ItemProperties) i.next();
+                ip.setMetadata(ItemProperties.METADATA_OWNING_REPOSITORY, this.getId());
+            }
+			result.addAll(list);
 		}
 		return result;
 	}

@@ -43,6 +43,14 @@ public interface ItemProperties {
 	 * @return the name of the item.
 	 */
 	String getName();
+    
+    /**
+     * Returns getAbsolutePath() concatenated properly with getName(). Properly
+     * means for "/".
+     * 
+     * @return
+     */
+    String getPath();
 
 	/**
 	 * Tests whether this item is Directory.
@@ -71,6 +79,13 @@ public interface ItemProperties {
 	 * @return the last modification date.
 	 */
 	Date getLastModified();
+    
+    /**
+     * Returns the name of the source repository.
+     * 
+     * @return
+     */
+    String getRepositoryId();
 
 	/**
 	 * Returns the metadata value.
