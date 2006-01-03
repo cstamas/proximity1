@@ -60,6 +60,13 @@ public interface Repository {
     void setIndexer(Indexer indexer);
     
     /**
+     * Forces repository reindexing. If there is no indexer supplied with repos,
+     * this call will do nothing.
+     *
+     */
+    void reindex();
+    
+    /**
      * Sets the statistics gatherer. May be null, to switch stats gathering
      * off.
      * 

@@ -81,6 +81,10 @@ public class ProximityIntegrationTest extends AbstractProximityIntegrationTest {
         example.setName("antlr*");
         result = proximity.searchItem(example);
         logger.info("Got search result:" + result);
+        example = new ProxiedItemProperties();
+        example.setAbsolutePath("/ismicro/jars");
+        result = proximity.searchItem(example);
+        logger.info("Got search result:" + result);
 	}
 
 	public void testSimpleDir() {

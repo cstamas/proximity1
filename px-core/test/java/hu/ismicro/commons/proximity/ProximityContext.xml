@@ -3,7 +3,7 @@
 
 <beans>
 
-	<bean id="proximity" class="hu.ismicro.commons.proximity.base.ProximityImpl">
+	<bean id="proximity" class="hu.ismicro.commons.proximity.base.ProximityImpl" init-method="afterPropertiesSet">
 		<property name="repositories">
 			<list>
 				<ref local="ibiblio"/>
@@ -16,8 +16,8 @@
 	
 	<bean id="stats" class="hu.ismicro.commons.proximity.base.StatisticsGathererImpl"/>
 
-	<bean id="indexer" class="hu.ismicro.commons.proximity.base.indexer.LuceneIndexer">
-		<property name="indexDirectory" value="/home/cstamas/tmp/proximity/index" />
+	<bean id="indexer" class="hu.ismicro.commons.proximity.base.indexer.LuceneIndexer" init-method="afterPropertiesSet">
+		<property name="indexDirectory" value="/home/cstamas/tmp/proximity/indexer" />
 	</bean>
 
 	<bean id="ibiblio" class="hu.ismicro.commons.proximity.base.RepositoryImpl">
@@ -44,6 +44,7 @@
 
 	<bean id="ismicro" class="hu.ismicro.commons.proximity.base.RepositoryImpl">
 		<property name="id" value="ISmicro Local"/>
+		<property name="indexer" ref="indexer"/>
 		<property name="statisticsGatherer" ref="stats"/>
 		<property name="localStorage" ref="ismicroFSStorage"/>
 	</bean>

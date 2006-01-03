@@ -36,6 +36,14 @@
 				<ref local="codehaus"/>
 			</list>
 		</property>
+		<property name="indexer" ref="indexer"/>
+		<property name="statisticsGatherer" ref="stats"/>
+	</bean>
+
+	<bean id="stats" class="hu.ismicro.commons.proximity.base.StatisticsGathererImpl"/>
+
+	<bean id="indexer" class="hu.ismicro.commons.proximity.base.indexer.LuceneIndexer">
+		<property name="indexDirectory" value="${indexer.dir}" />
 	</bean>
 
     <!--
@@ -46,6 +54,13 @@
 		<property name="id" value="www-ibiblio-org"/>
 		<property name="localStorage" ref="ibiblioFSStorage"/>
 		<property name="remoteStorage" ref="ibiblioRemotePeer"/>
+		<property name="indexer" ref="indexer"/>
+		<property name="statisticsGatherer" ref="stats"/>
+		<property name="repositoryLogic">
+			<bean class="hu.ismicro.commons.proximity.base.logic.MavenProxyLogic">
+				<property name="pomExpirationPeriod" value="0" />
+			</bean>
+		</property>
 	</bean>
 
 	<bean id="ibiblioFSStorage" class="hu.ismicro.commons.proximity.base.local.WritableFileSystemStorage">
@@ -65,6 +80,13 @@
 		<property name="id" value="dist-codehaus-org"/>
 		<property name="localStorage" ref="codehausFSStorage"/>
 		<property name="remoteStorage" ref="codehausRemotePeer"/>
+		<property name="indexer" ref="indexer"/>
+		<property name="statisticsGatherer" ref="stats"/>
+		<property name="repositoryLogic">
+			<bean class="hu.ismicro.commons.proximity.base.logic.MavenProxyLogic">
+				<property name="pomExpirationPeriod" value="0" />
+			</bean>
+		</property>
 	</bean>
 
 	<bean id="codehausFSStorage" class="hu.ismicro.commons.proximity.base.local.WritableFileSystemStorage">
@@ -83,6 +105,8 @@
 	<bean id="ismicro" class="hu.ismicro.commons.proximity.base.RepositoryImpl">
 		<property name="id" value="ISmicro Local"/>
 		<property name="localStorage" ref="ismicroFSStorage"/>
+		<property name="indexer" ref="indexer"/>
+		<property name="statisticsGatherer" ref="stats"/>
 	</bean>
 
 	<bean id="ismicroFSStorage" class="hu.ismicro.commons.proximity.base.local.ReadOnlyFileSystemStorage">
@@ -97,6 +121,8 @@
 	<bean id="extNonFree" class="hu.ismicro.commons.proximity.base.RepositoryImpl">
 		<property name="id" value="External NonFree"/>
 		<property name="localStorage" ref="extNonFreeFSStorage"/>
+		<property name="indexer" ref="indexer"/>
+		<property name="statisticsGatherer" ref="stats"/>
 	</bean>
 
 	<bean id="extNonFreeFSStorage" class="hu.ismicro.commons.proximity.base.local.ReadOnlyFileSystemStorage">
@@ -111,6 +137,8 @@
 	<bean id="extFree" class="hu.ismicro.commons.proximity.base.RepositoryImpl">
 		<property name="id" value="External Free"/>
 		<property name="localStorage" ref="extFreeFSStorage"/>
+		<property name="indexer" ref="indexer"/>
+		<property name="statisticsGatherer" ref="stats"/>
 	</bean>
 
 	<bean id="extFreeFSStorage" class="hu.ismicro.commons.proximity.base.local.ReadOnlyFileSystemStorage">
