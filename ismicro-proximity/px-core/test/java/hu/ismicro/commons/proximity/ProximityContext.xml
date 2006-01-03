@@ -7,7 +7,7 @@
 		<property name="repositories">
 			<list>
 				<ref local="ibiblio"/>
-				<ref local="ismicro"/>
+				<ref local="inhouse"/>
 			</list>
 		</property>
 		<property name="indexer" ref="indexer"/>
@@ -42,15 +42,15 @@
 		<property name="connectionTimeout" value="30000"/>
 	</bean>
 
-	<bean id="ismicro" class="hu.ismicro.commons.proximity.base.RepositoryImpl">
+	<bean id="inhouse" class="hu.ismicro.commons.proximity.base.RepositoryImpl">
 		<property name="id" value="ISmicro Local"/>
 		<property name="indexer" ref="indexer"/>
 		<property name="statisticsGatherer" ref="stats"/>
-		<property name="localStorage" ref="ismicroFSStorage"/>
+		<property name="localStorage" ref="inhouseFSStorage"/>
 	</bean>
 
-	<bean id="ismicroFSStorage" class="hu.ismicro.commons.proximity.base.local.ReadOnlyFileSystemStorage">
-		<property name="baseDir" value="/home/cstamas/tmp/proximity/ismicro"/>
+	<bean id="inhouseFSStorage" class="hu.ismicro.commons.proximity.base.local.ReadOnlyFileSystemStorage">
+		<property name="baseDir" value="/home/cstamas/tmp/proximity/inhouse"/>
 		<property name="metadataAware" value="false"/>
 	</bean>
 
