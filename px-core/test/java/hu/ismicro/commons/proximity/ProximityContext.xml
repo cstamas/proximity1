@@ -38,7 +38,7 @@
 	</bean>
 	
 	<bean id="ibiblioHTTPPeer" class="hu.ismicro.commons.proximity.base.remote.HttpClientRemotePeer">
-		<property name="remoteUrl" value="http://www.ibiblio.org/maven2/"/>
+		<property name="remoteUrl" value="http://www.ibiblio.org/maven/"/>
 		<property name="connectionTimeout" value="30000"/>
 	</bean>
 

@@ -126,23 +126,23 @@ public class ReadOnlyFileSystemStorage extends AbstractStorage {
 	}
 
 	public boolean containsItemProperties(String path) {
-		logger.info("Checking for existence of " + path + " in " + getMetadataBaseDir());
+		logger.debug("Checking for existence of " + path + " in " + getMetadataBaseDir());
 		return checkForExistence(getMetadataBaseDir(), path);
 	}
 
 	public boolean containsItem(String path) {
-		logger.info("Checking for existence of " + path + " in " + getStorageBaseDir());
+		logger.debug("Checking for existence of " + path + " in " + getStorageBaseDir());
 		return checkForExistence(getStorageBaseDir(), path);
 	}
 
 	public ProxiedItemProperties retrieveItemProperties(String path) throws StorageException {
-		logger.info("Retrieving " + path + " properties in " + getStorageBaseDir());
+		logger.debug("Retrieving " + path + " properties in " + getStorageBaseDir());
 		File target = new File(PathHelper.walkThePath(getStorageBaseDir(), path));
 		return constructItemProperties(target, path);
 	}
 
 	public ProxiedItem retrieveItem(String path) throws ItemNotFoundException, StorageException {
-		logger.info("Retrieving " + path + " in " + getStorageBaseDir());
+		logger.debug("Retrieving " + path + " in " + getStorageBaseDir());
 		try {
 			File target = new File(PathHelper.walkThePath(getStorageBaseDir(), path));
 			ProxiedItemProperties properties = constructItemProperties(target, path);
@@ -158,7 +158,7 @@ public class ReadOnlyFileSystemStorage extends AbstractStorage {
 	}
 
 	public List listItems(String path) {
-		logger.info("Listing " + path + " in " + getStorageBaseDir());
+		logger.debug("Listing " + path + " in " + getStorageBaseDir());
 		List result = new ArrayList();
 		String targetPath = PathHelper.walkThePath(getStorageBaseDir(), path);
 		File target = new File(targetPath);

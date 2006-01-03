@@ -25,6 +25,10 @@ public class ProxiedItemProperties implements ItemProperties {
 	public void setName(String name) {
 		setMetadata(METADATA_NAME, name);
 	}
+    
+    public String getPath() {
+        return getAbsolutePath() + "/" + getName();
+    }
 
 	public boolean isDirectory() {
 		return Boolean.parseBoolean(getMetadata(METADATA_IS_DIRECTORY));
@@ -57,6 +61,14 @@ public class ProxiedItemProperties implements ItemProperties {
 	public void setSize(long size) {
 		setMetadata(METADATA_FILESIZE, Long.toString(size));
 	}
+    
+    public String getRepositoryId() {
+        return getMetadata(METADATA_OWNING_REPOSITORY);
+    }
+    
+    public void setRepositoryId(String id) {
+        setMetadata(METADATA_OWNING_REPOSITORY, id);
+    }
 
 	public String getMetadata(String key) {
 		return (String) getMetadataMap().get(key);

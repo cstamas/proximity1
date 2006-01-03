@@ -29,7 +29,7 @@ public class WritableFileSystemStorage extends ReadOnlyFileSystemStorage {
 		if (!item.getProperties().isFile()) {
 			throw new IllegalArgumentException("Only files can be stored!");
 		}
-		logger.info("Storing item in [" + item.getProperties().getAbsolutePath() + "] with name ["
+		logger.debug("Storing item in [" + item.getProperties().getAbsolutePath() + "] with name ["
 				+ item.getProperties().getName() + "] in " + getStorageBaseDir());
 		try {
 			File file = new File(PathHelper.walkThePath(getStorageBaseDir(), PathHelper.changePathLevel(item
@@ -54,7 +54,7 @@ public class WritableFileSystemStorage extends ReadOnlyFileSystemStorage {
 		if (!iProps.isFile()) {
 			throw new IllegalArgumentException("Only files can be stored!");
 		}
-		logger.info("Storing metadata in [" + iProps.getAbsolutePath() + "] with name ["
+		logger.debug("Storing metadata in [" + iProps.getAbsolutePath() + "] with name ["
 				+ iProps.getName() + "] in " + getMetadataBaseDir());
 		try {
 			String itemPath = PathHelper.changePathLevel(iProps.getAbsolutePath(), iProps.getName());
@@ -75,7 +75,7 @@ public class WritableFileSystemStorage extends ReadOnlyFileSystemStorage {
 	}
 
 	public void deleteItem(String path) throws StorageException {
-		logger.info("Deleting " + path + " in " + getStorageBaseDir());
+		logger.debug("Deleting " + path + " in " + getStorageBaseDir());
 		File file = new File(getStorageBaseDir(), path);
 		if (file.exists()) {
 			if (!file.delete()) {
@@ -88,7 +88,7 @@ public class WritableFileSystemStorage extends ReadOnlyFileSystemStorage {
 	}
 
 	public void deleteItemProperties(String path) throws StorageException {
-		logger.info("Deleting " + path + " metadata in " + getMetadataBaseDir());
+		logger.debug("Deleting " + path + " metadata in " + getMetadataBaseDir());
 		File file = new File(getMetadataBaseDir(), path);
 		if (file.exists()) {
 			if (!file.delete()) {
