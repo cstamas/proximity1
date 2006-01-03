@@ -11,8 +11,11 @@
 			</list>
 		</property>
 		<property name="indexer" ref="indexer"/>
+		<property name="statisticsGatherer" ref="stats"/>
 	</bean>
 	
+	<bean id="stats" class="hu.ismicro.commons.proximity.base.StatisticsGathererImpl"/>
+
 	<bean id="indexer" class="hu.ismicro.commons.proximity.base.indexer.LuceneIndexer">
 		<property name="indexDirectory" value="/home/cstamas/tmp/proximity/index" />
 	</bean>
@@ -22,6 +25,7 @@
 		<property name="localStorage" ref="ibiblioFSStorage"/>
 		<property name="remoteStorage" ref="ibiblioHTTPPeer"/>
 		<property name="indexer" ref="indexer"/>
+		<property name="statisticsGatherer" ref="stats"/>
 		<property name="repositoryLogic">
 			<bean class="hu.ismicro.commons.proximity.base.logic.MavenProxyLogic">
 				<property name="pomExpirationPeriod" value="0" />
@@ -40,6 +44,7 @@
 
 	<bean id="ismicro" class="hu.ismicro.commons.proximity.base.RepositoryImpl">
 		<property name="id" value="ISmicro Local"/>
+		<property name="statisticsGatherer" ref="stats"/>
 		<property name="localStorage" ref="ismicroFSStorage"/>
 	</bean>
 

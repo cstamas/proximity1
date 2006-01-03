@@ -23,10 +23,20 @@ public class RepositoryImpl implements Repository {
 	private Storage remoteStorage;
 
 	private Indexer indexer;
+    
+    private StatisticsGatherer statisticsGatherer;
 
 	private RepositoryLogic repositoryLogic = new DefaultProxyingLogic();
 
-	public String getId() {
+	public StatisticsGatherer getStatisticsGatherer() {
+        return statisticsGatherer;
+    }
+
+    public void setStatisticsGatherer(StatisticsGatherer statisticsGatherer) {
+        this.statisticsGatherer = statisticsGatherer;
+    }
+
+    public String getId() {
 		return id;
 	}
 
@@ -70,7 +80,7 @@ public class RepositoryImpl implements Repository {
 	}
 
 	public ProxiedItemProperties retrieveItemProperties(String path) throws ItemNotFoundException, StorageException {
-		return (ProxiedItemProperties) retrieveItem(true, path).getProperties();
+        return (ProxiedItemProperties) retrieveItem(true, path).getProperties();
 	}
 
 	public ProxiedItem retrieveItem(String path) throws ItemNotFoundException, StorageException {
@@ -153,6 +163,9 @@ public class RepositoryImpl implements Repository {
 						} else {
 							result = getLocalStorage().retrieveItem(path);
 						}
+                        if (getStatisticsGatherer() != null) {
+                            getStatisticsGatherer().localHit(this, result.getProperties(), propsOnly);
+                        }
 						result = getRepositoryLogic().afterLocalCopyFound(result, this);
 					} else {
 						logger.info("Not found " + path + " item in storage of repository " + getId());
@@ -170,6 +183,9 @@ public class RepositoryImpl implements Repository {
 						result = getRemoteStorage().retrieveItem(path);
 					}
 					result.getProperties().setMetadata(ItemProperties.METADATA_OWNING_REPOSITORY, getId());
+                    if (getStatisticsGatherer() != null) {
+                        getStatisticsGatherer().remoteHit(this, result.getProperties(), propsOnly);
+                    }
 					result = getRepositoryLogic().afterRemoteCopyFound(result, this);
 					if (result != null && !result.getProperties().isDirectory() && getLocalStorage().isWritable()) {
 						if (getRepositoryLogic().shouldStoreLocallyAfterRemoteRetrieval(result.getProperties())) {

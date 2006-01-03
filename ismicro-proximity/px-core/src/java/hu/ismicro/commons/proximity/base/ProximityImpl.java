@@ -21,21 +21,31 @@ public class ProximityImpl implements Proximity {
     protected Log logger = LogFactory.getLog(this.getClass());
 
     private Map repositories = new HashMap();
-    
+
     private Indexer indexer;
 
+    private StatisticsGatherer statisticsGatherer;
+
+    public StatisticsGatherer getStatisticsGatherer() {
+        return statisticsGatherer;
+    }
+
+    public void setStatisticsGatherer(StatisticsGatherer statisticsGatherer) {
+        this.statisticsGatherer = statisticsGatherer;
+    }
+
     public Indexer getIndexer() {
-		return indexer;
-	}
+        return indexer;
+    }
 
-	public void setIndexer(Indexer indexer) {
-		this.indexer = indexer;
-	}
+    public void setIndexer(Indexer indexer) {
+        this.indexer = indexer;
+    }
 
-	public void setRepositories(List reposList) {
+    public void setRepositories(List reposList) {
         logger.info("Received " + reposList.size() + " repositories in a List.");
         repositories.clear();
-        for (Iterator i = reposList.iterator(); i.hasNext(); ) {
+        for (Iterator i = reposList.iterator(); i.hasNext();) {
             Repository repo = (Repository) i.next();
             addRepository(repo);
         }
@@ -43,7 +53,7 @@ public class ProximityImpl implements Proximity {
 
     public List getRepositories() {
         List result = new ArrayList();
-        for (Iterator i = repositories.keySet().iterator(); i.hasNext(); ) {
+        for (Iterator i = repositories.keySet().iterator(); i.hasNext();) {
             String repoKey = (String) i.next();
             result.add(repositories.get(repoKey));
         }
@@ -64,7 +74,7 @@ public class ProximityImpl implements Proximity {
         }
     }
 
-	public ItemProperties retrieveItemProperties(String path) throws ItemNotFoundException {
+    public ItemProperties retrieveItemProperties(String path) throws ItemNotFoundException {
         for (Iterator i = repositories.keySet().iterator(); i.hasNext();) {
             String reposId = (String) i.next();
             try {
@@ -75,9 +85,9 @@ public class ProximityImpl implements Proximity {
             }
         }
         throw new ItemNotFoundException(path);
-	}
+    }
 
-	public Item retrieveItem(String path) throws ItemNotFoundException {
+    public Item retrieveItem(String path) throws ItemNotFoundException {
         for (Iterator i = repositories.keySet().iterator(); i.hasNext();) {
             String reposId = (String) i.next();
             try {
@@ -90,15 +100,17 @@ public class ProximityImpl implements Proximity {
         throw new ItemNotFoundException(path);
     }
 
-	public ItemProperties retrieveItemPropertiesFromRepository(String path, String reposId) throws NoSuchRepositoryException, ItemNotFoundException {
+    public ItemProperties retrieveItemPropertiesFromRepository(String path, String reposId)
+            throws NoSuchRepositoryException, ItemNotFoundException {
         if (repositories.containsKey(reposId)) {
             Repository repo = (Repository) repositories.get(reposId);
             return repo.retrieveItemProperties(path);
         }
         throw new NoSuchRepositoryException(reposId);
-	}
+    }
 
-	public Item retrieveItemFromRepository(String path, String reposId) throws NoSuchRepositoryException, ItemNotFoundException {
+    public Item retrieveItemFromRepository(String path, String reposId) throws NoSuchRepositoryException,
+            ItemNotFoundException {
         if (repositories.containsKey(reposId)) {
             Repository repo = (Repository) repositories.get(reposId);
             return repo.retrieveItem(path);
@@ -124,13 +136,21 @@ public class ProximityImpl implements Proximity {
         throw new NoSuchRepositoryException(reposId);
     }
 
-	public List searchItem(ItemProperties example) {
-		return indexer.searchByItemPropertiesExample(example);
-	}
+    public List searchItem(ItemProperties example) {
+        return indexer.searchByItemPropertiesExample(example);
+    }
 
-	public List searchItemFromRepository(String reposId, ItemProperties example) throws NoSuchRepositoryException {
-		// TODO
-		throw new UnsupportedOperationException("Not yet implemented");
-	}
+    public List searchItemFromRepository(String reposId, ItemProperties example) throws NoSuchRepositoryException {
+        // TODO
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
+
+    public Map getStatistics() {
+        if (getStatisticsGatherer() != null) {
+            return statisticsGatherer.getStatistics();
+        } else {
+            return new HashMap();
+        }
+    }
 
 }
