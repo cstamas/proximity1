@@ -35,51 +35,80 @@ import org.apache.lucene.store.FSDirectory;
 
 public class LuceneIndexer implements Indexer {
 
-	Log logger = LogFactory.getLog(this.getClass());
+    Log logger = LogFactory.getLog(this.getClass());
 
-	private Directory indexDirectory;
+    private boolean recreateIndexes = true;
 
-	private Analyzer analyzer = new SimpleAnalyzer();
+    private Directory indexDirectory;
 
-	public void setIndexDirectory(String path) throws IOException {
-		File pathFile = new File(path);
-		if (!(pathFile.exists() && pathFile.isDirectory())) {
-			throw new IllegalArgumentException("The supplied parameter does not exists or is not a directory!");
-		}
-		this.indexDirectory = FSDirectory.getDirectory(pathFile, false);
-	}
+    private Analyzer analyzer = new SimpleAnalyzer();
 
-	public void addItemProperties(String UID, ItemProperties ip) throws StorageException {
-		logger.info("Adding item to index");
-		try {
-			IndexWriter writer = new IndexWriter(indexDirectory, analyzer, !IndexReader.indexExists(indexDirectory));
-			Document ipDoc = itemProperties2Document(ip);
-			ipDoc.add(Field.Keyword("UID", UID));
-			writer.addDocument(ipDoc);
-			writer.optimize();
-			writer.close();
-		} catch (IOException ex) {
-			logger.error("Got IOException during index addition.", ex);
-			throw new StorageException("Got IOException during addition.", ex);
-		}
-	}
+    public boolean isRecreateIndexes() {
+        return recreateIndexes;
+    }
 
-	public void deleteItemProperties(String UID, ItemProperties ip) throws ItemNotFoundException, StorageException {
-		logger.info("Deleting item from index");
-		try {
-			IndexReader reader = IndexReader.open(indexDirectory);
-			int deleted = reader.delete(new Term("UID", UID));
-			reader.close();
-			logger.debug("Deleted " + deleted + " items from index");
-		} catch (IOException ex) {
-			logger.error("Got IOException during index deletion.", ex);
-			throw new StorageException("Got IOException during deletion.", ex);
-		}
-	}
+    public void setRecreateIndexes(boolean recreateIndexes) {
+        this.recreateIndexes = recreateIndexes;
+    }
 
-	public List searchByItemPropertiesExample(ItemProperties ip) throws StorageException {
-		try {
-			IndexSearcher searcher = new IndexSearcher(indexDirectory);
+    public void afterPropertiesSet() {
+        try {
+            if (recreateIndexes) {
+                logger.info("Recreating indexes as instructed by recreateIndexes parameter.");
+                String[] files = indexDirectory.list();
+                for (int i = 0; i < files.length; i++) {
+                    indexDirectory.deleteFile(files[i]);
+                }
+            }
+            IndexWriter writer = new IndexWriter(indexDirectory, analyzer, recreateIndexes
+                    || !IndexReader.indexExists(indexDirectory));
+            writer.optimize();
+            writer.close();
+        } catch (IOException ex) {
+            logger.error("Got IOException during index addition.", ex);
+            throw new StorageException("Got IOException during index creation.", ex);
+        }
+    }
+
+    public void setIndexDirectory(String path) throws IOException {
+        File pathFile = new File(path);
+        if (!(pathFile.exists() && pathFile.isDirectory())) {
+            throw new IllegalArgumentException("The supplied parameter does not exists or is not a directory!");
+        }
+        this.indexDirectory = FSDirectory.getDirectory(pathFile, false);
+    }
+
+    public void addItemProperties(String UID, ItemProperties ip) throws StorageException {
+        logger.info("Adding item to index");
+        try {
+            IndexWriter writer = new IndexWriter(indexDirectory, analyzer, false);
+            Document ipDoc = itemProperties2Document(ip);
+            ipDoc.add(Field.Keyword("UID", UID));
+            writer.addDocument(ipDoc);
+            writer.optimize();
+            writer.close();
+        } catch (IOException ex) {
+            logger.error("Got IOException during index addition.", ex);
+            throw new StorageException("Got IOException during addition.", ex);
+        }
+    }
+
+    public void deleteItemProperties(String UID, ItemProperties ip) throws ItemNotFoundException, StorageException {
+        logger.info("Deleting item from index");
+        try {
+            IndexReader reader = IndexReader.open(indexDirectory);
+            int deleted = reader.delete(new Term("UID", UID));
+            reader.close();
+            logger.debug("Deleted " + deleted + " items from index");
+        } catch (IOException ex) {
+            logger.error("Got IOException during index deletion.", ex);
+            throw new StorageException("Got IOException during deletion.", ex);
+        }
+    }
+
+    public List searchByItemPropertiesExample(ItemProperties ip) throws StorageException {
+        try {
+            IndexSearcher searcher = new IndexSearcher(indexDirectory);
             BooleanQuery query = new BooleanQuery();
             for (Iterator i = ip.getAllMetadata().keySet().iterator(); i.hasNext();) {
                 String key = (String) i.next();
@@ -91,34 +120,34 @@ public class LuceneIndexer implements Indexer {
                 }
                 query.add(termQ, false, false);
             }
-			Hits hits = searcher.search(query);
-			List result = new ArrayList(hits.length());
-			for (int i = 0; i < hits.length(); i++) {
-				ProxiedItemProperties rip = new ProxiedItemProperties();
+            Hits hits = searcher.search(query);
+            List result = new ArrayList(hits.length());
+            for (int i = 0; i < hits.length(); i++) {
+                ProxiedItemProperties rip = new ProxiedItemProperties();
                 Map props = new HashMap();
-				Document doc = hits.doc(i);
-				for (Enumeration fields = doc.fields(); fields.hasMoreElements(); ) {
+                Document doc = hits.doc(i);
+                for (Enumeration fields = doc.fields(); fields.hasMoreElements();) {
                     Field field = (Field) fields.nextElement();
                     props.put(field.name(), field.stringValue());
-				}
+                }
                 rip.getAllMetadata().putAll(props);
-				result.add(rip);
-			}
-			searcher.close();
-			return result;
-		} catch (IOException ex) {
-			logger.error("Got IOException during index deletion.", ex);
-			throw new StorageException("Got IOException during deletion.", ex);
-		}
-	}
+                result.add(rip);
+            }
+            searcher.close();
+            return result;
+        } catch (IOException ex) {
+            logger.error("Got IOException during index deletion.", ex);
+            throw new StorageException("Got IOException during deletion.", ex);
+        }
+    }
 
-	private Document itemProperties2Document(ItemProperties ip) {
-		Document result = new Document();
-		for (Iterator i = ip.getAllMetadata().keySet().iterator(); i.hasNext();) {
-			String key = (String) i.next();
-			result.add(Field.Keyword(key, ip.getMetadata(key)));
-		}
-		return result;
-	}
+    private Document itemProperties2Document(ItemProperties ip) {
+        Document result = new Document();
+        for (Iterator i = ip.getAllMetadata().keySet().iterator(); i.hasNext();) {
+            String key = (String) i.next();
+            result.add(Field.Keyword(key, ip.getMetadata(key)));
+        }
+        return result;
+    }
 
 }

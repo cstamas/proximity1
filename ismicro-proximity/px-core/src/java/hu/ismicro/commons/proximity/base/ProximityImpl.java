@@ -25,6 +25,16 @@ public class ProximityImpl implements Proximity {
     private Indexer indexer;
 
     private StatisticsGatherer statisticsGatherer;
+    
+    void afterPropertiesSet() {
+        logger.info("Reindexing all defined repositories");
+        for (Iterator i = repositories.keySet().iterator(); i.hasNext(); ) {
+            String repoId = (String) i.next();
+            Repository repo = (Repository) repositories.get(repoId);
+            logger.info("  Reindexing " + repoId);
+            repo.reindex();
+        }
+    }
 
     public StatisticsGatherer getStatisticsGatherer() {
         return statisticsGatherer;

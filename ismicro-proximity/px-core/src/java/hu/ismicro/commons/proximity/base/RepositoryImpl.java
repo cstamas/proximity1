@@ -7,7 +7,9 @@ import hu.ismicro.commons.proximity.Repository;
 import hu.ismicro.commons.proximity.base.logic.DefaultProxyingLogic;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Stack;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -216,5 +218,35 @@ public class RepositoryImpl implements Repository {
 	protected String getItemUid(ItemProperties ip) {
 		return getId() + ":" + PathHelper.walkThePath(ip.getAbsolutePath(), ip.getName());
 	}
+
+    public void reindex() {
+        if (getIndexer() == null) {
+            logger.info("Will NOT reindex repository " + getId() + ", since it have no indexer defined.");
+            return;
+        }
+        if (getLocalStorage() == null) {
+            logger.info("Will NOT reindex repository " + getId() + ", since it have no local storage defined.");
+            return;
+        }
+        int indexed = 0;
+        Stack stack = new Stack();
+        List dir = getLocalStorage().listItems(PathHelper.PATH_SEPARATOR);
+        stack.push(dir);
+        while (!stack.isEmpty()) {
+            dir = (List) stack.pop();
+            for (Iterator i = dir.iterator(); i.hasNext(); ) {
+                ItemProperties ip = (ItemProperties) i.next();
+                ip.setMetadata(ItemProperties.METADATA_OWNING_REPOSITORY, getId());
+                if (ip.isDirectory()) {
+                    List subdir = getLocalStorage().listItems(PathHelper.walkThePath(ip.getAbsolutePath(), ip.getName()));
+                    stack.push(subdir);
+                } else {
+                    getIndexer().addItemProperties(getItemUid(ip), ip);
+                    indexed++;
+                }
+            }
+        }
+        logger.info("Indexed " + indexed + " items");
+    }
 
 }

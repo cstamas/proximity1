@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface Proximity {
-
+    
     /**
      * Returns the List of Repositories configured within Proximity.
      * 
