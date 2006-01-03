@@ -15,11 +15,5 @@
       <param name="beanName" value="proximity"/>
     </create>
 
-    <create
-      creator="spring"
-      javascript="proximitySupport">
-      <param name="beanName" value="proximitySupport"/>
-    </create>
-
   </allow>
 </dwr>

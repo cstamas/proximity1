@@ -1,6 +1,6 @@
 <h2>#springMessage("search.title")</h2>
 
-<script type="text/javascript" src="#springUrl('/dwr/interface/proximitySupport.js')"></script>
+<script type="text/javascript" src="#springUrl('/dwr/interface/proximity.js')"></script>
 <script type="text/javascript" src="#springUrl('/search.js')"></script>
 
 <table>
@@ -68,7 +68,7 @@
 					#end
 				</td>
 				<td>$vtldatetool.format('medium',${item.lastModified})&nbsp;</td>
-				<td>${item.repositoryId}&nbsp;</td>
+				<td><a href="#springUrl('/repository')?repositoryId=${item.repositoryId}">${item.repositoryId}</a>&nbsp;</td>
 			</tr>
 		#end
   

@@ -26,10 +26,10 @@
     <!--
       - Central proximity bean and it's helper.
     -->
-	<bean id="proximity" class="hu.ismicro.commons.proximity.base.ProximityImpl">
+	<bean id="proximity" class="hu.ismicro.commons.proximity.base.ProximityImpl" init-method="afterPropertiesSet">
 		<property name="repositories">
 			<list>
-				<ref local="ismicro"/>
+				<ref local="inhouse"/>
 				<ref local="extNonFree"/>
 				<ref local="extFree"/>
 				<ref local="ibiblio"/>
@@ -42,8 +42,9 @@
 
 	<bean id="stats" class="hu.ismicro.commons.proximity.base.StatisticsGathererImpl"/>
 
-	<bean id="indexer" class="hu.ismicro.commons.proximity.base.indexer.LuceneIndexer">
+	<bean id="indexer" class="hu.ismicro.commons.proximity.base.indexer.LuceneIndexer" init-method="afterPropertiesSet">
 		<property name="indexDirectory" value="${indexer.dir}" />
+		<property name="recreateIndexes" value="true"/>
 	</bean>
 
     <!--
@@ -51,7 +52,7 @@
       - A standard maven repository.
     -->
 	<bean id="ibiblio" class="hu.ismicro.commons.proximity.base.RepositoryImpl">
-		<property name="id" value="www-ibiblio-org"/>
+		<property name="id" value="ibiblio"/>
 		<property name="localStorage" ref="ibiblioFSStorage"/>
 		<property name="remoteStorage" ref="ibiblioRemotePeer"/>
 		<property name="indexer" ref="indexer"/>
@@ -77,7 +78,7 @@
       - A standard maven repository.
     -->
 	<bean id="codehaus" class="hu.ismicro.commons.proximity.base.RepositoryImpl">
-		<property name="id" value="dist-codehaus-org"/>
+		<property name="id" value="codehaus"/>
 		<property name="localStorage" ref="codehausFSStorage"/>
 		<property name="remoteStorage" ref="codehausRemotePeer"/>
 		<property name="indexer" ref="indexer"/>
@@ -99,18 +100,18 @@
 	</bean>
 
     <!--
-      - ISMicro Repository (with read-only storage and without remote peer)
+      - In-House Repository (with read-only storage and without remote peer)
       - A maven repository for publishing in-house artifacts.
     -->
-	<bean id="ismicro" class="hu.ismicro.commons.proximity.base.RepositoryImpl">
-		<property name="id" value="ISmicro Local"/>
-		<property name="localStorage" ref="ismicroFSStorage"/>
+	<bean id="inhouse" class="hu.ismicro.commons.proximity.base.RepositoryImpl">
+		<property name="id" value="inhouse"/>
+		<property name="localStorage" ref="inhouseFSStorage"/>
 		<property name="indexer" ref="indexer"/>
 		<property name="statisticsGatherer" ref="stats"/>
 	</bean>
 
-	<bean id="ismicroFSStorage" class="hu.ismicro.commons.proximity.base.local.ReadOnlyFileSystemStorage">
-		<property name="baseDir" value="${ismicroFSStorage.baseDir}"/>
+	<bean id="inhouseFSStorage" class="hu.ismicro.commons.proximity.base.local.ReadOnlyFileSystemStorage">
+		<property name="baseDir" value="${inhouseFSStorage.baseDir}"/>
 		<property name="metadataAware" value="false"/>
 	</bean>
 
@@ -120,7 +121,7 @@
       - not deployed on standard maven repositories (oracle JDBC, J2EE, etc...).
     -->
 	<bean id="extNonFree" class="hu.ismicro.commons.proximity.base.RepositoryImpl">
-		<property name="id" value="External NonFree"/>
+		<property name="id" value="extNonFree"/>
 		<property name="localStorage" ref="extNonFreeFSStorage"/>
 		<property name="indexer" ref="indexer"/>
 		<property name="statisticsGatherer" ref="stats"/>
@@ -137,7 +138,7 @@
       - not deployed on standard maven repositories (dwr, etc...).
     -->
 	<bean id="extFree" class="hu.ismicro.commons.proximity.base.RepositoryImpl">
-		<property name="id" value="External Free"/>
+		<property name="id" value="extFree"/>
 		<property name="localStorage" ref="extFreeFSStorage"/>
 		<property name="indexer" ref="indexer"/>
 		<property name="statisticsGatherer" ref="stats"/>

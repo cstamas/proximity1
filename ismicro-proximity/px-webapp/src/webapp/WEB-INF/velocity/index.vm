@@ -1,9 +1,8 @@
 <h2>Proximity</h2>
 
-<p>The Proximity is a general Proxy "like" engine with pluggable proxying 
-engine.</p>
+<p>The Proximity is an extensible http-proxy "like" engine.</p>
 
-<p>One of primary use will be as webapp to serve as maven proxy on our
+<p>One of it's primary use is as webapp to serve as maven proxy on our
 company's intranet. As for reducing outgoing traffic (caching ibiblio and other
 maven repos), aggregating more repositories (reducing project config) with acting
 as one logical repository and for publishing in-house and other external maven 
@@ -44,8 +43,6 @@ more, than "just" a Maven proxy.</p>
 <p>Features to be implemented:</p>
 
 <ul>
-	<li>Search (with regex or more "user friendly" version of it)</li>
-	<li>Stats</li>
 	<li>IP blocking of proxying (to be able to server/browse on a public machine
 		but act as proxy for internal LAN only).</li>
 	<li>...and more stuff.</li>
