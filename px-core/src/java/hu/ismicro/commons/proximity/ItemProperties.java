@@ -11,11 +11,23 @@ import java.util.Map;
  */
 public interface ItemProperties {
 
+    public static final String METADATA_ABSOLUTE_PATH = "item.absolutePath";
+
+    public static final String METADATA_NAME = "item.name";
+
+    public static final String METADATA_IS_DIRECTORY = "item.isDirectory";
+
+    public static final String METADATA_IS_FILE = "item.isFile";
+
+    public static final String METADATA_FILESIZE = "item.filesize";
+
+    public static final String METADATA_LAST_MODIFIED = "item.lastModified";
+
 	public static final String METADATA_ORIGINATING_URL = "item.origin";
 
 	public static final String METADATA_OWNING_REPOSITORY = "repository.id";
 
-	public static final String METADATA_EXPIRES = "expires";
+	public static final String METADATA_EXPIRES = "item.expires";
 
 	/**
 	 * Returns the absolute path of the item. Using this path appended with
