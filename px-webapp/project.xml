@@ -82,7 +82,7 @@
     <dependency>
       <groupId>commons-httpclient</groupId>
       <artifactId>commons-httpclient</artifactId>
-      <version>3.0-rc4</version>
+      <version>3.0</version>
       <type>jar</type>
       <url>http://jakarta.apache.org/commons/httpclient/</url>
       <properties>
@@ -92,9 +92,19 @@
     <dependency>
       <groupId>log4j</groupId>
       <artifactId>log4j</artifactId>
-      <version>1.2.11</version>
+      <version>1.2.12</version>
       <type>jar</type>
       <url>http://logging.apache.org/log4j/</url>
+      <properties>
+        <war.bundle>true</war.bundle>
+      </properties>
+    </dependency>
+    <dependency>
+      <groupId>lucene</groupId>
+      <artifactId>lucene</artifactId>
+      <version>1.4.3</version>
+      <type>jar</type>
+      <url>http://jakarta.apache.org/lucene/</url>
       <properties>
         <war.bundle>true</war.bundle>
       </properties>

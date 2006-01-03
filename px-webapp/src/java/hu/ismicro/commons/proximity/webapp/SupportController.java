@@ -1,6 +1,7 @@
 package hu.ismicro.commons.proximity.webapp;
 
 import hu.ismicro.commons.proximity.Proximity;
+import hu.ismicro.commons.proximity.base.ProxiedItemProperties;
 
 import java.util.HashMap;
 import java.util.List;
@@ -32,22 +33,28 @@ public class SupportController extends MultiActionController {
 
     public ModelAndView search(HttpServletRequest request, HttpServletResponse response) throws Exception {
         logger.debug("Got request for search");
+        ProxiedItemProperties example = new ProxiedItemProperties();
         if (RequestUtils.getStringParameter(request, "searchAll") != null
                 && RequestUtils.getRequiredStringParameter(request, "searchAllRegexp") != null) {
+            example.setName(RequestUtils.getRequiredStringParameter(request, "searchAllRegexp"));
         } else if (RequestUtils.getStringParameter(request, "searchSelected") != null
                 && RequestUtils.getRequiredStringParameter(request, "searchSelectedRepos") != null
                 && RequestUtils.getRequiredStringParameter(request, "searchSelectedRegexp") != null) {
+            example.setName(RequestUtils.getRequiredStringParameter(request, "searchSelectedRegexp"));
+            example.setMetadata(ProxiedItemProperties.METADATA_OWNING_REPOSITORY, RequestUtils.getRequiredStringParameter(request, "searchSelectedRepos"));
         }
+        List results = proximity.searchItem(example);
         List repositories = getProximity().getRepositories();
         Map context = new HashMap();
         context.put("repositories", repositories);
-        // results
+        context.put("results", results);
         return new ModelAndView("search", context);
     }
 
     public ModelAndView stats(HttpServletRequest request, HttpServletResponse response) throws Exception {
         logger.debug("Got request for stats");
-        return new ModelAndView("stats");
+        Map stats = proximity.getStatistics();
+        return new ModelAndView("stats", "stats", stats);
     }
 
 }

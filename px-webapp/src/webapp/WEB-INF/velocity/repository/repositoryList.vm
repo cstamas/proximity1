@@ -33,7 +33,7 @@
 						<img src="#springUrl('/images/file.png')"/>&nbsp;
 					#end
 				</td>
-				<td><a href="#springUrl('/repository')${item.path}?repositoryId=${item.repositoryName}">${item.name}</a>&nbsp;</td>
+				<td><a href="#springUrl('/repository')${item.path}?repositoryId=${item.repositoryId}">${item.name}</a>&nbsp;</td>
 				<td>
 					#if(${item.isDirectory()})
 						&nbsp;
@@ -42,7 +42,7 @@
 					#end
 				</td>
 				<td>$vtldatetool.format('medium',${item.lastModified})&nbsp;</td>
-				<td>${item.repositoryName}&nbsp;</td>
+				<td>${item.repositoryId}&nbsp;</td>
 			</tr>
 		#end
   

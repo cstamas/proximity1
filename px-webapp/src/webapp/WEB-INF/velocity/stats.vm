@@ -1,3 +1,19 @@
 <h2>#springMessage("stats.title")</h2>
 
-<p>Not implemented yet.</p>
+<table>
+
+        #foreach($entry in ${stats.keySet()})
+
+                <tr class="tdb">
+                        <td colspan="2">#springMessage($entry)</td>
+                </tr>
+                #foreach($key in ${stats.get($entry).keySet()})
+                        <tr class="tda">
+                                <td>$key</td>
+                                <td>${stats.get($entry).get($key)}</td>
+                        </tr>
+                #end
+
+        #end
+
+</table>
