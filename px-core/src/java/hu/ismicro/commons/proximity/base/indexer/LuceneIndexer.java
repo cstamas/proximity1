@@ -1,31 +1,105 @@
 package hu.ismicro.commons.proximity.base.indexer;
 
+import hu.ismicro.commons.proximity.ItemNotFoundException;
 import hu.ismicro.commons.proximity.ItemProperties;
 import hu.ismicro.commons.proximity.base.Indexer;
+import hu.ismicro.commons.proximity.base.ProxiedItemProperties;
+import hu.ismicro.commons.proximity.base.StorageException;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.List;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.SimpleAnalyzer;
+import org.apache.lucene.document.Document;
+import org.apache.lucene.document.Field;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
+import org.apache.lucene.index.Term;
+import org.apache.lucene.search.Hits;
+import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.Query;
+import org.apache.lucene.store.Directory;
+import org.apache.lucene.store.FSDirectory;
 
 public class LuceneIndexer implements Indexer {
-	
-	private IndexReader indexReader;
-	private IndexWriter indexWriter;
 
-	public void addItemProperties(ItemProperties ip) {
-		// TODO Auto-generated method stub
-		
+	Log logger = LogFactory.getLog(this.getClass());
+
+	private Directory indexDirectory;
+
+	private Analyzer analyzer = new SimpleAnalyzer();
+
+	public void setIndexDirectory(String path) throws IOException {
+		File pathFile = new File(path);
+		if (!(pathFile.exists() && pathFile.isDirectory())) {
+			throw new IllegalArgumentException("The supplied parameter does not exists or is not a directory!");
+		}
+		this.indexDirectory = FSDirectory.getDirectory(pathFile, false);
 	}
 
-	public void deleteItemProperties(ItemProperties ip) {
-		// TODO Auto-generated method stub
-		
+	public void addItemProperties(String UID, ItemProperties ip) throws StorageException {
+		logger.info("Adding item to index");
+		try {
+			IndexWriter writer = new IndexWriter(indexDirectory, analyzer, !IndexReader.indexExists(indexDirectory));
+			Document ipDoc = itemProperties2Document(ip);
+			ipDoc.add(Field.Keyword("UID", UID));
+			writer.addDocument(ipDoc);
+			writer.optimize();
+			writer.close();
+		} catch (IOException ex) {
+			logger.error("Got IOException during index addition.", ex);
+			throw new StorageException("Got IOException during addition.", ex);
+		}
 	}
 
-	public List searchByItemPropertiesExample(ItemProperties ip) {
-		// TODO Auto-generated method stub
-		return null;
+	public void deleteItemProperties(String UID, ItemProperties ip) throws ItemNotFoundException, StorageException {
+		logger.info("Deleting item from index");
+		try {
+			IndexReader reader = IndexReader.open(indexDirectory);
+			int deleted = reader.delete(new Term("UID", UID));
+			reader.close();
+			logger.debug("Deleted " + deleted + " items from index");
+		} catch (IOException ex) {
+			logger.error("Got IOException during index deletion.", ex);
+			throw new StorageException("Got IOException during deletion.", ex);
+		}
+	}
+
+	public List searchByItemPropertiesExample(ItemProperties ip) throws StorageException {
+		try {
+			IndexSearcher searcher = new IndexSearcher(indexDirectory);
+			Query query = null;
+			Hits hits = searcher.search(query);
+			List result = new ArrayList(hits.length());
+			for (int i = 0; i < hits.length(); i++) {
+				ProxiedItemProperties rip = new ProxiedItemProperties();
+				Document doc = hits.doc(i);
+				for (Enumeration e = doc.fields(); e.hasMoreElements(); ) {
+				}
+				result.add(rip);
+			}
+			searcher.close();
+			return result;
+		} catch (IOException ex) {
+			logger.error("Got IOException during index deletion.", ex);
+			throw new StorageException("Got IOException during deletion.", ex);
+		}
+	}
+
+	private Document itemProperties2Document(ItemProperties ip) {
+		Document result = new Document();
+		for (Iterator i = ip.getAllMetadata().keySet().iterator(); i.hasNext();) {
+			String key = (String) i.next();
+			result.add(Field.Keyword(key, ip.getMetadata(key)));
+		}
+		return result;
 	}
 
 }

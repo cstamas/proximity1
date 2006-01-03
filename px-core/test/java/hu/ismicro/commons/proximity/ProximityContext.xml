@@ -10,14 +10,22 @@
 				<ref local="ismicro"/>
 			</list>
 		</property>
+		<property name="indexer" ref="indexer"/>
+	</bean>
+	
+	<bean id="indexer" class="hu.ismicro.commons.proximity.base.indexer.LuceneIndexer">
+		<property name="indexDirectory" value="/home/cstamas/tmp/proximity/index" />
 	</bean>
 
 	<bean id="ibiblio" class="hu.ismicro.commons.proximity.base.RepositoryImpl">
 		<property name="id" value="www-ibiblio-org"/>
 		<property name="localStorage" ref="ibiblioFSStorage"/>
 		<property name="remoteStorage" ref="ibiblioHTTPPeer"/>
+		<property name="indexer" ref="indexer"/>
 		<property name="repositoryLogic">
-			<bean class="hu.ismicro.commons.proximity.base.logic.MavenProxyLogic"/>
+			<bean class="hu.ismicro.commons.proximity.base.logic.MavenProxyLogic">
+				<property name="pomExpirationPeriod" value="0" />
+			</bean>
 		</property>
 	</bean>
 
@@ -26,7 +34,7 @@
 	</bean>
 	
 	<bean id="ibiblioHTTPPeer" class="hu.ismicro.commons.proximity.base.remote.HttpClientRemotePeer">
-		<property name="remoteUrl" value="http://www.ibiblio.org/maven/"/>
+		<property name="remoteUrl" value="http://www.ibiblio.org/maven2/"/>
 		<property name="connectionTimeout" value="30000"/>
 	</bean>
 

@@ -21,8 +21,18 @@ public class ProximityImpl implements Proximity {
     protected Log logger = LogFactory.getLog(this.getClass());
 
     private Map repositories = new HashMap();
+    
+    private Indexer indexer;
 
-    public void setRepositories(List reposList) {
+    public Indexer getIndexer() {
+		return indexer;
+	}
+
+	public void setIndexer(Indexer indexer) {
+		this.indexer = indexer;
+	}
+
+	public void setRepositories(List reposList) {
         logger.info("Received " + reposList.size() + " repositories in a List.");
         repositories.clear();
         for (Iterator i = reposList.iterator(); i.hasNext(); ) {
@@ -114,12 +124,11 @@ public class ProximityImpl implements Proximity {
         throw new NoSuchRepositoryException(reposId);
     }
 
-	public List searchItem(String regexp) {
-		// TODO
-		throw new UnsupportedOperationException("Not yet implemented");
+	public List searchItem(ItemProperties example) {
+		return indexer.searchByItemPropertiesExample(example);
 	}
 
-	public List searchItemFromRepository(String reposId, String regexp) throws NoSuchRepositoryException {
+	public List searchItemFromRepository(String reposId, ItemProperties example) throws NoSuchRepositoryException {
 		// TODO
 		throw new UnsupportedOperationException("Not yet implemented");
 	}
