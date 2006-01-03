@@ -111,6 +111,7 @@
 
 	<bean id="ismicroFSStorage" class="hu.ismicro.commons.proximity.base.local.ReadOnlyFileSystemStorage">
 		<property name="baseDir" value="${ismicroFSStorage.baseDir}"/>
+		<property name="metadataAware" value="false"/>
 	</bean>
 
     <!--
@@ -127,6 +128,7 @@
 
 	<bean id="extNonFreeFSStorage" class="hu.ismicro.commons.proximity.base.local.ReadOnlyFileSystemStorage">
 		<property name="baseDir" value="${extNonFreeFSStorage.baseDir}"/>
+		<property name="metadataAware" value="false"/>
 	</bean>
 
     <!--
@@ -143,6 +145,7 @@
 
 	<bean id="extFreeFSStorage" class="hu.ismicro.commons.proximity.base.local.ReadOnlyFileSystemStorage">
 		<property name="baseDir" value="${extFreeFSStorage.baseDir}"/>
+		<property name="metadataAware" value="false"/>
 	</bean>
 
 </beans>

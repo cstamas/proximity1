@@ -2,6 +2,7 @@ package hu.ismicro.commons.proximity.webapp;
 
 import hu.ismicro.commons.proximity.Item;
 import hu.ismicro.commons.proximity.ItemNotFoundException;
+import hu.ismicro.commons.proximity.ItemProperties;
 import hu.ismicro.commons.proximity.Proximity;
 
 import java.io.InputStream;
@@ -35,22 +36,25 @@ public class RepositoryController extends MultiActionController {
     public ModelAndView repositoryList(HttpServletRequest request, HttpServletResponse response) throws Exception {
         String requestURI = request.getRequestURI().substring(
                 request.getContextPath().length() + request.getServletPath().length());
+        if (requestURI.length() == 0) {
+            requestURI = "/";
+        }
         logger.info("Got repository request on URI " + requestURI);
         String orderBy = request.getParameter("orderBy") == null ? "name" : request.getParameter("orderBy");
         String targetRepository = request.getParameter("repositoryId");
 
-        Item item = null;
+        ItemProperties itemProps = null;
         try {
             if (targetRepository == null) {
                 logger.info("Got request for repository on URI: " + requestURI);
-                item = proximity.retrieveItem(requestURI);
+                itemProps = proximity.retrieveItemProperties(requestURI);
             } else {
                 logger.info("Got request for repository on URI: " + requestURI + " from repository id "
                         + targetRepository);
-                item = proximity.retrieveItemFromRepository(requestURI, targetRepository);
+                itemProps = proximity.retrieveItemPropertiesFromRepository(requestURI, targetRepository);
             }
 
-            if (item.getProperties().isDirectory()) {
+            if (itemProps.isDirectory()) {
                 List items = null;
                 if (targetRepository == null) {
                     items = proximity.listItems(requestURI);
@@ -65,6 +69,7 @@ public class RepositoryController extends MultiActionController {
                 result.put("requestPathList", explodeUriToList(requestURI));
                 return new ModelAndView("repository/repositoryList", result);
             } else {
+                Item item = proximity.retrieveItem(requestURI);
                 // TODO: Made this proper (content type by ext, size, etc...)
                 response.setContentType("application/octet-stream");
                 response.setContentLength((int)item.getProperties().getSize());
