@@ -19,6 +19,8 @@ public interface Storage {
     
     boolean isWritable();
     
+    boolean isMetadataAware();
+    
     boolean containsItemProperties(String path) throws StorageException;
 
     boolean containsItem(String path) throws StorageException;

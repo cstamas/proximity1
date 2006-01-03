@@ -56,6 +56,7 @@ public class ReadOnlyFileSystemStorage extends AbstractStorage {
 
 	/**
 	 * Is this storage metadata aware?
+	 * 
 	 * @return
 	 */
 	public boolean isMetadataAware() {
@@ -83,24 +84,25 @@ public class ReadOnlyFileSystemStorage extends AbstractStorage {
 	}
 
 	/**
-	 * Sets the baseDir on the filesystem for this local FS storage.
-	 * The supplied String should be pointing to an existing directory.
-	 *  
+	 * Sets the baseDir on the filesystem for this local FS storage. The
+	 * supplied String should be pointing to an existing directory.
+	 * 
 	 * @param baseDirPath
 	 */
 	public void setBaseDir(String baseDirPath) {
 		File baseDirFile = new File(baseDirPath);
 		if (!(baseDirFile.exists() && baseDirFile.isDirectory())) {
-			throw new IllegalArgumentException("The supplied parameter does not exists or is not a directory!");
+			throw new IllegalArgumentException("The supplied parameter " + baseDirPath
+					+ " does not exists or is not a directory!");
 		}
 		this.baseDir = baseDirPath;
 	}
 
 	/**
 	 * It this storage is metadata aware, it returns baseDir appended by
-	 * metadata suffix, otherwise it will throw IllegalStateException
-	 * because the storage is metadata unaware.
-	 *  
+	 * metadata suffix, otherwise it will throw IllegalStateException because
+	 * the storage is metadata unaware.
+	 * 
 	 * @return
 	 */
 	public String getMetadataBaseDir() {
@@ -112,8 +114,8 @@ public class ReadOnlyFileSystemStorage extends AbstractStorage {
 	}
 
 	/**
-	 * If this storage is metadata aware, it returns baseDir appended by
-	 * storage suffix, otherwise it will return baseDir itself unmodified.
+	 * If this storage is metadata aware, it returns baseDir appended by storage
+	 * suffix, otherwise it will return baseDir itself unmodified.
 	 * 
 	 * @return
 	 */
@@ -126,13 +128,13 @@ public class ReadOnlyFileSystemStorage extends AbstractStorage {
 	}
 
 	public boolean containsItemProperties(String path) {
-        if (isMetadataAware()) {
-            logger.debug("Checking for existence of " + path + " in " + getMetadataBaseDir());
-            return checkForExistence(getMetadataBaseDir(), path);
-        } else {
-            logger.debug("Checking for existence of " + path + " in " + getStorageBaseDir());
-            return checkForExistence(getStorageBaseDir(), path);
-        }
+		if (isMetadataAware()) {
+			logger.debug("Checking for existence of " + path + " in " + getMetadataBaseDir());
+			return checkForExistence(getMetadataBaseDir(), path);
+		} else {
+			logger.debug("Checking for existence of " + path + " in " + getStorageBaseDir());
+			return checkForExistence(getStorageBaseDir(), path);
+		}
 	}
 
 	public boolean containsItem(String path) {

@@ -58,13 +58,12 @@ public interface Repository {
      * @param indexer
      */
     void setIndexer(Indexer indexer);
-    
+
     /**
-     * Forces repository reindexing. If there is no indexer supplied with repos,
-     * this call will do nothing.
+     * Initializes repository. Reindexing, recreating metadata, etc...
      *
      */
-    void reindex();
+    void initialize();
     
     /**
      * Sets the statistics gatherer. May be null, to switch stats gathering

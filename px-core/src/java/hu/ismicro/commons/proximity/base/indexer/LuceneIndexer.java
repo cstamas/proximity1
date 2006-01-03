@@ -73,7 +73,7 @@ public class LuceneIndexer implements Indexer {
     public void setIndexDirectory(String path) throws IOException {
         File pathFile = new File(path);
         if (!(pathFile.exists() && pathFile.isDirectory())) {
-            throw new IllegalArgumentException("The supplied parameter does not exists or is not a directory!");
+            throw new IllegalArgumentException("The supplied parameter " + path + " does not exists or is not a directory!");
         }
         this.indexDirectory = FSDirectory.getDirectory(pathFile, false);
     }

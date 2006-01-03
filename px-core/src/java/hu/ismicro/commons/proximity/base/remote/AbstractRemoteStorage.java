@@ -20,6 +20,10 @@ public abstract class AbstractRemoteStorage extends AbstractStorage implements R
     public String getRemoteUrl() {
         return this.remoteUrl.toString();
     }
+    
+    public boolean isMetadataAware() {
+    		return false;
+    }
 
     public void setRemoteUrl(String url) throws MalformedURLException {
         this.remoteUrl = new URL(url);
