@@ -90,15 +90,6 @@ public interface Proximity {
     public List searchItem(ItemProperties example);
 
     /**
-     * Searches for Item in a given repos.
-     * 
-     * @param reposId
-     * @param example
-     * @return List of ItemProperties, possibly 0 lenth.
-     */
-    public List searchItemFromRepository(String reposId, ItemProperties example) throws NoSuchRepositoryException;
-    
-    /**
      * Returns the statistics (if any).
      * 
      * @return

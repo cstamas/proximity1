@@ -147,18 +147,19 @@ public class ProximityImpl implements Proximity {
     }
 
     public List searchItem(ItemProperties example) {
-        return indexer.searchByItemPropertiesExample(example);
-    }
-
-    public List searchItemFromRepository(String reposId, ItemProperties example) throws NoSuchRepositoryException {
-        // TODO
-        throw new UnsupportedOperationException("Not yet implemented");
+    		if (getIndexer() != null) {
+    	        return indexer.searchByItemPropertiesExample(example);
+    		} else {
+    			logger.info("No indexer defined, but search request came in. Returning empty results.");
+    			return new ArrayList();
+    		}
     }
 
     public Map getStatistics() {
         if (getStatisticsGatherer() != null) {
-            return statisticsGatherer.getStatistics();
+            return getStatisticsGatherer().getStatistics();
         } else {
+			logger.info("No statistics gatherer defined, but stats request came in. Returning empty results.");
             return new HashMap();
         }
     }
