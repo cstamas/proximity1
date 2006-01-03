@@ -156,6 +156,13 @@ public class RepositoryImpl implements Repository {
 		return result;
 	}
 
+	public void initialize() {
+		logger.debug("Reindexing " + getId());
+		reindex();
+		logger.debug("Recreating metadata " + getId());
+		recreateMetadata();
+	}
+
 	protected ProxiedItem retrieveItem(boolean propsOnly, String path) throws ItemNotFoundException, StorageException {
 		ProxiedItem result = null;
 		try {
@@ -225,7 +232,12 @@ public class RepositoryImpl implements Repository {
 		return getId() + ":" + PathHelper.walkThePath(ip.getAbsolutePath(), ip.getName());
 	}
 
-    public void reindex() {
+    /**
+     * Forces repository reindexing. If there is no indexer supplied with repos,
+     * this call will do nothing.
+     *
+     */
+    protected void reindex() {
         if (getIndexer() == null) {
             logger.info("Will NOT reindex repository " + getId() + ", since it have no indexer defined.");
             return;
@@ -253,6 +265,45 @@ public class RepositoryImpl implements Repository {
             }
         }
         logger.info("Indexed " + indexed + " items");
+    }
+
+    /**
+     * Forces metadata creation if the underlying storage is metadata aware.
+     * Otherwise the call will do nothing.
+     *
+     */
+    protected void recreateMetadata() {
+        if (getLocalStorage() == null) {
+            logger.info("Will NOT recreate metadata on " + getId() + ", since it have no local storage defined.");
+            return;
+        }
+        if (!getLocalStorage().isWritable()) {
+            logger.info("Will NOT recreate metadata on " + getId() + ", since it have no writable local storage defined.");
+            return;
+        }
+        if (!getLocalStorage().isMetadataAware()) {
+            logger.info("Will NOT recreate metadata on " + getId() + ", since it have no metadata-aware local storage defined.");
+            return;
+        }
+        int processed = 0;
+        Stack stack = new Stack();
+        List dir = getLocalStorage().listItems(PathHelper.PATH_SEPARATOR);
+        stack.push(dir);
+        while (!stack.isEmpty()) {
+            dir = (List) stack.pop();
+            for (Iterator i = dir.iterator(); i.hasNext(); ) {
+                ItemProperties ip = (ItemProperties) i.next();
+                ip.setMetadata(ItemProperties.METADATA_OWNING_REPOSITORY, getId());
+                if (ip.isDirectory()) {
+                    List subdir = getLocalStorage().listItems(PathHelper.walkThePath(ip.getAbsolutePath(), ip.getName()));
+                    stack.push(subdir);
+                } else {
+                    getLocalStorage().storeItemProperties(ip);
+                    processed++;
+                }
+            }
+        }
+        logger.info("Recreated metadata on " + processed + " items");
     }
 
 }
