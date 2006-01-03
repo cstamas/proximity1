@@ -78,15 +78,15 @@ public class RepositoryImpl implements Repository {
 	}
 
 	public void deleteItemProperties(String path) throws StorageException {
-		if (getIndexer() != null) {
-			try {
-				ItemProperties itemProps = retrieveItemProperties(path);
-				getIndexer().deleteItemProperties(itemProps);
-			} catch (ItemNotFoundException ex) {
-				logger.info("Path [" + path + "] not found but deletion requested.", ex);
-			}
-		}
 		if (getLocalStorage() != null) {
+			if (getIndexer() != null) {
+				try {
+					ItemProperties itemProps = getLocalStorage().retrieveItemProperties(path);
+					getIndexer().deleteItemProperties(getItemUid(itemProps), itemProps);
+				} catch (ItemNotFoundException ex) {
+					logger.info("Path [" + path + "] not found but deletion requested.", ex);
+				}
+			}
 			getLocalStorage().deleteItemProperties(path);
 		} else {
 			throw new UnsupportedOperationException("The repository " + getId() + " have no local storage!");
@@ -94,15 +94,15 @@ public class RepositoryImpl implements Repository {
 	}
 
 	public void deleteItem(String path) throws StorageException {
-		if (getIndexer() != null) {
-			try {
-				ItemProperties itemProps = retrieveItemProperties(path);
-				getIndexer().deleteItemProperties(itemProps);
-			} catch (ItemNotFoundException ex) {
-				logger.info("Path [" + path + "] not found but deletion requested.", ex);
-			}
-		}
 		if (getLocalStorage() != null) {
+			if (getIndexer() != null) {
+				try {
+					ItemProperties itemProps = getLocalStorage().retrieveItemProperties(path);
+					getIndexer().deleteItemProperties(getItemUid(itemProps), itemProps);
+				} catch (ItemNotFoundException ex) {
+					logger.info("Path [" + path + "] not found but deletion requested.", ex);
+				}
+			}
 			getLocalStorage().deleteItem(path);
 		} else {
 			throw new UnsupportedOperationException("The repository " + getId() + " have no local storage!");
@@ -116,7 +116,7 @@ public class RepositoryImpl implements Repository {
 			throw new UnsupportedOperationException("The repository " + getId() + " have no local storage!");
 		}
 		if (getIndexer() != null && getRepositoryLogic().shouldIndex(itemProps)) {
-			getIndexer().addItemProperties(itemProps);
+			getIndexer().addItemProperties(getItemUid(itemProps), itemProps);
 		}
 	}
 
@@ -127,7 +127,7 @@ public class RepositoryImpl implements Repository {
 			throw new UnsupportedOperationException("The repository " + getId() + " have no local storage!");
 		}
 		if (getIndexer() != null && getRepositoryLogic().shouldIndex(item.getProperties())) {
-			getIndexer().addItemProperties(item.getProperties());
+			getIndexer().addItemProperties(getItemUid(item.getProperties()), item.getProperties());
 		}
 	}
 
@@ -195,6 +195,10 @@ public class RepositoryImpl implements Repository {
 		} catch (ItemNotFoundException ex) {
 			throw new ItemNotFoundException(path, getId());
 		}
+	}
+	
+	protected String getItemUid(ItemProperties ip) {
+		return getId() + ":" + PathHelper.walkThePath(ip.getAbsolutePath(), ip.getName());
 	}
 
 }

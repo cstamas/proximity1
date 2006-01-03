@@ -1,5 +1,6 @@
 package hu.ismicro.commons.proximity.base;
 
+import hu.ismicro.commons.proximity.ItemNotFoundException;
 import hu.ismicro.commons.proximity.ItemProperties;
 
 import java.util.List;
@@ -12,10 +13,10 @@ import java.util.List;
  */
 public interface Indexer {
 	
-    void addItemProperties(ItemProperties ip);
+    void addItemProperties(String UID, ItemProperties ip) throws StorageException;
     
-    void deleteItemProperties(ItemProperties ip);
+    void deleteItemProperties(String UID, ItemProperties ip) throws ItemNotFoundException, StorageException;
 
-	List searchByItemPropertiesExample(ItemProperties ip);
+	List searchByItemPropertiesExample(ItemProperties ip) throws StorageException;
     
 }

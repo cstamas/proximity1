@@ -83,18 +83,18 @@ public interface Proximity {
     /**
      * Searches for item.
      * 
-     * @param regexp
+     * @param example
      * @return List of ItemProperties, possibly 0 lenth.
      */
-    public List searchItem(String regexp);
+    public List searchItem(ItemProperties example);
 
     /**
      * Searches for Item in a given repos.
      * 
      * @param reposId
-     * @param regexp
+     * @param example
      * @return List of ItemProperties, possibly 0 lenth.
      */
-    public List searchItemFromRepository(String reposId, String regexp) throws NoSuchRepositoryException;
+    public List searchItemFromRepository(String reposId, ItemProperties example) throws NoSuchRepositoryException;
 
 }

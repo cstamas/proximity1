@@ -20,21 +20,56 @@ public class ProximityIntegrationTest extends AbstractProximityIntegrationTest {
 
 	public void testSimpleArtifact() {
 		try {
-			Item item = proximity.retrieveItem("/antlr/jars/antlr-2.7.1.jar");
+			Item item = proximity.retrieveItem("/antlr/antlr/2.7.5/antlr-2.7.5.jar");
 			logger.info("Got response of type " + item.getClass() + ":" + item);
 		} catch (ItemNotFoundException ex) {
 			logger.error("Got exception", ex);
 			fail();
 		}
 		try {
-			Item item = proximity.retrieveItem("/antlr/jars/antlr-2.7.1.jar-not-exists");
+			Item item = proximity.retrieveItem("/antlr/antlr/2.7.5/antlr-2.7.5.jar-NO_SUCH");
 			logger.info("Got response of type " + item.getClass() + ":" + item);
 			fail();
 		} catch (ItemNotFoundException ex) {
 			logger.error("Good, got exception", ex);
 		}
-		List items = proximity.listItems("/antlr/jars");
-		logger.info("Got response of type " + items.getClass() + ":" + items);
+	}
+
+	public void testPomArtifact() {
+		try {
+			Item item = proximity.retrieveItem("/antlr/antlr/2.7.5/antlr-2.7.5.pom");
+			logger.info("Got response of type " + item.getClass() + ":" + item);
+		} catch (ItemNotFoundException ex) {
+			logger.error("Good, got exception", ex);
+			fail();
+		}
+		try {
+			Item item = proximity.retrieveItem("/antlr/antlr/2.7.5/antlr-2.7.5.pom");
+			logger.info("Got response of type " + item.getClass() + ":" + item);
+		} catch (ItemNotFoundException ex) {
+			logger.error("Good, got exception", ex);
+			fail();
+		}
+	}
+
+	public void testMetadatadaArtifact() {
+		try {
+			Item item = proximity.retrieveItem("/ant/ant/maven-metadata.xml");
+			logger.info("Got response of type " + item.getClass() + ":" + item);
+		} catch (ItemNotFoundException ex) {
+			logger.error("Got exception", ex);
+			fail();
+		}
+		try {
+			Item item = proximity.retrieveItem("/ant/ant/maven-metadata.xml.md5");
+			logger.info("Got response of type " + item.getClass() + ":" + item);
+		} catch (ItemNotFoundException ex) {
+			logger.error("Got exception", ex);
+			fail();
+		}
+	}
+
+	public void testSnapshotArtifact() {
 	}
 
 	public void testSimpleDir() {
