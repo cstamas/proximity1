@@ -42,7 +42,7 @@
 					#end
 				</td>
 				<td>$vtldatetool.format('medium',${item.lastModified})&nbsp;</td>
-				<td>${item.repositoryId}&nbsp;</td>
+				<td><a href="#springUrl('/repository')?repositoryId=${item.repositoryId}">${item.repositoryId}</a>&nbsp;</td>
 			</tr>
 		#end
   

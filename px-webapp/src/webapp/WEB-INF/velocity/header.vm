@@ -2,7 +2,7 @@
 	<tr>
 		<td class="leftBand">
 			<div class="mainmenu">
-				<img src="http://www.is-micro.hu/images/ism_o.png"/>
+				<img src="#springUrl('/images/logo.png')"/>
 			</div>
 		</td>
 		<td class="topBar">
