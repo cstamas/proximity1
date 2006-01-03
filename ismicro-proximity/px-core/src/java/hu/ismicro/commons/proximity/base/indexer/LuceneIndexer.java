@@ -10,8 +10,10 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -22,9 +24,12 @@ import org.apache.lucene.document.Field;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.Term;
+import org.apache.lucene.search.BooleanQuery;
+import org.apache.lucene.search.FuzzyQuery;
 import org.apache.lucene.search.Hits;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
+import org.apache.lucene.search.WildcardQuery;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 
@@ -75,14 +80,28 @@ public class LuceneIndexer implements Indexer {
 	public List searchByItemPropertiesExample(ItemProperties ip) throws StorageException {
 		try {
 			IndexSearcher searcher = new IndexSearcher(indexDirectory);
-			Query query = null;
+            BooleanQuery query = new BooleanQuery();
+            for (Iterator i = ip.getAllMetadata().keySet().iterator(); i.hasNext();) {
+                String key = (String) i.next();
+                Query termQ;
+                if (ip.getMetadata(key).contains("?") || ip.getMetadata(key).contains("*")) {
+                    termQ = new WildcardQuery(new Term(key, ip.getMetadata(key)));
+                } else {
+                    termQ = new FuzzyQuery(new Term(key, ip.getMetadata(key)));
+                }
+                query.add(termQ, false, false);
+            }
 			Hits hits = searcher.search(query);
 			List result = new ArrayList(hits.length());
 			for (int i = 0; i < hits.length(); i++) {
 				ProxiedItemProperties rip = new ProxiedItemProperties();
+                Map props = new HashMap();
 				Document doc = hits.doc(i);
-				for (Enumeration e = doc.fields(); e.hasMoreElements(); ) {
+				for (Enumeration fields = doc.fields(); fields.hasMoreElements(); ) {
+                    Field field = (Field) fields.nextElement();
+                    props.put(field.name(), field.stringValue());
 				}
+                rip.getAllMetadata().putAll(props);
 				result.add(rip);
 			}
 			searcher.close();

@@ -8,18 +8,6 @@ import java.util.Map;
 
 public class ProxiedItemProperties implements ItemProperties {
 
-	protected static final String METADATA_ABSOLUTE_PATH = "item.absolutePath";
-
-	protected static final String METADATA_NAME = "item.name";
-
-	protected static final String METADATA_IS_DIRECTORY = "item.isDirectory";
-
-	protected static final String METADATA_IS_FILE = "item.isFile";
-
-	protected static final String METADATA_FILESIZE = "item.filesize";
-
-	protected static final String METADATA_LAST_MODIFIED = "item.lastModified";
-
 	private Map metadataMap;
 
 	public String getAbsolutePath() {
@@ -88,7 +76,7 @@ public class ProxiedItemProperties implements ItemProperties {
 		}
 		return metadataMap;
 	}
-
+    
 	public String toString() {
 		return getName() + "[" + getSize() + "]";
 	}

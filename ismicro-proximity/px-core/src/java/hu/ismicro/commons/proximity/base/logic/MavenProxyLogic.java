@@ -103,14 +103,17 @@ public class MavenProxyLogic extends DefaultExpiringProxyingLogic {
 			logger.info("Item is Maven 2 POM, setting expires on it to " + getPomExpirationPeriod()/1000 + " seconds.");
 			item.getProperties().setMetadata(ItemProperties.METADATA_EXPIRES,
 					Long.toString(System.currentTimeMillis() + getPomExpirationPeriod()));
+            item.getProperties().setMetadata("item.isPom", Boolean.TRUE.toString());
 		} else if (isMetadata(item.getProperties().getName())) {
 			logger.info("Item is Maven 2 Metadata, setting expires on it to " + getMetadataExpirationPeriod()/1000 + " seconds.");
 			item.getProperties().setMetadata(ItemProperties.METADATA_EXPIRES,
 					Long.toString(System.currentTimeMillis() + getMetadataExpirationPeriod()));
+            item.getProperties().setMetadata("item.isMetadata", Boolean.TRUE.toString());
 		} else if (isSnapshot(item.getProperties().getName())) {
 			logger.info("Item is Maven 1/2 Snapshot, setting expires on it to " + getSnapshotExpirationPeriod()/1000 + " seconds.");
 			item.getProperties().setMetadata(ItemProperties.METADATA_EXPIRES,
 					Long.toString(System.currentTimeMillis() + getSnapshotExpirationPeriod()));
+            item.getProperties().setMetadata("item.isSnapshot", Boolean.TRUE.toString());
 		} else {
 			item = super.afterRemoteCopyFound(item, repository);
 		}
