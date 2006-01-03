@@ -3,6 +3,7 @@ package hu.ismicro.commons.proximity;
 import hu.ismicro.commons.proximity.base.ProxiedItemProperties;
 
 import java.util.List;
+import java.util.Map;
 
 public class ProximityIntegrationTest extends AbstractProximityIntegrationTest {
 
@@ -90,5 +91,10 @@ public class ProximityIntegrationTest extends AbstractProximityIntegrationTest {
 		items = proximity.listItems("/ismicro/jars");
 		logger.info("Got response of type " + items.getClass() + ":" + items);
 	}
+    
+    public void testStats() {
+        Map stats = proximity.getStatistics();
+        logger.info("Got stats " + stats);
+    }
 
 }

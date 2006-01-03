@@ -80,5 +80,30 @@ public class ProxiedItemProperties implements ItemProperties {
 	public String toString() {
 		return getName() + "[" + getSize() + "]";
 	}
+    
+    public int hashCode() {
+        int hash = 7;
+        hash = 31 * hash + (null == getAbsolutePath() ? 0 : getAbsolutePath().hashCode());
+        hash = 31 * hash + (null == getName() ? 0 : getName().hashCode());
+        return hash;
+    }
+    
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if ((obj == null) || (obj.getClass() != this.getClass())) {
+            return false;
+        }
+        ProxiedItemProperties test = (ProxiedItemProperties) obj;
+        if (this.getAbsolutePath() == test.getAbsolutePath()
+                && this.getName() == test.getName())
+            return true;
+        if ((this.getAbsolutePath() != null && this.getAbsolutePath().equals(test.getAbsolutePath()))
+                && (this.getName() != null && this.getName().equals(test.getName())))
+            return true;
+        return false;
+      
+    }
 
 }

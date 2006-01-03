@@ -5,6 +5,7 @@ import hu.ismicro.commons.proximity.base.Indexer;
 import hu.ismicro.commons.proximity.base.ProxiedItem;
 import hu.ismicro.commons.proximity.base.ProxiedItemProperties;
 import hu.ismicro.commons.proximity.base.RepositoryLogic;
+import hu.ismicro.commons.proximity.base.StatisticsGatherer;
 import hu.ismicro.commons.proximity.base.Storage;
 import hu.ismicro.commons.proximity.base.StorageException;
 
@@ -57,6 +58,14 @@ public interface Repository {
      * @param indexer
      */
     void setIndexer(Indexer indexer);
+    
+    /**
+     * Sets the statistics gatherer. May be null, to switch stats gathering
+     * off.
+     * 
+     * @param stats
+     */
+    void setStatisticsGatherer(StatisticsGatherer stats);
     
     /**
      * Retrieves the item properties from the given path.

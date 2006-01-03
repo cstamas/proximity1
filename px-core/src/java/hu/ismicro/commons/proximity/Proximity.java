@@ -1,6 +1,7 @@
 package hu.ismicro.commons.proximity;
 
 import java.util.List;
+import java.util.Map;
 
 public interface Proximity {
 
@@ -96,5 +97,12 @@ public interface Proximity {
      * @return List of ItemProperties, possibly 0 lenth.
      */
     public List searchItemFromRepository(String reposId, ItemProperties example) throws NoSuchRepositoryException;
+    
+    /**
+     * Returns the statistics (if any).
+     * 
+     * @return
+     */
+    public Map getStatistics();
 
 }
