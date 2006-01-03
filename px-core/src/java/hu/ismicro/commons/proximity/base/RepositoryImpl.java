@@ -170,6 +170,7 @@ public class RepositoryImpl implements Repository {
 						} else {
 							result = getLocalStorage().retrieveItem(path);
 						}
+                        result.getProperties().setMetadata(ItemProperties.METADATA_OWNING_REPOSITORY, getId());
                         if (getStatisticsGatherer() != null) {
                             getStatisticsGatherer().localHit(this, result.getProperties(), propsOnly);
                         }
