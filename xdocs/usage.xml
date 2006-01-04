@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<document>
+
+  <properties>
+    <author email="cservenak@is-micro.hu">CSERVENAK, Tamas</author>
+    <title>ISmicro Projects</title>
+  </properties>
+
+  <meta name="keyword" content="ismicro java"/>
+
+<body>
+
+<section name="Proximity Usage">
+
+<p>The simplest thing to do, is to deploy the Proximity WAR in exploded form.
+Look at your's Servlet Engine docs for description for how to do that.</p>
+
+<subsection name="Apache Tomcat 4 and 5">
+<p>For impatients briefly: shut down Tomcat, unzip WAR into ${catalina.home}/webapps/proximity,
+edit the ${catalina.home}/webapps/proximity/WEB-INF/proximity.properties to point
+to <b>existing different directories</b> and voila! Fire up Tomcat and point
+your browser to <a href="http://localhost:8080/proximity/">http://localhost:8080/proximity/</a>.</p>
+</subsection>
+
+</section>
+
+<section name="Using with Maven 1 and 2">
+
+<p>All you have to do is install this WAR on some Servlet container that has
+access to outer world (for reaching ibiblio, codehaus, etc. This is NOT mandatory
+since you can use Proximity to serve only your own artifacts!). Second, configure 
+Maven to use this repository (use appropriate URLs, these below are just samples!)
+instead the default at Ibiblio:</p>
+
+<tt>maven -Dmaven.repo.remote=http://is-micro.myip.hu/proximity/repository clean jar</tt>
+
+<p>Alternatively, you can place the following line in <b>build.properties</b>:</p>
+
+<tt>maven.repo.remote=http://is-micro.myip.hu/proximity/repository</tt>
+
+<p>These tips are directly for Maven 1. For Maven 2, see 
+<a href="http://maven.apache.org/guides/index.html">Maven docs</a> for how to 
+set up repositories.</p>
+
+</section>
+
+<section name="Using with XY">
+
+<p>Proximity is general Proxy like application, it is <b>NOT</b> just Maven proxy.
+Proximity have extensible repository logic, and the main reason for creating Proximity
+was to solve Maven proxying on our intranet. But Proximity became a little bit
+more, than "just" a Maven proxy.</p>
+
+<p>The Proximiy has a special URL (the "/repository" in case of PxWebapp) that
+looks for local cache using provided logic and fetches the content from remote
+repositeries in the defined order. Simply as that. Use it for anything you like.</p>
+
+<p>Have fun!</p>
+
+</section>
+
+</body>
+</document>

@@ -11,27 +11,28 @@
 
 <body>
 
-<section name="ISmicro Commons Proximity">
+<section name="Proximity">
 
-<p>Proximity component is a proxy-like pure Java application.</p>
+<p>Proximity is a proxy-like pure Java application.</p>
 
-<p>Proximity consists of PX Core module, which is <b>environment and
-transport independent</b>, so it is capable to run in J2SE and
-J2EE environment too.</p>
+<p>Proximity consists of PX Core module, which is the "headless" Proximity 
+itself made<b>environment and transport independent</b>, so it is capable to 
+run in J2SE and J2EE environment too.</p>
 
-<p>The PX Webapp is a thin module (2 classes + some Velocity templates!) based 
-on Spring IoC framework and it's MVC implementation, and makes the Proximity 
-Servlet implementation.</p>
+<p>The PX Webapp is a thin J2EE Webapp (2 controller classes + some Velocity 
+templates!) built upon Spring IoC framework and it's MVC implementation, and 
+makes the Proximity Servlet implementation.</p>
 
 <subsection name="Using Proximity as corporate Maven proxy">
 <p>The initial goal to develop Proximity was to make some alternative to
 the existing <a href="http://maven-proxy.codehaus.org">maven-proxy</a> 
 application on Codehaus.</p>
+
 <p>The Proximity has the following features, that enables it to act as
 Maven-aware caching proxy:</p>
 
 <ul>
-<li>With pluggable proxying logic it is able to handle snapshot releases in 
+<li>With extensible proxying logic it is able to handle maven artifacts in 
 "maven-way" (there is a Logic implementation out-of-the-box)</li>
 <li>It is possible to define more remote repositories, thus Proximity is
 aggregating these repositores and also is caching the and reduces outbound
@@ -46,9 +47,14 @@ artifacts that are not found or ibiblio or other mainstream maven repo.</li>
 <li>Proximity Core is transport and environment independent (no javax.* deps) and
 embeddable in any environment (one example is PX Webapp + Spring).</li>
 <li>More flexible, see <a href="configuration.html">configuration</a>.</li>
-<li>Flexible logic implementations. Some repo may have different retrieval
-logic, as per Repos configuration allows.</li>
-<li>Not fighting against WAR deployment (I need WAR, since one Tomcat
+<li>Out-of-the-box able to differentiate Maven1/2 Snapshots, Maven2 metadata
+and POMs and set expiration on them  by type or refetch them always.</li>
+<li>Metadata aware storage, to "decorate" downloaded items with custom
+"metadata" key-value pairs used for processing or tagging.</li>
+<li>Flexible logic implementations. Different repos may have different retrieval
+logic, as per Repository configuration allows.</li>
+<li>Uses <b>Apache Lucene</b> as a search engine for cached items.</li>
+<li>Not fighting against WAR deployment (Sincerely, I need WAR, since one Tomcat
 already runs in my office).</li>
 </ul>
 

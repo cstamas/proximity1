@@ -18,14 +18,17 @@
 <ul>
 <li><b>Proximity</b> - handles one or more repository. The order of the
 configured repositories is important.</li>
-<li><b>Repository</b> - may have storage and remote peer defined. It have
-also pluggable logic to orhestrate the retrieval.</li>
+<li><b>Repository</b> - may have local storage and remote storage defined. It have
+also pluggable logic to advice the retrieval. Indexer and stats gatherer
+are optional.</li>
 <li><b>Storage</b> - a generic interface, which covers all kind a storage.
 It may be local or remote, with any kind of underlying protocol (FTP, NFS, HTTP, etc)</li>
-<li><b>RemotePeer</b> - a storage subinterface, which covers all kind a 
+<li><b>RemoteStorage</b> - a storage subinterface, which covers all kind a 
 remote-storage. It may be kind of underlying protocol (FTP, NFS, HTTP, etc), but
 Repository KNOWS it is REMOTE.</li>
-<li><b>RepositoryRetrievalLogic</b> - orchestrates the retrieval.</li>
+<li><b>RepositoryLogic</b> - advices the retrieval.</li>
+<li><b>StatisticsGatherer</b> - gathers statistics if present.</li>
+<li><b>Indexer</b> - maintains index of cached items if present.</li>
 </ul>
 
 <p>Proximity out-of-the-box offers one remote peer implementation based
@@ -33,10 +36,9 @@ on Jakarta Commons HttpClient and two storage implementation: one read-only
 file system storage (useful for locally offered artifacts) and writable file 
 system storage (useful for caching remote storages).</p>
 
-<p>Currently two (pretty naive) logic implementation exists: one simple 
-proxy like (crude, without timeout or something) and "maven aware" that
-currently just fetches SNAPSHOT artifacts from remote peer even if it
-exists locally.</p>
+<p>Currently three (pretty naive) logic implementation exists: one simple 
+proxy like (crude, without timeout or something), one with expire support
+and one "Maven1/2 aware".</p>
 
 <p>See <a href="multiproject/px-core/xref/index.html">source</a> for more
 info.</p>
@@ -52,45 +54,84 @@ into one output.</p>
 
 <subsection name="Repository">
 
-<p>A simple junction of three things: storage, remote peer and logic. A repository
-may have only local storage (eg. offering in-house artifacts), or just a remote
-peer (acts in proximity's aggregation, simplifies developer side configuration) or
-may have both. If the storage is writable, it will act as caching proxy.</p>
+<p>A simple junction of three things: local storage, remote storage and logic. 
+A repository may have only local storage (eg. offering in-house artifacts), or 
+just a remote peer (acts in proximity's aggregation, simplifies developer side 
+configuration) or may have both. If the storage is writable, it will act as 
+caching proxy. It may have also Indexer and Logic defined, see later.</p>
 
 </subsection>
 
 <subsection name="Storage">
 
-<p>A storage is a "local" (altough transport protocol is bot bounded in any way).
-It may be writable (WritableStorage), thus a repository may have write access to
-it.</p>
+<p>A storage is a "local" (altough transport protocol is not bounded in any way).
+It may be writable (WritableFileSystemStorage), thus a repository may have 
+write access to it.</p>
+
+<p>A Storage may be "metadata-aware", thus be able to store
+any extended metadata not provided from file system (like originating URL of
+Artifact, other custom key-value pairs, etc).</p>
 
 </subsection>
 
-<subsection name="Remote Peer">
+<subsection name="Remote Storage">
 
-<p>A remote peer is a storage that is remote. Like the Ibiblio repository. There
+<p>A remote storage is a storage that is remote, like the Ibiblio repository. There
 is one implementation using Jakarta Commons HttpClient, but the transport protocol
 is not bounded in any way. The remote peer may be writable (WritableRemotePeer)
-and may be used to publish artifacts (TODO).</p>
+and may be used to publish artifacts (TODO) using DAV or some other transport
+protocol.</p>
+
+</subsection>
+
+<subsection name="Repository Logic">
+
+<p>The logic advises Repository how to behave on various artifact requests.
+Currently three logic implementation logic exists: DefaultProxyingLogic, that
+simply stores locally everything remotely retrieved, it will never refetch
+and sends every file (not directories) to indexing. DefaultExpiringProxyingLogic
+is like previous one, but it applies extra metadata "expires" on all artifiact
+of configurable amount, refetching items after expiration. The MavenProxyLogic
+recognizes Maven1/2 SNAPSHOTs, Maven 2 metadatas and POMs. It allows to set
+expiration for these types or to refetch them as needed (no caching).</p>
+
+</subsection>
+
+<subsection name="Statistics Gatherer">
+
+<p>A simple stats gatherer. Should be done using AOP.</p>
+
+</subsection>
+
+<subsection name="Indexer">
+
+<p>Indexer is responsible for indexing cached items. Currently Apache Lucene 
+indexer is implemented with crude search capabilities (Actually the UI is
+crude, the Proximity API is finished [or isn't?]).</p>
 
 </subsection>
 
 </section>
 
-<section name="A simple case: ISmicro">
+<section name="A simple case: A Company">
 
-<p>Briefly, we have Proximity configured with five repositories (in this order):</p>
+<p>Briefly, we can have Proximity configured with five repositories (in this order):</p>
 
 <ol>
-<li>ismicro - in-house artifacts,</li>
+<li>inhouse - in-house artifacts,</li>
 <li>extNonFree - Oracle JDBC, J2EE stuff,</li>
 <li>extFree - stuff not (yet?) found on ibiblio and other places, like DWR</li>
-<li>ibiblio - official repo, </li>
+<li>ibiblio - official M1/M2 repo, </li>
 <li>codehaus - codehaus repo.</li>
 </ol>
 
-<p>Our configuration of Proximity as Maven proxy follows (infrastructure
+<p>As we stated before, the strategy of Proximity is got-first-serve-first, so
+the order of repositories is important. Putting ibilio or codehaus first
+would slow down builds of in-house projects containing in-house development
+SNAPSHOT's because of HTTP 404 roundtrips. But, the order of repositories is
+up to user to set up. This is just a tip.</p>
+
+<p>The Proximity WAR comes preconfigured as Maven proxy like this (infrastructure
 from Spring config omitted):</p>
 
 <source>
@@ -98,41 +139,49 @@ from Spring config omitted):</p>
     <!--
       - Central proximity bean and it's helper.
     -->
-	<bean id="proximity" class="hu.ismicro.commons.proximity.base.ProximityImpl">
+	<bean id="proximity" class="hu.ismicro.commons.proximity.base.ProximityImpl" init-method="afterPropertiesSet">
 		<property name="repositories">
 			<list>
-				<ref local="ismicro"/>
+				<ref local="inhouse"/>
 				<ref local="extNonFree"/>
 				<ref local="extFree"/>
 				<ref local="ibiblio"/>
 				<ref local="codehaus"/>
 			</list>
 		</property>
+		<property name="indexer" ref="indexer"/>
+		<property name="statisticsGatherer" ref="stats"/>
 	</bean>
 
-	<bean id="proximitySupport" class="hu.ismicro.commons.proximity.base.ProximitySupportImpl">
-		<property name="proximity" ref="proximity"/>
+	<bean id="stats" class="hu.ismicro.commons.proximity.base.StatisticsGathererImpl"/>
+
+	<bean id="indexer" class="hu.ismicro.commons.proximity.base.indexer.LuceneIndexer" init-method="afterPropertiesSet">
+		<property name="indexDirectory" value="${indexer.dir}" />
+		<property name="recreateIndexes" value="true"/>
 	</bean>
 
     <!--
       - IBIBLIO Repository (with writable storage and remote peer)
       - A standard maven repository.
     -->
-	<bean id="ibiblio" class="hu.ismicro.commons.proximity.base.SimpleRepository">
-		<property name="name" value="www-ibiblio-org"/>
-		<property name="writableStorage" ref="ibiblioFSStorage"/>
-		<property name="remotePeer" ref="ibiblioRemotePeer"/>
-		<property name="repositoryRetrievalLogic">
-			<bean class="hu.ismicro.commons.proximity.logic.MavenSnapshotAwareLocalLookupRemoteLookupLocalStoreRetrievalLogic"/>
+	<bean id="ibiblio" class="hu.ismicro.commons.proximity.base.RepositoryImpl">
+		<property name="id" value="ibiblio"/>
+		<property name="localStorage" ref="ibiblioFSStorage"/>
+		<property name="remoteStorage" ref="ibiblioRemotePeer"/>
+		<property name="indexer" ref="indexer"/>
+		<property name="statisticsGatherer" ref="stats"/>
+		<property name="repositoryLogic">
+			<bean class="hu.ismicro.commons.proximity.base.logic.MavenProxyLogic">
+				<property name="pomExpirationPeriod" value="0" />
+			</bean>
 		</property>
 	</bean>
 
-	<bean id="ibiblioFSStorage" class="hu.ismicro.commons.proximity.storage.WritableFileSystemStorage">
+	<bean id="ibiblioFSStorage" class="hu.ismicro.commons.proximity.base.local.WritableFileSystemStorage">
 		<property name="baseDir" value="${ibiblioFSStorage.baseDir}"/>
-		<property name="storeMetadata" value="true"/>
 	</bean>
 	
-	<bean id="ibiblioRemotePeer" class="hu.ismicro.commons.proximity.remote.HttpClientRemotePeer">
+	<bean id="ibiblioRemotePeer" class="hu.ismicro.commons.proximity.base.remote.HttpClientRemotePeer">
 		<property name="remoteUrl" value="http://www.ibiblio.org/maven/"/>
 		<property name="connectionTimeout" value="30000"/>
 	</bean>
@@ -141,36 +190,42 @@ from Spring config omitted):</p>
       - Codehaus Repository (with writable storage and remote peer)
       - A standard maven repository.
     -->
-	<bean id="codehaus" class="hu.ismicro.commons.proximity.base.SimpleRepository">
-		<property name="name" value="dist-codehaus-org"/>
-		<property name="writableStorage" ref="codehausFSStorage"/>
-		<property name="remotePeer" ref="codehausRemotePeer"/>
-		<property name="repositoryRetrievalLogic">
-			<bean class="hu.ismicro.commons.proximity.logic.MavenSnapshotAwareLocalLookupRemoteLookupLocalStoreRetrievalLogic"/>
+	<bean id="codehaus" class="hu.ismicro.commons.proximity.base.RepositoryImpl">
+		<property name="id" value="codehaus"/>
+		<property name="localStorage" ref="codehausFSStorage"/>
+		<property name="remoteStorage" ref="codehausRemotePeer"/>
+		<property name="indexer" ref="indexer"/>
+		<property name="statisticsGatherer" ref="stats"/>
+		<property name="repositoryLogic">
+			<bean class="hu.ismicro.commons.proximity.base.logic.MavenProxyLogic">
+				<property name="pomExpirationPeriod" value="0" />
+			</bean>
 		</property>
 	</bean>
 
-	<bean id="codehausFSStorage" class="hu.ismicro.commons.proximity.storage.WritableFileSystemStorage">
+	<bean id="codehausFSStorage" class="hu.ismicro.commons.proximity.base.local.WritableFileSystemStorage">
 		<property name="baseDir" value="${codehausFSStorage.baseDir}"/>
-		<property name="storeMetadata" value="true"/>
 	</bean>
 	
-	<bean id="codehausRemotePeer" class="hu.ismicro.commons.proximity.remote.HttpClientRemotePeer">
+	<bean id="codehausRemotePeer" class="hu.ismicro.commons.proximity.base.remote.HttpClientRemotePeer">
 		<property name="remoteUrl" value="http://dist.codehaus.org/"/>
 		<property name="connectionTimeout" value="30000"/>
 	</bean>
 
     <!--
-      - ISMicro Repository (with read-only storage and without remote peer)
+      - In-House Repository (with read-only storage and without remote peer)
       - A maven repository for publishing in-house artifacts.
     -->
-	<bean id="ismicro" class="hu.ismicro.commons.proximity.base.SimpleRepository">
-		<property name="name" value="ISmicro Local"/>
-		<property name="storage" ref="ismicroFSStorage"/>
+	<bean id="inhouse" class="hu.ismicro.commons.proximity.base.RepositoryImpl">
+		<property name="id" value="inhouse"/>
+		<property name="localStorage" ref="inhouseFSStorage"/>
+		<property name="indexer" ref="indexer"/>
+		<property name="statisticsGatherer" ref="stats"/>
 	</bean>
 
-	<bean id="ismicroFSStorage" class="hu.ismicro.commons.proximity.storage.FileSystemStorage">
-		<property name="baseDir" value="${ismicroFSStorage.baseDir}"/>
+	<bean id="inhouseFSStorage" class="hu.ismicro.commons.proximity.base.local.ReadOnlyFileSystemStorage">
+		<property name="baseDir" value="${inhouseFSStorage.baseDir}"/>
+		<property name="metadataAware" value="false"/>
 	</bean>
 
     <!--
@@ -178,13 +233,16 @@ from Spring config omitted):</p>
       - A maven repository for in-house use for publishing non-free artifacts 
       - not deployed on standard maven repositories (oracle JDBC, J2EE, etc...).
     -->
-	<bean id="extNonFree" class="hu.ismicro.commons.proximity.base.SimpleRepository">
-		<property name="name" value="External NonFree"/>
-		<property name="storage" ref="extNonFreeFSStorage"/>
+	<bean id="extNonFree" class="hu.ismicro.commons.proximity.base.RepositoryImpl">
+		<property name="id" value="extNonFree"/>
+		<property name="localStorage" ref="extNonFreeFSStorage"/>
+		<property name="indexer" ref="indexer"/>
+		<property name="statisticsGatherer" ref="stats"/>
 	</bean>
 
-	<bean id="extNonFreeFSStorage" class="hu.ismicro.commons.proximity.storage.FileSystemStorage">
+	<bean id="extNonFreeFSStorage" class="hu.ismicro.commons.proximity.base.local.ReadOnlyFileSystemStorage">
 		<property name="baseDir" value="${extNonFreeFSStorage.baseDir}"/>
+		<property name="metadataAware" value="false"/>
 	</bean>
 
     <!--
@@ -192,13 +250,16 @@ from Spring config omitted):</p>
       - A maven repository for in-house use for publishing artifacts 
       - not deployed on standard maven repositories (dwr, etc...).
     -->
-	<bean id="extFree" class="hu.ismicro.commons.proximity.base.SimpleRepository">
-		<property name="name" value="External Free"/>
-		<property name="storage" ref="extFreeFSStorage"/>
+	<bean id="extFree" class="hu.ismicro.commons.proximity.base.RepositoryImpl">
+		<property name="id" value="extFree"/>
+		<property name="localStorage" ref="extFreeFSStorage"/>
+		<property name="indexer" ref="indexer"/>
+		<property name="statisticsGatherer" ref="stats"/>
 	</bean>
 
-	<bean id="extFreeFSStorage" class="hu.ismicro.commons.proximity.storage.FileSystemStorage">
+	<bean id="extFreeFSStorage" class="hu.ismicro.commons.proximity.base.local.ReadOnlyFileSystemStorage">
 		<property name="baseDir" value="${extFreeFSStorage.baseDir}"/>
+		<property name="metadataAware" value="false"/>
 	</bean>
 ]]>
 </source>

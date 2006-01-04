@@ -15,6 +15,7 @@
         </menu>
 
         <menu name="Documentation">
+            <item name="Usage" href="usage.html"/>
             <item name="Configuration" href="configuration.html"/>
             <item name="Developers guide" href="developers.html"/>
         </menu>
