@@ -17,20 +17,122 @@
 
 <subsection name="Pluggable proxying logic">
 
-<p>The first thing is to develop more complicated proxying logic aside two
+<p>The first thing would be to develop more complicated proxying logic aside three
 "basic" ones provided in source. The logic should implement the following
 inteface:</p>
 
 <source>
-public interface RepositoryRetrievalLogic {
+public interface RepositoryLogic {
+	
+	/**
+	 * Return true if repository should check for local cached version of the
+	 * path.
+	 * 
+	 * @param path
+	 * @return
+	 */
+	boolean shouldCheckForLocalCopy(String path);
+	
+	/**
+	 * Postprocess item if needed after local copy found.
+	 * 
+	 * @param item
+	 * @param repository
+	 * @return
+	 */
+	ProxiedItem afterLocalCopyFound(ProxiedItem item, Repository repository);
+	
+	/**
+	 * Return true if repository should initiate remote lookup.
+	 * 
+	 * @param path
+	 * @param locallyExists true if there is a local copy found.
+	 * @return
+	 */
+	boolean shouldCheckForRemoteCopy(String path, boolean locallyExists);
+	
+	/**
+	 * Postprocess item if needed after remote retrieval.
+	 * 
+	 * @param item
+	 * @param repository
+	 * @return
+	 */
+	ProxiedItem afterRemoteCopyFound(ProxiedItem item, Repository repository);
+	
+	/**
+	 * Return true if reposotiry should store the remote retrieved item in a 
+	 * local writable store.
+	 * 
+	 * @param item
+	 * @return
+	 */
+	boolean shouldStoreLocallyAfterRemoteRetrieval(ItemProperties item);
 
-    ProxiedItem orchestrateItemRequest(String path, InnerRepository repository);
+	/**
+	 * Return true to index the given item.
+	 * 
+	 * @param item
+	 * @return
+	 */
+	boolean shouldIndex(ItemProperties item);
+	
+}
+</source>
+
+<p>Let's see the "default" logic:</p>
+
+<source>
+public class DefaultProxyingLogic implements RepositoryLogic {
+
+	protected Log logger = LogFactory.getLog(this.getClass());
+
+	/**
+	 * Always returns true.
+	 */
+	public boolean shouldCheckForLocalCopy(String path) {
+		return true;
+	}
+
+	/**
+	 * Does nothing and returns item unmodified.
+	 */
+	public ProxiedItem afterLocalCopyFound(ProxiedItem item, Repository repository) {
+		return item;
+	}
+
+	/**
+	 * Always returns !locallyExists. 
+	 */
+	public boolean shouldCheckForRemoteCopy(String path, boolean locallyExists) {
+		return !locallyExists;
+	}
+
+	/**
+	 * Does nothing and returns item unmodified.
+	 */
+	public ProxiedItem afterRemoteCopyFound(ProxiedItem item, Repository repository) {
+		return item;
+	}
+
+	/**
+	 * Always returns true.
+	 */
+	public boolean shouldStoreLocallyAfterRemoteRetrieval(ItemProperties item) {
+		return true;
+	}
+
+	/**
+	 * Always returns !item.isDirectory().
+	 */
+	public boolean shouldIndex(ItemProperties item) {
+		return !item.isDirectory();
+	}
 
 }
 </source>
 
-<p>And there is a helper abstract class in <b>hu.ismicro.commons.proximity.logic</b>
-package too.</p>
+<p>Look at the other existing implementations too.</p>
 
 </subsection>
 
