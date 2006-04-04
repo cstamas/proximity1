@@ -34,49 +34,49 @@
     </dependency>
 
     <dependency>
-      <groupId>springframework</groupId>
+      <groupId>org.springframework</groupId>
       <artifactId>spring-core</artifactId>
       <version>1.2.6</version>
       <type>jar</type>
       <scope>runtime</scope>
     </dependency>
     <dependency>
-      <groupId>springframework</groupId>
+      <groupId>org.springframework</groupId>
       <artifactId>spring-beans</artifactId>
       <version>1.2.6</version>
       <type>jar</type>
       <scope>runtime</scope>
     </dependency>
     <dependency>
-      <groupId>springframework</groupId>
+      <groupId>org.springframework</groupId>
       <artifactId>spring-context</artifactId>
       <version>1.2.6</version>
       <type>jar</type>
       <scope>runtime</scope>
     </dependency>
     <dependency>
-      <groupId>springframework</groupId>
+      <groupId>org.springframework</groupId>
       <artifactId>spring-aop</artifactId>
       <version>1.2.6</version>
       <type>jar</type>
       <scope>runtime</scope>
     </dependency>
     <dependency>
-      <groupId>springframework</groupId>
+      <groupId>org.springframework</groupId>
       <artifactId>spring-support</artifactId>
       <version>1.2.6</version>
       <type>jar</type>
       <scope>runtime</scope>
     </dependency>
     <dependency>
-      <groupId>springframework</groupId>
+      <groupId>org.springframework</groupId>
       <artifactId>spring-web</artifactId>
       <version>1.2.6</version>
       <type>jar</type>
       <scope>runtime</scope>
     </dependency>
     <dependency>
-      <groupId>springframework</groupId>
+      <groupId>org.springframework</groupId>
       <artifactId>spring-webmvc</artifactId>
       <version>1.2.6</version>
       <type>jar</type>
@@ -124,7 +124,7 @@
 
     <!-- For testing -->
     <dependency>
-      <groupId>springframework</groupId>
+      <groupId>org.springframework</groupId>
       <artifactId>spring-mock</artifactId>
       <version>1.2.6</version>
       <type>jar</type>
