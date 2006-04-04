@@ -116,8 +116,8 @@
   <!-- build information for the project -->
   <build>
     <nagEmailAddress>staff@is-micro.myip.hu</nagEmailAddress>
-    <sourceDirectory>${basedir}/src/java</sourceDirectory>
-    <unitTestSourceDirectory>${basedir}/test/java</unitTestSourceDirectory>
+    <sourceDirectory>${basedir}/src/main/java</sourceDirectory>
+    <unitTestSourceDirectory>${basedir}/src/test/java</unitTestSourceDirectory>
 
     <unitTest>
       <includes>
