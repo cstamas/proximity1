@@ -4,6 +4,7 @@ import hu.ismicro.commons.proximity.Item;
 import hu.ismicro.commons.proximity.ItemNotFoundException;
 import hu.ismicro.commons.proximity.ItemProperties;
 import hu.ismicro.commons.proximity.Proximity;
+import hu.ismicro.commons.proximity.ProximityRequest;
 
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -44,22 +45,27 @@ public class RepositoryController extends MultiActionController {
 		String targetRepository = request.getParameter("repositoryId");
 
 		ItemProperties itemProps = null;
+		ProximityRequest pRequest = new ProximityRequest();
+		pRequest.setPath(requestURI);
+		pRequest.setTargetedReposId(targetRepository);
+		pRequest.setGrantee(null);
+		pRequest.setAttributes(null);
 		try {
 			if (targetRepository == null) {
 				logger.info("Got request for repository on URI: " + requestURI);
-				itemProps = proximity.retrieveItemProperties(requestURI);
+				itemProps = proximity.retrieveItemProperties(pRequest);
 			} else {
 				logger.info("Got request for repository on URI: " + requestURI + " from repository id "
 						+ targetRepository);
-				itemProps = proximity.retrieveItemPropertiesFromRepository(requestURI, targetRepository);
+				itemProps = proximity.retrieveItemPropertiesFromRepository(pRequest);
 			}
 
 			if (itemProps.isDirectory()) {
 				List items = null;
 				if (targetRepository == null) {
-					items = proximity.listItems(requestURI);
+					items = proximity.listItems(pRequest);
 				} else {
-					items = proximity.listItemsFromRepository(requestURI, targetRepository);
+					items = proximity.listItemsFromRepository(pRequest);
 				}
 				PropertyComparator.sort(items, new MutableSortDefinition(orderBy, true, true));
 				Map result = new HashMap();
@@ -72,9 +78,9 @@ public class RepositoryController extends MultiActionController {
 				Item item = null;
 				// TODO: Optimize? Maybe a search first?
 				if (targetRepository == null) {
-					item = proximity.retrieveItem(requestURI);
+					item = proximity.retrieveItem(pRequest);
 				} else {
-					item = proximity.retrieveItemFromRepository(requestURI, targetRepository);
+					item = proximity.retrieveItemFromRepository(pRequest);
 				}
 				// TODO: Made this proper (content type by ext, size, etc...)
 				response.setContentType("application/octet-stream");
