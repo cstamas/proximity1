@@ -14,7 +14,7 @@ import java.util.Map;
 public class OpenAccessManager implements AccessManager {
 
 	public void decide(Object grantee, ProximityRequest request, Map config) throws AccessDeniedException {
-		// this access manager is open, everybody has access to everything
+		// this access manager is open, everybody has access to everything since it never throws AccessDeniedEx 
 	}
 
 }

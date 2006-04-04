@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Decide passes only if all voter votes ACCESS_APPROVED.
+ * Simple implementation of AccessManager that passes only if all voter votes ACCESS_APPROVED.
  * 
  * @author t.cservenak
  *
@@ -17,6 +17,14 @@ import java.util.Map;
 public class AffirmativeAccessManager implements AccessManager {
 	
 	private List voters = new ArrayList();
+
+	public List getVoters() {
+		return voters;
+	}
+
+	public void setVoters(List voters) {
+		this.voters = voters;
+	}
 
 	public void decide(Object grantee, ProximityRequest request, Map config) throws AccessDeniedException {
 		for (Iterator i = voters.iterator(); i.hasNext(); ) {
