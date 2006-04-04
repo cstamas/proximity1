@@ -38,7 +38,7 @@ public class ProxiedItemProperties implements ItemProperties {
     }
 
 	public boolean isDirectory() {
-		return Boolean.parseBoolean(getMetadata(METADATA_IS_DIRECTORY));
+		return Boolean.valueOf(getMetadata(METADATA_IS_DIRECTORY)).booleanValue();
 	}
 
 	public void setDirectory(boolean directory) {
@@ -46,7 +46,7 @@ public class ProxiedItemProperties implements ItemProperties {
 	}
 
 	public boolean isFile() {
-		return Boolean.parseBoolean(getMetadata(METADATA_IS_FILE));
+		return Boolean.valueOf(getMetadata(METADATA_IS_FILE)).booleanValue();
 	}
 
 	public void setFile(boolean file) {
