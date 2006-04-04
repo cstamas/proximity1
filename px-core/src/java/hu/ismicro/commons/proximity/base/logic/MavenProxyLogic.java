@@ -68,11 +68,11 @@ public class MavenProxyLogic extends DefaultExpiringProxyingLogic {
 	}
 
 	protected boolean isPom(String path) {
-		return PathHelper.getFileName(path).contains(".pom");
+		return PathHelper.getFileName(path).endsWith(".pom");
 	}
 
 	protected boolean isSnapshot(String path) {
-		return PathHelper.getFileName(path).contains("SNAPSHOT");
+		return PathHelper.getFileName(path).indexOf("SNAPSHOT") != -1;
 	}
 
 	protected boolean isMetadata(String path) {

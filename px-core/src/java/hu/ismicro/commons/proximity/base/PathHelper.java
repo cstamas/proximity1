@@ -37,7 +37,7 @@ public class PathHelper {
 	 * @return
 	 */
 	public static String absolutizePathFromBase(final String base, final String path) {
-		if (!path.startsWith(PATH_SEPARATOR) || path.contains(PATH_SELF) || path.contains(PATH_PARENT)) {
+		if (!path.startsWith(PATH_SEPARATOR) || path.indexOf(PATH_SELF) != -1 || path.indexOf(PATH_PARENT) != -1) {
 			Stack stack = new Stack();
 			String[] explodedBase = base.split(PATH_SEPARATOR);
 			for (int i = 0; i < explodedBase.length; i++) {
@@ -83,7 +83,7 @@ public class PathHelper {
 	 * @return
 	 */
 	public static String changePathLevel(final String base, String dest) {
-		if (dest.contains(PATH_SEPARATOR)) {
+		if (dest.indexOf(PATH_SEPARATOR) != -1) {
 			throw new IllegalArgumentException("The dest param should not contain [" + PATH_SEPARATOR + "]!");
 		}
 		if (PATH_SELF.equals(dest)) {

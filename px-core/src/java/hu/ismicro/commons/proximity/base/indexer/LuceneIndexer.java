@@ -113,7 +113,7 @@ public class LuceneIndexer implements Indexer {
             for (Iterator i = ip.getAllMetadata().keySet().iterator(); i.hasNext();) {
                 String key = (String) i.next();
                 Query termQ;
-                if (ip.getMetadata(key).contains("?") || ip.getMetadata(key).contains("*")) {
+                if (ip.getMetadata(key).indexOf("?") != -1 || ip.getMetadata(key).indexOf("*") != -1) {
                     termQ = new WildcardQuery(new Term(key, ip.getMetadata(key)));
                 } else {
                     termQ = new FuzzyQuery(new Term(key, ip.getMetadata(key)));
