@@ -1,6 +1,6 @@
 <h2>Proximity</h2>
 
-<p>The Proximity is an extensible http-proxy "like" engine.</p>
+<p>Proximity is extensible http-proxy "like" engine.</p>
 
 <p>One of it's primary use is as webapp to serve as maven proxy on our
 company's intranet. As for reducing outgoing traffic (caching ibiblio and other
@@ -19,13 +19,14 @@ Jars, etc...).</p>
 access to outer world (for reaching ibiblio, codehaus, etc. This is NOT mandatory
 since you can use Proximity to serve only your own artifacts!). Second, configure 
 Maven to use this repository (use appropriate URLs, these below are just samples!)
-instead the default at Ibiblio:</p>
+instead the default at Ibiblio (if you have Proximity running on localhost, or
+adjust the URL properly):</p>
 
-<tt>maven -Dmaven.repo.remote=http://is-micro.myip.hu/proximity/repository clean jar</tt>
+<tt>maven -Dmaven.repo.remote=http://localhost:8080/proximity/repository clean jar</tt>
 
 <p>Alternatively, you can place the following line in <b>build.properties</b>:</p>
 
-<tt>maven.repo.remote=http://is-micro.myip.hu/proximity/repository</tt>
+<tt>maven.repo.remote=http://localhost:8080/proximity/repository</tt>
 
 <h4>With Maven 2</h4>
 
