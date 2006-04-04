@@ -1,5 +1,6 @@
 package hu.ismicro.commons.proximity.access;
 
+import hu.ismicro.commons.proximity.AccessDeniedException;
 import hu.ismicro.commons.proximity.ProximityRequest;
 
 import java.util.Map;

@@ -4,6 +4,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import hu.ismicro.commons.proximity.ItemProperties;
+import hu.ismicro.commons.proximity.ProximityRequest;
 import hu.ismicro.commons.proximity.Repository;
 import hu.ismicro.commons.proximity.base.ProxiedItem;
 import hu.ismicro.commons.proximity.base.RepositoryLogic;
@@ -25,7 +26,7 @@ public class DefaultProxyingLogic implements RepositoryLogic {
 	/**
 	 * Always returns true.
 	 */
-	public boolean shouldCheckForLocalCopy(String path) {
+	public boolean shouldCheckForLocalCopy(ProximityRequest request) {
 		return true;
 	}
 
@@ -39,7 +40,7 @@ public class DefaultProxyingLogic implements RepositoryLogic {
 	/**
 	 * Always returns !locallyExists. 
 	 */
-	public boolean shouldCheckForRemoteCopy(String path, boolean locallyExists) {
+	public boolean shouldCheckForRemoteCopy(ProximityRequest request, boolean locallyExists) {
 		return !locallyExists;
 	}
 
