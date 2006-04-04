@@ -1,7 +1,5 @@
-package hu.ismicro.commons.proximity.access;
+package hu.ismicro.commons.proximity;
 
-import hu.ismicro.commons.proximity.ProximityException;
-import hu.ismicro.commons.proximity.ProximityRequest;
 
 /**
  * Thrown when a Proximity request is not backed by trusted/granted authority.

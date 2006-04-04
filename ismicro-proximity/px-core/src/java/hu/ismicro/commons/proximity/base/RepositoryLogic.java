@@ -1,6 +1,7 @@
 package hu.ismicro.commons.proximity.base;
 
 import hu.ismicro.commons.proximity.ItemProperties;
+import hu.ismicro.commons.proximity.ProximityRequest;
 import hu.ismicro.commons.proximity.Repository;
 
 /**
@@ -22,7 +23,7 @@ public interface RepositoryLogic {
 	 * @param path
 	 * @return
 	 */
-	boolean shouldCheckForLocalCopy(String path);
+	boolean shouldCheckForLocalCopy(ProximityRequest request);
 	
 	/**
 	 * Postprocess item if needed after local copy found.
@@ -40,7 +41,7 @@ public interface RepositoryLogic {
 	 * @param locallyExists true if there is a local copy found.
 	 * @return
 	 */
-	boolean shouldCheckForRemoteCopy(String path, boolean locallyExists);
+	boolean shouldCheckForRemoteCopy(ProximityRequest request, boolean locallyExists);
 	
 	/**
 	 * Postprocess item if needed after remote retrieval.
