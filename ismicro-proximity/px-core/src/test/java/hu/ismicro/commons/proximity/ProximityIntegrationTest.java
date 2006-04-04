@@ -20,29 +20,35 @@ public class ProximityIntegrationTest extends AbstractProximityIntegrationTest {
 	public Proximity getProximity() {
 		return proximity;
 	}
+	
+	protected ProximityRequest getRequest(String path) {
+		ProximityRequest request = new ProximityRequest();
+		request.setPath(path);
+		return request;
+	}
 
 	public void testSimpleArtifact() {
 		try {
-			Item item = proximity.retrieveItem("/antlr/antlr/2.7.5/antlr-2.7.5.jar");
+			Item item = proximity.retrieveItem(getRequest("/antlr/antlr/2.7.5/antlr-2.7.5.jar"));
 			logger.info("Got response of type " + item.getClass() + ":" + item);
-		} catch (ItemNotFoundException ex) {
+		} catch (ProximityException ex) {
 			logger.error("Got exception", ex);
 			fail();
 		}
 		try {
-			Item item = proximity.retrieveItem("/antlr/antlr/2.7.5/antlr-2.7.5.jar-NO_SUCH");
+			Item item = proximity.retrieveItem(getRequest("/antlr/antlr/2.7.5/antlr-2.7.5.jar-NO_SUCH"));
 			logger.info("Got response of type " + item.getClass() + ":" + item);
 			fail();
-		} catch (ItemNotFoundException ex) {
+		} catch (ProximityException ex) {
 			logger.error("Good, got exception", ex);
 		}
 	}
 
 	public void testPomArtifact() {
 		try {
-			Item item = proximity.retrieveItem("/antlr/poms/antlr-2.7.5.pom");
+			Item item = proximity.retrieveItem(getRequest("/antlr/poms/antlr-2.7.5.pom"));
 			logger.info("Got response of type " + item.getClass() + ":" + item);
-		} catch (ItemNotFoundException ex) {
+		} catch (ProximityException ex) {
 			logger.error("Good, got exception", ex);
 			fail();
 		}
@@ -50,16 +56,16 @@ public class ProximityIntegrationTest extends AbstractProximityIntegrationTest {
 
 	public void testMetadatadaArtifact() {
 		try {
-			Item item = proximity.retrieveItem("/ant/ant/maven-metadata.xml");
+			Item item = proximity.retrieveItem(getRequest("/ant/ant/maven-metadata.xml"));
 			logger.info("Got response of type " + item.getClass() + ":" + item);
-		} catch (ItemNotFoundException ex) {
+		} catch (ProximityException ex) {
 			logger.error("Got exception", ex);
 			fail();
 		}
 		try {
-			Item item = proximity.retrieveItem("/ant/ant/maven-metadata.xml.md5");
+			Item item = proximity.retrieveItem(getRequest("/ant/ant/maven-metadata.xml.md5"));
 			logger.info("Got response of type " + item.getClass() + ":" + item);
-		} catch (ItemNotFoundException ex) {
+		} catch (ProximityException ex) {
 			logger.error("Got exception", ex);
 			fail();
 		}
@@ -81,11 +87,11 @@ public class ProximityIntegrationTest extends AbstractProximityIntegrationTest {
 	}
 
 	public void testSimpleDir() {
-		List items = proximity.listItems("/");
+		List items = proximity.listItems(getRequest("/"));
 		logger.info("Got response of type " + items.getClass() + ":" + items);
-		items = proximity.listItems("/ismicro");
+		items = proximity.listItems(getRequest("/ismicro"));
 		logger.info("Got response of type " + items.getClass() + ":" + items);
-		items = proximity.listItems("/ismicro/jars");
+		items = proximity.listItems(getRequest("/ismicro/jars"));
 		logger.info("Got response of type " + items.getClass() + ":" + items);
 	}
     
