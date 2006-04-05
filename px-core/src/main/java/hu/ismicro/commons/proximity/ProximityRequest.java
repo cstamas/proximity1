@@ -55,5 +55,19 @@ public class ProximityRequest implements Serializable {
 	public void setTargetedReposId(String targetedReposId) {
 		this.targetedReposId = targetedReposId;
 	}
+	
+	public String toString() {
+		StringBuffer str = new StringBuffer("ProximityRequest[");
+		str.append("grantee=");
+		str.append(getGrantee());
+		str.append(", path=");
+		str.append(getPath());
+		str.append(", targetedReposId=");
+		str.append(getTargetedReposId());
+		str.append(", attributes=");
+		str.append(getAttributes());
+		str.append("]");
+		return str.toString();
+	}
 
 }
