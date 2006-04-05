@@ -201,6 +201,22 @@ public class RepositoryImpl implements Repository {
 		logger.debug("Recreating metadata " + getId());
 		recreateMetadata();
 	}
+	
+	protected String removePathPrefix(String path) {
+		if (getURIPrefix() != null && getURIPrefix().length() != 0) {
+			return path.substring(getURIPrefix().length());
+		} else {
+			return path;
+		}
+	}
+	
+	protected String putPathPrefix(String path) {
+		if (getURIPrefix() != null && getURIPrefix().length() != 0) {
+			return PathHelper.absolutizePathFromBase(getURIPrefix(), path);
+		} else {
+			return path;
+		}
+	}
 
 	protected ProxiedItem retrieveItem(boolean propsOnly, ProximityRequest request) throws ItemNotFoundException,
 			StorageException {
