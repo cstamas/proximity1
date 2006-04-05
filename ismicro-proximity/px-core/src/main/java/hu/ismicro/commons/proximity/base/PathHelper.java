@@ -156,6 +156,6 @@ public class PathHelper {
 		} else {
 			return PATH_SEPARATOR;
 		}
-
 	}
+	
 }
