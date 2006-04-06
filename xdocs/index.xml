@@ -33,17 +33,23 @@ Maven-aware caching proxy:</p>
 
 <ul>
 <li>With extensible proxying logic it is able to handle maven artifacts in 
-"maven-way" (there is a Logic implementation out-of-the-box)</li>
+"maven-way" (there is a Maven 1 and Maven 2 Logic implementation out-of-the-box)</li>
+<li>It may (or may not) expire various artifacts in local storage downloaded from
+remote peers. With Maven 1/2 Logic You have configurable timeouts for 
+POMs, SNAPSHOTs and METADATAs and for all artifacts.</li>
 <li>It is possible to define more remote repositories, thus Proximity is
-aggregating these repositores and also is caching the and reduces outbound
-traffic.</li>
+aggregating these repositores and also is caching them thus reduces outbound
+traffic (but the origin of artifact is still trackable!).</li>
 <li>The flexibility to define repositories allows administrator to include
 a local only repository to publish in-house artifacts, or other commercial
-artifacts that are not found or ibiblio or other mainstream maven repo.</li>
+artifacts that are not uploadable onto ibiblio.org or other mainstream Maven repo.</li>
 </ul>
 
 <p>In contrast to the maven-proxy implementation:</p>
 <ul>
+<li>Proximity is <b>not</b> Maven1/2 proxy only. Simply, it is a general solution 
+that works great with Maven1/2 too, but have other usages. Proximity-Core is 
+used in Generic Update Server devlopement (a commercial project). </li>
 <li>Proximity Core is transport and environment independent (no javax.* deps) and
 embeddable in any environment (one example is PX Webapp + Spring).</li>
 <li>More flexible, see <a href="configuration.html">configuration</a>.</li>
@@ -53,12 +59,26 @@ and POMs and set expiration on them  by type or refetch them always.</li>
 "metadata" key-value pairs used for processing or tagging.</li>
 <li>Flexible logic implementations. Different repos may have different retrieval
 logic, as per Repository configuration allows.</li>
-<li>Uses <b>Apache Lucene</b> as a search engine for cached items.</li>
+<li>It supports Access Level security on Proximity level and per Repository
+level. This opens interesting possibilities in corporate environments, like
+General Proximity Access filtering by Proximity AccessManager and artifact level filtering
+by Repository AccessManager. Just implement the AccessManager interface, inject it
+to Proximity bean or Repository bean and you got Access Control (per default Proximity
+is "wide-open").</li>
+<li>Repositories may be "prefixed". You may prefix some repository, eg.
+map complete ibiblio repository onto /someprefix Proximity
+URI. This way you may host multiple remote peers cleanly separated by URI (prefix 
+Maven reposes with /maven and prefix my-app with /myapp. One step closer to
+Maven2 driven software-update server).</li>
+<li>Repositories may be "hidden". Thus, artifacts within them accessed by complete 
+URL will be available, but the repository will not be shown on repository browsing.</li>
+<li>Uses <b>Apache Lucene</b> as a search engine for locally availabel and
+cached items.</li>
 <li>Not fighting against WAR deployment (Sincerely, I need WAR, since one Tomcat
 already runs in my office).</li>
 </ul>
 
-<p>You can see Proximity in action <a href="/proximity">here</a>!</p>
+<p>You can see Proximity in action <a href="/proximity">here</a> (not anymore :( )!</p>
 
 </subsection>
 

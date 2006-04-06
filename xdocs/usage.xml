@@ -21,6 +21,10 @@ Look at your's Servlet Engine docs for description for how to do that.</p>
 edit the ${catalina.home}/webapps/proximity/WEB-INF/proximity.properties to point
 to <b>existing different directories</b> and voila! Fire up Tomcat and point
 your browser to <a href="http://localhost:8080/proximity/">http://localhost:8080/proximity/</a>.</p>
+<p><b>Caveats:</b> Currently Proximity expects under "metadata-aware" local storage folders two
+subfolders called "metadata" and "storage". You have to create these dirs manually (will be fixed)!
+In the WAR deployment there are two "metadata aware" local storages, one for ibiblio.org and
+one for codehaus.org.</p>
 </subsection>
 
 </section>
@@ -42,6 +46,20 @@ instead the default at Ibiblio:</p>
 <p>These tips are directly for Maven 1. For Maven 2, see 
 <a href="http://maven.apache.org/guides/index.html">Maven docs</a> for how to 
 set up repositories.</p>
+
+<p>The easiest way to setup Maven2 is to use user or installation level settings.xml 
+and point at proximity like a "central" repo mirror:</p>
+
+<tt>[...]
+  <mirrors>
+    <mirror>
+      <id>proximity-maven2</id>
+      <mirrorOf>central</mirrorOf>
+      <name>Proximity for Maven2</name>
+      <url>http://localhost:8080/proximity/repository</url>
+    </mirror>
+  </mirrors>
+[...]</tt>
 
 </section>
 
