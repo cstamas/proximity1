@@ -17,9 +17,10 @@
 
 <ul>
 <li><b>Proximity</b> - handles one or more repository. The order of the
-configured repositories is important.</li>
+configured repositories is important (first listed gets first queried).
+It may have also accessManager defined to control Proximity access.</li>
 <li><b>Repository</b> - may have local storage and remote storage defined. It have
-also pluggable logic to advice the retrieval. Indexer and stats gatherer
+also pluggable logic to advice the retrieval. Indexer, accessManager and stats gatherer
 are optional.</li>
 <li><b>Storage</b> - a generic interface, which covers all kind a storage.
 It may be local or remote, with any kind of underlying protocol (FTP, NFS, HTTP, etc)</li>
@@ -29,6 +30,7 @@ Repository KNOWS it is REMOTE.</li>
 <li><b>RepositoryLogic</b> - advices the retrieval.</li>
 <li><b>StatisticsGatherer</b> - gathers statistics if present.</li>
 <li><b>Indexer</b> - maintains index of cached items if present.</li>
+<li><b>AccessManager</b> - Controls access to Proximity and/or certain Repository.</li>
 </ul>
 
 <p>Proximity out-of-the-box offers one remote peer implementation based
@@ -37,8 +39,10 @@ file system storage (useful for locally offered artifacts) and writable file
 system storage (useful for caching remote storages).</p>
 
 <p>Currently three (pretty naive) logic implementation exists: one simple 
-proxy like (crude, without timeout or something), one with expire support
-and one "Maven1/2 aware".</p>
+proxy like (crude, without timeout or something), one with general expiration
+support (applied to all handled artifacts/files) and one "Maven1/2 aware" (have
+expiring options for these Maven "types": POM, Snapshot, Metadata and all 
+other files).</p>
 
 <p>See <a href="multiproject/px-core/xref/index.html">source</a> for more
 info.</p>
@@ -46,7 +50,7 @@ info.</p>
 <subsection name="Proximity">
 
 <p>Handles one or more repository. The simple and clean implementation, using
-first-got is served, thus the order of configured repositories is important.
+"first-got is served", thus the order of configured repositories is important.
 It simply aggregates the output (in case of listing) of multiple repositories
 into one output.</p>
 
@@ -108,6 +112,13 @@ expiration for these types or to refetch them as needed (no caching).</p>
 <p>Indexer is responsible for indexing cached items. Currently Apache Lucene 
 indexer is implemented with crude search capabilities (Actually the UI is
 crude, the Proximity API is finished [or isn't?]).</p>
+
+</subsection>
+
+<subsection name="Access Manager">
+
+<p>AccessManager is responsible for Access Control. It is an interface actually,
+allowing to implement any kind of AccessManagers. There exists thre default implementations.</p>
 
 </subsection>
 
