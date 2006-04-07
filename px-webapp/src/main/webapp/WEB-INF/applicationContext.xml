@@ -24,7 +24,7 @@
     </bean>
 
     <!--
-      - Central proximity bean and it's helper.
+      - Central proximity bean and it's helpers.
     -->
 	<bean id="proximity" class="hu.ismicro.commons.proximity.base.ProximityImpl" init-method="afterPropertiesSet">
 		<property name="repositories">
@@ -38,6 +38,7 @@
 		</property>
 		<property name="indexer" ref="indexer"/>
 		<property name="statisticsGatherer" ref="stats"/>
+		<property name="accessManager" ref="openAccessManager"/>
 	</bean>
 
 	<bean id="stats" class="hu.ismicro.commons.proximity.base.StatisticsGathererImpl"/>
@@ -46,6 +47,9 @@
 		<property name="indexDirectory" value="${indexer.dir}" />
 		<property name="recreateIndexes" value="true"/>
 	</bean>
+	
+	<bean id="openAccessManager" class="hu.ismicro.commons.proximity.access.OpenAccessManager"/>
+	
 
     <!--
       - IBIBLIO Repository (with writable storage and remote peer)
@@ -57,9 +61,13 @@
 		<property name="remoteStorage" ref="ibiblioRemotePeer"/>
 		<property name="indexer" ref="indexer"/>
 		<property name="statisticsGatherer" ref="stats"/>
+		<property name="listable" value="true"/>
+		<property name="accessManager" ref="openAccessManager"/>
 		<property name="repositoryLogic">
 			<bean class="hu.ismicro.commons.proximity.base.logic.MavenProxyLogic">
 				<property name="pomExpirationPeriod" value="0" />
+				<property name="snapshotExpirationPeriod" value="0" />
+				<property name="metadataExpirationPeriod" value="0" />
 			</bean>
 		</property>
 	</bean>
@@ -83,9 +91,13 @@
 		<property name="remoteStorage" ref="codehausRemotePeer"/>
 		<property name="indexer" ref="indexer"/>
 		<property name="statisticsGatherer" ref="stats"/>
+		<property name="listable" value="true"/>
+		<property name="accessManager" ref="openAccessManager"/>
 		<property name="repositoryLogic">
 			<bean class="hu.ismicro.commons.proximity.base.logic.MavenProxyLogic">
 				<property name="pomExpirationPeriod" value="0" />
+				<property name="snapshotExpirationPeriod" value="0" />
+				<property name="metadataExpirationPeriod" value="0" />
 			</bean>
 		</property>
 	</bean>
@@ -107,7 +119,9 @@
 		<property name="id" value="inhouse"/>
 		<property name="localStorage" ref="inhouseFSStorage"/>
 		<property name="indexer" ref="indexer"/>
+		<property name="listable" value="true"/>
 		<property name="statisticsGatherer" ref="stats"/>
+		<property name="accessManager" ref="openAccessManager"/>
 	</bean>
 
 	<bean id="inhouseFSStorage" class="hu.ismicro.commons.proximity.base.local.ReadOnlyFileSystemStorage">
@@ -124,7 +138,9 @@
 		<property name="id" value="extNonFree"/>
 		<property name="localStorage" ref="extNonFreeFSStorage"/>
 		<property name="indexer" ref="indexer"/>
+		<property name="listable" value="true"/>
 		<property name="statisticsGatherer" ref="stats"/>
+		<property name="accessManager" ref="openAccessManager"/>
 	</bean>
 
 	<bean id="extNonFreeFSStorage" class="hu.ismicro.commons.proximity.base.local.ReadOnlyFileSystemStorage">
@@ -141,7 +157,9 @@
 		<property name="id" value="extFree"/>
 		<property name="localStorage" ref="extFreeFSStorage"/>
 		<property name="indexer" ref="indexer"/>
+		<property name="listable" value="true"/>
 		<property name="statisticsGatherer" ref="stats"/>
+		<property name="accessManager" ref="openAccessManager"/>
 	</bean>
 
 	<bean id="extFreeFSStorage" class="hu.ismicro.commons.proximity.base.local.ReadOnlyFileSystemStorage">
