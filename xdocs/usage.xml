@@ -50,16 +50,16 @@ set up repositories.</p>
 <p>The easiest way to setup Maven2 is to use user or installation level settings.xml 
 and point at proximity like a "central" repo mirror:</p>
 
-<tt>[...]
-  <mirrors>
-    <mirror>
-      <id>proximity-maven2</id>
-      <mirrorOf>central</mirrorOf>
-      <name>Proximity for Maven2</name>
-      <url>http://localhost:8080/proximity/repository</url>
-    </mirror>
-  </mirrors>
-[...]</tt>
+<source>[...]
+  &lt;mirrors&gt;
+    &lt;mirror&gt;
+      &lt;id>proximity-maven2&lt;/id&gt;
+      &lt;mirrorOf>central&lt;/mirrorOf&gt;
+      &lt;name>Proximity for Maven2&lt;/name&gt;
+      &lt;url>http://localhost:8080/proximity/repository&lt;/url&gt;
+    &lt;/mirror&gt;
+  &lt;/mirrors&gt;
+[...]</source>
 
 </section>
 
