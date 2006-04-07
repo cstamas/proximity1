@@ -136,8 +136,48 @@ public class DefaultProxyingLogic implements RepositoryLogic {
 
 </subsection>
 
+<subsection name="Access Control">
+
+<p>You have possibility to provide Proximity level and per Repository access control.
+You have to implement an AccessManager interface and inject it to Proximity or Repository bean.</p>
+
+<p>AccessManager.java</p>
+
+<source>
+package hu.ismicro.commons.proximity.access;
+
+import hu.ismicro.commons.proximity.AccessDeniedException;
+import hu.ismicro.commons.proximity.ProximityRequest;
+
+import java.util.Map;
+
+/**
+ * Interface for access manager.
+ * 
+ * @author t.cservenak
+ *
+ */
+public interface AccessManager {
+	
+	/**
+	 * The implementation of this method should throw AccessDeniedException or any
+	 * subclass of that exception if it denies access.
+	 * 
+	 * @param grantee
+	 * @param request
+	 * @param config
+	 * @throws AccessDeniedException
+	 */
+	void decide(Object grantee, ProximityRequest request, Map config) throws AccessDeniedException;
+
+}
+</source>
+
+</subsection>
+
 <subsection name="Other things to do">
-<p>Look at the source (it is way from finished) and get some thoughts!</p>
+<p>Practically, all elements of Proximity could be extended. Look for Remote Storages, Local
+Storages, etc.</p>
 </subsection>
 
 </section>

@@ -49,17 +49,18 @@ artifacts that are not uploadable onto ibiblio.org or other mainstream Maven rep
 <ul>
 <li>Proximity is <b>not</b> Maven1/2 proxy only. Simply, it is a general solution 
 that works great with Maven1/2 too, but have other usages. Proximity-Core is 
-used in Generic Update Server devlopement (a commercial project). </li>
+used in Generic Update Server (a commercial project) development too. </li>
 <li>Proximity Core is transport and environment independent (no javax.* deps) and
-embeddable in any environment (one example is PX Webapp + Spring).</li>
+is embeddable in any environment (one example is PX Webapp + Spring).</li>
 <li>More flexible, see <a href="configuration.html">configuration</a>.</li>
 <li>Out-of-the-box able to differentiate Maven1/2 Snapshots, Maven2 metadata
 and POMs and set expiration on them  by type or refetch them always.</li>
 <li>Metadata aware storage, to "decorate" downloaded items with custom
 "metadata" key-value pairs used for processing or tagging.</li>
 <li>Flexible logic implementations. Different repos may have different retrieval
-logic, as per Repository configuration allows.</li>
-<li>It supports Access Level security on Proximity level and per Repository
+logic, as per Repository configuration allows (as per logic, as per timeouting and 
+other configuration).</li>
+<li>It <b>supports Access Level security</b> on Proximity level and per Repository
 level. This opens interesting possibilities in corporate environments, like
 General Proximity Access filtering by Proximity AccessManager and artifact level filtering
 by Repository AccessManager. Just implement the AccessManager interface, inject it
@@ -68,17 +69,14 @@ is "wide-open").</li>
 <li>Repositories may be "prefixed". You may prefix some repository, eg.
 map complete ibiblio repository onto /someprefix Proximity
 URI. This way you may host multiple remote peers cleanly separated by URI (prefix 
-Maven reposes with /maven and prefix my-app with /myapp. One step closer to
-Maven2 driven software-update server).</li>
+Maven reposes with /maven and prefix my-app with /myapp).</li>
 <li>Repositories may be "hidden". Thus, artifacts within them accessed by complete 
-URL will be available, but the repository will not be shown on repository browsing.</li>
-<li>Uses <b>Apache Lucene</b> as a search engine for locally availabel and
-cached items.</li>
+URL will be available (as Maven does when gets and artifact), but the repository 
+will not be shown on repository browsing.</li>
+<li>Uses <b>Apache Lucene</b> as a search engine for cached items.</li>
 <li>Not fighting against WAR deployment (Sincerely, I need WAR, since one Tomcat
 already runs in my office).</li>
 </ul>
-
-<p>You can see Proximity in action <a href="/proximity">here</a> (not anymore :( )!</p>
 
 </subsection>
 
