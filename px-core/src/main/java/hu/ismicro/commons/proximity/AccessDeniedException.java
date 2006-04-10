@@ -9,6 +9,11 @@ package hu.ismicro.commons.proximity;
  */
 public class AccessDeniedException extends ProximityException {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8341250956517740603L;
+
 	private Object grantee;
 	
 	private ProximityRequest request;

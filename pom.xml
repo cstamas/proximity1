@@ -98,6 +98,7 @@
   </developers>
 
   <!--  The project licence -->
+<!--
   <licenses>
     <license>
       <name>The Apache Software License, Version 2.0</name>
@@ -105,6 +106,7 @@
       <distribution>repo</distribution>
     </license>
   </licenses>
+-->
 
   <!-- SCM -->
   <scm>

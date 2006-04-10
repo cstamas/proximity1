@@ -8,7 +8,12 @@ package hu.ismicro.commons.proximity;
  */
 public class NoSuchRepositoryException extends ProximityException {
 
-    public NoSuchRepositoryException(String repoId) {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -4422677352666814031L;
+
+	public NoSuchRepositoryException(String repoId) {
         super("Repository with name " + repoId + " not found!");
     }
 
