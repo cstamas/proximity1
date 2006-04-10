@@ -9,6 +9,11 @@ package hu.ismicro.commons.proximity.base;
  */
 public class StorageException extends RuntimeException {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7119754988039787918L;
+
 	public StorageException(String msg) {
 		super(msg);
 	}

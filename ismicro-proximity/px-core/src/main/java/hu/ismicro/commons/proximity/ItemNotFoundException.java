@@ -8,7 +8,12 @@ package hu.ismicro.commons.proximity;
  */
 public class ItemNotFoundException extends ProximityException {
 
-    public ItemNotFoundException(String path) {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -4964273361722823796L;
+
+	public ItemNotFoundException(String path) {
         super("Item not found on path " + path);
     }
 

@@ -1,15 +1,11 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
 <projectDescription>
-  <name>ismicro-proximity</name>
+  <name>px-core</name>
   <comment>Maven Proximity Application.</comment>
-  <projects>
-  </projects>
+  <projects/>
   <buildSpec>
     <buildCommand>
       <name>org.eclipse.jdt.core.javabuilder</name>
-      <arguments>
-      </arguments>
+      <arguments/>
     </buildCommand>
   </buildSpec>
   <natures>

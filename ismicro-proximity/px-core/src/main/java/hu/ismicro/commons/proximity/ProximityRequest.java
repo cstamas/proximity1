@@ -12,6 +12,11 @@ import java.util.Map;
  */
 public class ProximityRequest implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3576402488409590517L;
+
 	/** The grantee who is authenticated against infrastructure that holds Proximity Core */
 	private Object grantee;
 	
