@@ -47,13 +47,25 @@ public class HttpClientRemotePeer extends AbstractRemoteStorage {
 	private int connectionTimeout = 5000;
 
 	private boolean followRedirection = true;
+	
+	private String queryString = null;
+
+	public String getQueryString() {
+		return queryString;
+	}
+
+	public void setQueryString(String queryString) {
+		this.queryString = queryString;
+	}
 
 	protected int executeMethod(HttpMethod method) {
 		httpClient.getHttpConnectionManager().getParams().setConnectionTimeout(getConnectionTimeout());
 		method.setFollowRedirects(isFollowRedirection());
 		method.getParams().setParameter(HttpMethodParams.RETRY_HANDLER, getHttpRetryHandler());
+		method.setQueryString(getQueryString());
 		int resultCode = 0;
 		try {
+			logger.debug("Executing " + method);
 			resultCode = httpClient.executeMethod(method);
 		} catch (HttpException ex) {
 			logger.error("Protocol error while executing " + method.getName() + " method with query string "
