@@ -13,6 +13,10 @@ import java.util.List;
  */
 public interface Indexer {
 	
+	void reindexingStarted();
+	
+	void reindexingFinished();
+	
     void addItemProperties(String UID, ItemProperties ip) throws StorageException;
     
     void deleteItemProperties(String UID, ItemProperties ip) throws ItemNotFoundException, StorageException;
