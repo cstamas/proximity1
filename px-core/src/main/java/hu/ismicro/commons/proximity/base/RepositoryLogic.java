@@ -38,10 +38,10 @@ public interface RepositoryLogic {
 	 * Return true if repository should initiate remote lookup.
 	 * 
 	 * @param path
-	 * @param locallyExists true if there is a local copy found.
-	 * @return
+	 * @param localItemnot null if there is a local copy found, null otherwise.
+	 * @return true is there is need to check remote copy
 	 */
-	boolean shouldCheckForRemoteCopy(ProximityRequest request, boolean locallyExists);
+	boolean shouldCheckForRemoteCopy(ProximityRequest request, ProxiedItem localItem);
 	
 	/**
 	 * Postprocess item if needed after remote retrieval.
