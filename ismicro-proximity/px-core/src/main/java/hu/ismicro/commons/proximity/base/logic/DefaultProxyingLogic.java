@@ -40,8 +40,8 @@ public class DefaultProxyingLogic implements RepositoryLogic {
 	/**
 	 * Always returns !locallyExists. 
 	 */
-	public boolean shouldCheckForRemoteCopy(ProximityRequest request, boolean locallyExists) {
-		return !locallyExists;
+	public boolean shouldCheckForRemoteCopy(ProximityRequest request, ProxiedItem localItem) {
+		return localItem == null;
 	}
 
 	/**

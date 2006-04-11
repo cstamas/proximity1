@@ -1,6 +1,9 @@
 package hu.ismicro.commons.proximity.base.logic;
 
+import java.util.Date;
+
 import hu.ismicro.commons.proximity.ItemProperties;
+import hu.ismicro.commons.proximity.ProximityRequest;
 import hu.ismicro.commons.proximity.Repository;
 import hu.ismicro.commons.proximity.base.PathHelper;
 import hu.ismicro.commons.proximity.base.ProxiedItem;
@@ -96,6 +99,25 @@ public class MavenProxyLogic extends DefaultExpiringProxyingLogic {
 			return isSnapshotRefetch();
 		}
 		return false;
+	}
+
+	public ProxiedItem afterLocalCopyFound(ProxiedItem item, Repository repository) {
+		// override super, should not delete!
+		return item;
+	}
+
+	public boolean shouldCheckForRemoteCopy(ProximityRequest request, ProxiedItem localItem) {
+		if (localItem != null && localItem.getProperties().getMetadata(ItemProperties.METADATA_EXPIRES) != null) {
+			logger.debug("Item has expiration, checking it.");
+			Date expires = new Date(Long.parseLong(localItem.getProperties().getMetadata(ItemProperties.METADATA_EXPIRES)));
+			if (expires.before(new Date(System.currentTimeMillis()))) {
+				logger.info("Item has expired on " + expires + ", deleting it.");
+				return true;
+			}
+			return false;
+		} else {
+			return super.shouldCheckForRemoteCopy(request, localItem);
+		}
 	}
 
 	public ProxiedItem afterRemoteCopyFound(ProxiedItem item, Repository repository) {

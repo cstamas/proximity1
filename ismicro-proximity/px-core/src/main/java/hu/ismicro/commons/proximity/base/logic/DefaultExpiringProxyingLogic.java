@@ -36,7 +36,7 @@ public class DefaultExpiringProxyingLogic extends DefaultProxyingLogic {
 			logger.debug("Item has expiration, checking it.");
 			Date expires = new Date(Long.parseLong(item.getProperties().getMetadata(ItemProperties.METADATA_EXPIRES)));
 			if (expires.before(new Date(System.currentTimeMillis()))) {
-				logger.info("Item has expired on " + expires + ", deleting it.");
+				logger.info("Item has expired on " + expires + ", DELETING it.");
 				repository.deleteItem(PathHelper.walkThePath(item.getProperties().getAbsolutePath(), item
 						.getProperties().getName()));
 				return null;
@@ -46,10 +46,10 @@ public class DefaultExpiringProxyingLogic extends DefaultProxyingLogic {
 	}
 
 	/**
-	 * If expiration period is not 0, it will apply it on all items.
+	 * If expiration period is not -1, it will apply it on all items.
 	 */
 	public ProxiedItem afterRemoteCopyFound(ProxiedItem item, Repository repository) {
-		if (getItemExpirationPeriod() != 0) {
+		if (getItemExpirationPeriod() != -1) {
 			Date expires = new Date(System.currentTimeMillis() + getItemExpirationPeriod()); 
 			logger.info("Setting expires on item  to " + expires.toString());
 			item.getProperties().setMetadata(ItemProperties.METADATA_EXPIRES,
