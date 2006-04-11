@@ -79,13 +79,12 @@ public class LuceneIndexer implements Indexer {
     }
 
     public void addItemProperties(String UID, ItemProperties ip) throws StorageException {
-        logger.info("Adding item to index");
+        logger.debug("Adding item to index");
         try {
             IndexWriter writer = new IndexWriter(indexDirectory, analyzer, false);
             Document ipDoc = itemProperties2Document(ip);
             ipDoc.add(Field.Keyword("UID", UID));
             writer.addDocument(ipDoc);
-            writer.optimize();
             writer.close();
         } catch (IOException ex) {
             logger.error("Got IOException during index addition.", ex);
@@ -94,12 +93,12 @@ public class LuceneIndexer implements Indexer {
     }
 
     public void deleteItemProperties(String UID, ItemProperties ip) throws ItemNotFoundException, StorageException {
-        logger.info("Deleting item from index");
+        logger.debug("Deleting item from index");
         try {
             IndexReader reader = IndexReader.open(indexDirectory);
             int deleted = reader.delete(new Term("UID", UID));
             reader.close();
-            logger.debug("Deleted " + deleted + " items from index");
+            logger.info("Deleted " + deleted + " items from index");
         } catch (IOException ex) {
             logger.error("Got IOException during index deletion.", ex);
             throw new StorageException("Got IOException during deletion.", ex);
@@ -149,5 +148,20 @@ public class LuceneIndexer implements Indexer {
         }
         return result;
     }
+
+	public void reindexingStarted() {
+	}
+
+	public void reindexingFinished() {
+        logger.info("Finished reindexing, optimizing Lucene index");
+        try {
+            IndexWriter writer = new IndexWriter(indexDirectory, analyzer, false);
+            writer.optimize();
+            writer.close();
+        } catch (IOException ex) {
+            logger.error("Got IOException during index optimization.", ex);
+            throw new StorageException("Got IOException during optimization.", ex);
+        }
+	}
 
 }
