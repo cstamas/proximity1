@@ -196,10 +196,10 @@ public class RepositoryImpl implements Repository {
 	}
 
 	public void initialize() {
-		logger.debug("Reindexing " + getId());
-		reindex();
 		logger.debug("Recreating metadata " + getId());
 		recreateMetadata();
+		logger.debug("Reindexing " + getId());
+		reindex();
 	}
 	
 	protected String removePathPrefix(String path) {
@@ -243,7 +243,7 @@ public class RepositoryImpl implements Repository {
 					}
 				}
 			}
-			if (getRepositoryLogic().shouldCheckForRemoteCopy(request, result != null) && getRemoteStorage() != null) {
+			if (getRepositoryLogic().shouldCheckForRemoteCopy(request, result) && getRemoteStorage() != null) {
 				if ((propsOnly && getRemoteStorage().containsItemProperties(request.getPath()))
 						|| (getRemoteStorage().containsItem(request.getPath()))) {
 					logger.info("Found " + request.getPath() + " item in remote storage of repository " + getId());
@@ -304,6 +304,7 @@ public class RepositoryImpl implements Repository {
 			return;
 		}
 		int indexed = 0;
+		getIndexer().reindexingStarted();
 		Stack stack = new Stack();
 		List dir = getLocalStorage().listItems(PathHelper.PATH_SEPARATOR);
 		stack.push(dir);
@@ -322,6 +323,7 @@ public class RepositoryImpl implements Repository {
 				}
 			}
 		}
+		getIndexer().reindexingFinished();
 		logger.info("Indexed " + indexed + " items");
 	}
 
