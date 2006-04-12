@@ -138,16 +138,24 @@ public class HttpClientRemotePeer extends AbstractRemoteStorage {
 		try {
 			int response = executeMethod(get);
 			if (response == HttpStatus.SC_OK) {
+				logger.debug("Constructing ProxiedItemProperties");
 				ProxiedItemProperties properties = constructItemPropertiesFromGetResponse(path, originatingUrlString,
 						get);
 
+				logger.debug("Constructing ProxiedItem");
 				ProxiedItem result = new ProxiedItem();
 				result.setProperties(properties);
 				if (properties.isFile()) {
+					//TODO: Solve this out of memory, causing java heap space problems with big files! 
+					
 					// a little stream acrobatics
+					logger.debug("Pouring file 1");
 					ByteArrayOutputStream bos = new ByteArrayOutputStream((int) properties.getSize());
+					logger.debug("Pouring file 2");
 					IOUtils.copy(get.getResponseBodyAsStream(), bos);
+					logger.debug("Pouring file 3");
 					InputStream is = new ByteArrayInputStream(bos.toByteArray());
+					logger.debug("Pouring file 4");
 					result.setStream(is);
 				} else {
 					result.setStream(null);
