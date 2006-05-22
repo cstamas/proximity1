@@ -18,8 +18,9 @@ public class AccessDeniedException extends ProximityException {
 	
 	private ProximityRequest request;
 
-	public AccessDeniedException(Object grantee, ProximityRequest request, String msg) {
+	public AccessDeniedException(ProximityRequest request, String msg) {
 		super(msg);
+        this.grantee = request.getGrantee();
 	}
 	
 	public String toString() {

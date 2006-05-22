@@ -22,6 +22,6 @@ public interface AccessManager {
 	 * @param config
 	 * @throws AccessDeniedException
 	 */
-	void decide(Object grantee, ProximityRequest request, Map config) throws AccessDeniedException;
+	void decide(ProximityRequest request, Map config) throws AccessDeniedException;
 
 }

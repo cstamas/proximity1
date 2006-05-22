@@ -21,6 +21,6 @@ public interface AccessDecisionVoter {
 	 * 
 	 * @return The vote for this access.
 	 */
-	int vote(Object grantee, ProximityRequest request, Map attribs);
+	int vote(ProximityRequest request, Map attribs);
 
 }

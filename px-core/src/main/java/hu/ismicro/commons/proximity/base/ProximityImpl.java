@@ -25,18 +25,18 @@ public class ProximityImpl implements Proximity {
     protected Log logger = LogFactory.getLog(this.getClass());
 
     private List repositoryOrder = new ArrayList();
-    
+
     private Map repositories = new HashMap();
 
     private Indexer indexer;
-    
+
     private AccessManager accessManager = new OpenAccessManager();
 
     private StatisticsGatherer statisticsGatherer;
-    
+
     void afterPropertiesSet() {
         logger.info("Initializing all defined repositories");
-        for (Iterator i = repositoryOrder.iterator(); i.hasNext(); ) {
+        for (Iterator i = repositoryOrder.iterator(); i.hasNext();) {
             String repoId = (String) i.next();
             Repository repo = (Repository) repositories.get(repoId);
             logger.info("  Initializing " + repoId);
@@ -60,13 +60,13 @@ public class ProximityImpl implements Proximity {
         this.indexer = indexer;
     }
 
-	public AccessManager getAccessManager() {
-		return accessManager;
-	}
+    public AccessManager getAccessManager() {
+        return accessManager;
+    }
 
-	public void setAccessManager(AccessManager accessManager) {
-		this.accessManager = accessManager;
-	}
+    public void setAccessManager(AccessManager accessManager) {
+        this.accessManager = accessManager;
+    }
 
     public void setRepositories(List reposList) {
         logger.info("Received " + reposList.size() + " repositories in a List.");
@@ -103,100 +103,108 @@ public class ProximityImpl implements Proximity {
         }
     }
 
-    public ItemProperties retrieveItemProperties(ProximityRequest request) throws ItemNotFoundException, AccessDeniedException {
-    	    logger.debug("Got retrieveItemProperties with " + request);
-    	    accessManager.decide(request.getGrantee(), request, null);
-        for (Iterator i = repositoryOrder.iterator(); i.hasNext();) {
-            String reposId = (String) i.next();
-            try {
-                Repository repo = (Repository) repositories.get(reposId);
-                // if repository has no Commitment to prefix or has Commitment to this prefix, try it
-                if (repo.getURIPrefix() == null || request.getPath().startsWith(repo.getURIPrefix())) {
-                    return repo.retrieveItemProperties(request);
-                } else {
-                    logger.info("Item " + request.getPath() + " not searched in repository " + reposId + " commited to URI prefix " + repo.getURIPrefix());
-                }
-            } catch (ItemNotFoundException ex) {
-                logger.info("Item " + request.getPath() + " not found in repository " + reposId);
+    public ItemProperties retrieveItemProperties(ProximityRequest request) throws ItemNotFoundException,
+            AccessDeniedException, NoSuchRepositoryException {
+        logger.debug("Got retrieveItemProperties with " + request);
+        accessManager.decide(request, null);
+
+        if (request.getTargetedReposId() != null) {
+            if (repositories.containsKey(request.getTargetedReposId())) {
+                Repository repo = (Repository) repositories.get(request.getTargetedReposId());
+                return repo.retrieveItemProperties(request);
             }
-        }
-        throw new ItemNotFoundException(request.getPath());
-    }
+            throw new NoSuchRepositoryException(request.getTargetedReposId());
 
-    public Item retrieveItem(ProximityRequest request) throws ItemNotFoundException, AccessDeniedException {
-	    logger.debug("Got retrieveItem with " + request);
-	    accessManager.decide(request.getGrantee(), request, null);
-        for (Iterator i = repositoryOrder.iterator(); i.hasNext();) {
-            String reposId = (String) i.next();
-            try {
-                Repository repo = (Repository) repositories.get(reposId);
-                // if repository has no Commitment to prefix or has Commitment to this prefix, try it
-                if (repo.getURIPrefix() == null || request.getPath().startsWith(repo.getURIPrefix())) {
-                    return repo.retrieveItem(request);
-                } else {
-                    logger.info("Item " + request.getPath() + " not searched in repository " + reposId + " commited to URI prefix " + repo.getURIPrefix());
+        } else {
+
+            for (Iterator i = repositoryOrder.iterator(); i.hasNext();) {
+                String reposId = (String) i.next();
+                try {
+                    Repository repo = (Repository) repositories.get(reposId);
+                    // if repository has no Commitment to prefix or has
+                    // Commitment
+                    // to this prefix, try it
+                    if (repo.getURIPrefix() == null || request.getPath().startsWith(repo.getURIPrefix())) {
+                        return repo.retrieveItemProperties(request);
+                    } else {
+                        logger.info("Item " + request.getPath() + " not searched in repository " + reposId
+                                + " commited to URI prefix " + repo.getURIPrefix());
+                    }
+                } catch (ItemNotFoundException ex) {
+                    logger.info("Item " + request.getPath() + " not found in repository " + reposId);
                 }
-            } catch (ItemNotFoundException ex) {
-                logger.info("Item " + request.getPath() + " not found in repository " + reposId);
             }
+            throw new ItemNotFoundException(request.getPath());
         }
-        throw new ItemNotFoundException(request.getPath());
     }
 
-    public ItemProperties retrieveItemPropertiesFromRepository(ProximityRequest request)
-            throws NoSuchRepositoryException, ItemNotFoundException, AccessDeniedException {
-	    logger.debug("Got retrieveItemPropertiesFromRepository with " + request);
-	    accessManager.decide(request.getGrantee(), request, null);
-        if (repositories.containsKey(request.getTargetedReposId())) {
-            Repository repo = (Repository) repositories.get(request.getTargetedReposId());
-            return repo.retrieveItemProperties(request);
+    public Item retrieveItem(ProximityRequest request) throws ItemNotFoundException, AccessDeniedException,
+            NoSuchRepositoryException {
+        logger.debug("Got retrieveItem with " + request);
+        accessManager.decide(request, null);
+
+        if (request.getTargetedReposId() != null) {
+            if (repositories.containsKey(request.getTargetedReposId())) {
+                Repository repo = (Repository) repositories.get(request.getTargetedReposId());
+                return repo.retrieveItem(request);
+            }
+            throw new NoSuchRepositoryException(request.getTargetedReposId());
+
+        } else {
+
+            for (Iterator i = repositoryOrder.iterator(); i.hasNext();) {
+                String reposId = (String) i.next();
+                try {
+                    Repository repo = (Repository) repositories.get(reposId);
+                    // if repository has no Commitment to prefix or has
+                    // Commitment to this prefix, try it
+                    if (repo.getURIPrefix() == null || request.getPath().startsWith(repo.getURIPrefix())) {
+                        return repo.retrieveItem(request);
+                    } else {
+                        logger.info("Item " + request.getPath() + " not searched in repository " + reposId
+                                + " commited to URI prefix " + repo.getURIPrefix());
+                    }
+                } catch (ItemNotFoundException ex) {
+                    logger.info("Item " + request.getPath() + " not found in repository " + reposId);
+                }
+            }
+            throw new ItemNotFoundException(request.getPath());
         }
-        throw new NoSuchRepositoryException(request.getTargetedReposId());
     }
 
-    public Item retrieveItemFromRepository(ProximityRequest request) throws NoSuchRepositoryException,
-            ItemNotFoundException, AccessDeniedException {
-	    logger.debug("Got retrieveItemFromRepository with " + request);
-	    accessManager.decide(request.getGrantee(), request, null);
-        if (repositories.containsKey(request.getTargetedReposId())) {
-            Repository repo = (Repository) repositories.get(request.getTargetedReposId());
-            return repo.retrieveItem(request);
-        }
-        throw new NoSuchRepositoryException(request.getTargetedReposId());
-    }
-
-    public List listItems(ProximityRequest request) {
+    public List listItems(ProximityRequest request) throws AccessDeniedException, NoSuchRepositoryException {
+        accessManager.decide(request, null);
         List response = new ArrayList();
-        for (Iterator i = repositoryOrder.iterator(); i.hasNext();) {
-            String reposId = (String) i.next();
-            Repository repo = (Repository) repositories.get(reposId);
-            response.addAll(repo.listItems(request));
+        if (request.getTargetedReposId() != null) {
+            if (repositories.containsKey(request.getTargetedReposId())) {
+                Repository repo = (Repository) repositories.get(request.getTargetedReposId());
+                return repo.listItems(request);
+            }
+            throw new NoSuchRepositoryException(request.getTargetedReposId());
+        } else {
+            for (Iterator i = repositoryOrder.iterator(); i.hasNext();) {
+                String reposId = (String) i.next();
+                Repository repo = (Repository) repositories.get(reposId);
+                response.addAll(repo.listItems(request));
+            }
+            return response;
         }
-        return response;
-    }
-
-    public List listItemsFromRepository(ProximityRequest request) throws NoSuchRepositoryException {
-        if (repositories.containsKey(request.getTargetedReposId())) {
-            Repository repo = (Repository) repositories.get(request.getTargetedReposId());
-            return repo.listItems(request);
-        }
-        throw new NoSuchRepositoryException(request.getTargetedReposId());
     }
 
     public List searchItem(ItemProperties example) {
-    		if (getIndexer() != null) {
-    	        return indexer.searchByItemPropertiesExample(example);
-    		} else {
-    			logger.info("No indexer defined, but search request came in. Returning empty results.");
-    			return new ArrayList();
-    		}
+        if (getIndexer() != null) {
+            return getIndexer().searchByItemPropertiesExample(example);
+        } else {
+            logger.info("No indexer defined, but search request came in. Returning empty results.");
+            return new ArrayList();
+        }
     }
 
     public Map getStatistics() {
         if (getStatisticsGatherer() != null) {
             return getStatisticsGatherer().getStatistics();
         } else {
-			logger.info("No statistics gatherer defined, but stats request came in. Returning empty results.");
+            logger.info("No statistics gatherer defined, but stats request came in. Returning empty results.");
             return new HashMap();
         }
     }

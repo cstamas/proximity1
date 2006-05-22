@@ -39,6 +39,10 @@ public class LuceneIndexer implements Indexer {
 
     private boolean recreateIndexes = true;
 
+    private int dirtyItemTreshold = 500;
+
+    private int dirtyItems = 0;
+
     private Directory indexDirectory;
 
     private Analyzer analyzer = new SimpleAnalyzer();
@@ -73,7 +77,8 @@ public class LuceneIndexer implements Indexer {
     public void setIndexDirectory(String path) throws IOException {
         File pathFile = new File(path);
         if (!(pathFile.exists() && pathFile.isDirectory())) {
-            throw new IllegalArgumentException("The supplied parameter " + path + " does not exists or is not a directory!");
+            throw new IllegalArgumentException("The supplied parameter " + path
+                    + " does not exists or is not a directory!");
         }
         this.indexDirectory = FSDirectory.getDirectory(pathFile, false);
     }
@@ -86,6 +91,8 @@ public class LuceneIndexer implements Indexer {
             ipDoc.add(Field.Keyword("UID", UID));
             writer.addDocument(ipDoc);
             writer.close();
+            dirtyItems++;
+            optimizeIndexIfNeeded();
         } catch (IOException ex) {
             logger.error("Got IOException during index addition.", ex);
             throw new StorageException("Got IOException during addition.", ex);
@@ -98,7 +105,9 @@ public class LuceneIndexer implements Indexer {
             IndexReader reader = IndexReader.open(indexDirectory);
             int deleted = reader.delete(new Term("UID", UID));
             reader.close();
-            logger.info("Deleted " + deleted + " items from index");
+            logger.info("Deleted " + deleted + " items from index for UID=" + UID);
+            dirtyItems = dirtyItems + deleted;
+            optimizeIndexIfNeeded();
         } catch (IOException ex) {
             logger.error("Got IOException during index deletion.", ex);
             throw new StorageException("Got IOException during deletion.", ex);
@@ -149,19 +158,19 @@ public class LuceneIndexer implements Indexer {
         return result;
     }
 
-	public void reindexingStarted() {
-	}
-
-	public void reindexingFinished() {
-        logger.info("Finished reindexing, optimizing Lucene index");
-        try {
-            IndexWriter writer = new IndexWriter(indexDirectory, analyzer, false);
-            writer.optimize();
-            writer.close();
-        } catch (IOException ex) {
-            logger.error("Got IOException during index optimization.", ex);
-            throw new StorageException("Got IOException during optimization.", ex);
+    private void optimizeIndexIfNeeded() {
+        if (dirtyItems > dirtyItemTreshold) {
+            logger.info("Optimizing Lucene index");
+            try {
+                IndexWriter writer = new IndexWriter(indexDirectory, analyzer, false);
+                writer.optimize();
+                writer.close();
+            } catch (IOException ex) {
+                logger.error("Got IOException during index optimization.", ex);
+                throw new StorageException("Got IOException during optimization.", ex);
+            }
+            dirtyItems = 0;
         }
-	}
+    }
 
 }

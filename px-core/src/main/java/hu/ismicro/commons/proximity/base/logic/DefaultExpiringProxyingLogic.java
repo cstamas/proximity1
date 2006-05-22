@@ -8,7 +8,7 @@ import hu.ismicro.commons.proximity.base.ProxiedItem;
 import java.util.Date;
 
 /**
- * Simple logic with expiration support. If expirationPeriod is not 0, it will
+ * Simple logic with expiration support. If expirationPeriod is not -1, it will
  * apply expiration period onto items, and will handle removal of them when 
  * they expires.
  * 
@@ -19,12 +19,12 @@ public class DefaultExpiringProxyingLogic extends DefaultProxyingLogic {
 
 	private long itemExpirationPeriod = 86400 * 1000; // 24 hours
 
-	public long getItemExpirationPeriod() {
-		return itemExpirationPeriod;
+	public long getItemExpirationPeriodInSeconds() {
+		return itemExpirationPeriod / 1000;
 	}
 
-	public void setItemExpirationPeriod(long itemExpirationPeriod) {
-		this.itemExpirationPeriod = itemExpirationPeriod;
+	public void setItemExpirationPeriodInSeconds(long itemExpirationPeriod) {
+		this.itemExpirationPeriod = itemExpirationPeriod * 1000;
 	}
 
 	/**
@@ -49,8 +49,8 @@ public class DefaultExpiringProxyingLogic extends DefaultProxyingLogic {
 	 * If expiration period is not -1, it will apply it on all items.
 	 */
 	public ProxiedItem afterRemoteCopyFound(ProxiedItem item, Repository repository) {
-		if (getItemExpirationPeriod() != -1) {
-			Date expires = new Date(System.currentTimeMillis() + getItemExpirationPeriod()); 
+		if (itemExpirationPeriod != -1) {
+			Date expires = new Date(System.currentTimeMillis() + itemExpirationPeriod); 
 			logger.info("Setting expires on item  to " + expires.toString());
 			item.getProperties().setMetadata(ItemProperties.METADATA_EXPIRES,
 					Long.toString(expires.getTime()));
