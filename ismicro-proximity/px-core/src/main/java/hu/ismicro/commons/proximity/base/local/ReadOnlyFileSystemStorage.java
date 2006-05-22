@@ -50,6 +50,10 @@ public class ReadOnlyFileSystemStorage extends AbstractStorage {
 	 */
 	private boolean metadataAware = true;
 
+    private boolean metadataDirChecked = false;
+
+    private boolean storageDirChecked = false;
+
 	private String metadataPrefix = METADATA;
 
 	private String storagePrefix = STORAGE;
@@ -91,9 +95,17 @@ public class ReadOnlyFileSystemStorage extends AbstractStorage {
 	 */
 	public void setBaseDir(String baseDirPath) {
 		File baseDirFile = new File(baseDirPath);
-		if (!(baseDirFile.exists() && baseDirFile.isDirectory())) {
+        if (!baseDirFile.exists()) {
+            if (!baseDirFile.mkdirs()) {
+                throw new IllegalArgumentException("The supplied directory parameter " + baseDirPath
+                        + " does not exists and cannot be created!");
+            } else {
+                logger.info("Created basedir " + baseDirFile.getAbsolutePath());
+            }
+        }
+		if (!baseDirFile.isDirectory()) {
 			throw new IllegalArgumentException("The supplied parameter " + baseDirPath
-					+ " does not exists or is not a directory!");
+					+ " is not a directory!");
 		}
 		this.baseDir = baseDirPath;
 	}
@@ -107,6 +119,13 @@ public class ReadOnlyFileSystemStorage extends AbstractStorage {
 	 */
 	public String getMetadataBaseDir() {
 		if (isMetadataAware()) {
+            if (!metadataDirChecked) {
+                File metadataDir = new File(PathHelper.changePathLevel(baseDir, getMetadataPrefix()));
+                if (!metadataDir.exists()) {
+                    metadataDir.mkdirs();
+                }
+                metadataDirChecked = true;
+            }
 			return PathHelper.changePathLevel(baseDir, getMetadataPrefix());
 		} else {
 			throw new IllegalStateException("The storage is configured as metadata-unaware!");
@@ -121,6 +140,13 @@ public class ReadOnlyFileSystemStorage extends AbstractStorage {
 	 */
 	public String getStorageBaseDir() {
 		if (isMetadataAware()) {
+            if (!storageDirChecked) {
+                File storageDir = new File(PathHelper.changePathLevel(baseDir, getStoragePrefix()));
+                if (!storageDir.exists()) {
+                    storageDir.mkdirs();
+                }
+                storageDirChecked = true;
+            }
 			return PathHelper.changePathLevel(baseDir, getStoragePrefix());
 		} else {
 			return baseDir;
@@ -132,8 +158,8 @@ public class ReadOnlyFileSystemStorage extends AbstractStorage {
 			logger.debug("Checking for existence of " + path + " in " + getMetadataBaseDir());
 			return checkForExistence(getMetadataBaseDir(), path);
 		} else {
-			logger.debug("Checking for existence of " + path + " in " + getStorageBaseDir());
-			return checkForExistence(getStorageBaseDir(), path);
+			logger.debug("Checking for existence of " + path + " in " + baseDir);
+			return checkForExistence(baseDir, path);
 		}
 	}
 

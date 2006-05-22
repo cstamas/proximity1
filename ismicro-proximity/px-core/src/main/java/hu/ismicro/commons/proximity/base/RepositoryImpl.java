@@ -117,12 +117,12 @@ public class RepositoryImpl implements Repository {
 
 	public ProxiedItemProperties retrieveItemProperties(ProximityRequest request) throws ItemNotFoundException,
 			StorageException, AccessDeniedException {
-		accessManager.decide(request.getGrantee(), request, null);
+		accessManager.decide(request, null);
 		return (ProxiedItemProperties) retrieveItem(true, request).getProperties();
 	}
 
 	public ProxiedItem retrieveItem(ProximityRequest request) throws ItemNotFoundException, StorageException, AccessDeniedException {
-		accessManager.decide(request.getGrantee(), request, null);
+		accessManager.decide(request, null);
 		return retrieveItem(false, request);
 	}
 
@@ -235,7 +235,7 @@ public class RepositoryImpl implements Repository {
 						}
 						result.getProperties().setMetadata(ItemProperties.METADATA_OWNING_REPOSITORY, getId());
 						if (getStatisticsGatherer() != null) {
-							getStatisticsGatherer().localHit(this, result.getProperties(), propsOnly);
+							getStatisticsGatherer().localHit(request, this, result.getProperties(), propsOnly);
 						}
 						result = getRepositoryLogic().afterLocalCopyFound(result, this);
 					} else {
@@ -255,7 +255,7 @@ public class RepositoryImpl implements Repository {
 					}
 					result.getProperties().setMetadata(ItemProperties.METADATA_OWNING_REPOSITORY, getId());
 					if (getStatisticsGatherer() != null) {
-						getStatisticsGatherer().remoteHit(this, result.getProperties(), propsOnly);
+						getStatisticsGatherer().remoteHit(request, this, result.getProperties(), propsOnly);
 					}
 					result = getRepositoryLogic().afterRemoteCopyFound(result, this);
 					if (result != null && !result.getProperties().isDirectory() && getLocalStorage().isWritable()) {
@@ -304,7 +304,6 @@ public class RepositoryImpl implements Repository {
 			return;
 		}
 		int indexed = 0;
-		getIndexer().reindexingStarted();
 		Stack stack = new Stack();
 		List dir = getLocalStorage().listItems(PathHelper.PATH_SEPARATOR);
 		stack.push(dir);
@@ -323,7 +322,6 @@ public class RepositoryImpl implements Repository {
 				}
 			}
 		}
-		getIndexer().reindexingFinished();
 		logger.info("Indexed " + indexed + " items");
 	}
 

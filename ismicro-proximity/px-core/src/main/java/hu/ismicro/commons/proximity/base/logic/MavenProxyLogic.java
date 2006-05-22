@@ -1,16 +1,16 @@
 package hu.ismicro.commons.proximity.base.logic;
 
-import java.util.Date;
-
 import hu.ismicro.commons.proximity.ItemProperties;
 import hu.ismicro.commons.proximity.ProximityRequest;
 import hu.ismicro.commons.proximity.Repository;
 import hu.ismicro.commons.proximity.base.PathHelper;
 import hu.ismicro.commons.proximity.base.ProxiedItem;
 
+import java.util.Date;
+
 /**
  * Maven 1 and 2 aware proxy logic. It is configurable about expiring time for
- * SNAPHSOTs, POMs and METADATAs.
+ * SNAPSHOTs, POMs and METADATAs.
  * 
  * @author cstamas
  * 
@@ -34,27 +34,27 @@ public class MavenProxyLogic extends DefaultExpiringProxyingLogic {
 	 */
 	private long pomExpirationPeriod = 86400 * 1000; // 24 hours
 
-	public long getMetadataExpirationPeriod() {
+	public long getMetadataExpirationPeriodInSeconds() {
 		return metadataExpirationPeriod;
 	}
 
-	public void setMetadataExpirationPeriod(long metadataExpirationPeriod) {
+	public void setMetadataExpirationPeriodInSeconds(long metadataExpirationPeriod) {
 		this.metadataExpirationPeriod = metadataExpirationPeriod;
 	}
 
-	public long getPomExpirationPeriod() {
+	public long getPomExpirationPeriodInSeconds() {
 		return pomExpirationPeriod;
 	}
 
-	public void setPomExpirationPeriod(long pomExpirationPeriod) {
+	public void setPomExpirationPeriodInSeconds(long pomExpirationPeriod) {
 		this.pomExpirationPeriod = pomExpirationPeriod;
 	}
 
-	public long getSnapshotExpirationPeriod() {
+	public long getSnapshotExpirationPeriodInSeconds() {
 		return snapshotExpirationPeriod;
 	}
 
-	public void setSnapshotExpirationPeriod(long snapshotExpirationPeriod) {
+	public void setSnapshotExpirationPeriodInSeconds(long snapshotExpirationPeriod) {
 		this.snapshotExpirationPeriod = snapshotExpirationPeriod;
 	}
 
@@ -122,27 +122,27 @@ public class MavenProxyLogic extends DefaultExpiringProxyingLogic {
 
 	public ProxiedItem afterRemoteCopyFound(ProxiedItem item, Repository repository) {
 		if (isPom(item.getProperties().getName())) {
-			if (getPomExpirationPeriod() != -1) {
-				logger.info("Item is Maven 2 POM, setting expires on it to " + getPomExpirationPeriod() / 1000
+			if (pomExpirationPeriod != -1) {
+				logger.info("Item is Maven 2 POM, setting expires on it to " + pomExpirationPeriod / 1000
 						+ " seconds.");
 				item.getProperties().setMetadata(ItemProperties.METADATA_EXPIRES,
-						Long.toString(System.currentTimeMillis() + getPomExpirationPeriod()));
+						Long.toString(System.currentTimeMillis() + pomExpirationPeriod));
 			}
 			item.getProperties().setMetadata("item.isPom", Boolean.TRUE.toString());
 		} else if (isMetadata(item.getProperties().getName())) {
-			if (getMetadataExpirationPeriod() != -1) {
-				logger.info("Item is Maven 2 Metadata, setting expires on it to " + getMetadataExpirationPeriod()
+			if (metadataExpirationPeriod != -1) {
+				logger.info("Item is Maven 2 Metadata, setting expires on it to " + metadataExpirationPeriod
 						/ 1000 + " seconds.");
 				item.getProperties().setMetadata(ItemProperties.METADATA_EXPIRES,
-						Long.toString(System.currentTimeMillis() + getMetadataExpirationPeriod()));
+						Long.toString(System.currentTimeMillis() + metadataExpirationPeriod));
 			}
 			item.getProperties().setMetadata("item.isMetadata", Boolean.TRUE.toString());
 		} else if (isSnapshot(item.getProperties().getName())) {
-			if (getSnapshotExpirationPeriod() != -1) {
-				logger.info("Item is Maven 1/2 Snapshot, setting expires on it to " + getSnapshotExpirationPeriod()
+			if (snapshotExpirationPeriod != -1) {
+				logger.info("Item is Maven 1/2 Snapshot, setting expires on it to " + snapshotExpirationPeriod
 						/ 1000 + " seconds.");
 				item.getProperties().setMetadata(ItemProperties.METADATA_EXPIRES,
-						Long.toString(System.currentTimeMillis() + getSnapshotExpirationPeriod()));
+						Long.toString(System.currentTimeMillis() + snapshotExpirationPeriod));
 			}
 			item.getProperties().setMetadata("item.isSnapshot", Boolean.TRUE.toString());
 		} else {

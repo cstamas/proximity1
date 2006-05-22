@@ -28,6 +28,14 @@ public class PathHelper {
 	public static final String PATH_SELF = ".";
 
 	public static final String PATH_PARENT = "..";
+    
+    public static String[] split(String str, String arg) {
+        if ("\\".equals(arg)) {
+            return str.split("\\");
+        } else {
+            return str.split(arg);
+        }
+    }
 
 	/**
 	 * Calculates absolute path from base path.
@@ -39,13 +47,13 @@ public class PathHelper {
 	public static String absolutizePathFromBase(final String base, final String path) {
 		if (!path.startsWith(PATH_SEPARATOR) || path.indexOf(PATH_SELF) != -1 || path.indexOf(PATH_PARENT) != -1) {
 			Stack stack = new Stack();
-			String[] explodedBase = base.split(PATH_SEPARATOR);
+			String[] explodedBase = split(base, PATH_SEPARATOR);
 			for (int i = 0; i < explodedBase.length; i++) {
 				if (explodedBase[i].length() > 0) {
 					stack.push(explodedBase[i]);
 				}
 			}
-			String[] explodedPath = path.split(PATH_SEPARATOR);
+			String[] explodedPath = split(path, PATH_SEPARATOR);
 			for (int i = 0; i < explodedPath.length; i++) {
 				if (explodedPath[i].length() > 0) {
 					if (PATH_PARENT.equals(explodedPath[i])) {
@@ -90,7 +98,7 @@ public class PathHelper {
 			return base;
 		} else if (PATH_PARENT.equals(dest)) {
 			StringBuffer newPath = new StringBuffer();
-			String[] explodedPath = base.split(PATH_SEPARATOR);
+			String[] explodedPath = split(base, PATH_SEPARATOR);
 			for (int i = 0; i < explodedPath.length - 1; i++) {
 				if (explodedPath[i].length() > 0) {
 					newPath.append(PATH_SEPARATOR);
@@ -130,7 +138,7 @@ public class PathHelper {
 		if (base.endsWith(PATH_SEPARATOR)) {
 			currentBase = base.substring(0, base.length() - 1);
 		}
-		String[] explodedPath = destPath.split(PATH_SEPARATOR);
+		String[] explodedPath = split(destPath, PATH_SEPARATOR);
 		for (int i = 0; i < explodedPath.length; i++) {
 			if (explodedPath[i].length() > 0) {
 				currentBase = changePathLevel(currentBase, explodedPath[i]);
@@ -140,7 +148,7 @@ public class PathHelper {
 	}
 
 	/**
-	 * Returns the file name in contained in the path. Simply gets the last
+	 * Returns the file name contained in the path. Simply gets the last
 	 * String after the last PATH_SEPARATOR.
 	 * 
 	 * @param path
@@ -150,7 +158,7 @@ public class PathHelper {
 		while (path.endsWith(PATH_SEPARATOR)) {
 			path = path.substring(0, path.length() - 1);
 		}
-		String[] explodedPath = path.split(PATH_SEPARATOR);
+		String[] explodedPath = split(path, PATH_SEPARATOR);
 		if (explodedPath.length > 0 && explodedPath[explodedPath.length - 1].length() > 0) {
 			return explodedPath[explodedPath.length - 1];
 		} else {

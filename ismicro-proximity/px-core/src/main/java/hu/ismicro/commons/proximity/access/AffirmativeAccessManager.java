@@ -26,11 +26,11 @@ public class AffirmativeAccessManager implements AccessManager {
 		this.voters = voters;
 	}
 
-	public void decide(Object grantee, ProximityRequest request, Map config) throws AccessDeniedException {
+	public void decide(ProximityRequest request, Map config) throws AccessDeniedException {
 		for (Iterator i = voters.iterator(); i.hasNext(); ) {
 			AccessDecisionVoter voter = (AccessDecisionVoter) i.next();
-			if (voter.vote(grantee, request, config) != AccessDecisionVoter.ACCESS_APPROVED) {
-				throw new AccessDeniedException(grantee, request, "Voter " + voter.getClass().getName() + " has voted against access.");
+			if (voter.vote(request, config) != AccessDecisionVoter.ACCESS_APPROVED) {
+				throw new AccessDeniedException(request, "Voter " + voter.getClass().getName() + " has voted against access.");
 			}
 		}
 

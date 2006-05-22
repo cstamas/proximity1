@@ -8,71 +8,73 @@ import java.util.Map;
  * Object encapsulating Proximity request.
  * 
  * @author t.cservenak
- *
+ * 
  */
 public class ProximityRequest implements Serializable {
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -3576402488409590517L;
+    
+    public static final String REQUEST_REMOTE_ADDRESS = "request.remoteAddr";
 
-	/** The grantee who is authenticated against infrastructure that holds Proximity Core */
-	private Object grantee;
-	
-	/** The Path of the request */
-	private String path;
+    private static final long serialVersionUID = -3576402488409590517L;
 
-	/** The ID of the targeted repos if any or null */
-	private String targetedReposId = null;
+    /**
+     * The grantee who is authenticated against infrastructure that holds
+     * Proximity Core
+     */
+    private Object grantee;
 
-	/** Map of attributes if any */
-	private Map attributes = new HashMap();
+    /** The Path of the request */
+    private String path;
 
-	public Object getGrantee() {
-		return grantee;
-	}
+    /** The ID of the targeted repos if any or null */
+    private String targetedReposId = null;
 
-	public void setGrantee(Object grantee) {
-		this.grantee = grantee;
-	}
+    /** Map of attributes if any */
+    private Map attributes = new HashMap();
 
-	public String getPath() {
-		return path;
-	}
+    public Object getGrantee() {
+        return grantee;
+    }
 
-	public void setPath(String path) {
-		this.path = path;
-	}
+    public void setGrantee(Object grantee) {
+        this.grantee = grantee;
+    }
 
-	public Map getAttributes() {
-		return attributes;
-	}
+    public String getPath() {
+        return path;
+    }
 
-	public void setAttributes(Map attributes) {
-		this.attributes = attributes;
-	}
+    public void setPath(String path) {
+        this.path = path;
+    }
 
-	public String getTargetedReposId() {
-		return targetedReposId;
-	}
+    public Map getAttributes() {
+        return attributes;
+    }
 
-	public void setTargetedReposId(String targetedReposId) {
-		this.targetedReposId = targetedReposId;
-	}
-	
-	public String toString() {
-		StringBuffer str = new StringBuffer("ProximityRequest[");
-		str.append("grantee=");
-		str.append(getGrantee());
-		str.append(", path=");
-		str.append(getPath());
-		str.append(", targetedReposId=");
-		str.append(getTargetedReposId());
-		str.append(", attributes=");
-		str.append(getAttributes());
-		str.append("]");
-		return str.toString();
-	}
+    public void setAttributes(Map attributes) {
+        this.attributes = attributes;
+    }
+
+    public String getTargetedReposId() {
+        return targetedReposId;
+    }
+
+    public void setTargetedReposId(String targetedReposId) {
+        this.targetedReposId = targetedReposId;
+    }
+
+    public String toString() {
+        StringBuffer str = new StringBuffer("ProximityRequest[");
+        str.append("grantee=");
+        str.append(getGrantee());
+        str.append(", path=");
+        str.append(getPath());
+        str.append(", targetedReposId=");
+        str.append(getTargetedReposId());
+        str.append(", attributes=");
+        str.append(getAttributes());
+        str.append("]");
+        return str.toString();
+    }
 
 }
