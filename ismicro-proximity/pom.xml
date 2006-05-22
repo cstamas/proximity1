@@ -17,7 +17,7 @@
   <name>ISmicro Proximity</name>
 
   <!-- The version of the project under development -->
-  <version>1.0.0-SNAPSHOT</version>
+  <version>1.0.0</version>
 
   <!-- The description -->
   <description>Maven Proximity Application.</description>
@@ -51,7 +51,7 @@
       <subscribe>ismicro-commons@is-micro.myip.hu</subscribe>
       <unsubscribe></unsubscribe>
       <post>ismicro-commons@is-micro.myip.hu</post>
-      <archive>http://ford.is-micro.hu/pipermail/ismicro-commons/</archive>
+      <archive>http://mail.is-micro.hu/pipermail/ismicro-commons/</archive>
     </mailingList>
   </mailingLists>
 
@@ -69,36 +69,9 @@
       </roles>
       <timezone>2</timezone>
     </developer>
-
-    <developer>
-      <id>btamas</id>
-      <name>BARATH, Tamas</name>
-      <email>btamas@is-micro.myip.hu</email>
-      <url>https://is-micro.myip.hu/~btamas</url>
-      <organization>ISmicro</organization>
-      <organizationUrl>http://www.is-micro.hu/</organizationUrl>
-      <roles>
-        <role>Developer</role>
-      </roles>
-      <timezone>2</timezone>
-    </developer>
-
-    <developer>
-      <id>szuzso</id>
-      <name>SZUNYOG, Zsolt</name>
-      <email>szunyog@is-micro.hu</email>
-      <url>https://is-micro.myip.hu/~szuzso</url>
-      <organization>ISmicro</organization>
-      <organizationUrl>http://www.is-micro.hu/</organizationUrl>
-      <roles>
-        <role>Developer</role>
-      </roles>
-      <timezone>2</timezone>
-    </developer>
   </developers>
 
   <!--  The project licence -->
-<!--
   <licenses>
     <license>
       <name>The Apache Software License, Version 2.0</name>
@@ -106,13 +79,12 @@
       <distribution>repo</distribution>
     </license>
   </licenses>
--->
 
   <!-- SCM -->
   <scm>
-    <connection>scm:svn:https://is-micro.myip.hu/repos/ismicro/trunk/ismicro-proximity/</connection>
-    <developerConnection>scm:svn:https://is-micro.myip.hu/repos/ismicro/trunk/ismicro-proximity/</developerConnection>
-    <url>https://is-micro.myip.hu/viewcvs/ismicro/trunk/ismicro-proximity/</url>
+    <connection>scm:svn:https://is-micro.myip.hu/svn/ismicro-commons/trunk/ismicro-proximity/</connection>
+    <developerConnection>scm:svn:https://is-micro.myip.hu/svn/ismicro-commons/trunk/ismicro-proximity/</developerConnection>
+    <url>http://intranet.is-micro.hu/trac/ismicro-commons/browser/</url>
   </scm>
 
   <!-- details about the organization that 'owns' the project -->
@@ -131,7 +103,7 @@
         <plugin>
           <artifactId>maven-release-plugin</artifactId>
           <configuration>
-            <tagBase>https://is-micro.myip.hu.org/repos/ismicro/tags</tagBase>
+            <tagBase>https://is-micro.myip.hu.org/svn/ismicro-commons/tags</tagBase>
           </configuration>
         </plugin>
       </plugins>
@@ -147,16 +119,16 @@
     <repository>
       <id>ismicro</id>
       <name>ISmicro Central Repository</name>
-      <url>scp://ford.is-micro.hu/srv/projects/ismicro-commons/deploy/proximity</url>
+      <url>scp://file.is-micro.hu/srv/jds2/home/ismicro-commons/deploy/proximity</url>
     </repository>
     <snapshotRepository>
       <id>ismicro</id>
       <name>ISmicro Central Development Repository</name>
-      <url>scp://ford.is-micro.hu/srv/projects/ismicro-commons/deploy/proximity</url>
+      <url>scp://file.is-micro.hu/srv/jds2/home/ismicro-commons/deploy/proximity</url>
     </snapshotRepository>
     <site>
       <id>website</id>
-      <url>scp://ford.is-micro.hu/srv/projects/ismicro-commons/www/proximity</url>
+      <url>scp://file.is-micro.hu/srv/jds2/home/ismicro-commons/www/proximity</url>
     </site>
   </distributionManagement>
   
