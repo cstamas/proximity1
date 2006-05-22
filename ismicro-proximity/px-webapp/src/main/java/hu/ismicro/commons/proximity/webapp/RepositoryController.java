@@ -49,24 +49,14 @@ public class RepositoryController extends MultiActionController {
 		pRequest.setPath(requestURI);
 		pRequest.setTargetedReposId(targetRepository);
 		pRequest.setGrantee(null);
-		pRequest.setAttributes(null);
+        pRequest.getAttributes().put(ProximityRequest.REQUEST_REMOTE_ADDRESS, request.getRemoteAddr());
 		try {
-			if (targetRepository == null) {
-				logger.info("Got request for repository on URI: " + requestURI);
-				itemProps = proximity.retrieveItemProperties(pRequest);
-			} else {
-				logger.info("Got request for repository on URI: " + requestURI + " from repository id "
-						+ targetRepository);
-				itemProps = proximity.retrieveItemPropertiesFromRepository(pRequest);
-			}
+			logger.info("Got request for repository on URI: " + requestURI);
+			itemProps = proximity.retrieveItemProperties(pRequest);
 
 			if (itemProps.isDirectory()) {
 				List items = null;
-				if (targetRepository == null) {
-					items = proximity.listItems(pRequest);
-				} else {
-					items = proximity.listItemsFromRepository(pRequest);
-				}
+				items = proximity.listItems(pRequest);
 				PropertyComparator.sort(items, new MutableSortDefinition(orderBy, true, true));
 				Map result = new HashMap();
 				result.put("items", items);
@@ -77,11 +67,7 @@ public class RepositoryController extends MultiActionController {
 			} else {
 				Item item = null;
 				// TODO: Optimize? Maybe a search first?
-				if (targetRepository == null) {
-					item = proximity.retrieveItem(pRequest);
-				} else {
-					item = proximity.retrieveItemFromRepository(pRequest);
-				}
+				item = proximity.retrieveItem(pRequest);
 				// TODO: Made this proper (content type by ext, size, etc...)
 				response.setContentType("application/octet-stream");
 				response.setContentLength((int) item.getProperties().getSize());
