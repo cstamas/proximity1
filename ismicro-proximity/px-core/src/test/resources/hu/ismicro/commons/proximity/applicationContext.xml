@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+
+    <!--
+      - Infrastructure, not really a BL/Proximity beans
+    -->
+    <bean id="messageSource"
+        class="org.springframework.context.support.ResourceBundleMessageSource">
+        <property name="basenames">
+            <list>
+                <value>messages</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+      <property name="locations">
+        <list>
+          <value>classpath:/hu/ismicro/commons/proximity/proximity.properties</value>
+        </list>
+      </property>
+    </bean>
+
+    <!--
+      - Central proximity bean with list of repos and it's helpers.
+    -->
+	<bean id="proximity" class="hu.ismicro.commons.proximity.base.ProximityImpl" init-method="afterPropertiesSet">
+		<property name="repositories">
+			<list>
+			    <!-- Repos'es will be processed in THIS ORDER! -->
+				<ref local="inhouse"/>
+				<ref local="extFree"/>
+				<ref local="extNonFree"/>
+				<ref local="central"/>
+				<ref local="ibiblio"/>
+				<ref local="codehaus"/>
+			</list>
+		</property>
+		<property name="indexer" ref="indexer"/>
+		<property name="statisticsGatherer" ref="stats"/>
+		<property name="accessManager" ref="openAccessManager"/>
+	</bean>
+
+	<bean id="indexer" class="hu.ismicro.commons.proximity.base.indexer.LuceneIndexer" init-method="afterPropertiesSet">
+		<property name="indexDirectory" value="${indexer.dir}" />
+		<property name="recreateIndexes" value="true"/>
+	</bean>
+	
+	<bean id="stats" class="hu.ismicro.commons.proximity.base.SimpleStatisticsGathererImpl"/>
+
+	<bean id="openAccessManager" class="hu.ismicro.commons.proximity.access.OpenAccessManager"/>
+	
+
+    <!--
+      - repo1.maven.org Central Repository (with writable cache storage and remote peer)
+      - A standard maven2 repository.
+    -->
+	<bean id="central" class="hu.ismicro.commons.proximity.base.RepositoryImpl">
+		<property name="id" value="central"/>
+		<property name="localStorage" ref="centralFSStorage"/>
+		<property name="remoteStorage" ref="centralRemotePeer"/>
+		<property name="indexer" ref="indexer"/>
+		<property name="statisticsGatherer" ref="stats"/>
+		<property name="listable" value="true"/>
+		<property name="accessManager" ref="openAccessManager"/>
+		<property name="repositoryLogic">
+			<bean class="hu.ismicro.commons.proximity.base.logic.MavenProxyLogic">
+				<property name="itemExpirationPeriodInSeconds" value="-1" />
+			    <!-- Nothing will expire, except these. They will expire within 24 hours -->
+				<property name="pomExpirationPeriodInSeconds" value="86400" />
+				<property name="snapshotExpirationPeriodInSeconds" value="86400" />
+				<property name="metadataExpirationPeriodInSeconds" value="86400" />
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="centralFSStorage" class="hu.ismicro.commons.proximity.base.local.WritableFileSystemStorage">
+		<property name="baseDir" value="${centralFSStorage.baseDir}"/>
+	</bean>
+	
+	<bean id="centralRemotePeer" class="hu.ismicro.commons.proximity.base.remote.HttpClientRemotePeer">
+		<property name="remoteUrl" value="http://repo1.maven.org/maven2/"/>
+		<property name="connectionTimeout" value="10000"/>
+	</bean>
+
+    <!--
+      - IBIBLIO Repository (with writable cache storage and remote peer)
+      - A standard maven2 repository.
+    -->
+	<bean id="ibiblio" class="hu.ismicro.commons.proximity.base.RepositoryImpl">
+		<property name="id" value="ibiblio"/>
+		<property name="localStorage" ref="ibiblioFSStorage"/>
+		<property name="remoteStorage" ref="ibiblioRemotePeer"/>
+		<property name="indexer" ref="indexer"/>
+		<property name="statisticsGatherer" ref="stats"/>
+		<property name="listable" value="true"/>
+		<property name="accessManager" ref="openAccessManager"/>
+		<property name="repositoryLogic">
+			<bean class="hu.ismicro.commons.proximity.base.logic.MavenProxyLogic">
+				<property name="itemExpirationPeriodInSeconds" value="-1" />
+			    <!-- Nothing will expire, except these. They will expire within 24 hours -->
+				<property name="pomExpirationPeriodInSeconds" value="86400" />
+				<property name="snapshotExpirationPeriodInSeconds" value="86400" />
+				<property name="metadataExpirationPeriodInSeconds" value="86400" />
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="ibiblioFSStorage" class="hu.ismicro.commons.proximity.base.local.WritableFileSystemStorage">
+		<property name="baseDir" value="${ibiblioFSStorage.baseDir}"/>
+	</bean>
+	
+	<bean id="ibiblioRemotePeer" class="hu.ismicro.commons.proximity.base.remote.HttpClientRemotePeer">
+		<property name="remoteUrl" value="http://www.ibiblio.org/maven2/"/>
+		<property name="connectionTimeout" value="10000"/>
+	</bean>
+
+    <!--
+      - Codehaus Repository (with writable storage and remote peer)
+      - A standard maven repository.
+    -->
+	<bean id="codehaus" class="hu.ismicro.commons.proximity.base.RepositoryImpl">
+		<property name="id" value="codehaus"/>
+		<property name="localStorage" ref="codehausFSStorage"/>
+		<property name="remoteStorage" ref="codehausRemotePeer"/>
+		<property name="indexer" ref="indexer"/>
+		<property name="statisticsGatherer" ref="stats"/>
+		<property name="listable" value="true"/>
+		<property name="accessManager" ref="openAccessManager"/>
+		<property name="repositoryLogic">
+			<bean class="hu.ismicro.commons.proximity.base.logic.MavenProxyLogic">
+				<property name="itemExpirationPeriodInSeconds" value="-1" />
+			    <!-- Nothing will expire, except these. They will expire within 24 hours -->
+				<property name="pomExpirationPeriodInSeconds" value="86400" />
+				<property name="snapshotExpirationPeriodInSeconds" value="86400" />
+				<property name="metadataExpirationPeriodInSeconds" value="86400" />
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="codehausFSStorage" class="hu.ismicro.commons.proximity.base.local.WritableFileSystemStorage">
+		<property name="baseDir" value="${codehausFSStorage.baseDir}"/>
+	</bean>
+	
+	<bean id="codehausRemotePeer" class="hu.ismicro.commons.proximity.base.remote.HttpClientRemotePeer">
+		<property name="remoteUrl" value="http://dist.codehaus.org/"/>
+		<property name="connectionTimeout" value="10000"/>
+	</bean>
+
+    <!--
+      - In-House Repository (with read-only storage and without remote peer)
+      - A maven repository for publishing in-house artifacts.
+    -->
+	<bean id="inhouse" class="hu.ismicro.commons.proximity.base.RepositoryImpl">
+		<property name="id" value="inhouse"/>
+		<property name="localStorage" ref="inhouseFSStorage"/>
+		<property name="indexer" ref="indexer"/>
+		<property name="listable" value="true"/>
+		<property name="statisticsGatherer" ref="stats"/>
+		<property name="accessManager" ref="openAccessManager"/>
+	</bean>
+
+	<bean id="inhouseFSStorage" class="hu.ismicro.commons.proximity.base.local.ReadOnlyFileSystemStorage">
+		<property name="baseDir" value="${inhouseFSStorage.baseDir}"/>
+		<property name="metadataAware" value="false"/>
+	</bean>
+
+    <!--
+      - EXT NonFree Repository (with read-only storage and without remote peer)
+      - A maven repository for in-house use for publishing non-free artifacts 
+      - not deployed on standard maven repositories (oracle JDBC, J2EE, etc...).
+    -->
+	<bean id="extNonFree" class="hu.ismicro.commons.proximity.base.RepositoryImpl">
+		<property name="id" value="extNonFree"/>
+		<property name="localStorage" ref="extNonFreeFSStorage"/>
+		<property name="indexer" ref="indexer"/>
+		<property name="listable" value="true"/>
+		<property name="statisticsGatherer" ref="stats"/>
+		<property name="accessManager" ref="openAccessManager"/>
+	</bean>
+
+	<bean id="extNonFreeFSStorage" class="hu.ismicro.commons.proximity.base.local.ReadOnlyFileSystemStorage">
+		<property name="baseDir" value="${extNonFreeFSStorage.baseDir}"/>
+		<property name="metadataAware" value="false"/>
+	</bean>
+
+    <!--
+      - EXT Free Repository (with read-only storage and without remote peer)
+      - A maven repository for in-house use for publishing artifacts 
+      - not deployed on standard maven repositories (dwr, etc...).
+    -->
+	<bean id="extFree" class="hu.ismicro.commons.proximity.base.RepositoryImpl">
+		<property name="id" value="extFree"/>
+		<property name="localStorage" ref="extFreeFSStorage"/>
+		<property name="indexer" ref="indexer"/>
+		<property name="listable" value="true"/>
+		<property name="statisticsGatherer" ref="stats"/>
+		<property name="accessManager" ref="openAccessManager"/>
+	</bean>
+
+	<bean id="extFreeFSStorage" class="hu.ismicro.commons.proximity.base.local.ReadOnlyFileSystemStorage">
+		<property name="baseDir" value="${extFreeFSStorage.baseDir}"/>
+		<property name="metadataAware" value="false"/>
+	</bean>
+
+</beans>
