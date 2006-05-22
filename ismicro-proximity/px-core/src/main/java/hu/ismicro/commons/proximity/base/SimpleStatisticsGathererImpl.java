@@ -4,6 +4,7 @@ import hu.ismicro.commons.proximity.ItemProperties;
 import hu.ismicro.commons.proximity.ProximityRequest;
 import hu.ismicro.commons.proximity.Repository;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,6 +22,8 @@ public class SimpleStatisticsGathererImpl implements StatisticsGatherer {
     private static final String PROPS_RETRIEVAL = "propertiesRetrieval";
 
     private static final String ITEM_RETRIEVAL = "retrieval";
+
+    private static final String RETRIEVAL_TIMESTAMP = "retrievalTimestamp";
 
     private static final String REQUEST_REMOTE_ADDRESS_STATS = "remoteAddressStats";
 
@@ -44,6 +47,7 @@ public class SimpleStatisticsGathererImpl implements StatisticsGatherer {
 
     protected void addHit(String LOCAL_OR_REMOTE_KEY, ProximityRequest req, ItemProperties ip, Repository repo,
             boolean propsOnly) {
+        Date currentTime = new Date();
         // TODO: Very very primitive!
         if (!stats.containsKey(ip)) {
             stats.put(ip, new HashMap());
@@ -52,17 +56,24 @@ public class SimpleStatisticsGathererImpl implements StatisticsGatherer {
         if (!ipStats.containsKey(repo.getId())) {
             ipStats.put(repo.getId(), new HashMap());
         }
+        ipStats.put(RETRIEVAL_TIMESTAMP, currentTime);
+
         Map repoStats = (Map) ipStats.get(repo.getId());
         if (!repoStats.containsKey(LOCAL_OR_REMOTE_KEY)) {
             repoStats.put(LOCAL_OR_REMOTE_KEY, new HashMap());
         }
+        repoStats.put(RETRIEVAL_TIMESTAMP, currentTime);
+
         Map localStats = (Map) repoStats.get(LOCAL_OR_REMOTE_KEY);
         if (!localStats.containsKey(propsOnly ? PROPS_RETRIEVAL : ITEM_RETRIEVAL)) {
             localStats.put(propsOnly ? PROPS_RETRIEVAL : ITEM_RETRIEVAL, new Integer(0));
         }
+        localStats.put(RETRIEVAL_TIMESTAMP, currentTime);
+
         int count = ((Integer) localStats.get(propsOnly ? PROPS_RETRIEVAL : ITEM_RETRIEVAL)).intValue() + 1;
         logger.debug("Increasing hit for " + ip.getPath() + " to " + count);
         localStats.put(propsOnly ? PROPS_RETRIEVAL : ITEM_RETRIEVAL, new Integer(count));
+        localStats.put(RETRIEVAL_TIMESTAMP, new Date(System.currentTimeMillis()));
 
         // if we have front-end that records this
         if (req.getAttributes().get(ProximityRequest.REQUEST_REMOTE_ADDRESS) != null) {
