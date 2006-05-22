@@ -4,7 +4,6 @@ import hu.ismicro.commons.proximity.ItemProperties;
 import hu.ismicro.commons.proximity.ProximityRequest;
 import hu.ismicro.commons.proximity.Repository;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,7 +22,7 @@ public class SimpleStatisticsGathererImpl implements StatisticsGatherer {
 
     private static final String ITEM_RETRIEVAL = "retrieval";
 
-    private static final String REQUEST_REMOTE_ADDRESS_LIST = "remoteAddressList";
+    private static final String REQUEST_REMOTE_ADDRESS_STATS = "remoteAddressStats";
 
     private Map stats = new HashMap();
 
@@ -67,11 +66,17 @@ public class SimpleStatisticsGathererImpl implements StatisticsGatherer {
 
         // if we have front-end that records this
         if (req.getAttributes().get(ProximityRequest.REQUEST_REMOTE_ADDRESS) != null) {
-            if (!localStats.containsKey(REQUEST_REMOTE_ADDRESS_LIST)) {
-                localStats.put(REQUEST_REMOTE_ADDRESS_LIST, new ArrayList());
+            if (!localStats.containsKey(REQUEST_REMOTE_ADDRESS_STATS)) {
+                localStats.put(REQUEST_REMOTE_ADDRESS_STATS, new HashMap());
             }
-            ArrayList remoteAddresses = (ArrayList) localStats.get(REQUEST_REMOTE_ADDRESS_LIST);
-            remoteAddresses.add(req.getAttributes().get(ProximityRequest.REQUEST_REMOTE_ADDRESS));
+            Map addressStats = (Map) localStats.get(REQUEST_REMOTE_ADDRESS_STATS);
+            
+            String remoteAddr = (String) req.getAttributes().get(ProximityRequest.REQUEST_REMOTE_ADDRESS);
+            if (!addressStats.containsKey(remoteAddr)) {
+                addressStats.put(remoteAddr, new Integer(0));
+            }
+            count = ((Integer) addressStats.get(remoteAddr)).intValue() + 1;
+            addressStats.put(remoteAddr, new Integer(count));
         }
     }
 
