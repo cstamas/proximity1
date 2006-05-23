@@ -1,5 +1,7 @@
 <h2>#springMessage("stats.title")</h2>
 
+<p>#springMessage('stats.intro')</p>
+
 <table>
 
         #foreach($ip in ${stats.keySet()})
