@@ -57,4 +57,10 @@ public class SupportController extends MultiActionController {
         return new ModelAndView("stats", "stats", stats);
     }
 
+    public ModelAndView repositories(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        logger.debug("Got request for repositories layout");
+        List repositories = proximity.getRepositories();
+        return new ModelAndView("repositories", "repositories", repositories);
+    }
+
 }

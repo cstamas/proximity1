@@ -1,0 +1,43 @@
+<h2>#springMessage("repositories.title")</h2>
+
+<p>#springMessage('repositories.intro')</p>
+
+<table>
+
+        #foreach($repository in $repositories)
+
+                <tr class="tdb">
+                        <td colspan="2">${repository.id}</td>
+                </tr>
+                <tr class="tda">
+                        <td colspan="1">#springMessage("repositories.uriPrefix")</td>
+                        #if(${repository.getURIPrefix()})
+                          <td colspan="1">${repository.getURIPrefix()}</td>
+                        #else
+                          <td colspan="1">#springMessage("repositories.uriPrefix.none")</td>
+                        #end
+                </tr>
+                <tr class="tda">
+                        <td colspan="1">#springMessage("repositories.isListable")</td>
+                        <td colspan="1">${repository.isListable()}</td>
+                </tr>
+                <tr class="tda">
+                        <td colspan="1">#springMessage("repositories.remoteUrl")</td>
+                        #if(${repository.getRemoteStorage()})
+                          <td colspan="1"><a href="${repository.getRemoteStorage().getRemoteUrl()}">${repository.getRemoteStorage().getRemoteUrl()}</a></td>
+                        #else
+                          <td colspan="1">#springMessage("repositories.remoteUrl.none")</td>
+                        #end
+                </tr>
+                <tr class="tda">
+                        <td colspan="1">#springMessage("repositories.localBasedir")</td>
+                        #if(${repository.getLocalStorage()})
+                          <td colspan="1">${repository.getLocalStorage().getStorageBaseDir()}</td>
+                        #else
+                          <td colspan="1">#springMessage("repositories.localBasedir.none")</td>
+                        #end
+                </tr>
+
+        #end
+
+</table>

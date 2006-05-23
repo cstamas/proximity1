@@ -3,11 +3,7 @@
 <script type="text/javascript" src="#springUrl('/dwr/interface/proximity.js')"></script>
 <script type="text/javascript" src="#springUrl('/search.js')"></script>
 
-<h4>Searching</h4>
-
-<p>Using Search forms you may search <b>downloaded</b> items in general or
-from specific remote peer. This page <b>does not</b> search the actually
-proxied remote peers, only items that are downloaded from them!</p>
+<p>#springMessage('search.intro')</p>
 
 <table>
 	<thead>
@@ -43,6 +39,7 @@ proxied remote peers, only items that are downloaded from them!</p>
 
 <p/>
 
+#if($results)
 <table>
 	<thead>
 		<tr class="tdb">
@@ -80,3 +77,4 @@ proxied remote peers, only items that are downloaded from them!</p>
   
 	</tbody>
 </table>
+#end
