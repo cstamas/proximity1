@@ -35,27 +35,27 @@ public class MavenProxyLogic extends DefaultExpiringProxyingLogic {
 	private long pomExpirationPeriod = 86400 * 1000; // 24 hours
 
 	public long getMetadataExpirationPeriodInSeconds() {
-		return metadataExpirationPeriod;
+		return metadataExpirationPeriod / 1000;
 	}
 
 	public void setMetadataExpirationPeriodInSeconds(long metadataExpirationPeriod) {
-		this.metadataExpirationPeriod = metadataExpirationPeriod;
+		this.metadataExpirationPeriod = metadataExpirationPeriod * 1000;
 	}
 
 	public long getPomExpirationPeriodInSeconds() {
-		return pomExpirationPeriod;
+		return pomExpirationPeriod / 1000;
 	}
 
 	public void setPomExpirationPeriodInSeconds(long pomExpirationPeriod) {
-		this.pomExpirationPeriod = pomExpirationPeriod;
+		this.pomExpirationPeriod = pomExpirationPeriod * 1000;
 	}
 
 	public long getSnapshotExpirationPeriodInSeconds() {
-		return snapshotExpirationPeriod;
+		return snapshotExpirationPeriod / 1000;
 	}
 
 	public void setSnapshotExpirationPeriodInSeconds(long snapshotExpirationPeriod) {
-		this.snapshotExpirationPeriod = snapshotExpirationPeriod;
+		this.snapshotExpirationPeriod = snapshotExpirationPeriod * 1000;
 	}
 
 	public boolean isMetadataRefetch() {
