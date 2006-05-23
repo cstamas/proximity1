@@ -2,7 +2,6 @@ package hu.ismicro.commons.proximity.base.local;
 
 import hu.ismicro.commons.proximity.Item;
 import hu.ismicro.commons.proximity.ItemProperties;
-import hu.ismicro.commons.proximity.base.PathHelper;
 import hu.ismicro.commons.proximity.base.StorageException;
 
 import java.io.File;
@@ -32,8 +31,7 @@ public class WritableFileSystemStorage extends ReadOnlyFileSystemStorage {
 		logger.debug("Storing item in [" + item.getProperties().getAbsolutePath() + "] with name ["
 				+ item.getProperties().getName() + "] in " + getStorageBaseDir());
 		try {
-			File file = new File(PathHelper.walkThePath(getStorageBaseDir(), PathHelper.changePathLevel(item
-					.getProperties().getAbsolutePath(), item.getProperties().getName())));
+            File file = new File(new File(getStorageBaseDir(), item.getProperties().getAbsolutePath()), item.getProperties().getName());
 			file.getParentFile().mkdirs();
 			FileOutputStream os = new FileOutputStream(file);
 			IOUtils.copy(item.getStream(), os);
@@ -57,8 +55,7 @@ public class WritableFileSystemStorage extends ReadOnlyFileSystemStorage {
 		logger.debug("Storing metadata in [" + iProps.getAbsolutePath() + "] with name ["
 				+ iProps.getName() + "] in " + getMetadataBaseDir());
 		try {
-			String itemPath = PathHelper.changePathLevel(iProps.getAbsolutePath(), iProps.getName());
-			File target = new File(PathHelper.walkThePath(getMetadataBaseDir(), itemPath));
+            File target = new File(new File(getMetadataBaseDir(), iProps.getAbsolutePath()), iProps.getName());
 			target.getParentFile().mkdirs();
 
 			Properties metadata = new Properties();
