@@ -215,7 +215,12 @@ public class ReadOnlyFileSystemStorage extends AbstractStorage {
 
     protected ProxiedItemProperties constructItemProperties(File target, String path) {
         ProxiedItemProperties result = new ProxiedItemProperties();
-        result.setAbsolutePath((new File(path)).getParentFile().getAbsolutePath());
+        File pathFile = new File(path);
+        if (pathFile.getParentFile() != null) {
+            result.setAbsolutePath((new File(path)).getParentFile().getAbsolutePath());
+        } else {
+            result.setAbsolutePath((new File(path)).getAbsolutePath());
+        }
         result.setDirectory(target.isDirectory());
         result.setFile(target.isFile());
         result.setLastModified(new Date(target.lastModified()));
