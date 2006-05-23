@@ -2,7 +2,6 @@ package hu.ismicro.commons.proximity.base.local;
 
 import hu.ismicro.commons.proximity.ItemNotFoundException;
 import hu.ismicro.commons.proximity.base.AbstractStorage;
-import hu.ismicro.commons.proximity.base.PathHelper;
 import hu.ismicro.commons.proximity.base.ProxiedItem;
 import hu.ismicro.commons.proximity.base.ProxiedItemProperties;
 import hu.ismicro.commons.proximity.base.StorageException;
@@ -30,71 +29,73 @@ import java.util.Properties;
  */
 public class ReadOnlyFileSystemStorage extends AbstractStorage {
 
-	/**
-	 * The default METADATA prefix.
-	 */
-	private static final String METADATA = "metadata";
+    /**
+     * The default METADATA prefix.
+     */
+    private static final String METADATA = "metadata";
 
-	/**
-	 * The default STORAGE prefix.
-	 */
-	private static final String STORAGE = "storage";
+    /**
+     * The default STORAGE prefix.
+     */
+    private static final String STORAGE = "storage";
 
-	/**
-	 * The configured baseDir.
-	 */
-	private String baseDir;
+    /**
+     * The configured baseDir.
+     */
+    private String baseDir;
 
-	/**
-	 * Is this storage metadata aware? Default value is TRUE.
-	 */
-	private boolean metadataAware = true;
+    /**
+     * Is this storage metadata aware? Default value is TRUE.
+     */
+    private boolean metadataAware = true;
 
-    private boolean metadataDirChecked = false;
+    private String metadataPrefix = METADATA;
 
-    private boolean storageDirChecked = false;
+    private String storagePrefix = STORAGE;
 
-	private String metadataPrefix = METADATA;
+    private File baseDirFile = null;
 
-	private String storagePrefix = STORAGE;
+    private File metadataBaseDirFile = null;
 
-	/**
-	 * Is this storage metadata aware?
-	 * 
-	 * @return
-	 */
-	public boolean isMetadataAware() {
-		return metadataAware;
-	}
+    private File storageBaseDirFile = null;
 
-	public void setMetadataAware(boolean metadataAware) {
-		this.metadataAware = metadataAware;
-	}
+    /**
+     * Is this storage metadata aware?
+     * 
+     * @return
+     */
+    public boolean isMetadataAware() {
+        return metadataAware;
+    }
 
-	public String getMetadataPrefix() {
-		return metadataPrefix;
-	}
+    public void setMetadataAware(boolean metadataAware) {
+        this.metadataAware = metadataAware;
+    }
 
-	public void setMetadataPrefix(String metadataPrefix) {
-		this.metadataPrefix = metadataPrefix;
-	}
+    public String getMetadataPrefix() {
+        return metadataPrefix;
+    }
 
-	public String getStoragePrefix() {
-		return storagePrefix;
-	}
+    public void setMetadataPrefix(String metadataPrefix) {
+        this.metadataPrefix = metadataPrefix;
+    }
 
-	public void setStoragePrefix(String storagePrefix) {
-		this.storagePrefix = storagePrefix;
-	}
+    public String getStoragePrefix() {
+        return storagePrefix;
+    }
 
-	/**
-	 * Sets the baseDir on the filesystem for this local FS storage. The
-	 * supplied String should be pointing to an existing directory.
-	 * 
-	 * @param baseDirPath
-	 */
-	public void setBaseDir(String baseDirPath) {
-		File baseDirFile = new File(baseDirPath);
+    public void setStoragePrefix(String storagePrefix) {
+        this.storagePrefix = storagePrefix;
+    }
+
+    /**
+     * Sets the baseDir on the filesystem for this local FS storage. The
+     * supplied String should be pointing to an existing directory.
+     * 
+     * @param baseDirPath
+     */
+    public void setBaseDir(String baseDirPath) {
+        baseDirFile = new File(baseDirPath);
         if (!baseDirFile.exists()) {
             if (!baseDirFile.mkdirs()) {
                 throw new IllegalArgumentException("The supplied directory parameter " + baseDirPath
@@ -103,156 +104,151 @@ public class ReadOnlyFileSystemStorage extends AbstractStorage {
                 logger.info("Created basedir " + baseDirFile.getAbsolutePath());
             }
         }
-		if (!baseDirFile.isDirectory()) {
-			throw new IllegalArgumentException("The supplied parameter " + baseDirPath
-					+ " is not a directory!");
-		}
-		this.baseDir = baseDirPath;
-	}
+        if (!baseDirFile.isDirectory()) {
+            throw new IllegalArgumentException("The supplied parameter " + baseDirPath + " is not a directory!");
+        }
+        this.baseDir = baseDirPath;
+    }
 
-	/**
-	 * It this storage is metadata aware, it returns baseDir appended by
-	 * metadata suffix, otherwise it will throw IllegalStateException because
-	 * the storage is metadata unaware.
-	 * 
-	 * @return
-	 */
-	public String getMetadataBaseDir() {
-		if (isMetadataAware()) {
-            if (!metadataDirChecked) {
-                File metadataDir = new File(PathHelper.changePathLevel(baseDir, getMetadataPrefix()));
-                if (!metadataDir.exists()) {
-                    metadataDir.mkdirs();
+    /**
+     * It this storage is metadata aware, it returns baseDir appended by
+     * metadata suffix, otherwise it will throw IllegalStateException because
+     * the storage is metadata unaware.
+     * 
+     * @return
+     */
+    public File getMetadataBaseDir() {
+        if (isMetadataAware()) {
+            if (metadataBaseDirFile == null) {
+                metadataBaseDirFile = new File(baseDir, getMetadataPrefix());
+                if (!metadataBaseDirFile.exists()) {
+                    metadataBaseDirFile.mkdirs();
                 }
-                metadataDirChecked = true;
             }
-			return PathHelper.changePathLevel(baseDir, getMetadataPrefix());
-		} else {
-			throw new IllegalStateException("The storage is configured as metadata-unaware!");
-		}
-	}
+            return metadataBaseDirFile;
+        } else {
+            throw new IllegalStateException("The storage is configured as metadata-unaware!");
+        }
+    }
 
-	/**
-	 * If this storage is metadata aware, it returns baseDir appended by storage
-	 * suffix, otherwise it will return baseDir itself unmodified.
-	 * 
-	 * @return
-	 */
-	public String getStorageBaseDir() {
-		if (isMetadataAware()) {
-            if (!storageDirChecked) {
-                File storageDir = new File(PathHelper.changePathLevel(baseDir, getStoragePrefix()));
-                if (!storageDir.exists()) {
-                    storageDir.mkdirs();
+    /**
+     * If this storage is metadata aware, it returns baseDir appended by storage
+     * suffix, otherwise it will return baseDir itself unmodified.
+     * 
+     * @return
+     */
+    public File getStorageBaseDir() {
+        if (isMetadataAware()) {
+            if (storageBaseDirFile == null) {
+                storageBaseDirFile = new File(baseDir, getStoragePrefix());
+                if (!storageBaseDirFile.exists()) {
+                    storageBaseDirFile.mkdirs();
                 }
-                storageDirChecked = true;
             }
-			return PathHelper.changePathLevel(baseDir, getStoragePrefix());
-		} else {
-			return baseDir;
-		}
-	}
+            return storageBaseDirFile;
+        } else {
+            return baseDirFile;
+        }
+    }
 
-	public boolean containsItemProperties(String path) {
-		if (isMetadataAware()) {
-			logger.debug("Checking for existence of " + path + " in " + getMetadataBaseDir());
-			return checkForExistence(getMetadataBaseDir(), path);
-		} else {
-			logger.debug("Checking for existence of " + path + " in " + baseDir);
-			return checkForExistence(baseDir, path);
-		}
-	}
+    public boolean containsItemProperties(String path) {
+        if (isMetadataAware()) {
+            logger.debug("Checking for existence of " + path + " in " + getMetadataBaseDir());
+            return checkForExistence(getMetadataBaseDir(), path);
+        } else {
+            logger.debug("Checking for existence of " + path + " in " + baseDir);
+            return checkForExistence(getStorageBaseDir(), path);
+        }
+    }
 
-	public boolean containsItem(String path) {
-		logger.debug("Checking for existence of " + path + " in " + getStorageBaseDir());
-		return checkForExistence(getStorageBaseDir(), path);
-	}
+    public boolean containsItem(String path) {
+        logger.debug("Checking for existence of " + path + " in " + getStorageBaseDir());
+        return checkForExistence(getStorageBaseDir(), path);
+    }
 
-	public ProxiedItemProperties retrieveItemProperties(String path) throws StorageException {
-		logger.debug("Retrieving " + path + " properties in " + getStorageBaseDir());
-		File target = new File(PathHelper.walkThePath(getStorageBaseDir(), path));
-		return constructItemProperties(target, path);
-	}
+    public ProxiedItemProperties retrieveItemProperties(String path) throws StorageException {
+        logger.debug("Retrieving " + path + " properties in " + getStorageBaseDir());
+        File target = new File(getStorageBaseDir(), path);
+        return constructItemProperties(target, path);
+    }
 
-	public ProxiedItem retrieveItem(String path) throws ItemNotFoundException, StorageException {
-		logger.debug("Retrieving " + path + " in " + getStorageBaseDir());
-		try {
-			File target = new File(PathHelper.walkThePath(getStorageBaseDir(), path));
-			ProxiedItemProperties properties = constructItemProperties(target, path);
-			ProxiedItem result = new ProxiedItem();
-			result.setProperties(properties);
-			result.setStream(new FileInputStream(target));
-			return result;
-		} catch (FileNotFoundException ex) {
-			logger.error("FileNotFound in FS storage [" + getStorageBaseDir() + "] for path [" + path + "]", ex);
-			throw new ItemNotFoundException("FileNotFound in FS storage [" + getStorageBaseDir() + "] for path ["
-					+ path + "]");
-		}
-	}
+    public ProxiedItem retrieveItem(String path) throws ItemNotFoundException, StorageException {
+        logger.debug("Retrieving " + path + " in " + getStorageBaseDir());
+        try {
+            File target = new File(getStorageBaseDir(), path);
+            ProxiedItemProperties properties = constructItemProperties(target, path);
+            ProxiedItem result = new ProxiedItem();
+            result.setProperties(properties);
+            result.setStream(new FileInputStream(target));
+            return result;
+        } catch (FileNotFoundException ex) {
+            logger.error("FileNotFound in FS storage [" + getStorageBaseDir() + "] for path [" + path + "]", ex);
+            throw new ItemNotFoundException("FileNotFound in FS storage [" + getStorageBaseDir() + "] for path ["
+                    + path + "]");
+        }
+    }
 
-	public List listItems(String path) {
-		logger.debug("Listing " + path + " in " + getStorageBaseDir());
-		List result = new ArrayList();
-		String targetPath = PathHelper.walkThePath(getStorageBaseDir(), path);
-		File target = new File(targetPath);
-		if (target.exists()) {
-			if (target.isDirectory()) {
-				File[] files = target.listFiles();
-				for (int i = 0; i < files.length; i++) {
-					ProxiedItemProperties item = constructItemProperties(files[i], PathHelper.changePathLevel(path,
-							PathHelper.getFileName(files[i].getPath())));
-					result.add(item);
-				}
-			} else {
-				ProxiedItemProperties item = constructItemProperties(target, targetPath);
-				result.add(item);
-			}
-		}
-		return result;
-	}
+    public List listItems(String path) {
+        logger.debug("Listing " + path + " in " + getStorageBaseDir());
+        List result = new ArrayList();
+        File target = new File(getStorageBaseDir(), path);
+        if (target.exists()) {
+            if (target.isDirectory()) {
+                File[] files = target.listFiles();
+                for (int i = 0; i < files.length; i++) {
+                    ProxiedItemProperties item = constructItemProperties(files[i], (new File(path, files[i].getName())
+                            .getAbsolutePath()));
+                    result.add(item);
+                }
+            } else {
+                ProxiedItemProperties item = constructItemProperties(target, path);
+                result.add(item);
+            }
+        }
+        return result;
+    }
 
-	protected boolean checkForExistence(String baseDir, String path) {
-		File target = new File(PathHelper.walkThePath(baseDir, path));
-		return target.exists();
-	}
+    protected boolean checkForExistence(File baseDir, String path) {
+        File target = new File(baseDir, path);
+        return target.exists();
+    }
 
-	protected ProxiedItemProperties constructItemProperties(File target, String path) {
-		ProxiedItemProperties result = new ProxiedItemProperties();
-		result.setAbsolutePath(PathHelper.absolutizePathFromBase(PathHelper.PATH_SEPARATOR, PathHelper.changePathLevel(
-				path, PathHelper.PATH_PARENT)));
-		result.setDirectory(target.isDirectory());
-		result.setFile(target.isFile());
-		result.setLastModified(new Date(target.lastModified()));
-		result.setName(PathHelper.getFileName(path));
-		if (target.isFile()) {
-			result.setSize(target.length());
-		} else {
-			result.setSize(0);
-		}
-		if (isMetadataAware()) {
-			fillInMetadata(result);
-		}
-		return result;
-	}
+    protected ProxiedItemProperties constructItemProperties(File target, String path) {
+        ProxiedItemProperties result = new ProxiedItemProperties();
+        result.setAbsolutePath((new File(path)).getParentFile().getAbsolutePath());
+        result.setDirectory(target.isDirectory());
+        result.setFile(target.isFile());
+        result.setLastModified(new Date(target.lastModified()));
+        result.setName(target.getName());
+        if (target.isFile()) {
+            result.setSize(target.length());
+        } else {
+            result.setSize(0);
+        }
+        if (isMetadataAware()) {
+            fillInMetadata(result);
+        }
+        return result;
+    }
 
-	protected void fillInMetadata(ProxiedItemProperties iProps) {
-		try {
-			String itemPath = PathHelper.walkThePath(iProps.getAbsolutePath(), iProps.getName());
-			File target = new File(PathHelper.walkThePath(getMetadataBaseDir(), itemPath));
-			if (target.exists() && target.isFile()) {
-				Properties metadata = new Properties();
-				metadata.load(new FileInputStream(target));
-				for (Enumeration i = metadata.propertyNames(); i.hasMoreElements();) {
-					String key = (String) i.nextElement();
-					String value = metadata.getProperty(key);
-					iProps.setMetadata(key, value);
-				}
-			} else {
-				logger.info("No metadata exists for " + itemPath);
-			}
-		} catch (IOException ex) {
-			logger.error("Got IOException during metadata retrieval.", ex);
-		}
-	}
+    protected void fillInMetadata(ProxiedItemProperties iProps) {
+        try {
+            String itemPath = (new File(iProps.getAbsolutePath(), iProps.getName())).getAbsolutePath();
+            File target = new File(getMetadataBaseDir(), itemPath);
+            if (target.exists() && target.isFile()) {
+                Properties metadata = new Properties();
+                metadata.load(new FileInputStream(target));
+                for (Enumeration i = metadata.propertyNames(); i.hasMoreElements();) {
+                    String key = (String) i.nextElement();
+                    String value = metadata.getProperty(key);
+                    iProps.setMetadata(key, value);
+                }
+            } else {
+                logger.info("No metadata exists for " + itemPath);
+            }
+        } catch (IOException ex) {
+            logger.error("Got IOException during metadata retrieval.", ex);
+        }
+    }
 
 }

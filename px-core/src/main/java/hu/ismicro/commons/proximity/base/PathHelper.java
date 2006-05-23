@@ -7,14 +7,16 @@ import org.apache.commons.logging.LogFactory;
 
 /**
  * <p>
- * A simple collection of static methods to handle paths.
+ * A simple collection of static methods to handle paths. Not filesystem path,
+ * only some strings that resembles them!
  * 
  * <p>
  * Recognizes the following special codes:
  * 
- * <source> public static final String PATH_SEPARATOR =
- * System.getProperty("file.separator"); public static final String PATH_SELF =
- * "."; public static final String PATH_PARENT = ".."; </source>
+ * <source>
+ * public static final String PATH_SELF = "."; 
+ * public static final String PATH_PARENT = "..";
+ * </source>
  * 
  * @author cstamas
  * 
@@ -23,18 +25,14 @@ public class PathHelper {
 
 	protected static Log logger = LogFactory.getLog(PathHelper.class);
 
-	public static final String PATH_SEPARATOR = System.getProperty("file.separator");
+	public static final String PATH_SEPARATOR = "/";
 
 	public static final String PATH_SELF = ".";
 
 	public static final String PATH_PARENT = "..";
     
     public static String[] split(String str, String arg) {
-        if ("\\".equals(arg)) {
-            return str.split("\\");
-        } else {
-            return str.split(arg);
-        }
+        return str.split(arg);
     }
 
 	/**
