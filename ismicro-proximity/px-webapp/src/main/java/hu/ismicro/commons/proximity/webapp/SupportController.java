@@ -36,11 +36,11 @@ public class SupportController extends MultiActionController {
         ProxiedItemProperties example = new ProxiedItemProperties();
         if (RequestUtils.getStringParameter(request, "searchAll") != null
                 && RequestUtils.getRequiredStringParameter(request, "searchAllRegexp") != null) {
-            example.setName(RequestUtils.getRequiredStringParameter(request, "searchAllRegexp"));
+            example.setName(RequestUtils.getRequiredStringParameter(request, "searchAllRegexp") + "*");
         } else if (RequestUtils.getStringParameter(request, "searchSelected") != null
                 && RequestUtils.getRequiredStringParameter(request, "searchSelectedRepos") != null
                 && RequestUtils.getRequiredStringParameter(request, "searchSelectedRegexp") != null) {
-            example.setName(RequestUtils.getRequiredStringParameter(request, "searchSelectedRegexp"));
+            example.setName(RequestUtils.getRequiredStringParameter(request, "searchSelectedRegexp") + "*");
             example.setMetadata(ProxiedItemProperties.METADATA_OWNING_REPOSITORY, RequestUtils.getRequiredStringParameter(request, "searchSelectedRepos"));
         }
         List results = proximity.searchItem(example);

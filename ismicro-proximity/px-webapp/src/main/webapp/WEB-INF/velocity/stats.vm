@@ -5,12 +5,12 @@
         #foreach($ip in ${stats.keySet()})
 
                 <tr class="tdb">
-                        <td colspan="2">${ip.path}</td>
+                        <td colspan="5">${ip.path}</td>
                 </tr>
                 #foreach($repoId in ${stats.get($ip).keySet()})
                         <tr class="tda">
-                                <td>$repoId</td>
-                                <td>${stats.get($ip).get($repoId)}</td>
+                                <td colspan="1">$repoId</td>
+                                <td colspan="4">${stats.get($ip).get($repoId)}</td>
                         </tr>
                 #end
 

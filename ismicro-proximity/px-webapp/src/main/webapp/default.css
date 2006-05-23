@@ -31,7 +31,6 @@ table {
      vertical-align: top;
      margin: 0px;
      padding: 0px;
-#     background: #eeeeee;
 }
 
 .topBar {
@@ -44,14 +43,11 @@ table {
      vertical-align: top;
      margin: 0px;
      padding: 0px;
-#     background: #eeeeee;
 }
 
 .leftBand {
      vertical-align: top;
      width: 140px;
-#     padding: 3px;
-#     background: #eeeeee;
 }
 
 .menuroot {
