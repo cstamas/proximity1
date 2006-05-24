@@ -39,7 +39,7 @@ public class LuceneIndexer implements Indexer {
 
     private boolean recreateIndexes = true;
 
-    private int dirtyItemTreshold = 500;
+    private int dirtyItemTreshold = 100;
 
     private int dirtyItems = 0;
 
@@ -53,6 +53,14 @@ public class LuceneIndexer implements Indexer {
 
     public void setRecreateIndexes(boolean recreateIndexes) {
         this.recreateIndexes = recreateIndexes;
+    }
+
+    public int getDirtyItemTreshold() {
+        return dirtyItemTreshold;
+    }
+
+    public void setDirtyItemTreshold(int dirtyItemTreshold) {
+        this.dirtyItemTreshold = dirtyItemTreshold;
     }
 
     public void initialize() {

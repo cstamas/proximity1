@@ -75,7 +75,7 @@ public class HttpClientRemotePeer extends AbstractRemoteStorage {
             logger.error("Tranport error while executing " + method.getName() + " method with query string "
                     + method.getQueryString(), ex);
         }
-        logger.info("Received response code [" + resultCode + "] for executing [" + method.getName()
+        logger.debug("Received response code [" + resultCode + "] for executing [" + method.getName()
                 + "] method with path [" + method.getPath() + "]");
         return resultCode;
     }
@@ -121,6 +121,7 @@ public class HttpClientRemotePeer extends AbstractRemoteStorage {
             try {
                 int response = executeMethod(method);
                 if (response == HttpStatus.SC_OK) {
+                    logger.info("Item " + path + " properties fetched from remote peer of " + getId());
                     return constructItemPropertiesFromGetResponse(path, originatingUrlString, method);
                 } else {
                     logger.error("The method execution returned result code " + response);
@@ -142,6 +143,7 @@ public class HttpClientRemotePeer extends AbstractRemoteStorage {
             try {
                 int response = executeMethod(get);
                 if (response == HttpStatus.SC_OK) {
+                    logger.info("Item " + path + " fetched from remote peer of " + getId());
                     logger.debug("Constructing ProxiedItemProperties");
                     ProxiedItemProperties properties = constructItemPropertiesFromGetResponse(path,
                             originatingUrlString, get);
@@ -204,7 +206,7 @@ public class HttpClientRemotePeer extends AbstractRemoteStorage {
         Header lastModifiedHeader = executedMethod.getResponseHeader("last-modified");
         if (locationHeader != null) {
             // we may had redirection
-            logger.info("We got location header " + locationHeader.getValue());
+            logger.debug("We got location header " + locationHeader.getValue());
             originatingUrlString = locationHeader.getValue();
         }
         URL originatingUrl = new URL(originatingUrlString);
