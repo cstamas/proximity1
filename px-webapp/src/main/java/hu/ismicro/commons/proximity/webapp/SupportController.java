@@ -33,21 +33,32 @@ public class SupportController extends MultiActionController {
 
     public ModelAndView search(HttpServletRequest request, HttpServletResponse response) throws Exception {
         logger.debug("Got request for search");
-        ProxiedItemProperties example = new ProxiedItemProperties();
+        ProxiedItemProperties example = null; 
         if (RequestUtils.getStringParameter(request, "searchAll") != null
                 && RequestUtils.getRequiredStringParameter(request, "searchAllRegexp") != null) {
+            example = new ProxiedItemProperties();
             example.setName(RequestUtils.getRequiredStringParameter(request, "searchAllRegexp") + "*");
         } else if (RequestUtils.getStringParameter(request, "searchSelected") != null
                 && RequestUtils.getRequiredStringParameter(request, "searchSelectedRepos") != null
                 && RequestUtils.getRequiredStringParameter(request, "searchSelectedRegexp") != null) {
+            example = new ProxiedItemProperties();
             example.setName(RequestUtils.getRequiredStringParameter(request, "searchSelectedRegexp") + "*");
             example.setMetadata(ProxiedItemProperties.METADATA_OWNING_REPOSITORY, RequestUtils.getRequiredStringParameter(request, "searchSelectedRepos"));
+        } else if (RequestUtils.getStringParameter(request, "reindexAll") != null) {
+            proximity.reindex();
+        } else if (RequestUtils.getStringParameter(request, "reindexSelected") != null
+                && RequestUtils.getRequiredStringParameter(request, "reindexSelectedRepos") != null) {
+            proximity.reindex(RequestUtils.getRequiredStringParameter(request, "reindexSelectedRepos"));
         }
-        List results = proximity.searchItem(example);
-        List repositories = getProximity().getRepositories();
+
         Map context = new HashMap();
+
+        if (example != null) {
+            List results = proximity.searchItem(example);
+            context.put("results", results);
+        }
+        List repositories = getProximity().getRepositories();
         context.put("repositories", repositories);
-        context.put("results", results);
         return new ModelAndView("search", context);
     }
 

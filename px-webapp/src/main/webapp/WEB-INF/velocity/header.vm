@@ -1,7 +1,7 @@
 <table>
 	<tr>
 		<td class="leftBand">
-			<div class="mainmenu">
+			<div class="logo"><br/>
 				<img src="#springUrl('/images/logo.png')"/>
 			</div>
 		</td>
