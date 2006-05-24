@@ -20,89 +20,89 @@ import org.apache.commons.logging.LogFactory;
 
 public class RepositoryImpl implements Repository {
 
-	protected Log logger = LogFactory.getLog(this.getClass());
+    protected Log logger = LogFactory.getLog(this.getClass());
 
-	private String id;
+    private String id;
 
-	private String uriPrefix = null;
+    private String uriPrefix = null;
 
-	private boolean listable = true;
-    
+    private boolean listable = true;
+
     private boolean reindex = true;
-    
+
     private boolean recreateMetadata = true;
 
-	private Storage localStorage;
+    private Storage localStorage;
 
-	private Storage remoteStorage;
+    private Storage remoteStorage;
 
-	private Indexer indexer;
+    private Indexer indexer;
 
-	private AccessManager accessManager = new OpenAccessManager();
+    private AccessManager accessManager = new OpenAccessManager();
 
-	private StatisticsGatherer statisticsGatherer;
+    private StatisticsGatherer statisticsGatherer;
 
-	private RepositoryLogic repositoryLogic = new DefaultProxyingLogic();
+    private RepositoryLogic repositoryLogic = new DefaultProxyingLogic();
 
-	public StatisticsGatherer getStatisticsGatherer() {
-		return statisticsGatherer;
-	}
+    public StatisticsGatherer getStatisticsGatherer() {
+        return statisticsGatherer;
+    }
 
-	public void setStatisticsGatherer(StatisticsGatherer statisticsGatherer) {
-		this.statisticsGatherer = statisticsGatherer;
-	}
+    public void setStatisticsGatherer(StatisticsGatherer statisticsGatherer) {
+        this.statisticsGatherer = statisticsGatherer;
+    }
 
-	public String getId() {
-		return id;
-	}
+    public String getId() {
+        return id;
+    }
 
-	public void setId(String id) {
-		this.id = id;
-	}
+    public void setId(String id) {
+        this.id = id;
+    }
 
-	public String getURIPrefix() {
-		return uriPrefix;
-	}
+    public String getURIPrefix() {
+        return uriPrefix;
+    }
 
-	public void setURIPrefix(String prefix) {
-		this.uriPrefix = prefix;
-	}
+    public void setURIPrefix(String prefix) {
+        this.uriPrefix = prefix;
+    }
 
-	public boolean isListable() {
-		return listable;
-	}
+    public boolean isListable() {
+        return listable;
+    }
 
-	public void setListable(boolean listable) {
-		this.listable = listable;
-	}
+    public void setListable(boolean listable) {
+        this.listable = listable;
+    }
 
-	public Storage getLocalStorage() {
-		return localStorage;
-	}
+    public Storage getLocalStorage() {
+        return localStorage;
+    }
 
-	public void setLocalStorage(Storage localStorage) {
-		this.localStorage = localStorage;
-	}
+    public void setLocalStorage(Storage localStorage) {
+        this.localStorage = localStorage;
+    }
 
-	public Storage getRemoteStorage() {
-		return remoteStorage;
-	}
+    public Storage getRemoteStorage() {
+        return remoteStorage;
+    }
 
-	public void setRemoteStorage(Storage remoteStorage) {
-		this.remoteStorage = remoteStorage;
-	}
+    public void setRemoteStorage(Storage remoteStorage) {
+        this.remoteStorage = remoteStorage;
+    }
 
-	public RepositoryLogic getRepositoryLogic() {
-		return repositoryLogic;
-	}
+    public RepositoryLogic getRepositoryLogic() {
+        return repositoryLogic;
+    }
 
-	public Indexer getIndexer() {
-		return indexer;
-	}
+    public Indexer getIndexer() {
+        return indexer;
+    }
 
-	public void setIndexer(Indexer indexer) {
-		this.indexer = indexer;
-	}
+    public void setIndexer(Indexer indexer) {
+        this.indexer = indexer;
+    }
 
     public boolean isRecreateMetadata() {
         return recreateMetadata;
@@ -120,102 +120,103 @@ public class RepositoryImpl implements Repository {
         this.reindex = reindex;
     }
 
-	public AccessManager getAccessManager() {
-		return accessManager;
-	}
+    public AccessManager getAccessManager() {
+        return accessManager;
+    }
 
-	public void setAccessManager(AccessManager accessManager) {
-		this.accessManager = accessManager;
-	}
+    public void setAccessManager(AccessManager accessManager) {
+        this.accessManager = accessManager;
+    }
 
-	public void setRepositoryLogic(RepositoryLogic repositoryLogic) {
-		if (repositoryLogic == null) {
-			throw new IllegalArgumentException("The logic may be not null");
-		}
-		this.repositoryLogic = repositoryLogic;
-	}
+    public void setRepositoryLogic(RepositoryLogic repositoryLogic) {
+        if (repositoryLogic == null) {
+            throw new IllegalArgumentException("The logic may be not null");
+        }
+        this.repositoryLogic = repositoryLogic;
+    }
 
-	public ProxiedItemProperties retrieveItemProperties(ProximityRequest request) throws ItemNotFoundException,
-			StorageException, AccessDeniedException {
-		accessManager.decide(request, null);
-		return (ProxiedItemProperties) retrieveItem(true, request).getProperties();
-	}
+    public ProxiedItemProperties retrieveItemProperties(ProximityRequest request) throws ItemNotFoundException,
+            StorageException, AccessDeniedException {
+        accessManager.decide(request, null);
+        return (ProxiedItemProperties) retrieveItem(true, request).getProperties();
+    }
 
-	public ProxiedItem retrieveItem(ProximityRequest request) throws ItemNotFoundException, StorageException, AccessDeniedException {
-		accessManager.decide(request, null);
-		return retrieveItem(false, request);
-	}
+    public ProxiedItem retrieveItem(ProximityRequest request) throws ItemNotFoundException, StorageException,
+            AccessDeniedException {
+        accessManager.decide(request, null);
+        return retrieveItem(false, request);
+    }
 
-	public void deleteItemProperties(String path) throws StorageException {
-		if (getLocalStorage() != null) {
-			if (getIndexer() != null) {
-				try {
-					ItemProperties itemProps = getLocalStorage().retrieveItemProperties(path);
-					getIndexer().deleteItemProperties(getItemUid(itemProps), itemProps);
-				} catch (ItemNotFoundException ex) {
-					logger.info("Path [" + path + "] not found but deletion requested.", ex);
-				}
-			}
-			getLocalStorage().deleteItemProperties(path);
-		} else {
-			throw new UnsupportedOperationException("The repository " + getId() + " have no local storage!");
-		}
-	}
+    public void deleteItemProperties(String path) throws StorageException {
+        if (getLocalStorage() != null) {
+            if (getIndexer() != null) {
+                try {
+                    ItemProperties itemProps = getLocalStorage().retrieveItemProperties(path);
+                    getIndexer().deleteItemProperties(getItemUid(itemProps), itemProps);
+                } catch (ItemNotFoundException ex) {
+                    logger.info("Path [" + path + "] not found but deletion requested.", ex);
+                }
+            }
+            getLocalStorage().deleteItemProperties(path);
+        } else {
+            throw new UnsupportedOperationException("The repository " + getId() + " have no local storage!");
+        }
+    }
 
-	public void deleteItem(String path) throws StorageException {
-		if (getLocalStorage() != null) {
-			if (getIndexer() != null) {
-				try {
-					ItemProperties itemProps = getLocalStorage().retrieveItemProperties(path);
-					getIndexer().deleteItemProperties(getItemUid(itemProps), itemProps);
-				} catch (ItemNotFoundException ex) {
-					logger.info("Path [" + path + "] not found but deletion requested.", ex);
-				}
-			}
-			getLocalStorage().deleteItem(path);
-		} else {
-			throw new UnsupportedOperationException("The repository " + getId() + " have no local storage!");
-		}
-	}
+    public void deleteItem(String path) throws StorageException {
+        if (getLocalStorage() != null) {
+            if (getIndexer() != null) {
+                try {
+                    ItemProperties itemProps = getLocalStorage().retrieveItemProperties(path);
+                    getIndexer().deleteItemProperties(getItemUid(itemProps), itemProps);
+                } catch (ItemNotFoundException ex) {
+                    logger.info("Path [" + path + "] not found but deletion requested.", ex);
+                }
+            }
+            getLocalStorage().deleteItem(path);
+        } else {
+            throw new UnsupportedOperationException("The repository " + getId() + " have no local storage!");
+        }
+    }
 
-	public void storeItemProperties(ItemProperties itemProps) throws StorageException {
-		if (getLocalStorage() != null && getLocalStorage().isWritable()) {
-			getLocalStorage().storeItemProperties(itemProps);
-		} else {
-			throw new UnsupportedOperationException("The repository " + getId() + " have no local storage!");
-		}
-		if (getIndexer() != null && getRepositoryLogic().shouldIndex(itemProps)) {
-			getIndexer().addItemProperties(getItemUid(itemProps), itemProps);
-		}
-	}
+    public void storeItemProperties(ItemProperties itemProps) throws StorageException {
+        if (getLocalStorage() != null && getLocalStorage().isWritable()) {
+            getLocalStorage().storeItemProperties(itemProps);
+        } else {
+            throw new UnsupportedOperationException("The repository " + getId() + " have no local storage!");
+        }
+        if (getIndexer() != null && getRepositoryLogic().shouldIndex(itemProps)) {
+            getIndexer().addItemProperties(getItemUid(itemProps), itemProps);
+        }
+    }
 
-	public void storeItem(Item item) throws StorageException {
-		if (getLocalStorage() != null && getLocalStorage().isWritable()) {
-			getLocalStorage().storeItem(item);
-		} else {
-			throw new UnsupportedOperationException("The repository " + getId() + " have no local storage!");
-		}
-		if (getIndexer() != null && getRepositoryLogic().shouldIndex(item.getProperties())) {
-			getIndexer().addItemProperties(getItemUid(item.getProperties()), item.getProperties());
-		}
-	}
+    public void storeItem(Item item) throws StorageException {
+        if (getLocalStorage() != null && getLocalStorage().isWritable()) {
+            getLocalStorage().storeItem(item);
+        } else {
+            throw new UnsupportedOperationException("The repository " + getId() + " have no local storage!");
+        }
+        if (getIndexer() != null && getRepositoryLogic().shouldIndex(item.getProperties())) {
+            getIndexer().addItemProperties(getItemUid(item.getProperties()), item.getProperties());
+        }
+    }
 
-	public List listItems(ProximityRequest request) throws StorageException {
-		List result = new ArrayList();
-		if (isListable()) {
-			if (getLocalStorage() != null) {
-				List list = getLocalStorage().listItems(request.getPath());
-				for (Iterator i = list.iterator(); i.hasNext();) {
-					ItemProperties ip = (ItemProperties) i.next();
-					ip.setMetadata(ItemProperties.METADATA_OWNING_REPOSITORY, this.getId());
-				}
-				result.addAll(list);
-			}
-		}
-		return result;
-	}
+    public List listItems(ProximityRequest request) throws StorageException {
+        List result = new ArrayList();
+        if (isListable()) {
+            if (getLocalStorage() != null) {
+                List list = getLocalStorage().listItems(request.getPath());
+                for (Iterator i = list.iterator(); i.hasNext();) {
+                    ItemProperties ip = (ItemProperties) i.next();
+                    ip.setMetadata(ItemProperties.METADATA_OWNING_REPOSITORY, this.getId());
+                }
+                result.addAll(list);
+            }
+        }
+        return result;
+    }
 
-	public void initialize() {
+    public void initialize() {
         logger.info("Initializing...");
 
         if (recreateMetadata) {
@@ -226,171 +227,171 @@ public class RepositoryImpl implements Repository {
             logger.debug("Reindexing " + getId());
             reindex();
         }
-	}
-	
-	protected String removePathPrefix(String path) {
-		if (getURIPrefix() != null && getURIPrefix().length() != 0) {
-			return path.substring(getURIPrefix().length());
-		} else {
-			return path;
-		}
-	}
-	
-	protected String putPathPrefix(String path) {
-		if (getURIPrefix() != null && getURIPrefix().length() != 0) {
-			return PathHelper.absolutizePathFromBase(getURIPrefix(), path);
-		} else {
-			return path;
-		}
-	}
+    }
 
-	protected ProxiedItem retrieveItem(boolean propsOnly, ProximityRequest request) throws ItemNotFoundException,
-			StorageException {
-		ProxiedItem result = null;
-		try {
-			if (getLocalStorage() != null) {
-				if (getRepositoryLogic().shouldCheckForLocalCopy(request)) {
-					if ((propsOnly && getLocalStorage().containsItemProperties(request.getPath()))
-							|| (getLocalStorage().containsItem(request.getPath()))) {
-						logger.info("Found " + request.getPath() + " item in storage of repository " + getId());
-						if (propsOnly) {
-							result = new ProxiedItem();
-							result.setProperties(getLocalStorage().retrieveItemProperties(request.getPath()));
-						} else {
-							result = getLocalStorage().retrieveItem(request.getPath());
-						}
-						result.getProperties().setMetadata(ItemProperties.METADATA_OWNING_REPOSITORY, getId());
-						if (getStatisticsGatherer() != null) {
-							getStatisticsGatherer().localHit(request, this, result.getProperties(), propsOnly);
-						}
-						result = getRepositoryLogic().afterLocalCopyFound(result, this);
-					} else {
-						logger.info("Not found " + request.getPath() + " item in storage of repository " + getId());
-					}
-				}
-			}
-			if (getRepositoryLogic().shouldCheckForRemoteCopy(request, result) && getRemoteStorage() != null) {
-				if ((propsOnly && getRemoteStorage().containsItemProperties(request.getPath()))
-						|| (getRemoteStorage().containsItem(request.getPath()))) {
-					logger.info("Found " + request.getPath() + " item in remote storage of repository " + getId());
-					if (propsOnly) {
-						result = new ProxiedItem();
-						result.setProperties(getRemoteStorage().retrieveItemProperties(request.getPath()));
-					} else {
-						result = getRemoteStorage().retrieveItem(request.getPath());
-					}
-					result.getProperties().setMetadata(ItemProperties.METADATA_OWNING_REPOSITORY, getId());
-					if (getStatisticsGatherer() != null) {
-						getStatisticsGatherer().remoteHit(request, this, result.getProperties(), propsOnly);
-					}
-					result = getRepositoryLogic().afterRemoteCopyFound(result, this);
-					if (result != null && !result.getProperties().isDirectory() && getLocalStorage().isWritable()) {
-						if (getRepositoryLogic().shouldStoreLocallyAfterRemoteRetrieval(result.getProperties())) {
-							logger.info("Storing " + request.getPath() + " item in writable storage of repository "
-									+ getId());
-							if (propsOnly) {
-								storeItemProperties(result.getProperties());
-								result.setProperties(getLocalStorage().retrieveItemProperties(request.getPath()));
-							} else {
-								storeItem(result);
-								result = getLocalStorage().retrieveItem(request.getPath());
-							}
-						}
-					}
-				} else {
-					logger.info("Not found " + request.getPath() + " item in remote peer of repository " + getId());
-				}
+    protected String removePathPrefix(String path) {
+        if (getURIPrefix() != null && getURIPrefix().length() != 0) {
+            return path.substring(getURIPrefix().length());
+        } else {
+            return path;
+        }
+    }
 
-			}
-			if (result == null) {
-				throw new ItemNotFoundException(request.getPath());
-			}
-			return result;
-		} catch (ItemNotFoundException ex) {
-			throw new ItemNotFoundException(request.getPath(), getId());
-		}
-	}
+    protected String putPathPrefix(String path) {
+        if (getURIPrefix() != null && getURIPrefix().length() != 0) {
+            return PathHelper.absolutizePathFromBase(getURIPrefix(), path);
+        } else {
+            return path;
+        }
+    }
 
-	protected String getItemUid(ItemProperties ip) {
-		return getId() + ":" + PathHelper.walkThePath(ip.getAbsolutePath(), ip.getName());
-	}
+    protected ProxiedItem retrieveItem(boolean propsOnly, ProximityRequest request) throws ItemNotFoundException,
+            StorageException {
+        ProxiedItem result = null;
+        try {
+            if (getLocalStorage() != null) {
+                if (getRepositoryLogic().shouldCheckForLocalCopy(request)) {
+                    if ((propsOnly && getLocalStorage().containsItemProperties(request.getPath()))
+                            || (getLocalStorage().containsItem(request.getPath()))) {
+                        logger.info("Found " + request.getPath() + " item in storage of repository " + getId());
+                        if (propsOnly) {
+                            result = new ProxiedItem();
+                            result.setProperties(getLocalStorage().retrieveItemProperties(request.getPath()));
+                        } else {
+                            result = getLocalStorage().retrieveItem(request.getPath());
+                        }
+                        result.getProperties().setMetadata(ItemProperties.METADATA_OWNING_REPOSITORY, getId());
+                        if (getStatisticsGatherer() != null) {
+                            getStatisticsGatherer().localHit(request, this, result.getProperties(), propsOnly);
+                        }
+                        result = getRepositoryLogic().afterLocalCopyFound(result, this);
+                    } else {
+                        logger.info("Not found " + request.getPath() + " item in storage of repository " + getId());
+                    }
+                }
+            }
+            if (getRepositoryLogic().shouldCheckForRemoteCopy(request, result) && getRemoteStorage() != null) {
+                if ((propsOnly && getRemoteStorage().containsItemProperties(request.getPath()))
+                        || (getRemoteStorage().containsItem(request.getPath()))) {
+                    logger.info("Found " + request.getPath() + " item in remote storage of repository " + getId());
+                    if (propsOnly) {
+                        result = new ProxiedItem();
+                        result.setProperties(getRemoteStorage().retrieveItemProperties(request.getPath()));
+                    } else {
+                        result = getRemoteStorage().retrieveItem(request.getPath());
+                    }
+                    result.getProperties().setMetadata(ItemProperties.METADATA_OWNING_REPOSITORY, getId());
+                    if (getStatisticsGatherer() != null) {
+                        getStatisticsGatherer().remoteHit(request, this, result.getProperties(), propsOnly);
+                    }
+                    result = getRepositoryLogic().afterRemoteCopyFound(result, this);
+                    if (result != null && !result.getProperties().isDirectory() && getLocalStorage().isWritable()) {
+                        if (getRepositoryLogic().shouldStoreLocallyAfterRemoteRetrieval(result.getProperties())) {
+                            logger.info("Storing " + request.getPath() + " item in writable storage of repository "
+                                    + getId());
+                            if (propsOnly) {
+                                storeItemProperties(result.getProperties());
+                                result.setProperties(getLocalStorage().retrieveItemProperties(request.getPath()));
+                            } else {
+                                storeItem(result);
+                                result = getLocalStorage().retrieveItem(request.getPath());
+                            }
+                        }
+                    }
+                } else {
+                    logger.info("Not found " + request.getPath() + " item in remote peer of repository " + getId());
+                }
 
-	/**
-	 * Forces repository reindexing. If there is no indexer supplied with repos,
-	 * this call will do nothing.
-	 * 
-	 */
-	protected void reindex() {
-		if (getIndexer() == null) {
-			logger.info("Will NOT reindex repository " + getId() + ", since it have no indexer defined.");
-			return;
-		}
-		if (getLocalStorage() == null) {
-			logger.info("Will NOT reindex repository " + getId() + ", since it have no local storage defined.");
-			return;
-		}
-		int indexed = 0;
-		Stack stack = new Stack();
-		List dir = getLocalStorage().listItems(PathHelper.PATH_SEPARATOR);
-		stack.push(dir);
-		while (!stack.isEmpty()) {
-			dir = (List) stack.pop();
-			for (Iterator i = dir.iterator(); i.hasNext();) {
-				ItemProperties ip = (ItemProperties) i.next();
-				ip.setMetadata(ItemProperties.METADATA_OWNING_REPOSITORY, getId());
-				if (ip.isDirectory()) {
-					List subdir = getLocalStorage().listItems(
-							PathHelper.walkThePath(ip.getAbsolutePath(), ip.getName()));
-					stack.push(subdir);
-				} else {
-					getIndexer().addItemProperties(getItemUid(ip), ip);
-					indexed++;
-				}
-			}
-		}
-		logger.info("Indexed " + indexed + " items");
-	}
+            }
+            if (result == null) {
+                throw new ItemNotFoundException(request.getPath());
+            }
+            return result;
+        } catch (ItemNotFoundException ex) {
+            throw new ItemNotFoundException(request.getPath(), getId());
+        }
+    }
 
-	/**
-	 * Forces metadata creation if the underlying storage is metadata aware.
-	 * Otherwise the call will do nothing.
-	 * 
-	 */
-	protected void recreateMetadata() {
-		if (getLocalStorage() == null) {
-			logger.info("Will NOT recreate metadata on " + getId() + ", since it have no local storage defined.");
-			return;
-		}
-		if (!getLocalStorage().isWritable()) {
-			logger.info("Will NOT recreate metadata on " + getId()
-					+ ", since it have no writable local storage defined.");
-			return;
-		}
-		if (!getLocalStorage().isMetadataAware()) {
-			logger.info("Will NOT recreate metadata on " + getId()
-					+ ", since it have no metadata-aware local storage defined.");
-			return;
-		}
-		int processed = 0;
-		Stack stack = new Stack();
-		List dir = getLocalStorage().listItems(PathHelper.PATH_SEPARATOR);
-		stack.push(dir);
-		while (!stack.isEmpty()) {
-			dir = (List) stack.pop();
-			for (Iterator i = dir.iterator(); i.hasNext();) {
-				ItemProperties ip = (ItemProperties) i.next();
-				ip.setMetadata(ItemProperties.METADATA_OWNING_REPOSITORY, getId());
-				if (ip.isDirectory()) {
-					List subdir = getLocalStorage().listItems(
-							PathHelper.walkThePath(ip.getAbsolutePath(), ip.getName()));
-					stack.push(subdir);
-				} else {
-					getLocalStorage().storeItemProperties(ip);
-					processed++;
-				}
-			}
-		}
-		logger.info("Recreated metadata on " + processed + " items");
-	}
+    protected String getItemUid(ItemProperties ip) {
+        return getId() + ":" + PathHelper.walkThePath(ip.getAbsolutePath(), ip.getName());
+    }
+
+    /**
+     * Forces repository reindexing. If there is no indexer supplied with repos,
+     * this call will do nothing.
+     * 
+     */
+    protected void reindex() {
+        if (getIndexer() == null) {
+            logger.info("Will NOT reindex repository " + getId() + ", since it have no indexer defined.");
+            return;
+        }
+        if (getLocalStorage() == null) {
+            logger.info("Will NOT reindex repository " + getId() + ", since it have no local storage defined.");
+            return;
+        }
+        int indexed = 0;
+        Stack stack = new Stack();
+        List dir = getLocalStorage().listItems(PathHelper.PATH_SEPARATOR);
+        stack.push(dir);
+        while (!stack.isEmpty()) {
+            dir = (List) stack.pop();
+            for (Iterator i = dir.iterator(); i.hasNext();) {
+                ItemProperties ip = (ItemProperties) i.next();
+                ip.setMetadata(ItemProperties.METADATA_OWNING_REPOSITORY, getId());
+                if (ip.isDirectory()) {
+                    List subdir = getLocalStorage().listItems(
+                            PathHelper.walkThePath(ip.getAbsolutePath(), ip.getName()));
+                    stack.push(subdir);
+                } else {
+                    getIndexer().addItemProperties(getItemUid(ip), ip);
+                    indexed++;
+                }
+            }
+        }
+        logger.info("Indexed " + indexed + " items");
+    }
+
+    /**
+     * Forces metadata creation if the underlying storage is metadata aware.
+     * Otherwise the call will do nothing.
+     * 
+     */
+    protected void recreateMetadata() {
+        if (getLocalStorage() == null) {
+            logger.info("Will NOT recreate metadata on " + getId() + ", since it have no local storage defined.");
+            return;
+        }
+        if (!getLocalStorage().isWritable()) {
+            logger.info("Will NOT recreate metadata on " + getId()
+                    + ", since it have no writable local storage defined.");
+            return;
+        }
+        if (!getLocalStorage().isMetadataAware()) {
+            logger.info("Will NOT recreate metadata on " + getId()
+                    + ", since it have no metadata-aware local storage defined.");
+            return;
+        }
+        int processed = 0;
+        Stack stack = new Stack();
+        List dir = getLocalStorage().listItems(PathHelper.PATH_SEPARATOR);
+        stack.push(dir);
+        while (!stack.isEmpty()) {
+            dir = (List) stack.pop();
+            for (Iterator i = dir.iterator(); i.hasNext();) {
+                ItemProperties ip = (ItemProperties) i.next();
+                ip.setMetadata(ItemProperties.METADATA_OWNING_REPOSITORY, getId());
+                if (ip.isDirectory()) {
+                    List subdir = getLocalStorage().listItems(
+                            PathHelper.walkThePath(ip.getAbsolutePath(), ip.getName()));
+                    stack.push(subdir);
+                } else {
+                    getLocalStorage().storeItemProperties(ip);
+                    processed++;
+                }
+            }
+        }
+        logger.info("Recreated metadata on " + processed + " items");
+    }
 
 }
