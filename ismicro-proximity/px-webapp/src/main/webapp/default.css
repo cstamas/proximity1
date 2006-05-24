@@ -27,7 +27,7 @@ table {
 }
 
 .headerBand {
-     border-bottom: 1px solid #aaaaaa;
+#     border-bottom: 1px solid #aaaaaa;
      vertical-align: top;
      margin: 0px;
      padding: 0px;
@@ -69,11 +69,21 @@ table {
      font-weight: normal;
 }
 
+.logo {
+     width: 180px;
+     height: 60px;
+     margin: 3px;
+#     border-top: 1px solid #aaaaaa;
+#     border-bottom: 1px solid #aaaaaa;
+#     border-left: 1px solid #aaaaaa;
+#     border-right: 1px solid #aaaaaa;
+}
+
 .mainmenu {
      background: #eeeeee;
      width: 140px;
      margin: 3px;
-     padding: 6px;
+#     padding: 6px;
 #     font-weight: bold;
 #     font-style: italic;
      border-top: 1px solid #aaaaaa;

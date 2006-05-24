@@ -1,4 +1,4 @@
-<h2>Proximity</h2>
+<h2>#springMessage('proximity.product.name')</h2>
 
 <p>Proximity is extensible http-proxy "like" engine.</p>
 
@@ -12,6 +12,9 @@ Jars, etc...).</p>
 <p>Proximity features in brief:</p>
 
 <ul>
+<li>2-in-1 - With Proximity you can host your own private repo
+while proxying and have all the benefits of proxying remote repositories.
+No, Proximity does not remove stains.</li>
 <li>Access control - Proximity is well suited for <b>corporate deployments</b>, since it has extensible
 and configurable AccessManager. Proximity has various AccessManager and AccessDecisionVoter
 implementations out-of-the-box. Some examples: IP based access restriction, HTTPS

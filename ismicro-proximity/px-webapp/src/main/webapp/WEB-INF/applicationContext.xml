@@ -80,6 +80,7 @@
 		class="hu.ismicro.commons.proximity.base.indexer.LuceneIndexer">
 		<property name="indexDirectory" value="${indexer.dir}" />
 		<property name="recreateIndexes" value="true" />
+		<property name="dirtyItemTreshold" value="100" />
 	</bean>
 
 	<!--
