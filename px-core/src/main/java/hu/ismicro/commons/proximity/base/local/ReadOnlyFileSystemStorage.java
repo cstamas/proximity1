@@ -2,6 +2,7 @@ package hu.ismicro.commons.proximity.base.local;
 
 import hu.ismicro.commons.proximity.ItemNotFoundException;
 import hu.ismicro.commons.proximity.base.AbstractStorage;
+import hu.ismicro.commons.proximity.base.PathHelper;
 import hu.ismicro.commons.proximity.base.ProxiedItem;
 import hu.ismicro.commons.proximity.base.ProxiedItemProperties;
 import hu.ismicro.commons.proximity.base.StorageException;
@@ -107,7 +108,7 @@ public class ReadOnlyFileSystemStorage extends AbstractStorage {
         if (!baseDirFile.isDirectory()) {
             throw new IllegalArgumentException("The supplied parameter " + baseDirPath + " is not a directory!");
         }
-        this.baseDir = baseDirPath;
+        this.baseDir = baseDirFile.getAbsolutePath();
     }
 
     /**
@@ -196,8 +197,8 @@ public class ReadOnlyFileSystemStorage extends AbstractStorage {
             if (target.isDirectory()) {
                 File[] files = target.listFiles();
                 for (int i = 0; i < files.length; i++) {
-                    ProxiedItemProperties item = constructItemProperties(files[i], (new File(path, files[i].getName())
-                            .getAbsolutePath()));
+                    ProxiedItemProperties item = constructItemProperties(files[i], PathHelper.concatPaths(path,
+                            files[i].getName()));
                     result.add(item);
                 }
             } else {
@@ -215,12 +216,7 @@ public class ReadOnlyFileSystemStorage extends AbstractStorage {
 
     protected ProxiedItemProperties constructItemProperties(File target, String path) {
         ProxiedItemProperties result = new ProxiedItemProperties();
-        File pathFile = new File(path);
-        if (pathFile.getParentFile() != null) {
-            result.setAbsolutePath((new File(path)).getParentFile().getAbsolutePath());
-        } else {
-            result.setAbsolutePath((new File(path)).getAbsolutePath());
-        }
+        result.setAbsolutePath(PathHelper.getDirName(path));
         result.setDirectory(target.isDirectory());
         result.setFile(target.isFile());
         result.setLastModified(new Date(target.lastModified()));
@@ -238,8 +234,7 @@ public class ReadOnlyFileSystemStorage extends AbstractStorage {
 
     protected void fillInMetadata(ProxiedItemProperties iProps) {
         try {
-            String itemPath = (new File(iProps.getAbsolutePath(), iProps.getName())).getAbsolutePath();
-            File target = new File(getMetadataBaseDir(), itemPath);
+            File target = new File(new File(getMetadataBaseDir(), iProps.getAbsolutePath()), iProps.getName());
             if (target.exists() && target.isFile()) {
                 Properties metadata = new Properties();
                 metadata.load(new FileInputStream(target));
@@ -249,7 +244,8 @@ public class ReadOnlyFileSystemStorage extends AbstractStorage {
                     iProps.setMetadata(key, value);
                 }
             } else {
-                logger.info("No metadata exists for " + itemPath);
+                logger.info("No metadata exists for [" + iProps.getName() + "] on path [" + iProps.getAbsolutePath()
+                        + "]");
             }
         } catch (IOException ex) {
             logger.error("Got IOException during metadata retrieval.", ex);

@@ -8,6 +8,8 @@ import java.util.Map;
 
 public interface StatisticsGatherer {
     
+    void initialize();
+    
     void localHit(ProximityRequest req, Repository repo, ItemProperties ip, boolean propsOnly);
 
     void remoteHit(ProximityRequest req, Repository repo, ItemProperties ip, boolean propsOnly);

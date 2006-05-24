@@ -12,6 +12,8 @@ import java.util.List;
  *
  */
 public interface Indexer {
+    
+    void initialize();
 	
     void addItemProperties(String UID, ItemProperties ip) throws StorageException;
     

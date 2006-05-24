@@ -55,7 +55,8 @@ public class LuceneIndexer implements Indexer {
         this.recreateIndexes = recreateIndexes;
     }
 
-    public void afterPropertiesSet() {
+    public void initialize() {
+        logger.info("Initializing...");
         try {
             if (recreateIndexes) {
                 logger.info("Recreating indexes as instructed by recreateIndexes parameter.");

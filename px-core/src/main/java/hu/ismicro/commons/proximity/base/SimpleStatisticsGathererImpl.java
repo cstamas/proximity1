@@ -28,6 +28,11 @@ public class SimpleStatisticsGathererImpl implements StatisticsGatherer {
     private static final String REQUEST_REMOTE_ADDRESS_STATS = "remoteAddressStats";
 
     private Map stats = new HashMap();
+    
+    public void initialize() {
+        logger.info("Initializing...");
+        //nothing
+    }
 
     public void localHit(ProximityRequest req, Repository repo, ItemProperties ip, boolean propsOnly) {
         if (ip.isFile()) {

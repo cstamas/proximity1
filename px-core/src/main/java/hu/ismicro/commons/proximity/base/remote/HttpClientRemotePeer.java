@@ -66,7 +66,7 @@ public class HttpClientRemotePeer extends AbstractRemoteStorage {
         method.setQueryString(getQueryString());
         int resultCode = 0;
         try {
-            logger.debug("Executing " + method);
+            logger.debug("Executing " + method + " on URI " + method.getURI());
             resultCode = httpClient.executeMethod(method);
         } catch (HttpException ex) {
             logger.error("Protocol error while executing " + method.getName() + " method with query string "
@@ -75,8 +75,8 @@ public class HttpClientRemotePeer extends AbstractRemoteStorage {
             logger.error("Tranport error while executing " + method.getName() + " method with query string "
                     + method.getQueryString(), ex);
         }
-        logger.info("Received response code " + resultCode + " for executing " + method.getName()
-                + " method with query string " + method.getPath());
+        logger.info("Received response code [" + resultCode + "] for executing [" + method.getName()
+                + "] method with path [" + method.getPath() + "]");
         return resultCode;
     }
 
@@ -214,7 +214,12 @@ public class HttpClientRemotePeer extends AbstractRemoteStorage {
         // TODO: ibiblio behaves like this, check for others
         result.setDirectory(lastModifiedHeader == null);
         result.setFile(lastModifiedHeader != null);
-        result.setLastModified(makeDateFromString(lastModifiedHeader.getValue()));
+        if (lastModifiedHeader != null) {
+            result.setLastModified(makeDateFromString(lastModifiedHeader.getValue()));
+        } else {
+            // get system time
+            result.setLastModified(new Date());
+        }
         result.setName(PathHelper.getFileName(originatingUrl.getPath()));
         if (result.isFile() && executedMethod instanceof GetMethod) {
             result.setSize(((GetMethod) executedMethod).getResponseContentLength());
