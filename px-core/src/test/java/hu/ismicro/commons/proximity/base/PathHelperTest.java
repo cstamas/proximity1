@@ -39,13 +39,31 @@ public class PathHelperTest extends TestCase {
         Assert.assertEquals("http://a.c/a/b/c", PathHelper.walkThePath("http://a.c", "/a/b/c"));
     }
 
+    public void testGetDirName() {
+        Assert.assertEquals("", PathHelper.getDirName("c"));
+        Assert.assertEquals("/a/b", PathHelper.getDirName("/a/b/c"));
+        Assert.assertEquals("", PathHelper.getDirName("aa/"));
+        Assert.assertEquals("/", PathHelper.getDirName("///a"));
+        Assert.assertEquals("/a/b/c", PathHelper.getDirName("/a/b/c/file///"));
+    }
+
     public void testGetFileName() {
         Assert.assertEquals("c", PathHelper.getFileName("c"));
         Assert.assertEquals("c", PathHelper.getFileName("/a/b/c"));
         Assert.assertEquals("aa", PathHelper.getFileName("aa///"));
         Assert.assertEquals("/", PathHelper.getFileName("///"));
         Assert.assertEquals("file", PathHelper.getFileName("/a/b/c/file///"));
-
+    }
+    
+    public void testConcatPaths() {
+        Assert.assertEquals("a/b", PathHelper.concatPaths("a", "b"));
+        Assert.assertEquals("a/b", PathHelper.concatPaths("a/", "b"));
+        Assert.assertEquals("a/b", PathHelper.concatPaths("a", "/b"));
+        Assert.assertEquals("a/b", PathHelper.concatPaths("a/", "/b"));
+        Assert.assertEquals("/a/b", PathHelper.concatPaths("/a", "b"));
+        Assert.assertEquals("/a/b", PathHelper.concatPaths("/a/", "b"));
+        Assert.assertEquals("/a/b", PathHelper.concatPaths("/a", "/b"));
+        Assert.assertEquals("/a/b", PathHelper.concatPaths("/a/", "/b"));
     }
 
 }
