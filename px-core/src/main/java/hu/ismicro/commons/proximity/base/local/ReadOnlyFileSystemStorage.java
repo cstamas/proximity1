@@ -223,11 +223,11 @@ public class ReadOnlyFileSystemStorage extends AbstractStorage {
         result.setName(target.getName());
         if (target.isFile()) {
             result.setSize(target.length());
+            if (isMetadataAware()) {
+                fillInMetadata(result);
+            }
         } else {
             result.setSize(0);
-        }
-        if (isMetadataAware()) {
-            fillInMetadata(result);
         }
         return result;
     }

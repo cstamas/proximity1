@@ -34,19 +34,6 @@ public class ProximityImpl implements Proximity {
 
     private StatisticsGatherer statisticsGatherer;
 
-    public void initialize() {
-        logger.info("Starting Initialization...");
-        statisticsGatherer.initialize();
-        indexer.initialize();
-        logger.info("Initializing all defined repositories");
-        for (Iterator i = repositoryOrder.iterator(); i.hasNext();) {
-            String repoId = (String) i.next();
-            Repository repo = (Repository) repositories.get(repoId);
-            logger.info("  Initializing " + repoId);
-            repo.initialize();
-        }
-    }
-
     public StatisticsGatherer getStatisticsGatherer() {
         return statisticsGatherer;
     }
@@ -69,6 +56,35 @@ public class ProximityImpl implements Proximity {
 
     public void setAccessManager(AccessManager accessManager) {
         this.accessManager = accessManager;
+    }
+
+    public void initialize() {
+        logger.info("Starting Initialization...");
+        statisticsGatherer.initialize();
+        indexer.initialize();
+        logger.info("Initializing all defined repositories");
+        for (Iterator i = repositoryOrder.iterator(); i.hasNext();) {
+            String repoId = (String) i.next();
+            Repository repo = (Repository) repositories.get(repoId);
+            logger.info("Initializing " + repoId);
+            repo.initialize();
+        }
+    }
+
+    public void reindex() {
+        logger.info("Forced reindexing of all defined repositories.");
+        for (Iterator i = repositoryOrder.iterator(); i.hasNext();) {
+            String repoId = (String) i.next();
+            Repository repo = (Repository) repositories.get(repoId);
+            logger.info("Reindexing " + repoId);
+            repo.reindex();
+        }
+    }
+
+    public void reindex(String repoId) {
+        logger.info("Forced reindexing of " + repoId + " repository.");
+        Repository repo = (Repository) repositories.get(repoId);
+        repo.reindex();
     }
 
     public void setRepositories(List reposList) {
@@ -114,7 +130,12 @@ public class ProximityImpl implements Proximity {
         if (request.getTargetedReposId() != null) {
             if (repositories.containsKey(request.getTargetedReposId())) {
                 Repository repo = (Repository) repositories.get(request.getTargetedReposId());
-                return repo.retrieveItemProperties(request);
+                try {
+                    return repo.retrieveItemProperties(request);
+                } catch (ItemNotFoundException ex) {
+                    logger.info("Item " + request.getPath() + " not found in targeted repository " + repo.getId());
+                    throw ex;
+                }
             }
             throw new NoSuchRepositoryException(request.getTargetedReposId());
 
@@ -149,7 +170,12 @@ public class ProximityImpl implements Proximity {
         if (request.getTargetedReposId() != null) {
             if (repositories.containsKey(request.getTargetedReposId())) {
                 Repository repo = (Repository) repositories.get(request.getTargetedReposId());
-                return repo.retrieveItem(request);
+                try {
+                    return repo.retrieveItem(request);
+                } catch (ItemNotFoundException ex) {
+                    logger.info("Item " + request.getPath() + " not found in targeted repository " + repo.getId());
+                    throw ex;
+                }
             }
             throw new NoSuchRepositoryException(request.getTargetedReposId());
 

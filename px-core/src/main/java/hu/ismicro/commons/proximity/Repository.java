@@ -77,7 +77,18 @@ public interface Repository {
 	 */
 	void initialize();
 
-	/**
+    /**
+     * Forces reindex of repository.
+     * 
+     */
+    void reindex();
+    /**
+     * Forces metadata recreation of repository.
+     * 
+     */
+    void recreateMetadata();
+
+    /**
 	 * Sets the statistics gatherer. May be null, to switch stats gathering off.
 	 * 
 	 * @param stats

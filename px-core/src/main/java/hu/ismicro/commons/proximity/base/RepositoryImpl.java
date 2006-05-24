@@ -220,11 +220,11 @@ public class RepositoryImpl implements Repository {
         logger.info("Initializing...");
 
         if (recreateMetadata) {
-            logger.debug("Recreating metadata " + getId());
+            logger.info("Recreating metadata " + getId());
             recreateMetadata();
         }
         if (reindex) {
-            logger.debug("Reindexing " + getId());
+            logger.info("Reindexing " + getId());
             reindex();
         }
     }
@@ -253,7 +253,7 @@ public class RepositoryImpl implements Repository {
                 if (getRepositoryLogic().shouldCheckForLocalCopy(request)) {
                     if ((propsOnly && getLocalStorage().containsItemProperties(request.getPath()))
                             || (getLocalStorage().containsItem(request.getPath()))) {
-                        logger.info("Found " + request.getPath() + " item in storage of repository " + getId());
+                        logger.debug("Found " + request.getPath() + " item in storage of repository " + getId());
                         if (propsOnly) {
                             result = new ProxiedItem();
                             result.setProperties(getLocalStorage().retrieveItemProperties(request.getPath()));
@@ -266,14 +266,14 @@ public class RepositoryImpl implements Repository {
                         }
                         result = getRepositoryLogic().afterLocalCopyFound(result, this);
                     } else {
-                        logger.info("Not found " + request.getPath() + " item in storage of repository " + getId());
+                        logger.debug("Not found " + request.getPath() + " item in storage of repository " + getId());
                     }
                 }
             }
             if (getRepositoryLogic().shouldCheckForRemoteCopy(request, result) && getRemoteStorage() != null) {
                 if ((propsOnly && getRemoteStorage().containsItemProperties(request.getPath()))
                         || (getRemoteStorage().containsItem(request.getPath()))) {
-                    logger.info("Found " + request.getPath() + " item in remote storage of repository " + getId());
+                    logger.debug("Found " + request.getPath() + " item in remote storage of repository " + getId());
                     if (propsOnly) {
                         result = new ProxiedItem();
                         result.setProperties(getRemoteStorage().retrieveItemProperties(request.getPath()));
@@ -299,13 +299,14 @@ public class RepositoryImpl implements Repository {
                         }
                     }
                 } else {
-                    logger.info("Not found " + request.getPath() + " item in remote peer of repository " + getId());
+                    logger.debug("Not found " + request.getPath() + " item in remote peer of repository " + getId());
                 }
 
             }
             if (result == null) {
                 throw new ItemNotFoundException(request.getPath());
             }
+            logger.info("Item " + request.getPath() + " found in repository " + getId());
             return result;
         } catch (ItemNotFoundException ex) {
             throw new ItemNotFoundException(request.getPath(), getId());
@@ -321,7 +322,7 @@ public class RepositoryImpl implements Repository {
      * this call will do nothing.
      * 
      */
-    protected void reindex() {
+    public void reindex() {
         if (getIndexer() == null) {
             logger.info("Will NOT reindex repository " + getId() + ", since it have no indexer defined.");
             return;
@@ -357,7 +358,7 @@ public class RepositoryImpl implements Repository {
      * Otherwise the call will do nothing.
      * 
      */
-    protected void recreateMetadata() {
+    public void recreateMetadata() {
         if (getLocalStorage() == null) {
             logger.info("Will NOT recreate metadata on " + getId() + ", since it have no local storage defined.");
             return;

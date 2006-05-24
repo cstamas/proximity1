@@ -56,6 +56,18 @@ public interface Proximity {
 	 */
 	public List searchItem(ItemProperties example);
 
+    /**
+     * Forces reindex of repositories.
+     * 
+     */
+    void reindex();
+
+    /**
+     * Forces reindex of repository.
+     * 
+     */
+    void reindex(String repoId);
+
 	/**
 	 * Returns the statistics (if any).
 	 * 
