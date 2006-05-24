@@ -47,10 +47,10 @@ public class ProximityIntegrationTest extends AbstractProximityIntegrationTest {
 
     public void testPomArtifact() {
         try {
-            Item item = proximity.retrieveItem(getRequest("/antlr/poms/antlr-2.7.5.pom"));
+            Item item = proximity.retrieveItem(getRequest("/antlr/antlr/2.7.5/antlr-2.7.5.pom"));
             logger.info("Got response of type " + item.getClass() + ":" + item);
         } catch (ProximityException ex) {
-            logger.error("Good, got exception", ex);
+            logger.error("BAD, got exception", ex);
             fail();
         }
     }
