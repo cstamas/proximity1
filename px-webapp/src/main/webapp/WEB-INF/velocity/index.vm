@@ -12,35 +12,51 @@ Jars, etc...).</p>
 <p>Proximity features in brief:</p>
 
 <ul>
-<li>2-in-1 - With Proximity you can host your own private repo
-while proxying and have all the benefits of proxying remote repositories.
-No, Proximity does not remove stains.</li>
+
+<li>2-in-1 - With Proximity you can <b>host your own private repo
+while proxying other repositories</b> and have all the benefits of proxying 
+remote repositories. No, Proximity does not remove stains.</li>
+
 <li>Access control - Proximity is well suited for <b>corporate deployments</b>, since it has extensible
 and configurable AccessManager. Proximity has various AccessManager and AccessDecisionVoter
 implementations out-of-the-box. Some examples: IP based access restriction, HTTPS
 access only with client certificate verification and access management based on it. Access
 control may be configured on Proximity level and on repository level independently.</li>
-<li>Locally reusable mirror storage - The local storage of defined repositories are complete on-demand-mirrors of
-real remote repositories, thus usable for republishing (eg. using simple HTTP server, but sharing only
-the downloaded artifacts then).</li>
-<li>Aggregating but in a smart way - It is able to host multiple repositorties, and depending on config, they may
-or may not be real remote repositories. Proximity may be used to serve private
-artifacts (those not uploadable to central due to their licence) on local network 
-only. Still, proximity tracks and organizes downloaded artifacts separatly, following
-the origin of the artifact and not mixing them together.</li>
-<li>Piping - Proximity is able to form a pipe of it's instances, thus for example on corporate network you
-may have one central proximity on a machine with fast outbound traffic and multiple instances
-on local subnetworks. Proximity will all way down to last instance in pipe follow and keep
-artifacts separated following their originating repository.</li>
-<li>Fresh as needed - Proximity can be persistent or not, as configured. Moreover, artifacts, Maven1 Snapshots,
-Maven2 POMs and metadatas have own timeout configuration possibility.</li>
+
+<li>Locally reusable proxy storage - The local storage of defined repositories are <b>complete 
+on-demand-mirrors of real remote repositories</b>, thus usable for republishing 
+(eg. using simple HTTP server. But you will share only the currently downloaded artifacts 
+then).</li>
+
+<li>Aggregating, but in a smart way - It is able to host multiple repositorties, 
+and depending on config, they may or may not be proxied remote repositories. 
+Proximity may be used to serve private artifacts (those not uploadable to central due to their licence) 
+as well on local network only. Still, proximity tracks and <b>organizes downloaded 
+artifacts separatly</b>, following the origin of the artifact and not mixing them together.</li>
+
+<li>Piping - Thanx to smart aggregation, Proximity is able to form a pipe of it's instances, 
+thus for example on corporate network you may have one central proximity on a machine 
+with allowed fast outbound traffic, and multiple instances on local subnetworks where no
+direct outbound traffic is possible. Proximity will all way down to last instance in pipe 
+follow and <b>keep artifacts in separate storage</b>, following their originating repository.
+Moreover, you will have to publish in house artifacts only in one place.</li>
+
+<li>Fresh as needed - Proximity can be persistent or not, as configured. Moreover, Proximity recognizes
+the following kinds of items: Maven Snapshots, Maven2 POMs, Maven2 metadata and the rest is
+"just" artifact. All of these kinds have independent timeout configuration.
+Thus, <b>every of these item kinds can be: never updated once downloaded, always updated on request
+or timeouted</b>. These are independent settings (per kind).</li>
+
 <li>Fast searches - With time, your Proximity storage will grow. Proximity uses
-Apache Lucene as it's indexer to provide fast searches on repositories.</li>
+<b>Apache Lucene</b> as it's indexer to provide fast searches on repositories.</li>
+
 <li>Reusable software - Proximity Core is <b>transport independent</b>, this webapp you see is just a
 front-end for it implemented using Springframework, Velocity and <b>two controller class</b>.</li>
+
 <li>Extensible - Proximity Core is <b>extensible</b> and usable in many different ways and
 containers. The author have used it in Spring framework container (this webapp actually) 
-and in Codehaus Plexus container (together with embedded Maven2).</li>
+and in Codehaus Plexus container (together with embedded Maven2), SAS.</li>
+
 </ul>
 
 <h3>How to use</h3>
