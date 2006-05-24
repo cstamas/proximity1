@@ -20,9 +20,14 @@
       <item name="ISmicro Commons Projects" href="http://is-micro.myip.hu/projects/ismicro-commons/" />
     </links>
 
-    <menu name="Documentation">
+    <menu name="Proximity">
+      <item name="About" href="index.html"/>
+      <item name="Download" href="downloads.html"/>
+    </menu>
+
+    <menu name="Guides">
       <item name="Configuration" href="configuration.html"/>
-      <item name="Developers guide" href="developers.html"/>
+      <item name="Developers guide" href="developers-guide.html"/>
     </menu>
 
     ${reports}
