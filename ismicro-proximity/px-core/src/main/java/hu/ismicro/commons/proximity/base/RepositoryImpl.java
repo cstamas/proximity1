@@ -27,6 +27,10 @@ public class RepositoryImpl implements Repository {
 	private String uriPrefix = null;
 
 	private boolean listable = true;
+    
+    private boolean reindex = true;
+    
+    private boolean recreateMetadata = true;
 
 	private Storage localStorage;
 
@@ -99,6 +103,22 @@ public class RepositoryImpl implements Repository {
 	public void setIndexer(Indexer indexer) {
 		this.indexer = indexer;
 	}
+
+    public boolean isRecreateMetadata() {
+        return recreateMetadata;
+    }
+
+    public void setRecreateMetadata(boolean recreateMetadata) {
+        this.recreateMetadata = recreateMetadata;
+    }
+
+    public boolean isReindex() {
+        return reindex;
+    }
+
+    public void setReindex(boolean reindex) {
+        this.reindex = reindex;
+    }
 
 	public AccessManager getAccessManager() {
 		return accessManager;
@@ -196,10 +216,16 @@ public class RepositoryImpl implements Repository {
 	}
 
 	public void initialize() {
-		logger.debug("Recreating metadata " + getId());
-		recreateMetadata();
-		logger.debug("Reindexing " + getId());
-		reindex();
+        logger.info("Initializing...");
+
+        if (recreateMetadata) {
+            logger.debug("Recreating metadata " + getId());
+            recreateMetadata();
+        }
+        if (reindex) {
+            logger.debug("Reindexing " + getId());
+            reindex();
+        }
 	}
 	
 	protected String removePathPrefix(String path) {

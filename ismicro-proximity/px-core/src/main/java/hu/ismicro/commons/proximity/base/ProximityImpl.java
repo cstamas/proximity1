@@ -34,7 +34,10 @@ public class ProximityImpl implements Proximity {
 
     private StatisticsGatherer statisticsGatherer;
 
-    void afterPropertiesSet() {
+    public void initialize() {
+        logger.info("Starting Initialization...");
+        statisticsGatherer.initialize();
+        indexer.initialize();
         logger.info("Initializing all defined repositories");
         for (Iterator i = repositoryOrder.iterator(); i.hasNext();) {
             String repoId = (String) i.next();
@@ -173,6 +176,7 @@ public class ProximityImpl implements Proximity {
     }
 
     public List listItems(ProximityRequest request) throws AccessDeniedException, NoSuchRepositoryException {
+        logger.debug("Got listItems with " + request);
         accessManager.decide(request, null);
         List response = new ArrayList();
         if (request.getTargetedReposId() != null) {
@@ -192,6 +196,7 @@ public class ProximityImpl implements Proximity {
     }
 
     public List searchItem(ItemProperties example) {
+        logger.debug("Got searchItem with example " + example);
         if (getIndexer() != null) {
             return getIndexer().searchByItemPropertiesExample(example);
         } else {
@@ -201,6 +206,7 @@ public class ProximityImpl implements Proximity {
     }
 
     public Map getStatistics() {
+        logger.debug("Got getStatistics");
         if (getStatisticsGatherer() != null) {
             return getStatisticsGatherer().getStatistics();
         } else {

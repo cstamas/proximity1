@@ -4,6 +4,12 @@ import java.util.List;
 import java.util.Map;
 
 public interface Proximity {
+    
+    /**
+     * Initializes Proximity. Call once, first.
+     *
+     */
+    void initialize();
 
 	/**
 	 * Returns the List of Repositories configured within Proximity.
