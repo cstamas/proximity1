@@ -18,7 +18,7 @@
 			<td><a href="#springUrl('/repository')${requestUri}?orderBy=name"><b>#springMessage("item.path")</b></a></td>
 			<td><a href="#springUrl('/repository')${requestUri}?orderBy=size"><b>#springMessage("item.size")</b></a></td>
 			<td><a href="#springUrl('/repository')${requestUri}?orderBy=lastModified"><b>#springMessage("item.lastModified")</b></a></td>
-			<td><a href="#springUrl('/repository')${requestUri}?orderBy=repositoryName"><b>#springMessage("item.repositoryName")</b></a></td>
+			<td><a href="#springUrl('/repository')${requestUri}?orderBy=repositoryId"><b>#springMessage("item.repositoryId")</b></a></td>
 		</tr>
 	</thead>
 	

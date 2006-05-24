@@ -51,7 +51,7 @@ public class RepositoryController extends MultiActionController {
 		pRequest.setGrantee(null);
         pRequest.getAttributes().put(ProximityRequest.REQUEST_REMOTE_ADDRESS, request.getRemoteAddr());
 		try {
-			logger.info("Got request for repository on URI: " + requestURI);
+			logger.info("Got request for " + targetRepository + " repository on URI: " + requestURI);
 			itemProps = proximity.retrieveItemProperties(pRequest);
 
 			if (itemProps.isDirectory()) {
