@@ -97,7 +97,7 @@ public class ProxiedItemProperties implements ItemProperties {
 	}
     
 	public String toString() {
-		return getName() + "[" + getSize() + "]";
+		return getName();
 	}
     
     public int hashCode() {
