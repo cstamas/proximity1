@@ -14,7 +14,7 @@
 <table>
 	<thead>
 		<tr class="tdb">
-			<td>&nbsp;</td>
+			<td>#springMessage("item.kind")</td>
 			<td><a href="#springUrl('/repository')${requestUri}?orderBy=name"><b>#springMessage("item.path")</b></a></td>
 			<td><a href="#springUrl('/repository')${requestUri}?orderBy=size"><b>#springMessage("item.size")</b></a></td>
 			<td><a href="#springUrl('/repository')${requestUri}?orderBy=lastModified"><b>#springMessage("item.lastModified")</b></a></td>

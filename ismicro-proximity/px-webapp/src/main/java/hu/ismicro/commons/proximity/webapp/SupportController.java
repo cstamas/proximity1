@@ -44,11 +44,6 @@ public class SupportController extends MultiActionController {
             example = new ProxiedItemProperties();
             example.setName(RequestUtils.getRequiredStringParameter(request, "searchSelectedRegexp") + "*");
             example.setMetadata(ProxiedItemProperties.METADATA_OWNING_REPOSITORY, RequestUtils.getRequiredStringParameter(request, "searchSelectedRepos"));
-        } else if (RequestUtils.getStringParameter(request, "reindexAll") != null) {
-            proximity.reindex();
-        } else if (RequestUtils.getStringParameter(request, "reindexSelected") != null
-                && RequestUtils.getRequiredStringParameter(request, "reindexSelectedRepos") != null) {
-            proximity.reindex(RequestUtils.getRequiredStringParameter(request, "reindexSelectedRepos"));
         }
 
         Map context = new HashMap();
@@ -62,6 +57,20 @@ public class SupportController extends MultiActionController {
         return new ModelAndView("search", context);
     }
 
+    public ModelAndView maintenance(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        logger.debug("Got request for maintenance");
+        if (RequestUtils.getStringParameter(request, "reindexAll") != null) {
+            proximity.reindex();
+        } else if (RequestUtils.getStringParameter(request, "reindexSelected") != null
+                && RequestUtils.getRequiredStringParameter(request, "reindexSelectedRepos") != null) {
+            proximity.reindex(RequestUtils.getRequiredStringParameter(request, "reindexSelectedRepos"));
+        }
+
+        Map context = new HashMap();
+        List repositories = getProximity().getRepositories();
+        context.put("repositories", repositories);
+        return new ModelAndView("maintenance", context);
+    }
     public ModelAndView stats(HttpServletRequest request, HttpServletResponse response) throws Exception {
         logger.debug("Got request for stats");
         Map stats = proximity.getStatistics();

@@ -38,6 +38,7 @@
 	                    <prop key="/index.do">index</prop>
 	                    <prop key="/search.do">search</prop>
 	                    <prop key="/stats.do">stats</prop>
+	                    <prop key="/maintenance.do">maintenance</prop>
 	                    <prop key="/repositories.do">repositories</prop>
 	                </props>
 	            </property>
