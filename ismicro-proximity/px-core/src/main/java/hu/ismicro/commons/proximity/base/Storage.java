@@ -15,8 +15,6 @@ import java.util.List;
  */
 public interface Storage {
     
-    String getId();
-    
     boolean isWritable();
     
     boolean isMetadataAware();

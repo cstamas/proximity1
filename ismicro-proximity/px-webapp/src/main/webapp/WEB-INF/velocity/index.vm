@@ -15,7 +15,7 @@ Jars, etc...).</p>
 
 <li>2-in-1 - With Proximity you can <b>host your own private repo
 while proxying other repositories</b> and have all the benefits of proxying 
-remote repositories. No, Proximity does not remove stains.</li>
+remote repositories.</li>
 
 <li>Access control - Proximity is well suited for <b>corporate deployments</b>, since it has extensible
 and configurable AccessManager. Proximity has various AccessManager and AccessDecisionVoter
@@ -40,11 +40,11 @@ then).</li>
 <li>Aggregating, but in a smart way - It is able to host multiple repositorties, 
 and depending on config, they may or may not be proxied remote repositories. 
 Proximity may be used to serve private artifacts (those not uploadable to central due to their licence) 
-as well on local network only. Still, proximity tracks and <b>organizes downloaded 
+as well on local network only. Still, Proximity tracks and <b>organizes downloaded 
 artifacts separatly</b>, following the origin of the artifact and not mixing them together.</li>
 
 <li>Piping - Thanx to smart aggregation, Proximity is able to form a pipe of it's instances, 
-thus for example on corporate network you may have one central proximity on a machine 
+thus for example on corporate network you may have one central Proximity on a machine 
 with allowed fast outbound traffic, and multiple instances on local subnetworks where no
 direct outbound traffic is possible. Proximity will all way down to last instance in pipe 
 follow and <b>keep artifacts in separate storage</b>, following their originating repository.
@@ -70,34 +70,42 @@ and in Codehaus Plexus container (together with embedded Maven2), SAS.</li>
 
 <h3>How to use</h3>
 
-<p>Follows a few simple scenarios for using Proximity server:</p>
+<p>Install it as it should with distribution you downloaded. WAR file should be
+deployed on a J2EE servlet container. Bundled releases should be installed as
+described.</p>
+
+<p>For WAR distribution: All you have to do is install Proximity WAR on some Servlet 
+container that has access to outer world (for reaching central, codehaus, etc. 
+This is NOT mandatory since you can use Proximity to serve only your own artifacts!). </p>
+
+<p>The examples assumes that Proximity runs on a localhost and at HTTP port 8080.
+Follows a few simple scenarios for using Proximity server:</p>
 
 <h4>With Maven 1</h4>
 
-<p>All you have to do is install this WAR on some Servlet container that has
-access to outer world (for reaching central, codehaus, etc. This is NOT mandatory
-since you can use Proximity to serve only your own artifacts!). Second, configure 
-Maven1 to use this repository (use appropriate URLs, these below are just samples!)
+<p>If you have installed and working Proximity, you have to configure
+Maven1 to use Proximity as his repository (use appropriate URLs, these below are just samples!)
 instead the default at central:</p>
 
 <div>
 <pre>
-  maven -Dmaven.repo.remote=http://localhost:8080/px-webapp/repository clean jar
+  maven -Dmaven.repo.remote=<a href="http://localhost:8080#springUrl('/repository')">http://localhost:8080#springUrl('/repository')</a> clean jar
 </pre>
 </div>
 
-<p>Alternatively, you can place the following line in <b>build.properties</b>:</p>
+<p>Alternatively, you can place the following line in <b>build.properties</b> of project, or better,
+in your home (on Unix /home/_USERNAME_, on Windows C:\Documents And Settings\_USERNAME_):</p>
 
 <div>
 <pre>
-  maven.repo.remote=http://localhost:8080/px-webapp/repository
+  maven.repo.remote=<a href="http://localhost:8080#springUrl('/repository')">http://localhost:8080#springUrl('/repository')</a>
 </pre>
 </div>
 
 <h4>With Maven 2</h4>
 
-<p>Install it as described in Maven 1 section. Than, You have to create settings.xml in 
-your M2 repo that defines mirror of repo with id "central"
+<p>With installed Proximity You have to create settings.xml in 
+your local M2 repo that defines mirror with id "central"
 and point it to Proximity instance. You can use the default file
 that comes with Maven2 as template at M2_HOME/conf/settings.xml. Example:
 </p>
@@ -109,11 +117,13 @@ that comes with Maven2 as template at M2_HOME/conf/settings.xml. Example:
       &lt;id&gt;myProximity&lt;/id&gt;
       &lt;mirrorOf&gt;central&lt;/mirrorOf&gt;
       &lt;name&gt;Proximity mirrored central repos.&lt;/name&gt;
-      &lt;url&gt;http://localhost:8080/px-webapp/repository&lt;/url&gt;
+      &lt;url&gt;<a href="http://localhost:8080#springUrl('/repository')">http://localhost:8080#springUrl('/repository')</a>&lt;/url&gt;
     &lt;/mirror&gt;
   &lt;/mirrors&gt;
 </pre>
 </div>
+
+<p>This file should be placed in your $HOME/.m2 directory.</p>
 
 <h4>With anything other</h4>
 

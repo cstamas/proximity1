@@ -19,12 +19,13 @@ import java.util.Date;
 import org.apache.commons.httpclient.DefaultHttpMethodRetryHandler;
 import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpConnectionManager;
 import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.HttpMethodRetryHandler;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
+import org.apache.commons.httpclient.UsernamePasswordCredentials;
+import org.apache.commons.httpclient.auth.AuthScope;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.HeadMethod;
 import org.apache.commons.httpclient.params.HttpMethodParams;
@@ -42,15 +43,65 @@ import org.apache.commons.io.IOUtils;
  */
 public class HttpClientRemotePeer extends AbstractRemoteStorage {
 
-    private HttpConnectionManager connectionManager = new MultiThreadedHttpConnectionManager();
-
-    private HttpClient httpClient = new HttpClient(connectionManager);
-
     private HttpMethodRetryHandler httpRetryHandler = new DefaultHttpMethodRetryHandler();
+
+    private HttpClient httpClient = null;
 
     private boolean followRedirection = true;
 
     private String queryString = null;
+    
+    private int connectionTimeout = 5000;
+
+    private String proxyHost = null;
+    
+    private int proxyPort = 8080;
+    
+    private String proxyRealm = null;
+    
+    private String proxyUsername = null;
+    
+    private String proxyPassword = null;
+
+    public String getProxyHost() {
+        return proxyHost;
+    }
+
+    public void setProxyHost(String proxyHost) {
+        this.proxyHost = proxyHost;
+    }
+
+    public String getProxyPassword() {
+        return proxyPassword;
+    }
+
+    public void setProxyPassword(String proxyPassword) {
+        this.proxyPassword = proxyPassword;
+    }
+
+    public int getProxyPort() {
+        return proxyPort;
+    }
+
+    public void setProxyPort(int proxyPort) {
+        this.proxyPort = proxyPort;
+    }
+
+    public String getProxyRealm() {
+        return proxyRealm;
+    }
+
+    public void setProxyRealm(String proxyRealm) {
+        this.proxyRealm = proxyRealm;
+    }
+
+    public String getProxyUsername() {
+        return proxyUsername;
+    }
+
+    public void setProxyUsername(String proxyUsername) {
+        this.proxyUsername = proxyUsername;
+    }
 
     public String getQueryString() {
         return queryString;
@@ -60,40 +111,12 @@ public class HttpClientRemotePeer extends AbstractRemoteStorage {
         this.queryString = queryString;
     }
 
-    protected int executeMethod(HttpMethod method) {
-        method.setFollowRedirects(isFollowRedirection());
-        method.getParams().setParameter(HttpMethodParams.RETRY_HANDLER, getHttpRetryHandler());
-        method.setQueryString(getQueryString());
-        int resultCode = 0;
-        try {
-            logger.debug("Executing " + method + " on URI " + method.getURI());
-            resultCode = httpClient.executeMethod(method);
-        } catch (HttpException ex) {
-            logger.error("Protocol error while executing " + method.getName() + " method with query string "
-                    + method.getQueryString(), ex);
-        } catch (IOException ex) {
-            logger.error("Tranport error while executing " + method.getName() + " method with query string "
-                    + method.getQueryString(), ex);
-        }
-        logger.debug("Received response code [" + resultCode + "] for executing [" + method.getName()
-                + "] method with path [" + method.getPath() + "]");
-        return resultCode;
-    }
-
-    public void setHttpRetryHandler(HttpMethodRetryHandler httpRetryHandler) {
-        this.httpRetryHandler = httpRetryHandler;
-    }
-
-    public HttpMethodRetryHandler getHttpRetryHandler() {
-        return httpRetryHandler;
-    }
-
     public void setConnectionTimeout(int connectionTimeout) {
-        connectionManager.getParams().setConnectionTimeout(connectionTimeout);
+        this.connectionTimeout = connectionTimeout;
     }
 
     public int getConnectionTimeout() {
-        return connectionManager.getParams().getConnectionTimeout();
+        return connectionTimeout;
     }
 
     public void setFollowRedirection(boolean followRedirection) {
@@ -121,7 +144,7 @@ public class HttpClientRemotePeer extends AbstractRemoteStorage {
             try {
                 int response = executeMethod(method);
                 if (response == HttpStatus.SC_OK) {
-                    logger.info("Item " + path + " properties fetched from remote peer of " + getId());
+                    logger.info("Item " + path + " properties fetched from remote peer of " + getRemoteUrl());
                     return constructItemPropertiesFromGetResponse(path, originatingUrlString, method);
                 } else {
                     logger.error("The method execution returned result code " + response);
@@ -143,7 +166,7 @@ public class HttpClientRemotePeer extends AbstractRemoteStorage {
             try {
                 int response = executeMethod(get);
                 if (response == HttpStatus.SC_OK) {
-                    logger.info("Item " + path + " fetched from remote peer of " + getId());
+                    logger.info("Item " + path + " fetched from remote peer of " + getRemoteUrl());
                     logger.debug("Constructing ProxiedItemProperties");
                     ProxiedItemProperties properties = constructItemPropertiesFromGetResponse(path,
                             originatingUrlString, get);
@@ -183,6 +206,43 @@ public class HttpClientRemotePeer extends AbstractRemoteStorage {
         } finally {
             get.releaseConnection();
         }
+    }
+
+    public HttpClient getHttpClient() {
+        if (httpClient == null) {
+            logger.info("Creating CommonsHttpClient instance");
+            httpClient = new HttpClient(new MultiThreadedHttpConnectionManager());
+            httpClient.getParams().setConnectionManagerTimeout(getConnectionTimeout());
+            if (getProxyHost() != null) {
+                logger.info("... proxy setup with host " + getProxyHost() + ", port "+ getProxyPort());
+                httpClient.getHostConfiguration().setProxy(getProxyHost(), getProxyPort());
+                if (getProxyRealm() != null) {
+                    logger.info("... proxy authenticationsetup for realm " + getProxyRealm() + " and username " + getProxyUsername());
+                    httpClient.getState().setProxyCredentials(new AuthScope(proxyHost, proxyPort, proxyRealm), new UsernamePasswordCredentials(proxyUsername, proxyPassword));
+                }
+            }
+        }
+        return httpClient;
+    }
+
+    protected int executeMethod(HttpMethod method) {
+        method.setFollowRedirects(isFollowRedirection());
+        method.getParams().setParameter(HttpMethodParams.RETRY_HANDLER, httpRetryHandler);
+        method.setQueryString(getQueryString());
+        int resultCode = 0;
+        try {
+            logger.debug("Executing " + method + " on URI " + method.getURI());
+            resultCode = getHttpClient().executeMethod(method);
+        } catch (HttpException ex) {
+            logger.error("Protocol error while executing " + method.getName() + " method with query string "
+                    + method.getQueryString(), ex);
+        } catch (IOException ex) {
+            logger.error("Tranport error while executing " + method.getName() + " method with query string "
+                    + method.getQueryString(), ex);
+        }
+        logger.debug("Received response code [" + resultCode + "] for executing [" + method.getName()
+                + "] method with path [" + method.getPath() + "]");
+        return resultCode;
     }
 
     protected Date makeDateFromString(String date) {

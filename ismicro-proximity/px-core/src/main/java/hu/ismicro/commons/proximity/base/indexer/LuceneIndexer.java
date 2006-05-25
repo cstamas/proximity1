@@ -108,6 +108,28 @@ public class LuceneIndexer implements Indexer {
         }
     }
 
+    public void addItemProperties(Map uidWithItems) throws StorageException {
+        logger.debug("Adding batch items to index");
+        try {
+            IndexWriter writer = new IndexWriter(indexDirectory, analyzer, false);
+            String UID = null;
+            ItemProperties ip = null;
+            for (Iterator i = uidWithItems.keySet().iterator(); i.hasNext(); ) {
+                UID = (String) i.next();
+                ip = (ItemProperties) uidWithItems.get(UID);
+                Document ipDoc = itemProperties2Document(ip);
+                ipDoc.add(Field.Keyword("UID", UID));
+                writer.addDocument(ipDoc);
+            }
+            writer.optimize();
+            writer.close();
+            dirtyItems = 0;
+        } catch (IOException ex) {
+            logger.error("Got IOException during index addition.", ex);
+            throw new StorageException("Got IOException during addition.", ex);
+        }
+    }
+
     public void deleteItemProperties(String UID, ItemProperties ip) throws ItemNotFoundException, StorageException {
         logger.debug("Deleting item from index");
         try {

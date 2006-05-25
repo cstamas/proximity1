@@ -17,7 +17,7 @@
   <name>ISmicro Proximity</name>
 
   <!-- The version of the project under development -->
-  <version>1.0.0</version>
+  <version>1.0.0-alpha1</version>
 
   <!-- The description -->
   <description>Maven Proximity Application.</description>
