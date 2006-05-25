@@ -13,6 +13,9 @@
 
 <section name="Developers guide">
 
+<p><b>WARNING: THIS DOCUMENT IS OBSOLETE BUT LEFT HERE JUST TO SHOW THE IDEA BEHIND PROXIMITY
+UNTIL A MORE COMPLETE DOCUMENTATION IS NOT PUBLISHED.</b></p>
+
 <p>This Guide is <b>work in progress</b>.</p>
 
 <subsection name="Pluggable proxying logic">

@@ -16,8 +16,8 @@
   <body>
 
     <links>
-      <item name="Maven" href="http://maven.apache.org/"/>
-      <item name="ISmicro Commons Projects" href="http://is-micro.myip.hu/projects/ismicro-commons/" />
+      <item name="ISmicro Commons WIKI" href="http://is-micro.myip.hu/trac/ismicro-commons/" />
+      <item name="ISmicro Commons WEB" href="http://is-micro.myip.hu/projects/ismicro-commons/" />
     </links>
 
     <menu name="Proximity">
@@ -26,6 +26,7 @@
     </menu>
 
     <menu name="Guides">
+      <item name="Quick start" href="quick-start.html"/>
       <item name="Configuration" href="configuration.html"/>
       <item name="Developers guide" href="developers-guide.html"/>
     </menu>
