@@ -23,6 +23,15 @@ implementations out-of-the-box. Some examples: IP based access restriction, HTTP
 access only with client certificate verification and access management based on it. Access
 control may be configured on Proximity level and on repository level independently.</li>
 
+<li>HTTP, HTTPS and HTTP Proxy support - On it's front, Proximity is unaware is it serving
+artifacts over plain HTTP or HTTPS (it is container setup, eg. Tomcat). On it's back
+Proximity Remote Peer is powered with latest <b>Jakarta Commons HttpClient</b> thus has all
+the capabilities that Commons HttpClient has. HttpClient configuration is fully
+exposed through Spring context, allowing easy reconfiguration (like http proxy setup). 
+Furthermore, by employing custom front-ends (the Servlet controller class) and appropriate
+AccessControl class Proximity is ready to fit any specific needs for authorization
+(authentication is left to container!).</li>
+
 <li>Locally reusable proxy storage - The local storage of defined repositories are <b>complete 
 on-demand-mirrors of real remote repositories</b>, thus usable for republishing 
 (eg. using simple HTTP server. But you will share only the currently downloaded artifacts 

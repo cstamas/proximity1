@@ -8,38 +8,6 @@
 <table>
 	<thead>
 		<tr class="tdb">
-			<td colspan="2">#springMessage('search.reindex.title')</td>
-		</tr>
-	</thead>
-	<tbody>
-		<tr class="tda">
-			<td colspan="2">#springMessage('search.reindex.intro')</td>
-		</tr>
-		<tr class="tda">
-			<td width="50%">
-				<form action="#springUrl('/search.do')">
-					<input type="submit" name="reindexAll" value="#springMessage('search.reindex.all')"/>
-				</form>
-			</td>
-			<td width="50%">
-				<form action="#springUrl('/search.do')">
-					<select id="reindexSelectedRepos" name="reindexSelectedRepos">
-						#foreach($repository in $repositories)
-							<option value="${repository.id}">${repository.id}</option>
-						#end
-					</select>
-					<input type="submit" name="reindexSelected" value="#springMessage('search.reindex.selected')"/>
-				</form>
-			</td>
-		</tr>
-	</tbody>
-</table>
-
-<p/>
-
-<table>
-	<thead>
-		<tr class="tdb">
 			<td width="50%">#springMessage('search.all')</td>
 			<td width="50%">#springMessage('search.selected')</td>
 		</tr>
@@ -75,8 +43,9 @@
 <table>
 	<thead>
 		<tr class="tdb">
-			<td>&nbsp;</td>
+			<td><b>#springMessage("item.kind")</b></td>
 			<td><b>#springMessage("item.path")</b></td>
+			<td><b>#springMessage("item.name")</b></td>
 			<td><b>#springMessage("item.size")</b></td>
 			<td><b>#springMessage("item.lastModified")</b></td>
 			<td><b>#springMessage("item.repositoryId")</b></td>
@@ -89,11 +58,20 @@
 			<tr class="tda">
 				<td>
 					#if(${item.isDirectory()})
-						<img src="#springUrl('/images/directory.png')"/>&nbsp;
+						<img src="#springUrl('/images/folder-local.png')"/>&nbsp;
 					#else
-						<img src="#springUrl('/images/file.png')"/>&nbsp;
+					    #if( $item.getName().indexOf("SNAPSHOT") > -1  )
+							<img src="#springUrl('/images/maven-snapshot.png')" alt="Maven 1/2 snapshot"/>&nbsp;
+					    #elseif( $item.getName().endsWith(".pom") )
+							<img src="#springUrl('/images/maven2-pom.png')" alt="Maven2 POM"/>&nbsp;
+					    #elseif( $item.getName().startsWith("maven-metadata.xml") || $item.getName().endsWith(".sha1") || $item.getName().endsWith(".md5") )
+							<img src="#springUrl('/images/maven2-metadata.png')" alt="Maven2 metadata"/>&nbsp;
+					    #else
+							<img src="#springUrl('/images/artifact.png')" alt="Artifact"/>&nbsp;
+						#end
 					#end
 				</td>
+				<td><a href="#springUrl('/repository')${item.absolutePath}?repositoryId=${item.repositoryId}">${item.absolutePath}</a>&nbsp;</td>
 				<td><a href="#springUrl('/repository')${item.path}?repositoryId=${item.repositoryId}">${item.name}</a>&nbsp;</td>
 				<td>
 					#if(${item.isDirectory()})
