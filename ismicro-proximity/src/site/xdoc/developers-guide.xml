@@ -18,25 +18,6 @@ UNTIL A MORE COMPLETE DOCUMENTATION IS NOT PUBLISHED.</b></p>
 
 <p>This Guide is <b>work in progress</b>.</p>
 
-<subsection name="Pluggable proxying logic">
-
-<p>The first thing is to develop more complicated proxying logic aside two
-"basic" ones provided in source. The logic should implement the following
-inteface:</p>
-
-<source>
-public interface RepositoryRetrievalLogic {
-
-    ProxiedItem orchestrateItemRequest(String path, InnerRepository repository);
-
-}
-</source>
-
-<p>And there is a helper abstract class in <b>hu.ismicro.commons.proximity.logic</b>
-package too.</p>
-
-</subsection>
-
 <subsection name="Other things to do">
 <p>Look at the source (it is way from finished) and get some thoughts!</p>
 </subsection>
