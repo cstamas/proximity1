@@ -85,9 +85,16 @@ public class LuceneIndexer implements Indexer {
 
     public void setIndexDirectory(String path) throws IOException {
         File pathFile = new File(path);
-        if (!(pathFile.exists() && pathFile.isDirectory())) {
-            throw new IllegalArgumentException("The supplied parameter " + path
-                    + " does not exists or is not a directory!");
+        if (!(pathFile.exists())) {
+            if (!pathFile.mkdirs()) {
+                throw new IllegalArgumentException("The supplied directory parameter " + pathFile
+                        + " does not exists and cannot be created!");
+            } else {
+                logger.info("Created indexer basedir " + pathFile.getAbsolutePath());
+            }
+        }
+        if (!pathFile.isDirectory()) {
+            throw new IllegalArgumentException("The supplied parameter " + path + " is not a directory!");
         }
         this.indexDirectory = FSDirectory.getDirectory(pathFile, false);
     }
@@ -114,7 +121,7 @@ public class LuceneIndexer implements Indexer {
             IndexWriter writer = new IndexWriter(indexDirectory, analyzer, false);
             String UID = null;
             ItemProperties ip = null;
-            for (Iterator i = uidWithItems.keySet().iterator(); i.hasNext(); ) {
+            for (Iterator i = uidWithItems.keySet().iterator(); i.hasNext();) {
                 UID = (String) i.next();
                 ip = (ItemProperties) uidWithItems.get(UID);
                 Document ipDoc = itemProperties2Document(ip);
