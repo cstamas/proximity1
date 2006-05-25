@@ -13,6 +13,26 @@
 
 <section name="ISmicro Commons Proximity">
 
+     <div id="downloadbox">
+        <h5>Download latest Proximity</h5>
+        <p>
+          <a href="deploy">
+            <img valign="top" src="images/folder-remote.png" border="0" alt="" title="download"/>
+            Download
+          </a>
+          Proximity
+          <small>(unreleased yet)</small>
+        </p>
+        <ul>
+          <li>
+            Read <a href="quick-start.html">Quick Start</a>
+          </li>
+          <li>
+            Use <a href="quick-start.html">Proximity WIKI</a>
+          </li>
+        </ul>
+      </div>
+
 <p>Proximity is in function somewhere between http-proxy and
 proactive-mirror (am I speaking nonsense?).</p>
 
@@ -25,7 +45,10 @@ Jars, etc...).</p>
 
 <p>See a <a href="quick-start.html">Quick Start for Proximity</a></p>
 
-<p>Proximity features in brief:</p>
+<p>Visit <a href="/trac/ismicro-commons">ISmicro Commons WIKI</a> for WIKI and issue tracking.</p>
+
+
+<subsection name="Proximity features in brief">
 
 <ul>
 
@@ -84,6 +107,8 @@ containers. The author have used it in Spring framework container (this webapp a
 and in Codehaus Plexus container (together with embedded Maven2), SAS and/or Danube.</li>
 
 </ul>
+
+</subsection>
 
 </section>
 
