@@ -30,8 +30,8 @@ Jars, etc...).</p>
 <ul>
 
 <li><b>2-in-1</b> - With Proximity you can <i>host your own private repo
-while proxying other repositories</i> and have all the benefits of proxying 
-remote repositories.</li>
+while proxying other repositories</i> and have all the benefits of local (read FAST)
+repository access.</li>
 
 <li><b>Access control</b> - Proximity is well suited for <i>corporate deployments</i>, since it has extensible
 and configurable AccessManager. Proximity has various AccessManager and AccessDecisionVoter
@@ -124,6 +124,8 @@ in your home (on Unix /home/_USERNAME_, on Windows C:\Documents And Settings\_US
 </subsection>
 
 <subsection name="With Maven 2">
+
+<p>See a <a href="quick-start.html">Quick Start for Proximity</a>!</p>
 
 <p>With installed Proximity You have to create settings.xml in 
 your local M2 repo that defines mirror with id "central"
