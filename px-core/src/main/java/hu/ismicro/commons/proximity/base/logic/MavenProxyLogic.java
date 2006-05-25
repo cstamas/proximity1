@@ -70,16 +70,16 @@ public class MavenProxyLogic extends DefaultExpiringProxyingLogic {
 		return this.snapshotExpirationPeriod == 0;
 	}
 
-	protected boolean isPom(String path) {
-		return PathHelper.getFileName(path).endsWith(".pom");
+	protected boolean isPom(String name) {
+		return name.endsWith(".pom");
 	}
 
-	protected boolean isSnapshot(String path) {
-		return PathHelper.getFileName(path).indexOf("SNAPSHOT") != -1;
+	protected boolean isSnapshot(String name) {
+		return name.indexOf("SNAPSHOT") != -1;
 	}
 
-	protected boolean isMetadata(String path) {
-		return PathHelper.getFileName(path).startsWith("maven-metadata.xml");
+	protected boolean isMetadata(String name) {
+		return name.startsWith("maven-metadata.xml") || name.endsWith(".sha1") || name.endsWith(".md5");
 	}
 
 	// =========================================================================
@@ -89,13 +89,13 @@ public class MavenProxyLogic extends DefaultExpiringProxyingLogic {
 		if (!locallyExists) {
 			return true;
 		}
-		if (isPom(path)) {
+		if (isPom(PathHelper.getFileName(path))) {
 			return isPomRefetch();
 		}
-		if (isMetadata(path)) {
+		if (isMetadata(PathHelper.getFileName(path))) {
 			return isMetadataRefetch();
 		}
-		if (isSnapshot(path)) {
+		if (isSnapshot(PathHelper.getFileName(path))) {
 			return isSnapshotRefetch();
 		}
 		return false;

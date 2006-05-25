@@ -78,8 +78,11 @@
 	-->
 	<bean id="indexer"
 		class="hu.ismicro.commons.proximity.base.indexer.LuceneIndexer">
+		<!-- Where to store indexes? -->
 		<property name="indexDirectory" value="${indexer.dir}" />
+		<!-- On webapp start should i recreate Lucene indexes? -->
 		<property name="recreateIndexes" value="true" />
+		<!-- After how much of item insertion should i optimize indexes? -->
 		<property name="dirtyItemTreshold" value="100" />
 	</bean>
 
@@ -98,27 +101,22 @@
 	<!--
 		=================================================================================
 	-->
-	<!--
-		- Logic used for Maven1 repositories.
-	-->
-	<bean id="maven1logic"
-		class="hu.ismicro.commons.proximity.base.logic.MavenProxyLogic">
-		<property name="itemExpirationPeriodInSeconds" value="-1" />
-		<property name="snapshotExpirationPeriodInSeconds"
-			value="86400" />
-	</bean>
 
 	<!--
 		- Logic used for Maven2 repositories.
 	-->
 	<bean id="maven2logic"
 		class="hu.ismicro.commons.proximity.base.logic.MavenProxyLogic">
-		<property name="itemExpirationPeriodInSeconds" value="-1" />
-		<property name="pomExpirationPeriodInSeconds" value="86400" />
+		<!-- SNAPSHOTSs expires after 24h -->
 		<property name="snapshotExpirationPeriodInSeconds"
 			value="86400" />
+		<!-- Maven2 POMs expires after 24h -->
+		<property name="pomExpirationPeriodInSeconds" value="86400" />
+		<!-- Maven2 metadatas expires after 24h -->
 		<property name="metadataExpirationPeriodInSeconds"
 			value="86400" />
+		<!-- everything else will never expire once downloaded -->
+		<property name="itemExpirationPeriodInSeconds" value="-1" />
 	</bean>
 
 	<!--
@@ -132,12 +130,15 @@
 		<property name="localStorage" ref="centralFSStorage" />
 		<property name="remoteStorage" ref="centralRemotePeer" />
 		<property name="indexer" ref="indexer" />
-		<property name="reindex" value="true" />
-		<property name="recreateMetadata" value="true" />
 		<property name="statisticsGatherer" ref="stats" />
-		<property name="listable" value="true" />
 		<property name="accessManager" ref="openAccessManager" />
 		<property name="repositoryLogic" ref="maven2logic" />
+		<!-- Should i reindex my content on startup? -->
+		<property name="reindex" value="true" />
+		<!-- Should i recreate metadata on startup? -->
+		<property name="recreateMetadata" value="true" />
+		<!-- Am I listable? -->
+		<property name="listable" value="true" />
 	</bean>
 
 	<bean id="centralFSStorage"
@@ -153,8 +154,18 @@
 		<property name="remoteUrl"
 			value="http://repo1.maven.org/maven2/" />
 		<property name="connectionTimeout" value="10000" />
-		<property name="queryString" value="" />
 		<property name="followRedirection" value="true" />
+		<!-- Fix query string appended to URL, used for ProximityPiping "repositoryId=central" -->
+		<property name="queryString" value="" />
+		<!-- Proxy setup, uncomment if needed
+			<property name="proxyHost" value="myproxyhost.company.com" />
+			<property name="proxyPort" value="8080" />
+		-->
+		<!-- Proxy authentication setup, uncomment if proxy needs this
+			<property name="proxyRealm" value="ProxyRealm" />
+			<property name="proxyUsername" value="userOnProxy" />
+			<property name="proxyPassword" value="bigSecret" />
+		-->
 	</bean>
 
 	<!--
@@ -173,7 +184,7 @@
 		<property name="statisticsGatherer" ref="stats" />
 		<property name="listable" value="true" />
 		<property name="accessManager" ref="openAccessManager" />
-		<property name="repositoryLogic" ref="maven1logic" />
+		<property name="repositoryLogic" ref="maven2logic" />
 	</bean>
 
 	<bean id="ibiblioFSStorage"
@@ -191,6 +202,15 @@
 		<property name="connectionTimeout" value="10000" />
 		<property name="queryString" value="" />
 		<property name="followRedirection" value="true" />
+		<!-- Proxy setup, uncomment if needed
+			<property name="proxyHost" value="myproxyhost.company.com" />
+			<property name="proxyPort" value="8080" />
+		-->
+		<!-- Proxy authentication setup, uncomment if proxy needs this
+			<property name="proxyRealm" value="ProxyRealm" />
+			<property name="proxyUsername" value="userOnProxy" />
+			<property name="proxyPassword" value="bigSecret" />
+		-->
 	</bean>
 
 
@@ -210,7 +230,7 @@
 		<property name="statisticsGatherer" ref="stats" />
 		<property name="listable" value="true" />
 		<property name="accessManager" ref="openAccessManager" />
-		<property name="repositoryLogic" ref="maven1logic" />
+		<property name="repositoryLogic" ref="maven2logic" />
 	</bean>
 
 	<bean id="codehausFSStorage"
@@ -227,6 +247,15 @@
 		<property name="connectionTimeout" value="10000" />
 		<property name="queryString" value="" />
 		<property name="followRedirection" value="true" />
+		<!-- Proxy setup, uncomment if needed
+			<property name="proxyHost" value="myproxyhost.company.com" />
+			<property name="proxyPort" value="8080" />
+		-->
+		<!-- Proxy authentication setup, uncomment if proxy needs this
+			<property name="proxyRealm" value="ProxyRealm" />
+			<property name="proxyUsername" value="userOnProxy" />
+			<property name="proxyPassword" value="bigSecret" />
+		-->
 	</bean>
 
 	<!--

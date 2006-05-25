@@ -11,8 +11,10 @@ import hu.ismicro.commons.proximity.access.OpenAccessManager;
 import hu.ismicro.commons.proximity.base.logic.DefaultProxyingLogic;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Stack;
 
 import org.apache.commons.logging.Log;
@@ -314,7 +316,7 @@ public class RepositoryImpl implements Repository {
     }
 
     protected String getItemUid(ItemProperties ip) {
-        return getId() + ":" + PathHelper.walkThePath(ip.getAbsolutePath(), ip.getName());
+        return getId() + ":" + PathHelper.concatPaths(ip.getAbsolutePath(), ip.getName());
     }
 
     /**
@@ -334,6 +336,7 @@ public class RepositoryImpl implements Repository {
         int indexed = 0;
         Stack stack = new Stack();
         List dir = getLocalStorage().listItems(PathHelper.PATH_SEPARATOR);
+        Map batch = new HashMap();
         stack.push(dir);
         while (!stack.isEmpty()) {
             dir = (List) stack.pop();
@@ -345,11 +348,14 @@ public class RepositoryImpl implements Repository {
                             PathHelper.walkThePath(ip.getAbsolutePath(), ip.getName()));
                     stack.push(subdir);
                 } else {
-                    getIndexer().addItemProperties(getItemUid(ip), ip);
+                    // TODO: possible problem here with large repositories!
+                    batch.put(getItemUid(ip), ip);
+                    //getIndexer().addItemProperties(getItemUid(ip), ip);
                     indexed++;
                 }
             }
         }
+        getIndexer().addItemProperties(batch);
         logger.info("Indexed " + indexed + " items");
     }
 
