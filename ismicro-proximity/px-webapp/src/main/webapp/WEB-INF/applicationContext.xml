@@ -10,12 +10,12 @@
 -->
 
 <!-- 
-    List of known Maven2 mirrors, choose one that suit you!
-    
-    For Maven2:
-    http://repo1.maven.org/maven2/ (USA)
-    http://maven.sateh.com/repository/ (EU)
-    http://www.ibiblio.org/maven2/ (USA)
+	List of known Maven2 mirrors, choose one that suit you!
+	
+	For Maven2:
+	http://repo1.maven.org/maven2/ (USA)
+	http://maven.sateh.com/repository/ (EU)
+	http://www.ibiblio.org/maven2/ (USA)
 -->
 
 <beans>
@@ -42,7 +42,8 @@
 	-->
 	<bean id="propertyConfigurer"
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-		<property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_FALLBACK" />
+		<property name="systemPropertiesModeName"
+			value="SYSTEM_PROPERTIES_MODE_FALLBACK" />
 		<property name="locations">
 			<list>
 				<value>/WEB-INF/proximity.properties</value>
@@ -103,10 +104,45 @@
 		class="hu.ismicro.commons.proximity.base.SimpleStatisticsGathererImpl" />
 
 	<!--
-		- AccessManager. With OpenAccessManager Proximity is wide open.
+		- AccessManagers. With OpenAccessManager Proximity is wide open.
 	-->
 	<bean id="openAccessManager"
 		class="hu.ismicro.commons.proximity.access.OpenAccessManager" />
+
+	<!--
+		- AccessManagers. With AffirmativeAccessManager, we will have access if all defined
+		- voters vote AFFIRMATIVE.
+		
+		- We have currently one ONE voter, that tries to resemble Apache HTTPD2 Basic Access Control.
+		- We should suppply the allowFrom and denyFrom Java REGEX patterns and a boolean
+		- TRUE for "Order allow,deny" or FALSE for "Order deny,allow" (a la httpd)
+		
+		- Using these settings below, we have AccessManager that allows access for our
+		- 192.168.0.x LAN only. Requests from outer network will be REJECTED, thus
+		- Px is safe to sit on DMZ machine.
+		- Please note, that this settings will REJECT LOCALHOST TOO! 127.0.0.1
+		
+		- If configured on Proximity bean level: the browse link will be inaccessible
+		- If configured on Repoxitory level: the browse will show top-level items but the
+		- restricted repos will not allow download.
+		- Play with differenct combinations!
+		
+		- And don't forget: you may have as much voter and accessManager beans as you love!
+	-->
+	<bean id="lanAccessVoter"
+		class="hu.ismicro.commons.proximity.webapp.access.IpAddressAccessDecisionVoter">
+		<property name="allowDeny" value="true" />
+		<property name="allowFromPattern" value="192\.168\.0\..*" />
+		<property name="denyFromPattern" value=".*" />
+	</bean>
+	<bean id="internalLanOnlyAccessManager"
+		class="hu.ismicro.commons.proximity.access.AffirmativeAccessManager">
+		<property name="voters">
+			<list>
+				<ref local="lanAccessVoter" />
+			</list>
+		</property>
+	</bean>
 
 	<!--
 		=================================================================================
@@ -142,6 +178,9 @@
 		<property name="indexer" ref="indexer" />
 		<property name="statisticsGatherer" ref="stats" />
 		<property name="accessManager" ref="openAccessManager" />
+		<!-- Uncomment this and delete previous row to restrict access to this repo
+		<property name="accessManager" ref="internalLanOnlyAccessManager" />
+		-->
 		<property name="repositoryLogic" ref="maven2logic" />
 		<!-- Should i reindex my content on startup? -->
 		<property name="reindex" value="true" />
@@ -194,6 +233,9 @@
 		<property name="statisticsGatherer" ref="stats" />
 		<property name="listable" value="true" />
 		<property name="accessManager" ref="openAccessManager" />
+		<!-- Uncomment this and delete previous row to restrict access to this repo
+		<property name="accessManager" ref="internalLanOnlyAccessManager" />
+		-->
 		<property name="repositoryLogic" ref="maven2logic" />
 	</bean>
 
@@ -240,6 +282,9 @@
 		<property name="statisticsGatherer" ref="stats" />
 		<property name="listable" value="true" />
 		<property name="accessManager" ref="openAccessManager" />
+		<!-- Uncomment this and delete previous row to restrict access to this repo
+		<property name="accessManager" ref="internalLanOnlyAccessManager" />
+		-->
 		<property name="repositoryLogic" ref="maven2logic" />
 	</bean>
 
@@ -282,6 +327,9 @@
 		<property name="listable" value="true" />
 		<property name="statisticsGatherer" ref="stats" />
 		<property name="accessManager" ref="openAccessManager" />
+		<!-- Uncomment this and delete previous row to restrict access to this repo
+		<property name="accessManager" ref="internalLanOnlyAccessManager" />
+		-->
 	</bean>
 
 	<bean id="inhouseFSStorage"
@@ -305,6 +353,9 @@
 		<property name="listable" value="true" />
 		<property name="statisticsGatherer" ref="stats" />
 		<property name="accessManager" ref="openAccessManager" />
+		<!-- Uncomment this and delete previous row to restrict access to this repo
+		<property name="accessManager" ref="internalLanOnlyAccessManager" />
+		-->
 	</bean>
 
 	<bean id="extNonFreeFSStorage"
@@ -328,6 +379,9 @@
 		<property name="listable" value="true" />
 		<property name="statisticsGatherer" ref="stats" />
 		<property name="accessManager" ref="openAccessManager" />
+		<!-- Uncomment this and delete previous row to restrict access to this repo
+		<property name="accessManager" ref="internalLanOnlyAccessManager" />
+		-->
 	</bean>
 
 	<bean id="extFreeFSStorage"
