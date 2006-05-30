@@ -222,10 +222,10 @@ public class ReadOnlyFileSystemStorage extends AbstractStorage {
         result.setLastModified(new Date(target.lastModified()));
         result.setName(target.getName());
         if (target.isFile()) {
-            result.setSize(target.length());
             if (isMetadataAware()) {
                 fillInMetadata(result);
             }
+            result.setSize(target.length());
         } else {
             result.setSize(0);
         }

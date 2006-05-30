@@ -133,7 +133,7 @@ public class ProximityImpl implements Proximity {
                 try {
                     return repo.retrieveItemProperties(request);
                 } catch (ItemNotFoundException ex) {
-                    logger.info("Item " + request.getPath() + " not found in targeted repository " + repo.getId());
+                    logger.info("ItemProperties " + request.getPath() + " not found in targeted repository " + repo.getId());
                     throw ex;
                 }
             }
@@ -151,11 +151,11 @@ public class ProximityImpl implements Proximity {
                     if (repo.getURIPrefix() == null || request.getPath().startsWith(repo.getURIPrefix())) {
                         return repo.retrieveItemProperties(request);
                     } else {
-                        logger.info("Item " + request.getPath() + " not searched in repository " + reposId
+                        logger.info("ItemProperties " + request.getPath() + " not searched in repository " + reposId
                                 + " commited to URI prefix " + repo.getURIPrefix());
                     }
                 } catch (ItemNotFoundException ex) {
-                    logger.info("Item " + request.getPath() + " not found in repository " + reposId);
+                    logger.info("ItemPropeties " + request.getPath() + " not found in repository " + reposId);
                 }
             }
             throw new ItemNotFoundException(request.getPath());
