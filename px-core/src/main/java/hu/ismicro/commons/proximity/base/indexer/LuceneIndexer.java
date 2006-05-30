@@ -102,11 +102,15 @@ public class LuceneIndexer implements Indexer {
     public synchronized void addItemProperties(String UID, ItemProperties ip) throws StorageException {
         logger.debug("Adding item to index");
         try {
+            // prevent duplication on idx
+            IndexReader reader = IndexReader.open(indexDirectory);
+            int deleted = reader.delete(new Term("UID", UID));
+            reader.close();
             IndexWriter writer = new IndexWriter(indexDirectory, analyzer, false);
             Document ipDoc = itemProperties2Document(ip);
             ipDoc.add(Field.Keyword("UID", UID));
             writer.addDocument(ipDoc);
-            dirtyItems++;
+            dirtyItems = deleted + 1;
             optimizeIndexIfNeededAndClose(writer);
         } catch (IOException ex) {
             logger.error("Got IOException during index addition.", ex);
@@ -118,15 +122,19 @@ public class LuceneIndexer implements Indexer {
         logger.debug("Adding batch items to index");
         try {
             IndexWriter writer = new IndexWriter(indexDirectory, analyzer, false);
+            IndexReader reader = IndexReader.open(indexDirectory);
             String UID = null;
             ItemProperties ip = null;
             for (Iterator i = uidWithItems.keySet().iterator(); i.hasNext();) {
                 UID = (String) i.next();
+                // prevent duplication on idx
+                reader.delete(new Term("UID", UID));
                 ip = (ItemProperties) uidWithItems.get(UID);
                 Document ipDoc = itemProperties2Document(ip);
                 ipDoc.add(Field.Keyword("UID", UID));
                 writer.addDocument(ipDoc);
             }
+            reader.close();
             writer.optimize();
             writer.close();
             dirtyItems = 0;
