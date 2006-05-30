@@ -99,23 +99,22 @@ public class LuceneIndexer implements Indexer {
         this.indexDirectory = FSDirectory.getDirectory(pathFile, false);
     }
 
-    public void addItemProperties(String UID, ItemProperties ip) throws StorageException {
+    public synchronized void addItemProperties(String UID, ItemProperties ip) throws StorageException {
         logger.debug("Adding item to index");
         try {
             IndexWriter writer = new IndexWriter(indexDirectory, analyzer, false);
             Document ipDoc = itemProperties2Document(ip);
             ipDoc.add(Field.Keyword("UID", UID));
             writer.addDocument(ipDoc);
-            writer.close();
             dirtyItems++;
-            optimizeIndexIfNeeded();
+            optimizeIndexIfNeededAndClose(writer);
         } catch (IOException ex) {
             logger.error("Got IOException during index addition.", ex);
             throw new StorageException("Got IOException during addition.", ex);
         }
     }
 
-    public void addItemProperties(Map uidWithItems) throws StorageException {
+    public synchronized void addItemProperties(Map uidWithItems) throws StorageException {
         logger.debug("Adding batch items to index");
         try {
             IndexWriter writer = new IndexWriter(indexDirectory, analyzer, false);
@@ -137,7 +136,7 @@ public class LuceneIndexer implements Indexer {
         }
     }
 
-    public void deleteItemProperties(String UID, ItemProperties ip) throws ItemNotFoundException, StorageException {
+    public synchronized void deleteItemProperties(String UID, ItemProperties ip) throws ItemNotFoundException, StorageException {
         logger.debug("Deleting item from index");
         try {
             IndexReader reader = IndexReader.open(indexDirectory);
@@ -145,7 +144,7 @@ public class LuceneIndexer implements Indexer {
             reader.close();
             logger.info("Deleted " + deleted + " items from index for UID=" + UID);
             dirtyItems = dirtyItems + deleted;
-            optimizeIndexIfNeeded();
+            optimizeIndexIfNeededAndClose(new IndexWriter(indexDirectory, analyzer, false));
         } catch (IOException ex) {
             logger.error("Got IOException during index deletion.", ex);
             throw new StorageException("Got IOException during deletion.", ex);
@@ -196,18 +195,17 @@ public class LuceneIndexer implements Indexer {
         return result;
     }
 
-    private void optimizeIndexIfNeeded() {
+    private void optimizeIndexIfNeededAndClose(IndexWriter writer) {
         if (dirtyItems > dirtyItemTreshold) {
             logger.info("Optimizing Lucene index");
             try {
-                IndexWriter writer = new IndexWriter(indexDirectory, analyzer, false);
                 writer.optimize();
                 writer.close();
+                dirtyItems = 0;
             } catch (IOException ex) {
                 logger.error("Got IOException during index optimization.", ex);
                 throw new StorageException("Got IOException during optimization.", ex);
             }
-            dirtyItems = 0;
         }
     }
 
