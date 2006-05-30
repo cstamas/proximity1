@@ -1,5 +1,6 @@
 package hu.ismicro.commons.proximity.webapp;
 
+import hu.ismicro.commons.proximity.AccessDeniedException;
 import hu.ismicro.commons.proximity.Item;
 import hu.ismicro.commons.proximity.ItemNotFoundException;
 import hu.ismicro.commons.proximity.ItemProperties;
@@ -82,7 +83,11 @@ public class RepositoryController extends MultiActionController {
 			logger.info("Item not found on URI " + requestURI);
 			response.sendError(HttpServletResponse.SC_NOT_FOUND);
 			return null;
-		}
+		} catch (AccessDeniedException ex) {
+            logger.info("Access forbidden to " + requestURI + " for " + request.getRemoteAddr(), ex);
+            response.sendError(HttpServletResponse.SC_FORBIDDEN);
+            return null;
+        }
 	}
 
 	protected List explodeUriToList(String uri) {

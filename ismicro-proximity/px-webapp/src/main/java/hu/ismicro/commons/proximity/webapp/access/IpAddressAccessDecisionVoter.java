@@ -57,9 +57,21 @@ public class IpAddressAccessDecisionVoter implements AccessDecisionVoter {
         Matcher allowMatcher = allowFrom.matcher(ipAddress);
         Matcher denyMatcher = denyFrom.matcher(ipAddress);
         if (isAllowDeny()) {
-            return allowMatcher.matches() && !denyMatcher.matches();
+            if (allowMatcher.matches()) {
+                return true;
+            }
+            if (denyMatcher.matches()) {
+                return false;
+            }
+            return false;
         } else {
-            return allowMatcher.matches() || !denyMatcher.matches();
+            if (denyMatcher.matches()) {
+                return false;
+            }
+            if (allowMatcher.matches()) {
+                return true;
+            }
+            return true;
         }
     }
 
