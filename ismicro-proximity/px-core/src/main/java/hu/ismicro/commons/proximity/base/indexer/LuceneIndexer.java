@@ -136,7 +136,8 @@ public class LuceneIndexer implements Indexer {
         }
     }
 
-    public synchronized void deleteItemProperties(String UID, ItemProperties ip) throws ItemNotFoundException, StorageException {
+    public synchronized void deleteItemProperties(String UID, ItemProperties ip) throws ItemNotFoundException,
+            StorageException {
         logger.debug("Deleting item from index");
         try {
             IndexReader reader = IndexReader.open(indexDirectory);
@@ -196,16 +197,16 @@ public class LuceneIndexer implements Indexer {
     }
 
     private void optimizeIndexIfNeededAndClose(IndexWriter writer) {
-        if (dirtyItems > dirtyItemTreshold) {
-            logger.info("Optimizing Lucene index");
-            try {
+        try {
+            if (dirtyItems > dirtyItemTreshold) {
+                logger.info("Optimizing Lucene index");
                 writer.optimize();
-                writer.close();
                 dirtyItems = 0;
-            } catch (IOException ex) {
-                logger.error("Got IOException during index optimization.", ex);
-                throw new StorageException("Got IOException during optimization.", ex);
             }
+            writer.close();
+        } catch (IOException ex) {
+            logger.error("Got IOException during index optimization.", ex);
+            throw new StorageException("Got IOException during optimization.", ex);
         }
     }
 
