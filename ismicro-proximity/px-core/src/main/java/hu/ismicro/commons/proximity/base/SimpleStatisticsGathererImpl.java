@@ -78,7 +78,6 @@ public class SimpleStatisticsGathererImpl implements StatisticsGatherer {
         int count = ((Integer) localStats.get(propsOnly ? PROPS_RETRIEVAL : ITEM_RETRIEVAL)).intValue() + 1;
         logger.debug("Increasing hit for " + ip.getPath() + " to " + count);
         localStats.put(propsOnly ? PROPS_RETRIEVAL : ITEM_RETRIEVAL, new Integer(count));
-        localStats.put(RETRIEVAL_TIMESTAMP, new Date(System.currentTimeMillis()));
 
         // if we have front-end that records this
         if (req.getAttributes().get(ProximityRequest.REQUEST_REMOTE_ADDRESS) != null) {
