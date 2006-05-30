@@ -9,6 +9,15 @@
 	cservenak@is-micro.hu
 -->
 
+<!-- 
+    List of known Maven2 mirrors, choose one that suit you!
+    
+    For Maven2:
+    http://repo1.maven.org/maven2/ (USA)
+    http://maven.sateh.com/repository/ (EU)
+    http://www.ibiblio.org/maven2/ (USA)
+-->
+
 <beans>
 
 	<!--
@@ -199,7 +208,7 @@
 	<bean id="ibiblioRemotePeer"
 		class="hu.ismicro.commons.proximity.base.remote.HttpClientRemotePeer">
 		<property name="remoteUrl"
-			value="http://www.ibiblio.org/maven2/" />
+			value="http://www.ibiblio.org/maven/" />
 		<property name="connectionTimeout" value="10000" />
 		<property name="queryString" value="" />
 		<property name="followRedirection" value="true" />
