@@ -5,7 +5,7 @@
   <parent>
 	<groupId>ismicro</groupId>
 	<artifactId>ismicro-proximity</artifactId>
-	<version>1.0.0-alpha1</version>
+	<version>1.0.0</version>
   </parent>
   
   <!-- the version of maven's project object model -->
@@ -21,7 +21,7 @@
   <name>ISmicro Proximity Webapp</name>
 
   <!-- The version of the project under development -->
-  <version>1.0.0-alpha1</version>
+  <version>1.0.0-alpha2</version>
 
   <dependencies>
 
