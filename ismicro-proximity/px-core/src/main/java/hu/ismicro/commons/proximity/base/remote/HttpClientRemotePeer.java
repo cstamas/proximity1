@@ -173,19 +173,20 @@ public class HttpClientRemotePeer extends AbstractRemoteStorage {
 
                     logger.debug("Constructing ProxiedItem");
                     ProxiedItem result = new ProxiedItem();
-                    result.setProperties(properties);
                     if (properties.isFile()) {
                         // TODO: Solve this in  a better way
                         File tmpFile = File.createTempFile(PathHelper.getFileName(path), null);
                         FileOutputStream fos = new FileOutputStream(tmpFile);
-                        IOUtils.copy(get.getResponseBodyAsStream(), fos);
+                        int bytes = IOUtils.copy(get.getResponseBodyAsStream(), fos);
                         fos.flush();
                         fos.close();
+                        properties.setSize(bytes); // set the actual size in bytes we received
                         InputStream is = new FileInputStream(tmpFile);
                         result.setStream(is);
                     } else {
                         result.setStream(null);
                     }
+                    result.setProperties(properties);
                     return result;
                 } else {
                     if (response == HttpStatus.SC_NOT_FOUND) {
@@ -263,6 +264,7 @@ public class HttpClientRemotePeer extends AbstractRemoteStorage {
     protected ProxiedItemProperties constructItemPropertiesFromGetResponse(String path, String originatingUrlString,
             HttpMethod executedMethod) throws MalformedURLException {
         Header locationHeader = executedMethod.getResponseHeader("location");
+        Header contentLength = executedMethod.getRequestHeader("content-length");
         Header lastModifiedHeader = executedMethod.getResponseHeader("last-modified");
         if (locationHeader != null) {
             // we may had redirection
@@ -273,6 +275,9 @@ public class HttpClientRemotePeer extends AbstractRemoteStorage {
 
         ProxiedItemProperties result = new ProxiedItemProperties();
         result.setAbsolutePath(PathHelper.changePathLevel(path, PathHelper.PATH_PARENT));
+        if (contentLength != null) {
+            result.setSize(Long.parseLong(contentLength.getValue()));
+        }
         // TODO: ibiblio behaves like this, check for others
         result.setDirectory(lastModifiedHeader == null);
         result.setFile(lastModifiedHeader != null);
