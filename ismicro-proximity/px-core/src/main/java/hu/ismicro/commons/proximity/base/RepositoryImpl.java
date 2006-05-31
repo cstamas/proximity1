@@ -308,7 +308,7 @@ public class RepositoryImpl implements Repository {
             if (result == null) {
                 throw new ItemNotFoundException(request.getPath());
             }
-            logger.info(propsOnly ? "Item " : "ItemProperties" + request.getPath() + " found in repository " + getId());
+            logger.info(propsOnly ? "Item " : "ItemProperties " + request.getPath() + " found in repository " + getId());
             return result;
         } catch (ItemNotFoundException ex) {
             throw new ItemNotFoundException(request.getPath(), getId());
