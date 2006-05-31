@@ -223,8 +223,10 @@ public class ReadOnlyFileSystemStorage extends AbstractStorage {
         result.setName(target.getName());
         if (target.isFile()) {
             if (isMetadataAware()) {
+                // since basic props are also stored (eg. filesize)
                 fillInMetadata(result);
             }
+            // but we trust File and not stored filesize
             result.setSize(target.length());
         } else {
             result.setSize(0);

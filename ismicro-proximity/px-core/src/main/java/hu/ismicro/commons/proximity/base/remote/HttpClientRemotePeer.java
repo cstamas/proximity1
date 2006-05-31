@@ -275,12 +275,11 @@ public class HttpClientRemotePeer extends AbstractRemoteStorage {
 
         ProxiedItemProperties result = new ProxiedItemProperties();
         result.setAbsolutePath(PathHelper.changePathLevel(path, PathHelper.PATH_PARENT));
-        if (contentLength != null) {
-            result.setSize(Long.parseLong(contentLength.getValue()));
-        }
+
         // TODO: ibiblio behaves like this, check for others
         result.setDirectory(lastModifiedHeader == null);
         result.setFile(lastModifiedHeader != null);
+        
         if (lastModifiedHeader != null) {
             result.setLastModified(makeDateFromString(lastModifiedHeader.getValue()));
         } else {
@@ -288,8 +287,11 @@ public class HttpClientRemotePeer extends AbstractRemoteStorage {
             result.setLastModified(new Date());
         }
         result.setName(PathHelper.getFileName(originatingUrl.getPath()));
-        if (result.isFile() && executedMethod instanceof GetMethod) {
-            result.setSize(((GetMethod) executedMethod).getResponseContentLength());
+        if (result.isFile()) {
+            if (contentLength != null) {
+                result.setSize(Long.parseLong(contentLength.getValue()));
+            }
+            //result.setSize(((GetMethod) executedMethod).getResponseContentLength());
         } else {
             result.setSize(0);
         }
