@@ -3,6 +3,95 @@
 <p>#springMessage('stats.intro')</p>
 
 <table>
+<tr>
+<td>
+
+<table>
+	<tr class="tdb">
+		<td colspan="3">#springMessage('stats.topTenItems')</td>
+	</tr>
+	<tr class="tdb">
+		<td colspan="1" width="50%">#springMessage('stats.item.path')</td>
+		<td colspan="1" width="50%">#springMessage('stats.item.name')</td>
+		<td colspan="1" width="50%">#springMessage('stats.item.accessed')</td>
+	</tr>
+    #foreach($item in $topTenItems)
+        <tr class="tda">
+             <td colspan="1"><a href="#springUrl('/repository')${item.absolutePath}?repositoryId=${item.repositoryId}">${item.absolutePath}</a></td>
+             <td colspan="1"><a href="#springUrl('/repository')${item.path}?repositoryId=${item.repositoryId}">${item.name}</a></td>
+             <td colspan="1">?</td>
+        </tr>
+    #end
+</table>
+
+</td>
+<td>
+
+<table>
+	<tr class="tdb">
+		<td colspan="2" width="50%">#springMessage('stats.latestTenItems')</td>
+	</tr>
+	<tr class="tdb">
+		<td colspan="1" width="50%">#springMessage('stats.item.name')</td>
+		<td colspan="1" width="50%">#springMessage('stats.item.accessed')</td>
+	</tr>
+    #foreach($item in $latestTenItems)
+        <tr class="tda">
+             <td colspan="1"><a href="#springUrl('/repository')${item.absolutePath}?repositoryId=${item.repositoryId}">${item.absolutePath}</a></td>
+             <td colspan="1">?</td>
+        </tr>
+    #end
+</table>
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+<table>
+	<tr class="tdb">
+		<td colspan="2" width="50%">#springMessage('stats.topTenIps')</td>
+	</tr>
+	<tr class="tdb">
+		<td colspan="1">#springMessage('stats.item.name')</td>
+		<td colspan="1">#springMessage('stats.item.accessed')</td>
+	</tr>
+    #foreach($item in $topTenItems)
+        <tr class="tda">
+             <td colspan="1"><a href="#springUrl('/repository')${item.absolutePath}?repositoryId=${item.repositoryId}">${item.absolutePath}</a></td>
+             <td colspan="1">?</td>
+        </tr>
+    #end
+</table>
+
+</td>
+<td>
+
+<table>
+	<tr class="tdb">
+		<td colspan="2" width="50%">#springMessage('stats.latestTenIps')</td>
+	</tr>
+	<tr class="tdb">
+		<td colspan="1" width="50%">#springMessage('stats.item.name')</td>
+		<td colspan="1" width="50%">#springMessage('stats.item.accessed')</td>
+	</tr>
+    #foreach($item in $latestTenItems)
+        <tr class="tda">
+             <td colspan="1"><a href="#springUrl('/repository')${item.absolutePath}?repositoryId=${item.repositoryId}">${item.absolutePath}</a></td>
+             <td colspan="1">?</td>
+        </tr>
+    #end
+</table>
+
+</td>
+</tr>
+</table>
+
+<p/>
+
+<p>Raw stats (just for reference):</p>
+<table>
 
         #foreach($ip in ${stats.keySet()})
 
