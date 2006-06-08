@@ -25,6 +25,5 @@
 	<classpathentry kind="var" path="M2_REPO/org/springframework/spring-aop/1.2.7/spring-aop-1.2.7.jar"/>
 	<classpathentry kind="var" path="M2_REPO/commons-httpclient/commons-httpclient/3.0.1/commons-httpclient-3.0.1.jar"/>
 	<classpathentry kind="src" path="px-core/src/test/resources"/>
-	<classpathentry kind="src" path="px-webapp/src/main/conf"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
