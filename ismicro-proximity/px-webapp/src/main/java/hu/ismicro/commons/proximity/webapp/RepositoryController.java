@@ -93,11 +93,10 @@ public class RepositoryController extends MultiActionController {
 	protected List explodeUriToList(String uri) {
 		List result = new ArrayList();
 		String[] explodedUri = uri.split("/");
-		StringBuffer sb = new StringBuffer("/");
+		//StringBuffer sb = new StringBuffer("/");
 		for (int i = 0; i < explodedUri.length; i++) {
 			if (explodedUri[i].length() > 0) {
-				result.add(sb + explodedUri[i]);
-				sb.append(explodedUri[i] + "/");
+				result.add(explodedUri[i]);
 			}
 		}
 		return result;

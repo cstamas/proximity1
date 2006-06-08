@@ -17,7 +17,13 @@
                 #end
                 <tr class="tda">
                         <td colspan="1">#springMessage("repositories.isListable")</td>
-                        <td colspan="1">${repository.isListable()}</td>
+                        <td colspan="1">
+	                        #if( ${repository.isListable()} )
+    	                    	<a href="#springUrl('/repository')?repositoryId=${repository.id}">#springMessage("common.enabled")</a>
+    	                    #else
+    	                        #springMessage("common.disabled")
+        	                #end
+                        </td>
                 </tr>
                 #if(${repository.getRemoteStorage()})
                 <tr class="tda">
