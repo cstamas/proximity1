@@ -36,7 +36,8 @@ public class SupportController extends MultiActionController {
 
     public ModelAndView search(HttpServletRequest request, HttpServletResponse response) throws Exception {
         logger.debug("Got request for search");
-        ProxiedItemProperties example = null; 
+        ProxiedItemProperties example = null;
+        String query = null;
         if (RequestUtils.getStringParameter(request, "searchAll") != null
                 && RequestUtils.getRequiredStringParameter(request, "searchAllRegexp") != null) {
             example = new ProxiedItemProperties();
@@ -47,14 +48,24 @@ public class SupportController extends MultiActionController {
             example = new ProxiedItemProperties();
             example.setName(RequestUtils.getRequiredStringParameter(request, "searchSelectedRegexp") + "*");
             example.setMetadata(ProxiedItemProperties.METADATA_OWNING_REPOSITORY, RequestUtils.getRequiredStringParameter(request, "searchSelectedRepos"));
+        } else if (RequestUtils.getStringParameter(request, "searchLQL") != null
+                && RequestUtils.getRequiredStringParameter(request, "searchLQLQuery") != null) {
+            query =  RequestUtils.getRequiredStringParameter(request, "searchLQLQuery");
         }
+        
+        logger.debug("example=" + (example == null ? null : example.getName()) + ", query=" + query);
 
         Map context = new HashMap();
 
         if (example != null) {
-            List results = proximity.searchItem(example);
+            List results = getProximity().searchItem(example);
+            context.put("results", results);
+        } else if (query != null) {
+            List results = getProximity().searchItem(query);
             context.put("results", results);
         }
+        List keywords = getProximity().getSearchableKeywords();
+        context.put("searchableKeywords", keywords);
         List repositories = getProximity().getRepositories();
         context.put("repositories", repositories);
         return new ModelAndView("search", context);

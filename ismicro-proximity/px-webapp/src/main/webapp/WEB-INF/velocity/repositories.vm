@@ -7,7 +7,11 @@
         #foreach($repository in $repositories)
 
                 <tr class="tdb">
-                        <td colspan="2">${repository.id}</td>
+                        <td colspan="2">#springMessage("repositories.repoTitle")</td>
+                </tr>
+                <tr class="tda">
+                        <td colspan="1">#springMessage("repositories.id")</td>
+                        <td colspan="1">${repository.id}</td>
                 </tr>
                 #if(${repository.getURIPrefix()})
                 <tr class="tda">
@@ -37,6 +41,14 @@
                           <td colspan="1">${repository.getLocalStorage().getStorageBaseDir()}</td>
                         #else
                           <td colspan="1">#springMessage("repositories.localBasedir.none")</td>
+                        #end
+                </tr>
+                <tr class="tda">
+                        <td colspan="1">#springMessage("repositories.localBasedir.metadataAware")</td>
+                        #if(${repository.getLocalStorage().isMetadataAware()})
+                          <td colspan="1">#springMessage("common.yes")</td>
+                        #else
+                          <td colspan="1">#springMessage("common.no")</td>
                         #end
                 </tr>
 

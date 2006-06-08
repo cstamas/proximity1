@@ -88,7 +88,7 @@
 		- Indexer, used to speed up searches.
 	-->
 	<bean id="indexer"
-		class="hu.ismicro.commons.proximity.base.indexer.LuceneIndexer">
+		class="hu.ismicro.commons.proximity.maven.MavenAwareLuceneIndexer">
 		<!-- Where to store indexes? -->
 		<property name="indexDirectory" value="${indexer.dir}" />
 		<!-- On webapp start should i recreate Lucene indexes? -->
@@ -152,7 +152,7 @@
 		- Logic used for Maven2 repositories.
 	-->
 	<bean id="maven2logic"
-		class="hu.ismicro.commons.proximity.base.logic.MavenProxyLogic">
+		class="hu.ismicro.commons.proximity.maven.MavenProxyLogic">
 		<!-- SNAPSHOTSs expires after 24h -->
 		<property name="snapshotExpirationPeriodInSeconds"
 			value="86400" />
@@ -350,7 +350,7 @@
 		<property name="indexer" ref="indexer" />
 		<property name="reindex" value="true" />
 		<property name="recreateMetadata" value="true" />
-		<property name="listable" value="true" />
+		<property name="listable" value="false" />
 		<property name="statisticsGatherer" ref="stats" />
 		<property name="accessManager" ref="openAccessManager" />
 		<!-- Uncomment this and delete previous row to restrict access to this repo
