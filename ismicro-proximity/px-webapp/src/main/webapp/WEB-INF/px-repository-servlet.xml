@@ -3,43 +3,57 @@
 
 <beans>
 
-    <!-- Configurer that sets up a shared VelocityEngine for Velocity views -->
-    <bean id="velocityConfigurer"
-        class="org.springframework.web.servlet.view.velocity.VelocityConfigurer">
-        <property name="resourceLoaderPath" value="WEB-INF/velocity/" />
-    </bean>
+	<!-- Configurer that sets up a shared VelocityEngine for Velocity views -->
+	<bean id="velocityConfigurer"
+		class="org.springframework.web.servlet.view.velocity.VelocityConfigurer">
+		<property name="resourceLoaderPath" value="WEB-INF/velocity/" />
+		<property name="velocityProperties">
+			<props>
+				<prop key="velocimacro.library">
+					hu/ismicro/commons/proximity/webapp/view/px-macros.vm
+				</prop>
+			</props>
+		</property>
+	</bean>
 
-    <!-- Simple ViewResolver for Velocity, appending ".vm" to logical view names -->
-    <bean id="viewResolver"
-    	class="org.springframework.web.servlet.view.velocity.VelocityViewResolver">
-    	<property name="viewClass"
-    		value="org.springframework.web.servlet.view.velocity.VelocityLayoutView" />
-    	<property name="contentType" value="text/html;charset=UTF-8" />
-    	<property name="suffix" value=".vm" />
-    	<property name="exposeSpringMacroHelpers" value="true" />
-    	<property name="exposeRequestAttributes" value="true" />
-    	<property name="exposeSessionAttributes" value="true" />
-    	<property name="dateToolAttribute" value="vtldatetool" />
-    	<property name="numberToolAttribute" value="vtlnumbertool" />
-    </bean>
+	<!-- Simple ViewResolver for Velocity, appending ".vm" to logical view names -->
+	<bean id="viewResolver"
+		class="org.springframework.web.servlet.view.velocity.VelocityViewResolver">
+		<property name="viewClass"
+			value="org.springframework.web.servlet.view.velocity.VelocityLayoutView" />
+		<property name="contentType" value="text/html;charset=UTF-8" />
+		<property name="suffix" value=".vm" />
+		<property name="exposeSpringMacroHelpers" value="true" />
+		<property name="exposeRequestAttributes" value="true" />
+		<property name="exposeSessionAttributes" value="true" />
+		<property name="dateToolAttribute" value="vtldatetool" />
+		<property name="numberToolAttribute" value="vtlnumbertool" />
+		<property name="toolboxConfigLocation"
+			value="/WEB-INF/velocity-toolbox.xml" />
+	</bean>
 
-    <!-- HandlerMapping that dispatches all request to the MultiActionController below -->
-	<bean id="handlerMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
-	    <property name="defaultHandler" ref="repositoryController"/>
+	<!-- HandlerMapping that dispatches all request to the MultiActionController below -->
+	<bean id="handlerMapping"
+		class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+		<property name="defaultHandler" ref="repositoryController" />
 	</bean>
 
 	<!-- MultiActionController that defines user interface actions as separate methods -->
-	<bean id="repositoryController" class="hu.ismicro.commons.proximity.webapp.RepositoryController">
-        <property name="proximity"><ref bean="proximity"/></property>
-	    <property name="methodNameResolver">
-	        <bean class="org.springframework.web.servlet.mvc.multiaction.PropertiesMethodNameResolver">
-	            <property name="mappings">
-	                <props>
-	                    <prop key="/**">repositoryList</prop>
-	                </props>
-	            </property>
-	        </bean>
-	    </property>
+	<bean id="repositoryController"
+		class="hu.ismicro.commons.proximity.webapp.RepositoryController">
+		<property name="proximity">
+			<ref bean="proximity" />
+		</property>
+		<property name="methodNameResolver">
+			<bean
+				class="org.springframework.web.servlet.mvc.multiaction.PropertiesMethodNameResolver">
+				<property name="mappings">
+					<props>
+						<prop key="/**">repositoryList</prop>
+					</props>
+				</property>
+			</bean>
+		</property>
 	</bean>
 
 </beans>
