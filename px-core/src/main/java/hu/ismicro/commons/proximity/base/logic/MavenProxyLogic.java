@@ -5,6 +5,7 @@ import hu.ismicro.commons.proximity.ProximityRequest;
 import hu.ismicro.commons.proximity.Repository;
 import hu.ismicro.commons.proximity.base.PathHelper;
 import hu.ismicro.commons.proximity.base.ProxiedItem;
+import hu.ismicro.commons.proximity.maven.MavenArtifactRecognizer;
 
 import java.util.Date;
 
@@ -70,18 +71,6 @@ public class MavenProxyLogic extends DefaultExpiringProxyingLogic {
 		return this.snapshotExpirationPeriod == 0;
 	}
 
-	protected boolean isPom(String name) {
-		return name.endsWith(".pom");
-	}
-
-	protected boolean isSnapshot(String name) {
-		return name.indexOf("SNAPSHOT") != -1;
-	}
-
-	protected boolean isMetadata(String name) {
-		return name.startsWith("maven-metadata.xml") || name.endsWith(".sha1") || name.endsWith(".md5");
-	}
-
 	// =========================================================================
 	// Logic iface
 
@@ -89,13 +78,13 @@ public class MavenProxyLogic extends DefaultExpiringProxyingLogic {
 		if (!locallyExists) {
 			return true;
 		}
-		if (isPom(PathHelper.getFileName(path))) {
+		if (MavenArtifactRecognizer.isPom(PathHelper.getFileName(path))) {
 			return isPomRefetch();
 		}
-		if (isMetadata(PathHelper.getFileName(path))) {
+		if (MavenArtifactRecognizer.isMetadata(PathHelper.getFileName(path))) {
 			return isMetadataRefetch();
 		}
-		if (isSnapshot(PathHelper.getFileName(path))) {
+		if (MavenArtifactRecognizer.isSnapshot(PathHelper.getFileName(path))) {
 			return isSnapshotRefetch();
 		}
 		return false;
@@ -121,7 +110,7 @@ public class MavenProxyLogic extends DefaultExpiringProxyingLogic {
 	}
 
 	public ProxiedItem afterRemoteCopyFound(ProxiedItem item, Repository repository) {
-		if (isPom(item.getProperties().getName())) {
+		if (MavenArtifactRecognizer.isPom(item.getProperties().getName())) {
 			if (pomExpirationPeriod != -1) {
 				logger.info("Item is Maven 2 POM, setting expires on it to " + pomExpirationPeriod / 1000
 						+ " seconds.");
@@ -129,7 +118,7 @@ public class MavenProxyLogic extends DefaultExpiringProxyingLogic {
 						Long.toString(System.currentTimeMillis() + pomExpirationPeriod));
 			}
 			item.getProperties().setMetadata("item.isPom", Boolean.TRUE.toString());
-		} else if (isMetadata(item.getProperties().getName())) {
+		} else if (MavenArtifactRecognizer.isMetadata(item.getProperties().getName())) {
 			if (metadataExpirationPeriod != -1) {
 				logger.info("Item is Maven 2 Metadata, setting expires on it to " + metadataExpirationPeriod
 						/ 1000 + " seconds.");
@@ -137,7 +126,7 @@ public class MavenProxyLogic extends DefaultExpiringProxyingLogic {
 						Long.toString(System.currentTimeMillis() + metadataExpirationPeriod));
 			}
 			item.getProperties().setMetadata("item.isMetadata", Boolean.TRUE.toString());
-		} else if (isSnapshot(item.getProperties().getName())) {
+		} else if (MavenArtifactRecognizer.isSnapshot(item.getProperties().getName())) {
 			if (snapshotExpirationPeriod != -1) {
 				logger.info("Item is Maven 1/2 Snapshot, setting expires on it to " + snapshotExpirationPeriod
 						/ 1000 + " seconds.");

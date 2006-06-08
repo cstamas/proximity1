@@ -1,5 +1,6 @@
 package hu.ismicro.commons.proximity.base;
 
+import hu.ismicro.commons.proximity.Item;
 import hu.ismicro.commons.proximity.ItemNotFoundException;
 import hu.ismicro.commons.proximity.ItemProperties;
 
@@ -16,7 +17,7 @@ public interface Indexer {
     
     void initialize();
 	
-    void addItemProperties(String UID, ItemProperties ip) throws StorageException;
+    void addItemProperties(String UID, Item ip) throws StorageException;
 
     void addItemProperties(Map uidsWithItems) throws StorageException;
     
