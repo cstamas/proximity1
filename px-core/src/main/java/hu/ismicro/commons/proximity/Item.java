@@ -22,5 +22,11 @@ public interface Item {
      * @return
      */
     InputStream getStream();
+
+    /**
+     * Sets the content stream of the item.
+     * @param stream
+     */
+    void setStream(InputStream stream);
     
 }

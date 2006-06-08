@@ -5,6 +5,7 @@ import hu.ismicro.commons.proximity.ItemProperties;
 import hu.ismicro.commons.proximity.base.StorageException;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
@@ -40,6 +41,7 @@ public class WritableFileSystemStorage extends ReadOnlyFileSystemStorage {
                 item.getStream().close();
                 os.flush();
                 os.close();
+                item.setStream(new FileInputStream(file));
                 file.setLastModified(item.getProperties().getLastModified().getTime());
             }
             if (isMetadataAware()) {
