@@ -1,0 +1,88 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<!-- Parent POM -->
+	<parent>
+		<groupId>ismicro</groupId>
+		<artifactId>ismicro-proximity</artifactId>
+		<version>1.0.0</version>
+	</parent>
+
+	<!-- the version of maven's project object model -->
+	<modelVersion>4.0.0</modelVersion>
+
+	<!-- a unique name for this project -->
+	<artifactId>px-core-maven</artifactId>
+
+	<!-- POM packaging -->
+	<packaging>jar</packaging>
+
+	<!-- a short but descriptive name for the project -->
+	<name>ISmicro Proximity Maven bindings</name>
+
+	<!-- The version of the project under development -->
+	<version>1.0.0-RC1</version>
+
+	<dependencies>
+
+		<dependency>
+			<groupId>ismicro</groupId>
+			<artifactId>px-core</artifactId>
+			<version>1.0.0-RC1</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.maven</groupId>
+			<artifactId>maven-model</artifactId>
+			<version>2.0.4</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.codehaus.plexus</groupId>
+			<artifactId>plexus-utils</artifactId>
+			<version>1.2</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+
+		<!-- For testing -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>3.8.1</version>
+			<type>jar</type>
+			<scope>test</scope>
+		</dependency>
+
+	</dependencies>
+
+	<distributionManagement>
+		<repository>
+			<id>ismicro</id>
+			<name>ISmicro Central Repository</name>
+			<url>
+				scp://ford.is-micro.hu/srv/projects/ismicro-commons/deploy/proximity
+			</url>
+		</repository>
+		<snapshotRepository>
+			<id>ismicro</id>
+			<name>ISmicro Central Development Repository</name>
+			<url>
+				scp://ford.is-micro.hu/srv/projects/ismicro-commons/deploy/proximity
+			</url>
+		</snapshotRepository>
+		<site>
+			<id>website</id>
+			<url>
+				scp://ford.is-micro.hu/srv/projects/ismicro-commons/www/proximity
+			</url>
+		</site>
+	</distributionManagement>
+
+	<reporting />
+
+</project>
