@@ -4,7 +4,7 @@
 		<title>Proximity</title>
         <script type="text/javascript" src="#springUrl('/dwr/engine.js')"></script>
         <script type="text/javascript" src="#springUrl('/dwr/util.js')"></script>
-		<link rel="stylesheet" href="#springUrl('/default.css')" type="text/css" media="all"></link>
+		<link rel="stylesheet" href="#springUrl('/css/default.css')" type="text/css" media="all"></link>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></meta>
 	</head>
 	<body>
