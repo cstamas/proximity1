@@ -5,11 +5,14 @@
 	<a href="#springUrl('/repository')">#springMessage("repositorylist.root")</a>
 
 #foreach($path in $requestPathList)
-	&nbsp;&gt;&nbsp;
-	<a href="#springUrl('/repository')$path">$path</a>
+    #set ( $currpath = "$!currpath/$path" )
+	&nbsp;#springMessage("repositorylist.pathSeparator")&nbsp;
+	<a href="#springUrl('/repository')$currpath">$path</a>
 #end
 
 </div>
+
+<p/>
 
 <table>
 	<thead>
