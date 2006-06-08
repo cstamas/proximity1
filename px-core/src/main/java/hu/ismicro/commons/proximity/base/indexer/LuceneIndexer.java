@@ -1,8 +1,8 @@
 package hu.ismicro.commons.proximity.base.indexer;
 
-import hu.ismicro.commons.proximity.Item;
 import hu.ismicro.commons.proximity.ItemNotFoundException;
 import hu.ismicro.commons.proximity.ItemProperties;
+import hu.ismicro.commons.proximity.base.IndexerException;
 import hu.ismicro.commons.proximity.base.ProxiedItemProperties;
 import hu.ismicro.commons.proximity.base.StorageException;
 
@@ -22,6 +22,8 @@ import org.apache.lucene.document.Field;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.Term;
+import org.apache.lucene.queryParser.ParseException;
+import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.FuzzyQuery;
 import org.apache.lucene.search.Hits;
@@ -94,7 +96,7 @@ public class LuceneIndexer extends AbstractIndexer {
         this.indexDirectory = FSDirectory.getDirectory(pathFile, false);
     }
 
-    public synchronized void addItemProperties(String UID, Item item) throws StorageException {
+    public synchronized void addItemProperties(String UID, ItemProperties item) throws StorageException {
         logger.debug("Adding item to index");
         try {
             // prevent duplication on idx
@@ -118,7 +120,7 @@ public class LuceneIndexer extends AbstractIndexer {
         try {
             IndexReader reader = IndexReader.open(indexDirectory);
             String UID = null;
-            Item item = null;
+            ItemProperties item = null;
             for (Iterator i = uidWithItems.keySet().iterator(); i.hasNext();) {
                 UID = (String) i.next();
                 // prevent duplication on idx
@@ -130,7 +132,7 @@ public class LuceneIndexer extends AbstractIndexer {
             for (Iterator i = uidWithItems.keySet().iterator(); i.hasNext();) {
                 UID = (String) i.next();
                 // prevent duplication on idx
-                item = (Item) uidWithItems.get(UID);
+                item = (ItemProperties) uidWithItems.get(UID);
                 Document ipDoc = itemProperties2Document(item);
                 ipDoc.add(Field.Keyword("UID", UID));
                 writer.addDocument(ipDoc);
@@ -189,6 +191,37 @@ public class LuceneIndexer extends AbstractIndexer {
             }
             searcher.close();
             return result;
+        } catch (IOException ex) {
+            logger.error("Got IOException during index deletion.", ex);
+            throw new StorageException("Got IOException during deletion.", ex);
+        }
+    }
+
+    public List searchByQuery(String queryStr) throws IndexerException, StorageException {
+        try {
+            IndexSearcher searcher = new IndexSearcher(indexDirectory);
+            QueryParser qparser = new QueryParser(ItemProperties.METADATA_NAME, analyzer);
+            try {
+                Query query = qparser.parse(queryStr);
+                Hits hits = searcher.search(query);
+                List result = new ArrayList(hits.length());
+                for (int i = 0; i < hits.length(); i++) {
+                    ProxiedItemProperties rip = new ProxiedItemProperties();
+                    Map props = new HashMap();
+                    Document doc = hits.doc(i);
+                    for (Enumeration fields = doc.fields(); fields.hasMoreElements();) {
+                        Field field = (Field) fields.nextElement();
+                        props.put(field.name(), field.stringValue());
+                    }
+                    rip.getAllMetadata().putAll(props);
+                    result.add(rip);
+                }
+                searcher.close();
+                return result;
+            } catch (ParseException ex) {
+                logger.error("Bad query syntax!", ex);
+                throw new IndexerException("Bad Query syntax!", ex);
+            }
         } catch (IOException ex) {
             logger.error("Got IOException during index deletion.", ex);
             throw new StorageException("Got IOException during deletion.", ex);

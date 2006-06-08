@@ -27,8 +27,6 @@ public interface ItemProperties {
 
 	public static final String METADATA_OWNING_REPOSITORY = "repository.id";
 
-	public static final String METADATA_EXPIRES = "item.expires";
-
 	/**
 	 * Returns the absolute path of the item. Using this path appended with
 	 * getName() will fetch the Item represented by this properties.

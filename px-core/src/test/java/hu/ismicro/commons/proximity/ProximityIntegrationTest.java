@@ -72,7 +72,7 @@ public class ProximityIntegrationTest extends AbstractProximityIntegrationTest {
         }
     }
 
-    public void testSearchByExample1() {
+    public void testSearchByExample1() throws ProximityException {
         ProxiedItemProperties example = new ProxiedItemProperties();
         example.setName("antlr-2.7.5.jar");
         List result = proximity.searchItem(example);

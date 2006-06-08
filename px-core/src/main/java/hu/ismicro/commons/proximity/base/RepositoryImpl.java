@@ -188,7 +188,7 @@ public class RepositoryImpl implements Repository {
             throw new UnsupportedOperationException("The repository " + getId() + " have no local storage!");
         }
         if (getIndexer() != null && getRepositoryLogic().shouldIndex(item.getProperties())) {
-            getIndexer().addItemProperties(getItemUid(item.getProperties()), item);
+            getIndexer().addItemProperties(getItemUid(item.getProperties()), item.getProperties());
         }
     }
 
@@ -209,6 +209,10 @@ public class RepositoryImpl implements Repository {
 
     public void initialize() {
         logger.info("Initializing...");
+
+        if (getLocalStorage() != null) {
+            indexer.registerLocalStorage(getLocalStorage());
+        }
 
         if (recreateMetadata) {
             logger.info("Recreating metadata " + getId());
@@ -296,7 +300,9 @@ public class RepositoryImpl implements Repository {
             if (result == null) {
                 throw new ItemNotFoundException(request.getPath());
             }
-            logger.info(propsOnly ? "Item " : "ItemProperties " + request.getPath() + " found in repository " + getId());
+            logger
+                    .info(propsOnly ? "Item " : "ItemProperties " + request.getPath() + " found in repository "
+                            + getId());
             return result;
         } catch (ItemNotFoundException ex) {
             throw new ItemNotFoundException(request.getPath(), getId());
@@ -338,7 +344,7 @@ public class RepositoryImpl implements Repository {
                 } else {
                     // TODO: possible problem here with large repositories!
                     batch.put(getItemUid(ip), ip);
-                    //getIndexer().addItemProperties(getItemUid(ip), ip);
+                    // getIndexer().addItemProperties(getItemUid(ip), ip);
                     indexed++;
                 }
             }

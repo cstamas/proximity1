@@ -221,10 +221,30 @@ public class ProximityImpl implements Proximity {
         }
     }
 
+    public List getSearchableKeywords() {
+        logger.debug("Got getSearchableKeywords");
+        if (getIndexer() != null) {
+            return getIndexer().getSearchableKeywords();
+        } else {
+            logger.info("No indexer defined, but getSearchableKeywords request came in. Returning empty results.");
+            return new ArrayList();
+        }
+    }
+
     public List searchItem(ItemProperties example) {
         logger.debug("Got searchItem with example " + example);
         if (getIndexer() != null) {
             return getIndexer().searchByItemPropertiesExample(example);
+        } else {
+            logger.info("No indexer defined, but search request came in. Returning empty results.");
+            return new ArrayList();
+        }
+    }
+    
+    public List searchItem(String query) throws IndexerException {
+        logger.debug("Got searchItem with query " + query);
+        if (getIndexer() != null) {
+            return getIndexer().searchByQuery(query);
         } else {
             logger.info("No indexer defined, but search request came in. Returning empty results.");
             return new ArrayList();
