@@ -1,11 +1,11 @@
-package hu.ismicro.commons.proximity.base.logic;
+package hu.ismicro.commons.proximity.maven;
 
 import hu.ismicro.commons.proximity.ItemProperties;
 import hu.ismicro.commons.proximity.ProximityRequest;
 import hu.ismicro.commons.proximity.Repository;
 import hu.ismicro.commons.proximity.base.PathHelper;
 import hu.ismicro.commons.proximity.base.ProxiedItem;
-import hu.ismicro.commons.proximity.maven.MavenArtifactRecognizer;
+import hu.ismicro.commons.proximity.base.logic.DefaultExpiringProxyingLogic;
 
 import java.util.Date;
 

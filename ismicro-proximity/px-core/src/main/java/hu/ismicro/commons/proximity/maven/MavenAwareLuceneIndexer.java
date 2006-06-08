@@ -1,8 +1,8 @@
-package hu.ismicro.commons.proximity.base.indexer;
+package hu.ismicro.commons.proximity.maven;
 
 import hu.ismicro.commons.proximity.Item;
 import hu.ismicro.commons.proximity.ItemProperties;
-import hu.ismicro.commons.proximity.maven.MavenArtifactRecognizer;
+import hu.ismicro.commons.proximity.base.indexer.LuceneIndexer;
 
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
