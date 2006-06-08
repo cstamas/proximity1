@@ -48,13 +48,28 @@ public interface Proximity {
 	 */
 	List listItems(ProximityRequest request) throws AccessDeniedException, NoSuchRepositoryException;
 
-	/**
+    /**
+     * Lists the searchable keywords as returned by Indexer.
+     * 
+     * @return the list of keywords usable in queries.
+     */
+    List getSearchableKeywords();
+
+    /**
 	 * Searches for item.
 	 * 
 	 * @param example
 	 * @return List of ItemProperties, possibly 0 length.
 	 */
-	public List searchItem(ItemProperties example);
+	public List searchItem(ItemProperties example) throws ProximityException;
+
+    /**
+     * Searches for item.
+     * 
+     * @param query, dependent on indexer backend since Proximity just "passes" it out
+     * @return List of ItemProperties, possibly 0 length.
+     */
+    public List searchItem(String query) throws ProximityException;
 
     /**
      * Forces reindex of repositories.
