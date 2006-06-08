@@ -137,6 +137,7 @@
 
 	<modules>
 		<module>px-core</module>
+		<module>px-core-maven</module>
 		<module>px-webapp</module>
 	</modules>
 
