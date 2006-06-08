@@ -181,17 +181,6 @@ public class RepositoryImpl implements Repository {
         }
     }
 
-    public void storeItemProperties(ItemProperties itemProps) throws StorageException {
-        if (getLocalStorage() != null && getLocalStorage().isWritable()) {
-            getLocalStorage().storeItemProperties(itemProps);
-        } else {
-            throw new UnsupportedOperationException("The repository " + getId() + " have no local storage!");
-        }
-        if (getIndexer() != null && getRepositoryLogic().shouldIndex(itemProps)) {
-            getIndexer().addItemProperties(getItemUid(itemProps), itemProps);
-        }
-    }
-
     public void storeItem(Item item) throws StorageException {
         if (getLocalStorage() != null && getLocalStorage().isWritable()) {
             getLocalStorage().storeItem(item);
@@ -199,7 +188,7 @@ public class RepositoryImpl implements Repository {
             throw new UnsupportedOperationException("The repository " + getId() + " have no local storage!");
         }
         if (getIndexer() != null && getRepositoryLogic().shouldIndex(item.getProperties())) {
-            getIndexer().addItemProperties(getItemUid(item.getProperties()), item.getProperties());
+            getIndexer().addItemProperties(getItemUid(item.getProperties()), item);
         }
     }
 
@@ -291,11 +280,10 @@ public class RepositoryImpl implements Repository {
                         if (getRepositoryLogic().shouldStoreLocallyAfterRemoteRetrieval(result.getProperties())) {
                             logger.info("Storing " + request.getPath() + " item in writable storage of repository "
                                     + getId());
+                            storeItem(result);
                             if (propsOnly) {
-                                storeItemProperties(result.getProperties());
                                 result.setProperties(getLocalStorage().retrieveItemProperties(request.getPath()));
                             } else {
-                                storeItem(result);
                                 result = getLocalStorage().retrieveItem(request.getPath());
                             }
                         }

@@ -1,8 +1,8 @@
 package hu.ismicro.commons.proximity.base.indexer;
 
+import hu.ismicro.commons.proximity.Item;
 import hu.ismicro.commons.proximity.ItemNotFoundException;
 import hu.ismicro.commons.proximity.ItemProperties;
-import hu.ismicro.commons.proximity.base.Indexer;
 import hu.ismicro.commons.proximity.base.ProxiedItemProperties;
 import hu.ismicro.commons.proximity.base.StorageException;
 
@@ -15,8 +15,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.SimpleAnalyzer;
 import org.apache.lucene.document.Document;
@@ -33,9 +31,7 @@ import org.apache.lucene.search.WildcardQuery;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 
-public class LuceneIndexer implements Indexer {
-
-    Log logger = LogFactory.getLog(this.getClass());
+public class LuceneIndexer extends AbstractIndexer {
 
     private boolean recreateIndexes = true;
 
@@ -63,8 +59,7 @@ public class LuceneIndexer implements Indexer {
         this.dirtyItemTreshold = dirtyItemTreshold;
     }
 
-    public void initialize() {
-        logger.info("Initializing...");
+    protected void doInitialize() {
         try {
             if (recreateIndexes) {
                 logger.info("Recreating indexes as instructed by recreateIndexes parameter.");
@@ -99,7 +94,7 @@ public class LuceneIndexer implements Indexer {
         this.indexDirectory = FSDirectory.getDirectory(pathFile, false);
     }
 
-    public synchronized void addItemProperties(String UID, ItemProperties ip) throws StorageException {
+    public synchronized void addItemProperties(String UID, Item item) throws StorageException {
         logger.debug("Adding item to index");
         try {
             // prevent duplication on idx
@@ -107,7 +102,7 @@ public class LuceneIndexer implements Indexer {
             int deleted = reader.delete(new Term("UID", UID));
             reader.close();
             IndexWriter writer = new IndexWriter(indexDirectory, analyzer, false);
-            Document ipDoc = itemProperties2Document(ip);
+            Document ipDoc = itemProperties2Document(item);
             ipDoc.add(Field.Keyword("UID", UID));
             writer.addDocument(ipDoc);
             dirtyItems = deleted + 1;
@@ -123,7 +118,7 @@ public class LuceneIndexer implements Indexer {
         try {
             IndexReader reader = IndexReader.open(indexDirectory);
             String UID = null;
-            ItemProperties ip = null;
+            Item item = null;
             for (Iterator i = uidWithItems.keySet().iterator(); i.hasNext();) {
                 UID = (String) i.next();
                 // prevent duplication on idx
@@ -135,8 +130,8 @@ public class LuceneIndexer implements Indexer {
             for (Iterator i = uidWithItems.keySet().iterator(); i.hasNext();) {
                 UID = (String) i.next();
                 // prevent duplication on idx
-                ip = (ItemProperties) uidWithItems.get(UID);
-                Document ipDoc = itemProperties2Document(ip);
+                item = (Item) uidWithItems.get(UID);
+                Document ipDoc = itemProperties2Document(item);
                 ipDoc.add(Field.Keyword("UID", UID));
                 writer.addDocument(ipDoc);
             }
@@ -198,15 +193,6 @@ public class LuceneIndexer implements Indexer {
             logger.error("Got IOException during index deletion.", ex);
             throw new StorageException("Got IOException during deletion.", ex);
         }
-    }
-
-    private Document itemProperties2Document(ItemProperties ip) {
-        Document result = new Document();
-        for (Iterator i = ip.getAllMetadata().keySet().iterator(); i.hasNext();) {
-            String key = (String) i.next();
-            result.add(Field.Keyword(key, ip.getMetadata(key)));
-        }
-        return result;
     }
 
     private void optimizeIndexIfNeededAndClose(IndexWriter writer) {

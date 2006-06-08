@@ -134,14 +134,6 @@ public interface Repository {
 	void deleteItem(String path) throws StorageException;
 
 	/**
-	 * Stores item propeties.
-	 * 
-	 * @param itemProps
-	 * @throws StorageException
-	 */
-	void storeItemProperties(ItemProperties itemProps) throws StorageException;
-
-	/**
 	 * Stores item.
 	 * 
 	 * @param item
