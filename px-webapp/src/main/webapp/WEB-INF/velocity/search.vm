@@ -16,14 +16,14 @@
 		<tr class="tda">
 			<td width="50%">
 				<form action="#springUrl('/search.do')">
-					#springMessage('search.regexp'):<br/>
+					#springMessage('search.byName'):<br/>
 					<input id="searchAllRegexp" type="text" name="searchAllRegexp" value="" size="50"/>
 					<input type="submit" name="searchAll" value="#springMessage('search.all')"/>
 				</form>
 			</td>
 			<td width="50%">
 				<form action="#springUrl('/search.do')">
-					#springMessage('search.regexp'):<br/>
+					#springMessage('search.byName'):<br/>
 					<input id="searchSelectedRegexp" type="text" name="searchSelectedRegexp" value="" size="50"/>
 					<select id="searchSelectedRepos" name="searchSelectedRepos">
 						#foreach($repository in $repositories)
@@ -31,6 +31,26 @@
 						#end
 					</select>
 					<input type="submit" name="searchSelected" value="#springMessage('search.selected')"/>
+				</form>
+			</td>
+		</tr>
+		<tr class="tdb">
+			<td colspan="2">#springMessage('search.lql')</td>
+		</tr>
+		<tr class="tda">
+			<td colspan="2">
+				<form action="#springUrl('/search.do')">
+					<p>#springMessage('search.lql.intro')</p>
+
+					<p><i>
+					#foreach($kw in $searchableKeywords)
+						$kw&nbsp;
+					#end
+					</i></p>
+
+					<p>#springMessage('search.lql.example')</p>
+					<input id="searchLQLQuery" type="text" name="searchLQLQuery" value="" size="50"/>
+					<input type="submit" name="searchLQL" value="#springMessage('search.lql')"/>
 				</form>
 			</td>
 		</tr>
