@@ -1,171 +1,155 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
-  <!-- Parent POM -->
-  <parent>
-	<groupId>ismicro</groupId>
-	<artifactId>ismicro-proximity</artifactId>
-	<version>1.0.0</version>
-  </parent>
-  
-  <!-- the version of maven's project object model -->
-  <modelVersion>4.0.0</modelVersion>
+	<!-- Parent POM -->
+	<parent>
+		<groupId>ismicro</groupId>
+		<artifactId>ismicro-proximity</artifactId>
+		<version>1.0.0</version>
+	</parent>
 
-  <!-- a unique name for this project -->
-  <artifactId>px-webapp</artifactId>
-  
-  <!-- POM packaging -->
-  <packaging>war</packaging>
+	<!-- the version of maven's project object model -->
+	<modelVersion>4.0.0</modelVersion>
 
-  <!-- a short but descriptive name for the project -->
-  <name>ISmicro Proximity Webapp</name>
+	<!-- a unique name for this project -->
+	<artifactId>px-webapp</artifactId>
 
-  <!-- The version of the project under development -->
-  <version>1.0.0-alpha2</version>
+	<!-- POM packaging -->
+	<packaging>war</packaging>
 
-  <dependencies>
+	<!-- a short but descriptive name for the project -->
+	<name>ISmicro Proximity Webapp</name>
 
-    <dependency>
-      <groupId>ismicro</groupId>
-      <artifactId>px-core</artifactId>
-      <version>1.0.0-alpha2</version>
-      <type>jar</type>
-    </dependency>
+	<!-- The version of the project under development -->
+	<version>1.0.0-RC1</version>
 
-<!--
-    <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-core</artifactId>
-      <version>1.2.6</version>
-      <type>jar</type>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-beans</artifactId>
-      <version>1.2.6</version>
-      <type>jar</type>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-context</artifactId>
-      <version>1.2.6</version>
-      <type>jar</type>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-aop</artifactId>
-      <version>1.2.6</version>
-      <type>jar</type>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-support</artifactId>
-      <version>1.2.6</version>
-      <type>jar</type>
-      <scope>runtime</scope>
-    </dependency>
--->
-    <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-web</artifactId>
-      <version>1.2.7</version>
-      <type>jar</type>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-webmvc</artifactId>
-      <version>1.2.7</version>
-      <type>jar</type>
-    </dependency>
+	<dependencies>
 
-    <dependency>
-      <groupId>dwr</groupId>
-      <artifactId>dwr</artifactId>
-      <version>1.1.1</version>
-      <type>jar</type>
-      <scope>runtime</scope>
-    </dependency>
+		<dependency>
+			<groupId>ismicro</groupId>
+			<artifactId>px-core</artifactId>
+			<version>1.0.0-RC1</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-web</artifactId>
+			<version>1.2.7</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc</artifactId>
+			<version>1.2.7</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
 
-    <dependency>
-      <groupId>velocity</groupId>
-      <artifactId>velocity</artifactId>
-      <version>1.4</version>
-      <type>jar</type>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>velocity-tools</groupId>
-      <artifactId>velocity-tools-generic</artifactId>
-      <version>1.1</version>
-      <type>jar</type>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>velocity-tools</groupId>
-      <artifactId>velocity-tools-view</artifactId>
-      <version>1.1</version>
-      <type>jar</type>
-      <scope>runtime</scope>
-    </dependency>
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.11</version>
+			<type>jar</type>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>dwr</groupId>
+			<artifactId>dwr</artifactId>
+			<version>1.1.1</version>
+			<type>jar</type>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>velocity</groupId>
+			<artifactId>velocity</artifactId>
+			<version>1.4</version>
+			<type>jar</type>
+			<scope>runtime</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>velocity</groupId>
+					<artifactId>velocity-dep</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>velocity-tools</groupId>
+			<artifactId>velocity-tools-view</artifactId>
+			<version>1.1</version>
+			<type>jar</type>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>commons-digester</groupId>
+			<artifactId>commons-digester</artifactId>
+			<version>1.7</version>
+			<type>jar</type>
+			<scope>runtime</scope>
+		</dependency>
 
-    <!-- Compile time -->
-    <dependency>
-      <groupId>javax.servlet</groupId>
-      <artifactId>servlet-api</artifactId>
-      <version>2.4</version>
-      <type>jar</type>
-      <scope>provided</scope>
-    </dependency>
+		<!-- Compile time -->
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+			<version>2.4</version>
+			<type>jar</type>
+			<scope>provided</scope>
+		</dependency>
 
-    <!-- For testing -->
-    
-    <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-mock</artifactId>
-      <version>1.2.7</version>
-      <type>jar</type>
-      <scope>test</scope>
-    </dependency>
-    
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>3.8.1</version>
-      <type>jar</type>
-      <scope>test</scope>
-    </dependency>
-    
-  </dependencies>
+		<!-- For testing -->
 
-  <build>
-    <resources>
-      <resource>
-        <directory>src/main/conf</directory>
-      </resource>
-    </resources>
-  </build>
-  
-  <distributionManagement>
-    <repository>
-      <id>ismicro</id>
-      <name>ISmicro Central Repository</name>
-      <url>scp://ford.is-micro.hu/srv/projects/ismicro-commons/deploy/proximity</url>
-    </repository>
-    <snapshotRepository>
-      <id>ismicro</id>
-      <name>ISmicro Central Development Repository</name>
-      <url>scp://ford.is-micro.hu/srv/projects/ismicro-commons/deploy/proximity</url>
-    </snapshotRepository>
-    <site>
-      <id>website</id>
-      <url>scp://ford.is-micro.hu/srv/projects/ismicro-commons/www/proximity</url>
-    </site>
-  </distributionManagement>
-  
-  <reporting/>
-  
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-mock</artifactId>
+			<version>1.2.7</version>
+			<type>jar</type>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>3.8.1</version>
+			<type>jar</type>
+			<scope>test</scope>
+		</dependency>
+
+	</dependencies>
+
+	<build>
+		<resources>
+			<resource>
+				<directory>src/main/conf</directory>
+			</resource>
+		</resources>
+	</build>
+
+	<distributionManagement>
+		<repository>
+			<id>ismicro</id>
+			<name>ISmicro Central Repository</name>
+			<url>
+				scp://ford.is-micro.hu/srv/projects/ismicro-commons/deploy/proximity
+			</url>
+		</repository>
+		<snapshotRepository>
+			<id>ismicro</id>
+			<name>ISmicro Central Development Repository</name>
+			<url>
+				scp://ford.is-micro.hu/srv/projects/ismicro-commons/deploy/proximity
+			</url>
+		</snapshotRepository>
+		<site>
+			<id>website</id>
+			<url>
+				scp://ford.is-micro.hu/srv/projects/ismicro-commons/www/proximity
+			</url>
+		</site>
+	</distributionManagement>
+
+	<reporting />
+
 </project>
