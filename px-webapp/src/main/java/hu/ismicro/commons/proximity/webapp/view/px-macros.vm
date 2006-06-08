@@ -1,0 +1,19 @@
+#macro( mavenItem $item )
+    #if( $item.getName().indexOf("SNAPSHOT") > -1  )
+		<img src="#springUrl('/images/maven-snapshot.png')" alt="Maven 1/2 snapshot"/>&nbsp;
+    #elseif( $item.getName().endsWith(".pom") )
+		<img src="#springUrl('/images/maven2-pom.png')" alt="Maven2 POM"/>&nbsp;
+    #elseif( $item.getName().startsWith("maven-metadata.xml") || $item.getName().endsWith(".sha1") || $item.getName().endsWith(".md5") )
+		<img src="#springUrl('/images/maven2-metadata.png')" alt="Maven2 metadata"/>&nbsp;
+    #else
+		<img src="#springUrl('/images/artifact.png')" alt="Artifact"/>&nbsp;
+	#end
+#end
+
+#macro( kindImage $item )
+	#if(${item.isDirectory()})
+		<img src="#springUrl('/images/folder-local.png')"/>&nbsp;
+	#else
+	    #mavenItem($item)
+	#end
+#end
