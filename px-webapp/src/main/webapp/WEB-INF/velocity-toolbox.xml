@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<toolbox>
+    <tool>
+        <key>formatFileSize</key>
+        <scope>application</scope>
+        <class>hu.ismicro.commons.proximity.webapp.view.FormatFileSize</class>
+    </tool>
+</toolbox>
