@@ -28,5 +28,6 @@
 	<classpathentry kind="var" path="M2_REPO/org/apache/maven/maven-model/2.0.4/maven-model-2.0.4.jar"/>
 	<classpathentry kind="src" path="px-core-maven/src/main/java"/>
 	<classpathentry kind="var" path="M2_REPO/org/codehaus/plexus/plexus-utils/1.2/plexus-utils-1.2.jar"/>
+	<classpathentry kind="src" path="px-core-maven/src/test/java"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
