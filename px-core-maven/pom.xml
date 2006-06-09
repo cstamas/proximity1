@@ -27,7 +27,7 @@
 	<dependencies>
 
 		<dependency>
-			<groupId>ismicro</groupId>
+			<groupId>hu.ismicro.proximity</groupId>
 			<artifactId>px-core</artifactId>
 			<version>1.0.0-RC1</version>
 			<type>jar</type>
