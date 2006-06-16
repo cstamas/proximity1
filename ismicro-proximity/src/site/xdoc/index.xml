@@ -220,7 +220,8 @@ already runs in my office).</li>
 
 <p>Proximity consists of PX Core module, which is <b>environment and
 transport independent</b>, so it is capable to run in J2SE and
-J2EE environment too.</p>
+J2EE environment too. The Maven1/2 awareness is added by new module called
+PX Core Maven that contains Px Maven bindings.</p>
 
 <p>The PX Webapp is a thin module (2 classes + some Velocity templates!) based 
 on Spring IoC framework and it's MVC implementation, and makes the Proximity 
