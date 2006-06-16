@@ -6,6 +6,7 @@ import hu.ismicro.commons.proximity.ItemNotFoundException;
 import hu.ismicro.commons.proximity.ItemProperties;
 import hu.ismicro.commons.proximity.ProximityRequest;
 import hu.ismicro.commons.proximity.Repository;
+import hu.ismicro.commons.proximity.RepositoryNotAvailableException;
 import hu.ismicro.commons.proximity.access.AccessManager;
 import hu.ismicro.commons.proximity.access.OpenAccessManager;
 import hu.ismicro.commons.proximity.base.logic.DefaultProxyingLogic;
@@ -27,7 +28,11 @@ public class RepositoryImpl implements Repository {
     private String id;
 
     private String uriPrefix = null;
-
+    
+    private boolean available = true;
+    
+    private boolean offline = false;
+    
     private boolean listable = true;
 
     private boolean reindex = true;
@@ -62,20 +67,36 @@ public class RepositoryImpl implements Repository {
         this.id = id;
     }
 
-    public String getURIPrefix() {
-        return uriPrefix;
-    }
-
-    public void setURIPrefix(String prefix) {
-        this.uriPrefix = prefix;
-    }
-
     public boolean isListable() {
         return listable;
     }
 
     public void setListable(boolean listable) {
         this.listable = listable;
+    }
+
+    public boolean isAvailable() {
+        return available;
+    }
+
+    public void setAvailable(boolean available) {
+        this.available = available;
+    }
+
+    public boolean isOffline() {
+        return offline;
+    }
+
+    public void setOffline(boolean offline) {
+        this.offline = offline;
+    }
+
+    public String getUriPrefix() {
+        return uriPrefix;
+    }
+
+    public void setUriPrefix(String uriPrefix) {
+        this.uriPrefix = uriPrefix;
     }
 
     public Storage getLocalStorage() {
@@ -137,19 +158,28 @@ public class RepositoryImpl implements Repository {
         this.repositoryLogic = repositoryLogic;
     }
 
-    public ProxiedItemProperties retrieveItemProperties(ProximityRequest request) throws ItemNotFoundException,
+    public ProxiedItemProperties retrieveItemProperties(ProximityRequest request) throws RepositoryNotAvailableException, ItemNotFoundException,
             StorageException, AccessDeniedException {
+        if (!isAvailable()) {
+            throw new RepositoryNotAvailableException("The repository " + getId() + " is NOT available!");
+        }
         accessManager.decide(request, null);
         return (ProxiedItemProperties) retrieveItem(true, request).getProperties();
     }
 
-    public ProxiedItem retrieveItem(ProximityRequest request) throws ItemNotFoundException, StorageException,
+    public ProxiedItem retrieveItem(ProximityRequest request) throws RepositoryNotAvailableException, ItemNotFoundException, StorageException,
             AccessDeniedException {
+        if (!isAvailable()) {
+            throw new RepositoryNotAvailableException("The repository " + getId() + " is NOT available!");
+        }
         accessManager.decide(request, null);
         return retrieveItem(false, request);
     }
 
-    public void deleteItemProperties(String path) throws StorageException {
+    public void deleteItemProperties(String path) throws RepositoryNotAvailableException, StorageException {
+        if (!isAvailable()) {
+            throw new RepositoryNotAvailableException("The repository " + getId() + " is NOT available!");
+        }
         if (getLocalStorage() != null) {
             if (getIndexer() != null) {
                 try {
@@ -165,7 +195,10 @@ public class RepositoryImpl implements Repository {
         }
     }
 
-    public void deleteItem(String path) throws StorageException {
+    public void deleteItem(String path) throws RepositoryNotAvailableException, StorageException {
+        if (!isAvailable()) {
+            throw new RepositoryNotAvailableException("The repository " + getId() + " is NOT available!");
+        }
         if (getLocalStorage() != null) {
             if (getIndexer() != null) {
                 try {
@@ -181,7 +214,10 @@ public class RepositoryImpl implements Repository {
         }
     }
 
-    public void storeItem(Item item) throws StorageException {
+    public void storeItem(Item item) throws RepositoryNotAvailableException, StorageException {
+        if (!isAvailable()) {
+            throw new RepositoryNotAvailableException("The repository " + getId() + " is NOT available!");
+        }
         if (getLocalStorage() != null && getLocalStorage().isWritable()) {
             getLocalStorage().storeItem(item);
         } else {
@@ -192,7 +228,10 @@ public class RepositoryImpl implements Repository {
         }
     }
 
-    public List listItems(ProximityRequest request) throws StorageException {
+    public List listItems(ProximityRequest request) throws RepositoryNotAvailableException, StorageException {
+        if (!isAvailable()) {
+            throw new RepositoryNotAvailableException("The repository " + getId() + " is NOT available!");
+        }
         List result = new ArrayList();
         if (isListable()) {
             if (getLocalStorage() != null) {
@@ -225,24 +264,25 @@ public class RepositoryImpl implements Repository {
     }
 
     protected String removePathPrefix(String path) {
-        if (getURIPrefix() != null && getURIPrefix().length() != 0) {
-            return path.substring(getURIPrefix().length());
+        if (getUriPrefix() != null && getUriPrefix().length() != 0) {
+            return path.substring(getUriPrefix().length());
         } else {
             return path;
         }
     }
 
     protected String putPathPrefix(String path) {
-        if (getURIPrefix() != null && getURIPrefix().length() != 0) {
-            return PathHelper.absolutizePathFromBase(getURIPrefix(), path);
+        if (getUriPrefix() != null && getUriPrefix().length() != 0) {
+            return PathHelper.absolutizePathFromBase(getUriPrefix(), path);
         } else {
             return path;
         }
     }
 
-    protected ProxiedItem retrieveItem(boolean propsOnly, ProximityRequest request) throws ItemNotFoundException,
+    protected ProxiedItem retrieveItem(boolean propsOnly, ProximityRequest request) throws RepositoryNotAvailableException, ItemNotFoundException,
             StorageException {
-        ProxiedItem result = null;
+        ProxiedItem localResult = null;
+        ProxiedItem remoteResult = null;
         try {
             if (getLocalStorage() != null) {
                 if (getRepositoryLogic().shouldCheckForLocalCopy(request)) {
@@ -250,45 +290,46 @@ public class RepositoryImpl implements Repository {
                             || (getLocalStorage().containsItem(request.getPath()))) {
                         logger.debug("Found " + request.getPath() + " item in storage of repository " + getId());
                         if (propsOnly) {
-                            result = new ProxiedItem();
-                            result.setProperties(getLocalStorage().retrieveItemProperties(request.getPath()));
+                            localResult = new ProxiedItem();
+                            localResult.setProperties(getLocalStorage().retrieveItemProperties(request.getPath()));
                         } else {
-                            result = getLocalStorage().retrieveItem(request.getPath());
+                            localResult = getLocalStorage().retrieveItem(request.getPath());
                         }
-                        result.getProperties().setMetadata(ItemProperties.METADATA_OWNING_REPOSITORY, getId());
+                        localResult.getProperties().setMetadata(ItemProperties.METADATA_OWNING_REPOSITORY, getId());
                         if (getStatisticsGatherer() != null) {
-                            getStatisticsGatherer().localHit(request, this, result.getProperties(), propsOnly);
+                            getStatisticsGatherer().localHit(request, this, localResult.getProperties(), propsOnly);
                         }
-                        result = getRepositoryLogic().afterLocalCopyFound(result, this);
+                        localResult = getRepositoryLogic().afterLocalCopyFound(localResult, this);
                     } else {
                         logger.debug("Not found " + request.getPath() + " item in storage of repository " + getId());
                     }
                 }
             }
-            if (getRepositoryLogic().shouldCheckForRemoteCopy(request, result) && getRemoteStorage() != null) {
+            if (!isOffline() && getRepositoryLogic().shouldCheckForRemoteCopy(request, localResult) && getRemoteStorage() != null) {
                 if ((propsOnly && getRemoteStorage().containsItemProperties(request.getPath()))
                         || (getRemoteStorage().containsItem(request.getPath()))) {
                     logger.debug("Found " + request.getPath() + " item in remote storage of repository " + getId());
                     if (propsOnly) {
-                        result = new ProxiedItem();
-                        result.setProperties(getRemoteStorage().retrieveItemProperties(request.getPath()));
+                        remoteResult = new ProxiedItem();
+                        remoteResult.setProperties(getRemoteStorage().retrieveItemProperties(request.getPath()));
                     } else {
-                        result = getRemoteStorage().retrieveItem(request.getPath());
+                        remoteResult = getRemoteStorage().retrieveItem(request.getPath());
                     }
-                    result.getProperties().setMetadata(ItemProperties.METADATA_OWNING_REPOSITORY, getId());
+                    remoteResult.getProperties().setMetadata(ItemProperties.METADATA_OWNING_REPOSITORY, getId());
                     if (getStatisticsGatherer() != null) {
-                        getStatisticsGatherer().remoteHit(request, this, result.getProperties(), propsOnly);
+                        getStatisticsGatherer().remoteHit(request, this, remoteResult.getProperties(), propsOnly);
                     }
-                    result = getRepositoryLogic().afterRemoteCopyFound(result, this);
-                    if (result != null && !result.getProperties().isDirectory() && getLocalStorage().isWritable()) {
-                        if (getRepositoryLogic().shouldStoreLocallyAfterRemoteRetrieval(result.getProperties())) {
+                    remoteResult = getRepositoryLogic().afterRemoteCopyFound(localResult, remoteResult, this);
+                    if (remoteResult != null && !remoteResult.getProperties().isDirectory()
+                            && getLocalStorage().isWritable()) {
+                        if (getRepositoryLogic().shouldStoreLocallyAfterRemoteRetrieval(localResult, remoteResult)) {
                             logger.info("Storing " + request.getPath() + " item in writable storage of repository "
                                     + getId());
-                            storeItem(result);
+                            storeItem(remoteResult);
                             if (propsOnly) {
-                                result.setProperties(getLocalStorage().retrieveItemProperties(request.getPath()));
+                                remoteResult.setProperties(getLocalStorage().retrieveItemProperties(request.getPath()));
                             } else {
-                                result = getLocalStorage().retrieveItem(request.getPath());
+                                remoteResult = getLocalStorage().retrieveItem(request.getPath());
                             }
                         }
                     }
@@ -297,12 +338,12 @@ public class RepositoryImpl implements Repository {
                 }
 
             }
+            ProxiedItem result = getRepositoryLogic().afterRetrieval(localResult, remoteResult);
             if (result == null) {
                 throw new ItemNotFoundException(request.getPath());
             }
-            logger
-                    .info(propsOnly ? "Item " : "ItemProperties " + request.getPath() + " found in repository "
-                            + getId());
+            logger.info(((propsOnly) ? ("Item ") : ("ItemProperties ")) + request.getPath() + " found in repository "
+                    + getId());
             return result;
         } catch (ItemNotFoundException ex) {
             throw new ItemNotFoundException(request.getPath(), getId());

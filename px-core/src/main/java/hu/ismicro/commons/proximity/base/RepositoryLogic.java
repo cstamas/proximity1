@@ -46,20 +46,26 @@ public interface RepositoryLogic {
 	/**
 	 * Postprocess item if needed after remote retrieval.
 	 * 
-	 * @param item
-	 * @param repository
+	 * @param localItem - the artifact found locally
+	 * @param repository - the artifact found remotely
 	 * @return
 	 */
-	ProxiedItem afterRemoteCopyFound(ProxiedItem item, Repository repository);
+	ProxiedItem afterRemoteCopyFound(ProxiedItem localItem, ProxiedItem remoteItem, Repository repository);
 	
 	/**
 	 * Return true if reposotiry should store the remote retrieved item in a 
 	 * local writable store.
 	 * 
-	 * @param item
+	 * @param localItem
+     * @param remoteItem
 	 * @return
 	 */
-	boolean shouldStoreLocallyAfterRemoteRetrieval(ItemProperties item);
+	boolean shouldStoreLocallyAfterRemoteRetrieval(ProxiedItem localItem, ProxiedItem remoteItem);
+
+    /**
+     * Choose tha artifact to serve.
+     */
+    public ProxiedItem afterRetrieval(ProxiedItem localItem, ProxiedItem remoteItem);
 
 	/**
 	 * Return true to index the given item.

@@ -47,16 +47,30 @@ public class DefaultProxyingLogic implements RepositoryLogic {
 	/**
 	 * Does nothing and returns item unmodified.
 	 */
-	public ProxiedItem afterRemoteCopyFound(ProxiedItem item, Repository repository) {
-		return item;
+	public ProxiedItem afterRemoteCopyFound(ProxiedItem localItem, ProxiedItem remoteItem, Repository repository) {
+		return remoteItem;
 	}
 
 	/**
 	 * Always returns true.
 	 */
-	public boolean shouldStoreLocallyAfterRemoteRetrieval(ItemProperties item) {
+	public boolean shouldStoreLocallyAfterRemoteRetrieval(ProxiedItem localItem, ProxiedItem remoteItem) {
 		return true;
 	}
+    
+
+    /**
+     * Always give the best what we have.
+     */
+    public ProxiedItem afterRetrieval(ProxiedItem localItem, ProxiedItem remoteItem) {
+        if (remoteItem != null) {
+            return remoteItem;
+        };
+        if (localItem != null) {
+            return localItem;
+        }
+        return null;
+    }
 
 	/**
 	 * Always returns !item.isDirectory().
