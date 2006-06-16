@@ -28,6 +28,7 @@ It may be local or remote, with any kind of underlying protocol (FTP, NFS, HTTP,
 remote-storage. It may be kind of underlying protocol (FTP, NFS, HTTP, etc), but
 Repository KNOWS it is REMOTE.</li>
 <li><b>RepositoryRetrievalLogic</b> - orchestrates the retrieval.</li>
+<li><b>AccessManager</b> - decides whether to allow or forbid access (on Proximity or per repository level).</li>
 </ul>
 
 <p>Proximity out-of-the-box offers one remote peer implementation based
@@ -52,7 +53,16 @@ all default values are here!):</p>
 	them have default values!).
 	
 	Have fun,
-	cservenak@is-micro.hu
+	cservenak@XXXXXXXXX
+-->
+
+<!-- 
+	List of known Maven2 mirrors, choose one that suit you!
+	
+	For Maven2:
+	http://repo1.maven.org/maven2/ (USA)
+	http://maven.sateh.com/repository/ (EU)
+	http://www.ibiblio.org/maven2/ (USA)
 -->
 
 <beans>
@@ -79,7 +89,8 @@ all default values are here!):</p>
 	-->
 	<bean id="propertyConfigurer"
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-		<property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_FALLBACK" />
+		<property name="systemPropertiesModeName"
+			value="SYSTEM_PROPERTIES_MODE_FALLBACK" />
 		<property name="locations">
 			<list>
 				<value>/WEB-INF/proximity.properties</value>
@@ -124,7 +135,7 @@ all default values are here!):</p>
 		- Indexer, used to speed up searches.
 	-->
 	<bean id="indexer"
-		class="hu.ismicro.commons.proximity.base.indexer.LuceneIndexer">
+		class="hu.ismicro.commons.proximity.maven.MavenAwareLuceneIndexer">
 		<!-- Where to store indexes? -->
 		<property name="indexDirectory" value="${indexer.dir}" />
 		<!-- On webapp start should i recreate Lucene indexes? -->
@@ -140,10 +151,45 @@ all default values are here!):</p>
 		class="hu.ismicro.commons.proximity.base.SimpleStatisticsGathererImpl" />
 
 	<!--
-		- AccessManager. With OpenAccessManager Proximity is wide open.
+		- AccessManagers. With OpenAccessManager Proximity is wide open.
 	-->
 	<bean id="openAccessManager"
 		class="hu.ismicro.commons.proximity.access.OpenAccessManager" />
+
+	<!--
+		- AccessManagers. With AffirmativeAccessManager, we will have access if all defined
+		- voters vote AFFIRMATIVE.
+		
+		- We have currently one ONE voter, that tries to resemble Apache HTTPD2 Basic Access Control.
+		- We should suppply the allowFrom and denyFrom Java REGEX patterns and a boolean
+		- TRUE for "Order allow,deny" or FALSE for "Order deny,allow" (a la httpd)
+		
+		- Using these settings below, we have AccessManager that allows access for our
+		- 192.168.0.x LAN only. Requests from outer network will be REJECTED, thus
+		- Px is safe to sit on DMZ machine.
+		- Please note, that this settings will REJECT LOCALHOST TOO! 127.0.0.1
+		
+		- If configured on Proximity bean level: the browse link will be inaccessible
+		- If configured on Repoxitory level: the browse will show top-level items but the
+		- restricted repos will not allow download.
+		- Play with differenct combinations!
+		
+		- And don't forget: you may have as much voter and accessManager beans as you love!
+	-->
+	<bean id="lanAccessVoter"
+		class="hu.ismicro.commons.proximity.webapp.access.IpAddressAccessDecisionVoter">
+		<property name="allowDeny" value="true" />
+		<property name="allowFromPattern" value="192\.168\.0\..*" />
+		<property name="denyFromPattern" value=".*" />
+	</bean>
+	<bean id="internalLanOnlyAccessManager"
+		class="hu.ismicro.commons.proximity.access.AffirmativeAccessManager">
+		<property name="voters">
+			<list>
+				<ref local="lanAccessVoter" />
+			</list>
+		</property>
+	</bean>
 
 	<!--
 		=================================================================================
@@ -151,9 +197,13 @@ all default values are here!):</p>
 
 	<!--
 		- Logic used for Maven2 repositories.
+		- Use seconds for setting timeout.
+		- x > 0 - the expiration in seconds
+		- x = 0 - the expiration flag is set to now, thus it will expire initially and be refetched always
+		- x = -1 - turn off for the group expiration handling.
 	-->
 	<bean id="maven2logic"
-		class="hu.ismicro.commons.proximity.base.logic.MavenProxyLogic">
+		class="hu.ismicro.commons.proximity.maven.MavenProxyLogic">
 		<!-- SNAPSHOTSs expires after 24h -->
 		<property name="snapshotExpirationPeriodInSeconds"
 			value="86400" />
@@ -179,6 +229,9 @@ all default values are here!):</p>
 		<property name="indexer" ref="indexer" />
 		<property name="statisticsGatherer" ref="stats" />
 		<property name="accessManager" ref="openAccessManager" />
+		<!-- Uncomment this and delete previous row to restrict access to this repo
+		<property name="accessManager" ref="internalLanOnlyAccessManager" />
+		-->
 		<property name="repositoryLogic" ref="maven2logic" />
 		<!-- Should i reindex my content on startup? -->
 		<property name="reindex" value="true" />
@@ -186,6 +239,10 @@ all default values are here!):</p>
 		<property name="recreateMetadata" value="true" />
 		<!-- Am I listable? -->
 		<property name="listable" value="true" />
+		<!-- Am I available? If no, i will refuse all requests -->
+		<property name="available" value="true" />
+		<!-- Am I offline? If yes, i will not touch my remote peer, will serve only from localStorage -->
+		<property name="offline" value="false" />
 	</bean>
 
 	<bean id="centralFSStorage"
@@ -201,99 +258,10 @@ all default values are here!):</p>
 		<property name="remoteUrl"
 			value="http://repo1.maven.org/maven2/" />
 		<property name="connectionTimeout" value="10000" />
+		<property name="retrievalRetryCount" value="3" />
 		<property name="followRedirection" value="true" />
 		<!-- Fix query string appended to URL, used for ProximityPiping "repositoryId=central" -->
 		<property name="queryString" value="" />
-		<!-- Proxy setup, uncomment if needed
-			<property name="proxyHost" value="myproxyhost.company.com" />
-			<property name="proxyPort" value="8080" />
-		-->
-		<!-- Proxy authentication setup, uncomment if proxy needs this
-			<property name="proxyRealm" value="ProxyRealm" />
-			<property name="proxyUsername" value="userOnProxy" />
-			<property name="proxyPassword" value="bigSecret" />
-		-->
-	</bean>
-
-	<!--
-		- MAVEN1
-		- IBIBLIO Repository (with writable cache storage and remote peer)
-		- A standard maven1 repository.
-	-->
-	<bean id="ibiblio"
-		class="hu.ismicro.commons.proximity.base.RepositoryImpl">
-		<property name="id" value="ibiblio" />
-		<property name="localStorage" ref="ibiblioFSStorage" />
-		<property name="remoteStorage" ref="ibiblioRemotePeer" />
-		<property name="indexer" ref="indexer" />
-		<property name="reindex" value="true" />
-		<property name="recreateMetadata" value="true" />
-		<property name="statisticsGatherer" ref="stats" />
-		<property name="listable" value="true" />
-		<property name="accessManager" ref="openAccessManager" />
-		<property name="repositoryLogic" ref="maven2logic" />
-	</bean>
-
-	<bean id="ibiblioFSStorage"
-		class="hu.ismicro.commons.proximity.base.local.WritableFileSystemStorage">
-		<property name="baseDir" value="${ibiblioFSStorage.baseDir}" />
-		<property name="metadataAware" value="true" />
-		<property name="metadataPrefix" value="metadata" />
-		<property name="storagePrefix" value="storage" />
-	</bean>
-
-	<bean id="ibiblioRemotePeer"
-		class="hu.ismicro.commons.proximity.base.remote.HttpClientRemotePeer">
-		<property name="remoteUrl"
-			value="http://www.ibiblio.org/maven2/" />
-		<property name="connectionTimeout" value="10000" />
-		<property name="queryString" value="" />
-		<property name="followRedirection" value="true" />
-		<!-- Proxy setup, uncomment if needed
-			<property name="proxyHost" value="myproxyhost.company.com" />
-			<property name="proxyPort" value="8080" />
-		-->
-		<!-- Proxy authentication setup, uncomment if proxy needs this
-			<property name="proxyRealm" value="ProxyRealm" />
-			<property name="proxyUsername" value="userOnProxy" />
-			<property name="proxyPassword" value="bigSecret" />
-		-->
-	</bean>
-
-
-	<!--
-		- MAVEN1!
-		- Codehaus Repository (with writable storage and remote peer)
-		- A standard maven1 repository.
-	-->
-	<bean id="codehaus"
-		class="hu.ismicro.commons.proximity.base.RepositoryImpl">
-		<property name="id" value="codehaus" />
-		<property name="localStorage" ref="codehausFSStorage" />
-		<property name="remoteStorage" ref="codehausRemotePeer" />
-		<property name="indexer" ref="indexer" />
-		<property name="reindex" value="true" />
-		<property name="recreateMetadata" value="true" />
-		<property name="statisticsGatherer" ref="stats" />
-		<property name="listable" value="true" />
-		<property name="accessManager" ref="openAccessManager" />
-		<property name="repositoryLogic" ref="maven2logic" />
-	</bean>
-
-	<bean id="codehausFSStorage"
-		class="hu.ismicro.commons.proximity.base.local.WritableFileSystemStorage">
-		<property name="baseDir" value="${codehausFSStorage.baseDir}" />
-		<property name="metadataAware" value="true" />
-		<property name="metadataPrefix" value="metadata" />
-		<property name="storagePrefix" value="storage" />
-	</bean>
-
-	<bean id="codehausRemotePeer"
-		class="hu.ismicro.commons.proximity.base.remote.HttpClientRemotePeer">
-		<property name="remoteUrl" value="http://dist.codehaus.org/" />
-		<property name="connectionTimeout" value="10000" />
-		<property name="queryString" value="" />
-		<property name="followRedirection" value="true" />
 		<!-- Proxy setup, uncomment if needed
 			<property name="proxyHost" value="myproxyhost.company.com" />
 			<property name="proxyPort" value="8080" />
@@ -314,11 +282,21 @@ all default values are here!):</p>
 		<property name="id" value="inhouse" />
 		<property name="localStorage" ref="inhouseFSStorage" />
 		<property name="indexer" ref="indexer" />
-		<property name="reindex" value="true" />
-		<property name="recreateMetadata" value="true" />
-		<property name="listable" value="true" />
 		<property name="statisticsGatherer" ref="stats" />
 		<property name="accessManager" ref="openAccessManager" />
+		<!-- Uncomment this and delete previous row to restrict access to this repo
+		<property name="accessManager" ref="internalLanOnlyAccessManager" />
+		-->
+		<!-- Should i reindex my content on startup? -->
+		<property name="reindex" value="true" />
+		<!-- Should i recreate metadata on startup? -->
+		<property name="recreateMetadata" value="true" />
+		<!-- Am I listable? -->
+		<property name="listable" value="true" />
+		<!-- Am I available? If no, i will refuse all requests -->
+		<property name="available" value="true" />
+		<!-- Am I offline? If yes, i will not touch my remote peer, will serve only from localStorage -->
+		<property name="offline" value="false" />
 	</bean>
 
 	<bean id="inhouseFSStorage"
@@ -337,11 +315,21 @@ all default values are here!):</p>
 		<property name="id" value="extNonFree" />
 		<property name="localStorage" ref="extNonFreeFSStorage" />
 		<property name="indexer" ref="indexer" />
-		<property name="reindex" value="true" />
-		<property name="recreateMetadata" value="true" />
-		<property name="listable" value="true" />
 		<property name="statisticsGatherer" ref="stats" />
 		<property name="accessManager" ref="openAccessManager" />
+		<!-- Uncomment this and delete previous row to restrict access to this repo
+		<property name="accessManager" ref="internalLanOnlyAccessManager" />
+		-->
+		<!-- Should i reindex my content on startup? -->
+		<property name="reindex" value="true" />
+		<!-- Should i recreate metadata on startup? -->
+		<property name="recreateMetadata" value="true" />
+		<!-- Am I listable? -->
+		<property name="listable" value="true" />
+		<!-- Am I available? If no, i will refuse all requests -->
+		<property name="available" value="true" />
+		<!-- Am I offline? If yes, i will not touch my remote peer, will serve only from localStorage -->
+		<property name="offline" value="false" />
 	</bean>
 
 	<bean id="extNonFreeFSStorage"
@@ -360,11 +348,21 @@ all default values are here!):</p>
 		<property name="id" value="extFree" />
 		<property name="localStorage" ref="extFreeFSStorage" />
 		<property name="indexer" ref="indexer" />
-		<property name="reindex" value="true" />
-		<property name="recreateMetadata" value="true" />
-		<property name="listable" value="true" />
 		<property name="statisticsGatherer" ref="stats" />
 		<property name="accessManager" ref="openAccessManager" />
+		<!-- Uncomment this and delete previous row to restrict access to this repo
+		<property name="accessManager" ref="internalLanOnlyAccessManager" />
+		-->
+		<!-- Should i reindex my content on startup? -->
+		<property name="reindex" value="true" />
+		<!-- Should i recreate metadata on startup? -->
+		<property name="recreateMetadata" value="true" />
+		<!-- Am I listable? -->
+		<property name="listable" value="true" />
+		<!-- Am I available? If no, i will refuse all requests -->
+		<property name="available" value="true" />
+		<!-- Am I offline? If yes, i will not touch my remote peer, will serve only from localStorage -->
+		<property name="offline" value="false" />
 	</bean>
 
 	<bean id="extFreeFSStorage"

@@ -24,12 +24,19 @@ the following page.
 
   In case we got something other, like 404 error, look at the $TOMCAT_HOME/logs/proximity.log 
 file and ask for help or {{{https://is-micro.myip.hu/trac/ismicro-commons/}<<issue a ticket>>}}.
-In case house is burning, you can mail me at cservenakATis-microDOThu.
+In case house is burning, you can mail me at t.cservenakATgmailDOTcom.
+
+Let's take a short tour...
 
 [images/proximity-documentation.png] Proximity is up, showing default page.
 
-  Let's take a short tour of Proximity. The second page is the Search page. On this page
-we can search amongst <<downloaded>> artifacts. Here, we searched for word "maven-clean".
+  The second page is the Search page. On this page we can search amongst <<downloaded>> artifacts. 
+There a "simple" search and Lucene Query search. The simple search searches on index searching for 
+items that has names that starts with the search input.
+
+  The Lucene query search is more powerful. The interesting thing is the search engine is extensible. 
+Currently, the MavenAwareLuceneIndexer parses the POM and extracts various interesting infos 
+from it. Searchable keywords are listed on page with some samples.
 
 [images/proximity-search.png] Proximity searching.
 
@@ -38,14 +45,15 @@ that have localStorage will be shown with their directories. Proxy repositories 
 together with their remoteUrl parameter and localStorage directory path. The WAR default
 behaviour is to create storages on Java System Propery "user.home" appended with "proximity".
 
+  This page should became more interesting from the moment when runtime Repository configuration
+becomes possible (scheduled for later releases).
+
 [images/proximity-repositories.png] Proximity showing his repositories.
+[images/proximity-repositories1.png] Proximity showing his repositories (continued).
 
   Proximity collects statistics during runtime (if configured so). Initially statistics
 page will be empty, since no activity happend on Proximity. Currently Proximity just collects
-stats but have no usable page to display them. As you see, request IP, retrieval count and 
-target and dates are logged. With these stats there could be made nice stats, like top 10
-artifacts, latest downloaded (from remote repos) artifacts, most active developers by IP, etc.
-Volunteer?
+simple stats. As you see, various info about requests and requested artifacts are logged. 
 
 [images/proximity-statistics.png] Proximity showing statistics (unfinished feature).
 
