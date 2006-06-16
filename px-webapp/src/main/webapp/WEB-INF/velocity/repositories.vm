@@ -7,50 +7,118 @@
         #foreach($repository in $repositories)
 
                 <tr class="tdb">
-                        <td colspan="2">#springMessage("repositories.repoTitle")</td>
+		                #if(${repository.getRemoteStorage()})
+	                        <td colspan="3">#springMessage("repositories.repoTitle.proxied")</td>
+                        #else
+	                        <td colspan="3">#springMessage("repositories.repoTitle.hosted")</td>
+                        #end
                 </tr>
                 <tr class="tda">
                         <td colspan="1">#springMessage("repositories.id")</td>
                         <td colspan="1">${repository.id}</td>
+                        <td colspan="1">#springMessage("repositories.id.help")</td>
                 </tr>
-                #if(${repository.getURIPrefix()})
+                #if(${repository.getUriPrefix()})
                 <tr class="tda">
                         <td colspan="1">#springMessage("repositories.uriPrefix")</td>
                         <td colspan="1">${repository.getURIPrefix()}</td>
+                        <td colspan="1">#springMessage("repositories.uriPrefix.help")</td>
                 </tr>
                 #end
+                <tr class="tda">
+                        <td colspan="1">#springMessage("repositories.isAvailable")</td>
+                        <td colspan="1">
+	                        #if( ${repository.isAvailable()} )
+    	                    	#springMessage("common.yes")
+    	                    #else
+    	                        #springMessage("common.no")
+        	                #end
+                        </td>
+                        <td colspan="1">#springMessage("repositories.isAvailable.help")</td>
+                </tr>
+                <tr class="tda">
+                        <td colspan="1">#springMessage("repositories.isOffline")</td>
+                        <td colspan="1">
+	                        #if( ${repository.isOffline()} )
+    	                    	#springMessage("common.yes")
+    	                    #else
+    	                        #springMessage("common.no")
+        	                #end
+                        </td>
+                        <td colspan="1">#springMessage("repositories.isOffline.help")</td>
+                </tr>
                 <tr class="tda">
                         <td colspan="1">#springMessage("repositories.isListable")</td>
                         <td colspan="1">
 	                        #if( ${repository.isListable()} )
-    	                    	<a href="#springUrl('/repository')?repositoryId=${repository.id}">#springMessage("common.enabled")</a>
+    	                    	#springMessage("common.yes"), <a href="#springUrl('/repository')?repositoryId=${repository.id}">${repository.id}</a>
     	                    #else
-    	                        #springMessage("common.disabled")
+    	                        #springMessage("common.no")
         	                #end
                         </td>
+                        <td colspan="1">#springMessage("repositories.isListable.help")</td>
                 </tr>
                 #if(${repository.getRemoteStorage()})
                 <tr class="tda">
-                        <td colspan="1">#springMessage("repositories.remoteUrl")</td>
-                        <td colspan="1"><a href="${repository.getRemoteStorage().getRemoteUrl()}">${repository.getRemoteStorage().getRemoteUrl()}</a></td>
+                        <td colspan="1">#springMessage("repositories.remoteStorage")</td>
+                        <td colspan="2">
+                        
+                        <table>
+
+			                <tr class="tda">
+			                        <td colspan="1">#springMessage("repositories.remote.url")</td>
+			                        <td colspan="1"><a href="${repository.getRemoteStorage().getRemoteUrl()}">${repository.getRemoteStorage().getRemoteUrl()}</a></td>
+			                        <td colspan="1">#springMessage("repositories.remote.url.help")</td>
+			                </tr>
+			                <tr class="tda">
+			                        <td colspan="1">#springMessage("repositories.remote.timeout")</td>
+			                        <td colspan="1">${repository.getRemoteStorage().getConnectionTimeout()}</td>
+			                        <td colspan="1">#springMessage("repositories.remote.timeout.help")</td>
+			                </tr>
+			                <tr class="tda">
+			                        <td colspan="1">#springMessage("repositories.remote.retryCount")</td>
+			                        <td colspan="1">${repository.getRemoteStorage().getRetrievalRetryCount()}</td>
+			                        <td colspan="1">#springMessage("repositories.remote.retryCount.help")</td>
+			                </tr>
+			                <tr class="tda">
+			                        <td colspan="1">#springMessage("repositories.remote.proxyHost")</td>
+			                        <td colspan="1">$!{repository.getRemoteStorage().getProxyHost()}</td>
+			                        <td colspan="1">#springMessage("repositories.remote.proxyHost.help")</td>
+			                </tr>
+
+                        </table>
+
+                        </td>
                 </tr>
                 #end
+
+                #if(${repository.getLocalStorage()})
                 <tr class="tda">
-                        <td colspan="1">#springMessage("repositories.localBasedir")</td>
-                        #if(${repository.getLocalStorage()})
-                          <td colspan="1">${repository.getLocalStorage().getStorageBaseDir()}</td>
-                        #else
-                          <td colspan="1">#springMessage("repositories.localBasedir.none")</td>
-                        #end
+                        <td colspan="1">#springMessage("repositories.localStorage")</td>
+                        <td colspan="2">
+                        
+                        <table>
+
+			                <tr class="tda">
+			                        <td colspan="1">#springMessage("repositories.local.basedir")</td>
+			                        <td colspan="1">${repository.getLocalStorage().getStorageBaseDir()}</td>
+			                        <td colspan="1">#springMessage("repositories.local.basedir.help")</td>
+			                </tr>
+			                <tr class="tda">
+			                        <td colspan="1">#springMessage("repositories.local.metadataAware")</td>
+			                        #if(${repository.getLocalStorage().isMetadataAware()})
+			                          <td colspan="1">#springMessage("common.yes")</td>
+			                        #else
+			                          <td colspan="1">#springMessage("common.no")</td>
+			                        #end
+			                        <td colspan="1">#springMessage("repositories.local.metadataAware.help")</td>
+			                </tr>
+
+                        </table>
+
+                        </td>
                 </tr>
-                <tr class="tda">
-                        <td colspan="1">#springMessage("repositories.localBasedir.metadataAware")</td>
-                        #if(${repository.getLocalStorage().isMetadataAware()})
-                          <td colspan="1">#springMessage("common.yes")</td>
-                        #else
-                          <td colspan="1">#springMessage("common.no")</td>
-                        #end
-                </tr>
+                #end
 
         #end
 

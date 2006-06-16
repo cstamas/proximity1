@@ -6,20 +6,18 @@
 <tr>
 <td>
 
-<table>
+<table width="100%">
 	<tr class="tdb">
-		<td colspan="3">#springMessage('stats.topTenItems')</td>
+		<td colspan="2">#springMessage('stats.last10Artifacts')</td>
 	</tr>
 	<tr class="tdb">
 		<td colspan="1" width="50%">#springMessage('stats.item.path')</td>
 		<td colspan="1" width="50%">#springMessage('stats.item.name')</td>
-		<td colspan="1" width="50%">#springMessage('stats.item.accessed')</td>
 	</tr>
-    #foreach($item in $topTenItems)
+    #foreach($item in $stats.last10Artifacts)
         <tr class="tda">
              <td colspan="1"><a href="#springUrl('/repository')${item.absolutePath}?repositoryId=${item.repositoryId}">${item.absolutePath}</a></td>
              <td colspan="1"><a href="#springUrl('/repository')${item.path}?repositoryId=${item.repositoryId}">${item.name}</a></td>
-             <td colspan="1">?</td>
         </tr>
     #end
 </table>
@@ -27,18 +25,18 @@
 </td>
 <td>
 
-<table>
+<table width="100%">
 	<tr class="tdb">
-		<td colspan="2" width="50%">#springMessage('stats.latestTenItems')</td>
+		<td colspan="2">#springMessage('stats.last10LocalHits')</td>
 	</tr>
 	<tr class="tdb">
+		<td colspan="1" width="50%">#springMessage('stats.item.path')</td>
 		<td colspan="1" width="50%">#springMessage('stats.item.name')</td>
-		<td colspan="1" width="50%">#springMessage('stats.item.accessed')</td>
 	</tr>
-    #foreach($item in $latestTenItems)
+    #foreach($item in $stats.last10LocalHits)
         <tr class="tda">
              <td colspan="1"><a href="#springUrl('/repository')${item.absolutePath}?repositoryId=${item.repositoryId}">${item.absolutePath}</a></td>
-             <td colspan="1">?</td>
+             <td colspan="1"><a href="#springUrl('/repository')${item.path}?repositoryId=${item.repositoryId}">${item.name}</a></td>
         </tr>
     #end
 </table>
@@ -49,18 +47,16 @@
 <tr>
 <td>
 
-<table>
+<table width="100%">
 	<tr class="tdb">
-		<td colspan="2" width="50%">#springMessage('stats.topTenIps')</td>
+		<td colspan="2">#springMessage('stats.last10IpAddresses')</td>
 	</tr>
 	<tr class="tdb">
-		<td colspan="1">#springMessage('stats.item.name')</td>
-		<td colspan="1">#springMessage('stats.item.accessed')</td>
+		<td colspan="1" width="50%">#springMessage('stats.item.ipaddress')</td>
 	</tr>
-    #foreach($item in $topTenItems)
+    #foreach($item in $stats.last10IpAddresses)
         <tr class="tda">
-             <td colspan="1"><a href="#springUrl('/repository')${item.absolutePath}?repositoryId=${item.repositoryId}">${item.absolutePath}</a></td>
-             <td colspan="1">?</td>
+             <td colspan="1">$item</td>
         </tr>
     #end
 </table>
@@ -68,18 +64,18 @@
 </td>
 <td>
 
-<table>
+<table width="100%">
 	<tr class="tdb">
-		<td colspan="2" width="50%">#springMessage('stats.latestTenIps')</td>
+		<td colspan="2">#springMessage('stats.last10RemoteHits')</td>
 	</tr>
 	<tr class="tdb">
+		<td colspan="1" width="50%">#springMessage('stats.item.path')</td>
 		<td colspan="1" width="50%">#springMessage('stats.item.name')</td>
-		<td colspan="1" width="50%">#springMessage('stats.item.accessed')</td>
 	</tr>
-    #foreach($item in $latestTenItems)
+    #foreach($item in $stats.last10RemoteHits)
         <tr class="tda">
              <td colspan="1"><a href="#springUrl('/repository')${item.absolutePath}?repositoryId=${item.repositoryId}">${item.absolutePath}</a></td>
-             <td colspan="1">?</td>
+             <td colspan="1"><a href="#springUrl('/repository')${item.path}?repositoryId=${item.repositoryId}">${item.name}</a></td>
         </tr>
     #end
 </table>
@@ -89,22 +85,3 @@
 </table>
 
 <p/>
-
-<p>Raw stats (just for reference):</p>
-<table>
-
-        #foreach($ip in ${stats.keySet()})
-
-                <tr class="tdb">
-                        <td colspan="5">${ip.path}</td>
-                </tr>
-                #foreach($repoId in ${stats.get($ip).keySet()})
-                        <tr class="tda">
-                                <td colspan="1">$repoId</td>
-                                <td colspan="4">${stats.get($ip).get($repoId)}</td>
-                        </tr>
-                #end
-
-        #end
-
-</table>
