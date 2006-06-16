@@ -43,7 +43,7 @@ import org.apache.commons.io.IOUtils;
  */
 public class HttpClientRemotePeer extends AbstractRemoteStorage {
 
-    private HttpMethodRetryHandler httpRetryHandler = new DefaultHttpMethodRetryHandler();
+    private HttpMethodRetryHandler httpRetryHandler = null;
 
     private HttpClient httpClient = null;
 
@@ -52,6 +52,8 @@ public class HttpClientRemotePeer extends AbstractRemoteStorage {
     private String queryString = null;
     
     private int connectionTimeout = 5000;
+
+    private int retrievalRetryCount = 3;
 
     private String proxyHost = null;
     
@@ -117,6 +119,14 @@ public class HttpClientRemotePeer extends AbstractRemoteStorage {
 
     public int getConnectionTimeout() {
         return connectionTimeout;
+    }
+
+    public int getRetrievalRetryCount() {
+        return retrievalRetryCount;
+    }
+
+    public void setRetrievalRetryCount(int retrievalRetryCount) {
+        this.retrievalRetryCount = retrievalRetryCount;
     }
 
     public void setFollowRedirection(boolean followRedirection) {
@@ -212,6 +222,7 @@ public class HttpClientRemotePeer extends AbstractRemoteStorage {
     public HttpClient getHttpClient() {
         if (httpClient == null) {
             logger.info("Creating CommonsHttpClient instance");
+            httpRetryHandler = new DefaultHttpMethodRetryHandler(retrievalRetryCount, false);
             httpClient = new HttpClient(new MultiThreadedHttpConnectionManager());
             httpClient.getParams().setConnectionManagerTimeout(getConnectionTimeout());
             if (getProxyHost() != null) {

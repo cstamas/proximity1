@@ -8,6 +8,7 @@ import hu.ismicro.commons.proximity.NoSuchRepositoryException;
 import hu.ismicro.commons.proximity.Proximity;
 import hu.ismicro.commons.proximity.ProximityRequest;
 import hu.ismicro.commons.proximity.Repository;
+import hu.ismicro.commons.proximity.RepositoryNotAvailableException;
 import hu.ismicro.commons.proximity.access.AccessManager;
 import hu.ismicro.commons.proximity.access.OpenAccessManager;
 
@@ -132,6 +133,8 @@ public class ProximityImpl implements Proximity {
                 Repository repo = (Repository) repositories.get(request.getTargetedReposId());
                 try {
                     return repo.retrieveItemProperties(request);
+                } catch (RepositoryNotAvailableException ex) {
+                    logger.info("Repository unavailable", ex);
                 } catch (ItemNotFoundException ex) {
                     logger.info("ItemProperties " + request.getPath() + " not found in targeted repository " + repo.getId());
                     throw ex;
@@ -145,15 +148,9 @@ public class ProximityImpl implements Proximity {
                 String reposId = (String) i.next();
                 try {
                     Repository repo = (Repository) repositories.get(reposId);
-                    // if repository has no Commitment to prefix or has
-                    // Commitment
-                    // to this prefix, try it
-                    if (repo.getURIPrefix() == null || request.getPath().startsWith(repo.getURIPrefix())) {
-                        return repo.retrieveItemProperties(request);
-                    } else {
-                        logger.info("ItemProperties " + request.getPath() + " not searched in repository " + reposId
-                                + " commited to URI prefix " + repo.getURIPrefix());
-                    }
+                    return repo.retrieveItemProperties(request);
+                } catch (RepositoryNotAvailableException ex) {
+                    logger.info("Repository unavailable", ex);
                 } catch (ItemNotFoundException ex) {
                     logger.info("ItemPropeties " + request.getPath() + " not found in repository " + reposId);
                 }
@@ -172,6 +169,8 @@ public class ProximityImpl implements Proximity {
                 Repository repo = (Repository) repositories.get(request.getTargetedReposId());
                 try {
                     return repo.retrieveItem(request);
+                } catch (RepositoryNotAvailableException ex) {
+                    logger.info("Repository unavailable", ex);
                 } catch (ItemNotFoundException ex) {
                     logger.info("Item " + request.getPath() + " not found in targeted repository " + repo.getId());
                     throw ex;
@@ -185,14 +184,9 @@ public class ProximityImpl implements Proximity {
                 String reposId = (String) i.next();
                 try {
                     Repository repo = (Repository) repositories.get(reposId);
-                    // if repository has no Commitment to prefix or has
-                    // Commitment to this prefix, try it
-                    if (repo.getURIPrefix() == null || request.getPath().startsWith(repo.getURIPrefix())) {
-                        return repo.retrieveItem(request);
-                    } else {
-                        logger.info("Item " + request.getPath() + " not searched in repository " + reposId
-                                + " commited to URI prefix " + repo.getURIPrefix());
-                    }
+                    return repo.retrieveItem(request);
+                } catch (RepositoryNotAvailableException ex) {
+                    logger.info("Repository unavailable", ex);
                 } catch (ItemNotFoundException ex) {
                     logger.info("Item " + request.getPath() + " not found in repository " + reposId);
                 }
@@ -208,14 +202,22 @@ public class ProximityImpl implements Proximity {
         if (request.getTargetedReposId() != null) {
             if (repositories.containsKey(request.getTargetedReposId())) {
                 Repository repo = (Repository) repositories.get(request.getTargetedReposId());
-                return repo.listItems(request);
+                try {
+                    return repo.listItems(request);
+                } catch (RepositoryNotAvailableException ex) {
+                    logger.info("Repository unavailable", ex);
+                }
             }
             throw new NoSuchRepositoryException(request.getTargetedReposId());
         } else {
             for (Iterator i = repositoryOrder.iterator(); i.hasNext();) {
                 String reposId = (String) i.next();
                 Repository repo = (Repository) repositories.get(reposId);
-                response.addAll(repo.listItems(request));
+                try {
+                    response.addAll(repo.listItems(request));
+                } catch (RepositoryNotAvailableException ex) {
+                    logger.info("Repository unavailable", ex);
+                }
             }
             return response;
         }
