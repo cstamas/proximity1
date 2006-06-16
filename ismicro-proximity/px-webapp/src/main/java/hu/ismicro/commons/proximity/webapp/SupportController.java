@@ -1,12 +1,9 @@
 package hu.ismicro.commons.proximity.webapp;
 
-import hu.ismicro.commons.proximity.ItemProperties;
 import hu.ismicro.commons.proximity.Proximity;
 import hu.ismicro.commons.proximity.base.ProxiedItemProperties;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -47,12 +44,13 @@ public class SupportController extends MultiActionController {
                 && RequestUtils.getRequiredStringParameter(request, "searchSelectedRegexp") != null) {
             example = new ProxiedItemProperties();
             example.setName(RequestUtils.getRequiredStringParameter(request, "searchSelectedRegexp") + "*");
-            example.setMetadata(ProxiedItemProperties.METADATA_OWNING_REPOSITORY, RequestUtils.getRequiredStringParameter(request, "searchSelectedRepos"));
+            example.setMetadata(ProxiedItemProperties.METADATA_OWNING_REPOSITORY, RequestUtils
+                    .getRequiredStringParameter(request, "searchSelectedRepos"));
         } else if (RequestUtils.getStringParameter(request, "searchLQL") != null
                 && RequestUtils.getRequiredStringParameter(request, "searchLQLQuery") != null) {
-            query =  RequestUtils.getRequiredStringParameter(request, "searchLQLQuery");
+            query = RequestUtils.getRequiredStringParameter(request, "searchLQLQuery");
         }
-        
+
         logger.debug("example=" + (example == null ? null : example.getName()) + ", query=" + query);
 
         Map context = new HashMap();
@@ -85,42 +83,11 @@ public class SupportController extends MultiActionController {
         context.put("repositories", repositories);
         return new ModelAndView("maintenance", context);
     }
+
     public ModelAndView stats(HttpServletRequest request, HttpServletResponse response) throws Exception {
         logger.debug("Got request for stats");
-        
         Map stats = proximity.getStatistics();
-
-        ArrayList topTenItems = new ArrayList(10);
-        // dummy implementation
-        int cnt = 1;
-        for (Iterator i = stats.keySet().iterator(); i.hasNext() && cnt < 11; cnt++) {
-            topTenItems.add((ItemProperties) i.next());
-        }
-        
-        ArrayList latestTenItems = new ArrayList(10);
-        // dummy implementation
-        cnt = 1;
-        for (Iterator i = stats.keySet().iterator(); i.hasNext() && cnt < 11; cnt++) {
-            latestTenItems.add((ItemProperties) i.next());
-        }
-
-        ArrayList topTenIps = new ArrayList(10);
-        cnt = 1;
-        for (Iterator i = stats.keySet().iterator(); i.hasNext() && cnt < 11; cnt++) {
-            topTenIps.add((ItemProperties) i.next());
-        }
-        
-        ArrayList latestTenIps = new ArrayList(10);
-        cnt = 1;
-        for (Iterator i = stats.keySet().iterator(); i.hasNext() && cnt < 11; cnt++) {
-            latestTenIps.add((ItemProperties) i.next());
-        }
-        
         Map context = new HashMap();
-        context.put("topTenItems", topTenItems);
-        context.put("latestTenItems", latestTenItems);
-        context.put("topTenIps", topTenIps);
-        context.put("latestTenIps", latestTenIps);
         context.put("stats", stats);
         return new ModelAndView("stats", context);
     }
