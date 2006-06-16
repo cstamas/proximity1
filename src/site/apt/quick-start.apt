@@ -49,6 +49,7 @@ behaviour is to create storages on Java System Propery "user.home" appended with
 becomes possible (scheduled for later releases).
 
 [images/proximity-repositories.png] Proximity showing his repositories.
+
 [images/proximity-repositories1.png] Proximity showing his repositories (continued).
 
   Proximity collects statistics during runtime (if configured so). Initially statistics
