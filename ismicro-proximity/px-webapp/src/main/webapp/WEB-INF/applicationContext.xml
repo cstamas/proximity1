@@ -150,6 +150,10 @@
 
 	<!--
 		- Logic used for Maven2 repositories.
+		- Use seconds for setting timeout.
+		- x > 0 - the expiration in seconds
+		- x = 0 - the expiration flag is set to now, thus it will expire initially and be refetched always
+		- x = -1 - turn off for the group expiration handling.
 	-->
 	<bean id="maven2logic"
 		class="hu.ismicro.commons.proximity.maven.MavenProxyLogic">
@@ -188,6 +192,10 @@
 		<property name="recreateMetadata" value="true" />
 		<!-- Am I listable? -->
 		<property name="listable" value="true" />
+		<!-- Am I available? If no, i will refuse all requests -->
+		<property name="available" value="true" />
+		<!-- Am I offline? If yes, i will not touch my remote peer, will serve only from localStorage -->
+		<property name="offline" value="false" />
 	</bean>
 
 	<bean id="centralFSStorage"
@@ -203,6 +211,7 @@
 		<property name="remoteUrl"
 			value="http://repo1.maven.org/maven2/" />
 		<property name="connectionTimeout" value="10000" />
+		<property name="retrievalRetryCount" value="3" />
 		<property name="followRedirection" value="true" />
 		<!-- Fix query string appended to URL, used for ProximityPiping "repositoryId=central" -->
 		<property name="queryString" value="" />
@@ -228,15 +237,22 @@
 		<property name="localStorage" ref="ibiblioFSStorage" />
 		<property name="remoteStorage" ref="ibiblioRemotePeer" />
 		<property name="indexer" ref="indexer" />
-		<property name="reindex" value="true" />
-		<property name="recreateMetadata" value="true" />
 		<property name="statisticsGatherer" ref="stats" />
-		<property name="listable" value="true" />
 		<property name="accessManager" ref="openAccessManager" />
 		<!-- Uncomment this and delete previous row to restrict access to this repo
 		<property name="accessManager" ref="internalLanOnlyAccessManager" />
 		-->
 		<property name="repositoryLogic" ref="maven2logic" />
+		<!-- Should i reindex my content on startup? -->
+		<property name="reindex" value="true" />
+		<!-- Should i recreate metadata on startup? -->
+		<property name="recreateMetadata" value="true" />
+		<!-- Am I listable? -->
+		<property name="listable" value="true" />
+		<!-- Am I available? If no, i will refuse all requests -->
+		<property name="available" value="true" />
+		<!-- Am I offline? If yes, i will not touch my remote peer, will serve only from localStorage -->
+		<property name="offline" value="false" />
 	</bean>
 
 	<bean id="ibiblioFSStorage"
@@ -252,6 +268,7 @@
 		<property name="remoteUrl"
 			value="http://www.ibiblio.org/maven/" />
 		<property name="connectionTimeout" value="10000" />
+		<property name="retrievalRetryCount" value="3" />
 		<property name="queryString" value="" />
 		<property name="followRedirection" value="true" />
 		<!-- Proxy setup, uncomment if needed
@@ -277,15 +294,22 @@
 		<property name="localStorage" ref="codehausFSStorage" />
 		<property name="remoteStorage" ref="codehausRemotePeer" />
 		<property name="indexer" ref="indexer" />
-		<property name="reindex" value="true" />
-		<property name="recreateMetadata" value="true" />
 		<property name="statisticsGatherer" ref="stats" />
-		<property name="listable" value="true" />
 		<property name="accessManager" ref="openAccessManager" />
 		<!-- Uncomment this and delete previous row to restrict access to this repo
 		<property name="accessManager" ref="internalLanOnlyAccessManager" />
 		-->
 		<property name="repositoryLogic" ref="maven2logic" />
+		<!-- Should i reindex my content on startup? -->
+		<property name="reindex" value="true" />
+		<!-- Should i recreate metadata on startup? -->
+		<property name="recreateMetadata" value="true" />
+		<!-- Am I listable? -->
+		<property name="listable" value="true" />
+		<!-- Am I available? If no, i will refuse all requests -->
+		<property name="available" value="true" />
+		<!-- Am I offline? If yes, i will not touch my remote peer, will serve only from localStorage -->
+		<property name="offline" value="false" />
 	</bean>
 
 	<bean id="codehausFSStorage"
@@ -300,6 +324,7 @@
 		class="hu.ismicro.commons.proximity.base.remote.HttpClientRemotePeer">
 		<property name="remoteUrl" value="http://dist.codehaus.org/" />
 		<property name="connectionTimeout" value="10000" />
+		<property name="retrievalRetryCount" value="3" />
 		<property name="queryString" value="" />
 		<property name="followRedirection" value="true" />
 		<!-- Proxy setup, uncomment if needed
@@ -322,14 +347,21 @@
 		<property name="id" value="inhouse" />
 		<property name="localStorage" ref="inhouseFSStorage" />
 		<property name="indexer" ref="indexer" />
-		<property name="reindex" value="true" />
-		<property name="recreateMetadata" value="true" />
-		<property name="listable" value="true" />
 		<property name="statisticsGatherer" ref="stats" />
 		<property name="accessManager" ref="openAccessManager" />
 		<!-- Uncomment this and delete previous row to restrict access to this repo
 		<property name="accessManager" ref="internalLanOnlyAccessManager" />
 		-->
+		<!-- Should i reindex my content on startup? -->
+		<property name="reindex" value="true" />
+		<!-- Should i recreate metadata on startup? -->
+		<property name="recreateMetadata" value="true" />
+		<!-- Am I listable? -->
+		<property name="listable" value="true" />
+		<!-- Am I available? If no, i will refuse all requests -->
+		<property name="available" value="true" />
+		<!-- Am I offline? If yes, i will not touch my remote peer, will serve only from localStorage -->
+		<property name="offline" value="false" />
 	</bean>
 
 	<bean id="inhouseFSStorage"
@@ -348,14 +380,21 @@
 		<property name="id" value="extNonFree" />
 		<property name="localStorage" ref="extNonFreeFSStorage" />
 		<property name="indexer" ref="indexer" />
-		<property name="reindex" value="true" />
-		<property name="recreateMetadata" value="true" />
-		<property name="listable" value="false" />
 		<property name="statisticsGatherer" ref="stats" />
 		<property name="accessManager" ref="openAccessManager" />
 		<!-- Uncomment this and delete previous row to restrict access to this repo
 		<property name="accessManager" ref="internalLanOnlyAccessManager" />
 		-->
+		<!-- Should i reindex my content on startup? -->
+		<property name="reindex" value="true" />
+		<!-- Should i recreate metadata on startup? -->
+		<property name="recreateMetadata" value="true" />
+		<!-- Am I listable? -->
+		<property name="listable" value="true" />
+		<!-- Am I available? If no, i will refuse all requests -->
+		<property name="available" value="true" />
+		<!-- Am I offline? If yes, i will not touch my remote peer, will serve only from localStorage -->
+		<property name="offline" value="false" />
 	</bean>
 
 	<bean id="extNonFreeFSStorage"
@@ -374,14 +413,21 @@
 		<property name="id" value="extFree" />
 		<property name="localStorage" ref="extFreeFSStorage" />
 		<property name="indexer" ref="indexer" />
-		<property name="reindex" value="true" />
-		<property name="recreateMetadata" value="true" />
-		<property name="listable" value="true" />
 		<property name="statisticsGatherer" ref="stats" />
 		<property name="accessManager" ref="openAccessManager" />
 		<!-- Uncomment this and delete previous row to restrict access to this repo
 		<property name="accessManager" ref="internalLanOnlyAccessManager" />
 		-->
+		<!-- Should i reindex my content on startup? -->
+		<property name="reindex" value="true" />
+		<!-- Should i recreate metadata on startup? -->
+		<property name="recreateMetadata" value="true" />
+		<!-- Am I listable? -->
+		<property name="listable" value="true" />
+		<!-- Am I available? If no, i will refuse all requests -->
+		<property name="available" value="true" />
+		<!-- Am I offline? If yes, i will not touch my remote peer, will serve only from localStorage -->
+		<property name="offline" value="false" />
 	</bean>
 
 	<bean id="extFreeFSStorage"
