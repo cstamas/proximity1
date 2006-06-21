@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<document>
+
+  <properties>
+    <author email="t.cservenak@gmail.com">CSERVENAK, Tamas</author>
+    <title>Proximity Webapp</title>
+  </properties>
+
+  <meta name="keyword" content="ismicro java"/>
+
+<body>
+
+<section name="Proximity Webapp">
+
+<p>Proximity webapp component ties up px-core and px-core-maven into a J2EE web application called
+Proximity. It is just a proof-of-concept for PxCore functionality.</p>
+
+<p>Proximity is Maven1 and Maven2 aware proxy-like J2EE web application.</p>
+
+</section>
+
+</body>
+</document>
