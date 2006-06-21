@@ -15,22 +15,20 @@
 	<packaging>pom</packaging>
 
 	<!-- a short but descriptive name for the project -->
-	<name>ISmicro Proximity</name>
+	<name>Proximity</name>
 
 	<!-- The version of the project under development -->
 	<version>1.0.0</version>
 
 	<!-- The description -->
-	<description>Maven Proximity Application.</description>
+	<description>Pure Java proxy-like Application.</description>
 
 	<!-- The project site url -->
-	<url>
-		https://is-micro.myip.hu/projects/ismicro-commons/proximity/
-	</url>
+	<url>http://proximity.abstracthorizon.org/</url>
 
 	<issueManagement>
 		<system>Trac</system>
-		<url>https://is-micro.myip.hu/trac/ismicro-commons/</url>
+		<url>https://is-micro.myip.hu/trac/ismicro-proximity/</url>
 	</issueManagement>
 
 	<ciManagement>
@@ -66,8 +64,8 @@
 		<developer>
 			<id>cstamas</id>
 			<name>CSERVENAK, Tamas</name>
-			<email>cservenak@is-micro.hu</email>
-			<organization>ISmicro</organization>
+			<email>t.cservenak@gmail.com</email>
+			<organization>ISmicro Ltd</organization>
 			<roles>
 				<role>Lead Developer</role>
 			</roles>
@@ -112,8 +110,8 @@
 
 	<!-- details about the organization that 'owns' the project -->
 	<organization>
-		<name>ISmicro Kft</name>
-		<url>http://www.is-micro.hu/</url>
+		<name>ABSTRACT HORIZON</name>
+		<url>http://www.abstracthorizon.org/</url>
 	</organization>
 
 	<!-- jar files the project is dependent on -->
@@ -121,6 +119,13 @@
 
 	<!-- build information for the project -->
 	<build>
+		<extensions>
+			<extension>
+				<groupId>org.apache.maven.wagon</groupId>
+				<artifactId>wagon-ftp</artifactId>
+				<version>1.0-beta-1</version>
+			</extension>
+		</extensions>
 		<pluginManagement>
 			<plugins>
 				<plugin>
@@ -157,13 +162,34 @@
 			</url>
 		</snapshotRepository>
 		<site>
-			<id>website</id>
-			<url>
-				scp://file.is-micro.hu/srv/jds2/home/ismicro-commons/www/proximity
-			</url>
+			<id>abstracthorizon.org</id>
+			<url>ftp://ftp.abstracthorizon.org/proximity</url>
 		</site>
 	</distributionManagement>
 
-	<reporting />
+	<reporting>
+		<plugins>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-pmd-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jxr-plugin</artifactId>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>
+					maven-project-info-reports-plugin
+				</artifactId>
+			</plugin>
+		</plugins>
+	</reporting>
 
 </project>
