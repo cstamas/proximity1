@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<document>
+
+  <properties>
+    <author email="t.cservenak@gmail.com">CSERVENAK, Tamas</author>
+    <title>PX-Core</title>
+  </properties>
+
+  <meta name="keyword" content="ismicro java"/>
+
+<body>
+
+<section name="Proximity Core">
+
+<p>Proximity Core component is a proxy-like pure Java application. PX Core is transport and 
+environment independent, thus it may serve in J2SE and J2EE application without a problem!.</p>
+
+<p>The PxCore is just a bunch of beans, with dependencies for only the needed transport and 
+storage. Core dependencies are: commons-codec, commons-collections, commons-httpclient and 
+commons-logging (needed by previous components and by Core itself). For detailed deps look 
+here  maven dependencies report.</p>
+
+</section>
+
+</body>
+</document>
