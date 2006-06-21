@@ -3,7 +3,7 @@
 <document>
 
   <properties>
-    <author email="cservenak@is-micro.hu">CSERVENAK, Tamas</author>
+    <author email="t.cservenak@gmail.com">CSERVENAK, Tamas</author>
     <title>Project Downloads</title>
   </properties>
 
@@ -17,7 +17,7 @@
 
 <p>Prereleases are on General Deployment Area.</p>
 
-<p>Browse the  <a href="/projects/ismicro-commons/deploy/proximity/">General Deployment Area</a> to download
+<p>Browse the  <a href="deploy/">General Deployment Area</a> to download
 newest artifacts.</p>
 
 <!--
