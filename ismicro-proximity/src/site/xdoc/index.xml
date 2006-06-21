@@ -3,8 +3,8 @@
 <document>
 
   <properties>
-    <author email="cservenak@is-micro.hu">CSERVENAK, Tamas</author>
-    <title>ISmicro Projects</title>
+    <author email="t.cservenak@gmail.com">CSERVENAK, Tamas</author>
+    <title>Proximity</title>
   </properties>
 
   <meta name="keyword" content="ismicro java"/>
@@ -28,7 +28,7 @@
             Read <a href="quick-start.html">Quick Start</a>
           </li>
           <li>
-            Use <a href="/trac/ismicro-commons">Proximity WIKI</a>
+            Use <a href="https://is-micro.myip.hu/trac/ismicro-proximity/">Proximity WIKI</a>
           </li>
         </ul>
       </div>
@@ -45,7 +45,7 @@ Jars, etc...).</p>
 
 <p>See a <a href="quick-start.html">Quick Start for Proximity</a></p>
 
-<p>Visit <a href="/trac/ismicro-commons">ISmicro Commons WIKI</a> for WIKI and issue tracking.</p>
+<p>Visit <a href="https://is-micro.myip.hu/trac/ismicro-proximity/">ISmicro Proximity WIKI</a> for WIKI and issue tracking.</p>
 
 
 <subsection name="Proximity features in brief">

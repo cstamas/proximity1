@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://web.resource.org/cc/"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://inkscape.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="744.09448819"
+   height="1052.3622047"
+   id="svg2"
+   sodipodi:version="0.32"
+   inkscape:version="0.43"
+   sodipodi:docbase="/home/cstamas/worx/projects/ismicro-proximity/eclipse/ismicro-proximity/src/site/resources/images"
+   sodipodi:docname="ah.svg">
+  <defs
+     id="defs4" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1.6173285"
+     inkscape:cx="175.32162"
+     inkscape:cy="566.67657"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     inkscape:window-width="1074"
+     inkscape:window-height="825"
+     inkscape:window-x="129"
+     inkscape:window-y="123" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <path
+       style="fill:#ff9933;fill-opacity:1;stroke:none;stroke-opacity:1"
+       d="M 198.65038,328.52595 C 134.17076,328.93478 81.277724,378.53116 75.650383,441.65095 C 88.791194,385.43746 139.2635,343.52595 199.46288,343.52595 C 259.62847,343.52596 310.06882,385.39133 323.24413,441.5572 C 317.54918,378.22025 264.27411,328.52596 199.46288,328.52595 C 199.19489,328.52595 198.91797,328.52425 198.65038,328.52595 z "
+       id="path1307"
+       inkscape:export-filename="/home/cstamas/Desktop/ah.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <text
+       xml:space="preserve"
+       style="font-size:13px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+       x="40.060291"
+       y="421.39987"
+       id="text3057"
+       sodipodi:linespacing="125%"
+       inkscape:export-filename="/home/cstamas/Desktop/ah.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"><tspan
+         sodipodi:role="line"
+         id="tspan3073"
+         x="40.060291"
+         y="421.39987"
+         dx="50">A B S T R A C T   H O R I Z O N</tspan></text>
+    <g
+       id="g6594"
+       style="fill:#000000;fill-opacity:1"
+       transform="translate(11.61091,257.3121)">
+      <path
+         id="path6596"
+         d="M 383.75,351.84375 C 368.81295,351.84375 351.51105,360.16696 339.65625,370.125 C 322.34825,384.58786 311.1875,410.42831 311.1875,434.375 C 311.1875,453.3427 318.80426,461.15625 324.96875,461.15625 C 331.37034,461.15624 339.17583,456.90159 347,450.5 C 357.19512,442.20164 368.347,430.82153 377.59375,417.78125 L 378.0625,417.78125 L 373.3125,440.28125 C 369.99317,457.58925 373.08892,461.15625 377.59375,461.15625 C 383.52114,461.15624 399.41557,452.38544 412.21875,436.5 L 409.375,430.8125 C 402.4992,437.68828 394.17802,443.15625 392.28125,443.15625 C 392.09232,443.15625 391.90995,443.10872 391.75,443.03125 C 391.69423,443.00207 391.61394,442.94702 391.5625,442.90625 C 391.52871,442.87773 391.46922,442.81533 391.4375,442.78125 C 390.67342,441.91106 390.54182,439.29093 391.8125,432.9375 C 397.2657,402.82631 404.39397,370.57495 408.1875,355.875 L 407.46875,354.9375 C 404.8607,354.93751 401.78809,354.24254 398.46875,353.53125 C 393.48972,352.58287 388.72902,351.84375 383.75,351.84375 z M 372.15625,362.0625 C 372.54448,362.04786 372.92722,362.0625 373.3125,362.0625 C 379.47701,362.06251 385.89941,363.71533 389.21875,365.375 C 387.55908,372.96206 383.98305,390.01616 381.375,399.5 C 373.31374,415.85964 346.528,446 337.28125,446 C 333.9619,445.99999 330.875,441.01307 330.875,430.34375 C 330.875,406.87123 340.37747,378.88606 356.5,367.03125 C 360.2787,364.14164 366.33275,362.28217 372.15625,362.0625 z "
+         style="font-size:237.0962677px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Minion Pro" />
+      <path
+         id="path6598"
+         d="M 512.43823,432.70902 C 505.79954,439.11061 498.44955,443.61545 496.07859,443.61545 C 494.41892,443.37835 493.94473,441.95577 495.3673,435.07998 L 507.69631,381.97042 C 513.62371,356.12695 506.98501,351.85919 501.05761,351.85919 C 496.78988,351.85919 491.33666,353.51887 485.17216,356.83822 C 474.50284,362.52852 456.95769,375.09465 441.30935,396.1962 L 440.83516,396.1962 L 462.17382,297.80124 C 463.5964,291.39965 463.3593,289.50288 461.22544,289.50288 C 457.90609,289.50288 445.10287,295.90448 426.37229,297.80124 L 425.661,303.72865 L 432.53679,303.72865 C 441.78354,303.96575 442.96902,304.67705 440.36097,317.00604 C 431.11422,365.61073 420.68197,413.50427 410.48684,459.2638 L 412.14651,461.16057 C 417.36262,459.26381 423.52714,457.60413 428.98035,456.65574 C 431.11421,445.03804 435.38195,423.93645 437.75291,413.50422 C 449.37061,392.87687 477.1109,366.32207 488.01732,366.32207 C 491.81085,366.32207 492.75924,370.58981 489.91409,383.1559 L 477.34799,438.16224 C 473.55445,454.52186 475.21413,461.16057 481.37862,461.16057 C 488.25441,461.16057 502.95439,452.86219 515.52048,438.39933 L 512.43823,432.70902"
+         style="font-size:237.0962677px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Minion Pro" />
+    </g>
+  </g>
+</svg>

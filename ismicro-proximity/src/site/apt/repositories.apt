@@ -1,0 +1,56 @@
+                           ----------------------
+                           Repositories
+                           ----------------------
+                           Cservenak Tamas
+                           ----------------------
+                           2006. 06. 21.
+
+
+Maven repositories
+
+  Maven completely relies on <<repositories>> to do the work. There are <<remote>> repositories (plural!) and
+<<local>> repository (singular!). The remote repositories are (from the developer's point of view) "remote",
+since he has no <direct> influence on them/it, while local repositories are completely under his control and
+used directly in build cycle performed by him.
+
+  Furthermore, the <<local>> repository and <<remote>> repository <is not the same> and are <not interchangeable
+by any means> (like deep-filecopy and republishing it on some HTTP server)! These two kinds of repositories
+shares same "deep" hierarchy and most of the content (JARs, POMs,...) but a local repository is <<not usable
+as remote repository>>, since the <metadata> information is lost (at least transformed and/or renamed) in it!
+
+  Maven uses centralized repositories to provide global access to needed and described artifacts found
+in project's POM. Furthermore, these <<remote>> repositories are heavily used in artifact and maven plugin
+(which are plain artifacts too) resolution. Even the "clean" goal on fresh maven2 installation will fetch a
+few plugins (the maven-clean-plugin) and it's dependencies from central repository, since maven2 is 
+shipped slim, without plugins!
+
+  Repositories for Maven2 are configured at Maven2 level (in settings.xml) and per project level (in POM).
+
+The remote repositories
+
+  As it was stated on the beginning, you may have as much remote repositories as you like, but Maven2
+comes preconfigured to use the "central" remote repository (see below) as default. The reason why would
+you like more then one remote repository is simple: you can separate artifacts, you can separate build
+or even you can create separate environments (these reasons will may be unclear for a common OSS developer).
+
+  Remote repositories are accessed mostly over plain HTTP transport, but it is not restricted to it. There are
+examples to repositories published over HTTPS, FTP or even over HTTPS with client key authentication too (2SSL).
+
+* The central remote repository
+
+  The <<central>> repository is an alias for a "Maven Repository Switchboard" named repository, which is 
+found in <maven-project-2.0.x.jar>, deployed with Maven2. It points to a symbolic address 
+"http://repo1.maven.org/maven2" which is simply an alias for "http://www.ibiblio.org/maven2/" 
+(as of 2006. 06. 21.). The need for this alias were justified by recent ibiblio and/or codehaus blackout, 
+when the alias was redirected to "http://repo.mergere.com/maven2/" as a quick solution, since all 
+maven2 users without maven-proxy between them and repo "central" was doomed to failing builds!
+
+  The central repository is configured to <not hold> snapshots -- a fact that is a way too much ignored
+(will see later when overrriding reposes why).
+
+The local repository
+
+  The <<local>> repository is per default created in $HOME/.m2/repository directory. It will by time grow
+as new artifacts are fetched from remote repositories and as the developer <<installs>> artifacts into it
+locally. Simple formulation would be: the local repository will contain the <union of all artifacts and
+their dependencies> ever built with Maven2 using the given local repository.
