@@ -19,7 +19,7 @@
 	<packaging>jar</packaging>
 
 	<!-- a short but descriptive name for the project -->
-	<name>ISmicro Proximity Maven bindings</name>
+	<name>Px Maven bindings</name>
 
 	<!-- The version of the project under development -->
 	<version>1.0.0-RC1</version>
@@ -59,30 +59,5 @@
 		</dependency>
 
 	</dependencies>
-
-	<distributionManagement>
-		<repository>
-			<id>ismicro</id>
-			<name>ISmicro Central Repository</name>
-			<url>
-				scp://ford.is-micro.hu/srv/projects/ismicro-commons/deploy/proximity
-			</url>
-		</repository>
-		<snapshotRepository>
-			<id>ismicro</id>
-			<name>ISmicro Central Development Repository</name>
-			<url>
-				scp://ford.is-micro.hu/srv/projects/ismicro-commons/deploy/proximity
-			</url>
-		</snapshotRepository>
-		<site>
-			<id>website</id>
-			<url>
-				scp://ford.is-micro.hu/srv/projects/ismicro-commons/www/proximity
-			</url>
-		</site>
-	</distributionManagement>
-
-	<reporting />
 
 </project>
