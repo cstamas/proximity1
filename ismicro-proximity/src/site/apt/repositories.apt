@@ -6,7 +6,7 @@
                            2006. 06. 21.
 
 
-Maven repositories
+Maven repositories - short intro
 
   Maven completely relies on <<repositories>> to do the work. There are <<remote>> repositories (plural!) and
 <<local>> repository (singular!). The remote repositories are (from the developer's point of view) "remote",

@@ -102,6 +102,8 @@ but <<will not try to contact remote peer>>.
   
 A possible solution
 
+  <<TODO: refine this section>>
+
   Proximity per default comes preconfigured for Maven2 use and to cover all these needs. Proximity out-of-the-box
 brings the following repositories (in aggregated form, but with separated storages):
 
