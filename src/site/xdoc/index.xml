@@ -11,7 +11,7 @@
 
 <body>
 
-<section name="ISmicro Commons Proximity">
+<section name="Proximity">
 
      <div id="downloadbox">
         <h5>Download latest Proximity</h5>
@@ -45,7 +45,8 @@ Jars, etc...).</p>
 
 <p>See a <a href="quick-start.html">Quick Start for Proximity</a></p>
 
-<p>Visit <a href="https://is-micro.myip.hu/trac/ismicro-proximity/">ISmicro Proximity WIKI</a> for WIKI and issue tracking.</p>
+<p>Visit <a href="https://is-micro.myip.hu/trac/ismicro-proximity/">ISmicro Proximity WIKI</a>
+for WIKI and issue tracking.</p>
 
 
 <subsection name="Proximity features in brief">
@@ -114,6 +115,8 @@ and in Codehaus Plexus container (together with embedded Maven2), SAS and/or Dan
 
 <section name="How to use">
 
+<p>This paragraph will give brief instructions on using Proximity with Maven1 and Maven2.</p>
+
 <p>Install it as it should with distribution you downloaded. WAR file should be
 deployed on a J2EE servlet container. Bundled releases should be installed as
 described.</p>
@@ -122,10 +125,10 @@ described.</p>
 container that has access to outer world (for reaching central, codehaus, etc. 
 This is NOT mandatory since you can use Proximity to serve only your own artifacts!). </p>
 
-<p>The examples assumes that Proximity runs on a localhost and at HTTP port 8080.
-Follows a few simple scenarios for using Proximity server:</p>
+<p>The examples assumes that Proximity runs on a localhost and at HTTP port 8080 (as wih default
+Apache Tomcat deployment). Follows a few simple scenarios for using Proximity server:</p>
 
-<subsection name="With Maven 1">
+<subsection name="With Maven1">
 
 <p>If you have installed and working Proximity, you have to configure
 Maven1 to use Proximity as his repository (use appropriate URLs, these below are just samples!)
@@ -155,7 +158,7 @@ in your home (on Unix /home/_USERNAME_, on Windows C:\Documents And Settings\_US
 <p>With installed Proximity You have to create settings.xml in 
 your local M2 repo that defines mirror with id "central"
 and point it to Proximity instance. You can use the default file
-that comes with Maven2 as template at M2_HOME/conf/settings.xml. Example:
+that comes with Maven2 as template at $M2_HOME/conf/settings.xml. Example:
 </p>
 
 <div>
@@ -182,7 +185,7 @@ Proximity have pluggable proxying logic, and the main reason for creating Proxim
 was to solve Maven proxying on our intranet. But Proximity became a little bit
 more, than "just" a Maven proxy.</p>
 
-<p>The Maven1/2 awareness comes from pluggable proxy logic, that is independently configurable
+<p>The Maven1/2 awareness comes from pluggable proxy logic and Maven binding, that is independently configurable
 on repository level. No other Maven dependency exists!</p>
 
 <p>Have fun!</p>
@@ -193,11 +196,14 @@ on repository level. No other Maven dependency exists!</p>
 
 <section name="Using Proximity as corporate Maven proxy">
 
+<p>See <a href="corporate-environment.html">corporate environmemt</a> for full description
+about Proximity usage in such environment.</p>
+
 <p>The Proximity has the following features, that enables it to act as
 Maven-aware caching proxy:</p>
 
 <ul>
-<li>With pluggable proxying logic it is able to handle snapshot releases in 
+<li>With pluggable proxying logic it is able to handle maven artifacts in 
 "maven-way" (there is a Logic implementation out-of-the-box)</li>
 <li>It is possible to define more remote repositories, thus Proximity is
 aggregating these repositores and also is caching the and reduces outbound
@@ -205,6 +211,8 @@ traffic.</li>
 <li>The flexibility to define repositories allows administrator to include
 a local only repository to publish in-house artifacts, or other commercial
 artifacts that are not found or ibiblio or other mainstream maven repo.</li>
+<li>Proximity is able to cope with multiple different repositories using non-aggregating
+reposes (see repository relocation alias prefixing).</li>
 </ul>
 
 <p>In contrast to existing maven proxy implementations:</p>

@@ -21,7 +21,7 @@ as remote repository>>, since the <metadata> information is lost (at least trans
   Maven uses centralized repositories to provide global access to needed and described artifacts found
 in project's POM. Furthermore, these <<remote>> repositories are heavily used in artifact and maven plugin
 (which are plain artifacts too) resolution. Even the "clean" goal on fresh maven2 installation will fetch a
-few plugins (the maven-clean-plugin) and it's dependencies from central repository, since maven2 is 
+few plugins (at least the maven-clean-plugin) and it's dependencies from central repository, since maven2 is 
 shipped slim, without plugins!
 
   Repositories for Maven2 are configured at Maven2 level (in settings.xml) and per project level (in POM).
@@ -35,6 +35,7 @@ or even you can create separate environments (these reasons will may be unclear 
 
   Remote repositories are accessed mostly over plain HTTP transport, but it is not restricted to it. There are
 examples to repositories published over HTTPS, FTP or even over HTTPS with client key authentication too (2SSL).
+For the latter, there are sample deployments using Proximity.
 
 * The central remote repository
 
@@ -45,8 +46,8 @@ found in <maven-project-2.0.x.jar>, deployed with Maven2. It points to a symboli
 when the alias was redirected to "http://repo.mergere.com/maven2/" as a quick solution, since all 
 maven2 users without maven-proxy between them and repo "central" was doomed to failing builds!
 
-  The central repository is configured to <not hold> snapshots -- a fact that is a way too much ignored
-(will see later when overrriding reposes why).
+  The central repository is configured to <not hold> snapshots (not like Maven1 repository found on ibiblio!) 
+-- a fact that is a way too much ignored (will see later when overrriding reposes why).
 
 The local repository
 
