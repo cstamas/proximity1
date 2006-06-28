@@ -10,13 +10,13 @@ Corporate environment
 
   The Corporate Environment (CE) differs from a common Open Source needs (OS) in many ways. First of all,
 many commercial projects will need artifacts not found on any remote repository. Second, CE will probaly
-have some built infrastructure (internal LAN) and internal guidelines for using public internet or even 
-it may completely prohibit it (NTLM proxy?)! Third, it needs to share non-OS artifacts amongst it's developers created 
-in mid-step of development not uploadable to any existing remote repository -- and reasonably -- 
-it should <<not be deployed>> outside the (logical or physical) borders of the company itself. Furthermore,
-the CE may want even to restrict the inner accessibility of artifacts to various 
-[developers | developer groups | project members]. Lastly,
-but not least important, the CE wants to be protected from various remote repository outage. 
+have some built infrastructure (internal LAN) and internal guidelines for using public internet (proxy, 
+heterogenous environment) or even it may completely prohibit access to it! Third, it needs to share non-OS 
+artifacts amongst it's developers created in mid-step of development not uploadable to any existing remote 
+repository -- and reasonably -- it should <<not be deployed>> outside the (logical or physical) borders of 
+the company itself. Furthermore, the CE may want even to restrict the inner accessibility of artifacts to 
+various  [developers | developer groups | project members]. Lastly, but not least important, the CE wants 
+to be protected from various remote repository outage (like the one in june of 2006). 
 
   As we see, these CE specific needs differs a lot from a common OS project. Let's break down these
 requirements one-by-one.
@@ -28,17 +28,24 @@ requirements one-by-one.
 repository you can share resources amongst your developers without compromising their licenses. 
 
   It is advisable to create one common repository to store all non-OSS artifacts not deployable to 
-"public" Maven2 repositories because of their license (like Oracle JDBC driver -- free as a free beer) or 
+public Maven2 repositories because of their license (like Oracle JDBC driver -- free as a free beer) or 
 because it is part of some purchased commercial product (some JAR bindings that came with a product 
-bought by company itself).
-
-  These artifacts are <<not deployable>> to any of public remote repositories, it is even not an interest of
+bought by company itself). These artifacts are <<not deployable>> to any of public remote repositories, it is even not an interest of
 a company unless software piracy is one of it's profile :)
 
   By creating internal repository, CE is able to tune POM or use some company level "superPOM" (recommended)
 where these internal repositories will be set up. There should be a company-level person, who could
 manage requests for company-level internal repository management, artifact deployment and/or updates.
 
+  You can even create more internal repositories, but it is advisable to separate the repositories 
+reasonably, to avoid the fragmentation of the projects itself. A common setup would be to use reposes
+named like:
+
+  * "extFree" -- with OSS or OSS-like licenses not found on "central" repository
+  * "extNonFree" -- with non-OSS licenses (like some JDBC drivers for commercial databases)
+  * "inhouse" -- with artifacts used/shared on company level (utils, plugins, etc)
+  * "someProject" -- with artifacts used/shared on project level created in the mid-steps of build and
+      needed for later builds.
 
 * Internal network
 
@@ -46,12 +53,18 @@ manage requests for company-level internal repository management, artifact deplo
 it prohibits any of outbound traffic?
 
   In any case, Proximity may help a lot. The most evident is that Proximity (as any proxy) will reduce
-the outbound traffic and reduce the <<build time latency>>, since Maven2 will query repository on LAN and
+the outbound traffic and reduce the <<build time latency>>, since Maven2 will query repository on CE LAN and
 not on the Internet.
 
   Furthermore, if CE is restrictive, Proximity may be used to "tunnel" the repositories down to developers 
 simply by piping Proximity instances. Thus, developer will have no internet access (even human errors are
-disqualified) but Maven2 will be able to do the build!
+disqualified) but Maven2 will be able to do the build! Simple setup would invoke Proximity deployment on
+a designated machine with access to the internet -- the main Proximity deployment. Workstations from the
+CE environment may not access Internet directly, but using Proximity as <<mirror>> (set up in every Maven2
+deployment on developers workstations) will reduce outbound traffic and enable fully functional use of
+Maven2 in such environment. By placing "group" level, "project" level or any other level of Proximity deployment
+between the main Proximity and developers, you can fine tune even the visibility of repositores for a given
+branch or project team.
 
 
 * Sharing of internal-only artifacts
@@ -63,23 +76,39 @@ should be a person per-project who will be responsible for deployment authorizat
 
 * Authorization
 
-  This is highly CE dependent. What technology is used as authentication source? Is it Windows ADS or Samba?
-This configuration is actually resolvable with HTTP server at "rough" level, but to fine tune it on
-artifact level you can use AccessManager component of Proximity.
+  This is highly CE dependent. What technology is used as authentication source? Is it Windows ADS, OpenLDAP
+or Samba? This problem is resolvable with HTTP server at "rough" level, but to fine tune it on
+artifact level, you can use AccessManager component of Proximity.
+
+  The best results are achieved by combining classical HTTP server access setup (login/authentication) with
+Proximity based artifact level authorization. It is even deployable over VPN or HTTPS + Basic 
+authentication + Client side certificate to remote developers.
 
 * Maven2 environment robustness
 
-  Maven2 build cycle is simple: if it needs some artifact, and it got HTTP error 500 during it's remote 
-retrieval, the <<build will fail>>, even if this error happened during some plugin update search! The 500
-HTTP error is considered fatal during build. Unfortunately, HTTP 500 is quite frequent and stochastic on 
-overhelmed ibiblio server. The solution with Proximiy is simple: on a remote GET command Proximity internally
-makes maximum 3 (configurable) retries, thus "saving" us of this sporadic HTTP 500 thrown due to high 
-hit-rate of ibilio. Also, Proximity is able to work in "offline" mode, offering what it have locally 
-(in hosted or proxied repository) in case we know some remote peer is down. In offline mode, proximity will
-offer the contents of it's cache or hosted repository but <<will not try to contact remote peer>>.
+  Maven2 build cycle is simple but sensitive to remote repository outages: if it needs some artifact in it's
+execution lifecyvle, and it got HTTP error 500 during it's remote HTTP retrieval, the <<build will fail>>, 
+even if this error happened during some plugin update search! The 500 HTTP error is considered fatal 
+during build. Unfortunately, HTTP 500 is quite frequent and appears stochastic on 
+overhelmed ibiblio server. The solution with Proximiy is simple: with default setup, on a remote GET command 
+Proximity internally makes maximum 3 (configurable) retries, thus "saving" us of this sporadic HTTP 500 
+thrown due to high hit-rate of ibilio. Also, Proximity is able to work in "offline" mode, offering what it 
+have locally (in hosted or proxied repository) in case we know some remote peer is down or we want to isolate
+our environment from it. In offline mode, proximity will offer the contents of it's cache or hosted repository 
+but <<will not try to contact remote peer>>.
 
   This way, we can made our build as robust as needed.
   
+  
 A possible solution
 
-  TODO.
+  Proximity per default comes preconfigured for Maven2 use and to cover all these needs. Proximity out-of-the-box
+brings the following repositories (in aggregated form, but with separated storages):
+
+  * "extFree" -- to store OSS compatible artifacts not found on "central" repository
+  * "extNonFree" -- to store non-OSS artifacts
+  * "inhouse" -- to store (eventually non-public) inhouse artifacts
+  * "central" -- a proxied repository
+
+  These repositories are satisfying for almost every smaller developer group working with OSS and even
+commercial non-OSS software.
