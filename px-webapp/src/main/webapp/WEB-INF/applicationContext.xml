@@ -6,15 +6,15 @@
 	them have default values!).
 	
 	Have fun,
-	cservenak@is-micro.hu
+	t.cservenak@gmail.com
 -->
 
 <!-- 
 	List of known Maven2 mirrors, choose one that suit you!
 	
 	For Maven2:
+	http://maven.sateh.com/repository/ (recommended for EU)
 	http://repo1.maven.org/maven2/ (USA)
-	http://maven.sateh.com/repository/ (EU)
 	http://www.ibiblio.org/maven2/ (USA)
 -->
 
@@ -85,7 +85,8 @@
 	</bean>
 
 	<!--
-		- Indexer, used to speed up searches.
+		- Indexer, used to speed up searches ONLY.
+		- This indexer parses POMs and takes some info from them.
 	-->
 	<bean id="indexer"
 		class="hu.ismicro.commons.proximity.maven.MavenAwareLuceneIndexer">
@@ -113,9 +114,9 @@
 		- AccessManagers. With AffirmativeAccessManager, we will have access if all defined
 		- voters vote AFFIRMATIVE.
 		
-		- We have currently one ONE voter, that tries to resemble Apache HTTPD2 Basic Access Control.
+		- We have currently ONE voter, that tries to resemble Apache HTTPD2 Basic Access Control.
 		- We should suppply the allowFrom and denyFrom Java REGEX patterns and a boolean
-		- TRUE for "Order allow,deny" or FALSE for "Order deny,allow" (a la httpd)
+		- TRUE for "Order allow,deny" or FALSE for "Order deny,allow" (a la Apache httpd)
 		
 		- Using these settings below, we have AccessManager that allows access for our
 		- 192.168.0.x LAN only. Requests from outer network will be REJECTED, thus
@@ -123,7 +124,7 @@
 		- Please note, that this settings will REJECT LOCALHOST TOO! 127.0.0.1
 		
 		- If configured on Proximity bean level: the browse link will be inaccessible
-		- If configured on Repoxitory level: the browse will show top-level items but the
+		- If configured on Repository level: the browse will show top-level items but the
 		- restricted repos will not allow download.
 		- Play with differenct combinations!
 		
@@ -162,7 +163,7 @@
 			value="86400" />
 		<!-- Maven2 POMs expires after 24h -->
 		<property name="pomExpirationPeriodInSeconds" value="86400" />
-		<!-- Maven2 metadatas expires after 24h -->
+		<!-- Maven2 metadatas (maven-metadata.xml and *.sha1 and *.md5) expires after 24h -->
 		<property name="metadataExpirationPeriodInSeconds"
 			value="86400" />
 		<!-- everything else will never expire once downloaded -->
@@ -182,7 +183,7 @@
 		<property name="indexer" ref="indexer" />
 		<property name="statisticsGatherer" ref="stats" />
 		<property name="accessManager" ref="openAccessManager" />
-		<!-- Uncomment this and delete previous row to restrict access to this repo
+		<!-- Uncomment this and delete previous accessManager declaration to restrict access to this repo
 		<property name="accessManager" ref="internalLanOnlyAccessManager" />
 		-->
 		<property name="repositoryLogic" ref="maven2logic" />
@@ -200,9 +201,13 @@
 
 	<bean id="centralFSStorage"
 		class="hu.ismicro.commons.proximity.base.local.WritableFileSystemStorage">
+		<!-- Where the storage will reside -->
 		<property name="baseDir" value="${centralFSStorage.baseDir}" />
+		<!-- If true, two subfolders will be created with identical structure but different content. -->
 		<property name="metadataAware" value="true" />
+		<!-- The prefix for metadata subfolder. -->
 		<property name="metadataPrefix" value="metadata" />
+		<!-- The prefix for storage subfolder. -->
 		<property name="storagePrefix" value="storage" />
 	</bean>
 
@@ -210,8 +215,11 @@
 		class="hu.ismicro.commons.proximity.base.remote.HttpClientRemotePeer">
 		<property name="remoteUrl"
 			value="http://repo1.maven.org/maven2/" />
+	    <!-- The timeout of HTTP connection -->
 		<property name="connectionTimeout" value="10000" />
+		<!-- The count of retries (used by DefaultRetryHandler) -->
 		<property name="retrievalRetryCount" value="3" />
+		<!-- Should HttpClient follow redirections? (preferred!) -->
 		<property name="followRedirection" value="true" />
 		<!-- Fix query string appended to URL, used for ProximityPiping "repositoryId=central" -->
 		<property name="queryString" value="" />
