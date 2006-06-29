@@ -42,8 +42,11 @@ reasonably, to avoid the fragmentation of the projects itself. A common setup wo
 named like:
 
   * "extFree" -- with OSS or OSS-like licenses not found on "central" repository
+
   * "extNonFree" -- with non-OSS licenses (like some JDBC drivers for commercial databases)
+
   * "inhouse" -- with artifacts used/shared on company level (utils, plugins, etc)
+
   * "someProject" -- with artifacts used/shared on project level created in the mid-steps of build and
       needed for later builds.
 
@@ -108,8 +111,11 @@ A possible solution
 brings the following repositories (in aggregated form, but with separated storages):
 
   * "extFree" -- to store OSS compatible artifacts not found on "central" repository
+
   * "extNonFree" -- to store non-OSS artifacts
+
   * "inhouse" -- to store (eventually non-public) inhouse artifacts
+
   * "central" -- a proxied repository
 
   These repositories are satisfying for almost every smaller developer group working with OSS and even

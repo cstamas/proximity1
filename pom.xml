@@ -104,7 +104,7 @@
 			scm:svn:https://is-micro.myip.hu/svn/ismicro-commons/trunk/ismicro-proximity/
 		</developerConnection>
 		<url>
-			https://is-micro.myip.hu/trac/ismicro-commons/browser/
+			https://is-micro.myip.hu/trac/ismicro-commons/browser/trunk/ismicro-proximity
 		</url>
 	</scm>
 
@@ -119,7 +119,6 @@
 
 	<!-- build information for the project -->
 	<build>
-	<!-- 
 		<extensions>
 			<extension>
 				<groupId>org.apache.maven.wagon</groupId>
@@ -127,7 +126,6 @@
 				<version>1.0-beta-1</version>
 			</extension>
 		</extensions>
-	-->
 		<pluginManagement>
 			<plugins>
 				<plugin>
@@ -184,7 +182,10 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jxr-plugin</artifactId>
 			</plugin>
-
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-report-plugin</artifactId>
+			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>
