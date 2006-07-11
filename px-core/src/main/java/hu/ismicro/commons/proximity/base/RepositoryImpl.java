@@ -383,9 +383,8 @@ public class RepositoryImpl implements Repository {
                             PathHelper.walkThePath(ip.getAbsolutePath(), ip.getName()));
                     stack.push(subdir);
                 } else {
-                    // TODO: possible problem here with large repositories!
+                    // TODO: possible memory problem here with large repositories!
                     batch.put(getItemUid(ip), ip);
-                    // getIndexer().addItemProperties(getItemUid(ip), ip);
                     indexed++;
                 }
             }
