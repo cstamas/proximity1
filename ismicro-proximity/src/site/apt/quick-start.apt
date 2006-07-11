@@ -23,7 +23,7 @@ already used Proximity, while the newly installed will on many links show empty 
 the following page. 
 
   In case we got something other, like 404 error, look at the $TOMCAT_HOME/logs/proximity.log 
-file and ask for help or {{{https://is-micro.myip.hu/trac/ismicro-commons/}<<issue a ticket>>}}.
+file and ask for help or {{{https://is-micro.myip.hu/trac/ismicro-proximity/}<<issue a ticket>>}}.
 In case house is burning, you can mail me at t.cservenakATgmailDOTcom.
 
 Let's take a short tour...
@@ -96,7 +96,15 @@ is a code to copy+paste.
 ----------------------------------------
 
   Using this minimal snippet settings as is, the Maven2 will use Proximity instead of
-direct access to central repository.
+direct access to central repository. 
+
+  Place this snippet into a file called settings.xml located in $HOME/.m2 directory. You may have to create
+".m2" directory if you had never executed Maven2! For example:
+  
+    * on Windows, %HOME% defaults to <<C:\Documents and Settings\[USERNAME]>>. To recheck it, open a
+    <cmd.exe> and type "cd %HOME%". The current directory will be your home directory.
+    
+    * on Unix/Linux, $HOME defaults to <</home/[USERNAME]>>.
 
   Next, we can use Maven2 and build.
 

@@ -22,6 +22,7 @@ the other to access your colleagues Proximity instance on the same subnet withou
   There are general parameters to turn HTTP proxy usage on a Remote Peer. Those parameters are:
   
     * <<proxyHost>> - the hostname or IP address of the HTTP proxy
+    
     * <<proxyPort>> - the port used for HTTP Proxy access
     
   When the <<proxyHost>> parameter is set, Proximity automatically activates HTTP Proxy usage on a given remote
@@ -36,6 +37,7 @@ further.
 Those parameters are:
 
     * <<proxyUsername>> - the username used for HTTP Proxy authentication
+    
     * <<proxyPassword>> - the password used for HTTP Proxy authentication
 
   This way, we are able to access password protected HTTP proxies using HTTP Basic and Digest authentication
@@ -46,6 +48,7 @@ methods.
   For NTLM authentication, you have two more parameters to set on remotePeer:
     
     * <<proxyNtlmDomain>> - The Windows domain to authenticate within
+    
     * <<proxyNtlmHost>> - The host the authentication request is originating from.  Essentially, the computer 
       name for machine running Proximity.
 
