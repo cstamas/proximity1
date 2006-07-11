@@ -24,6 +24,7 @@ import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.HttpMethodRetryHandler;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
+import org.apache.commons.httpclient.NTCredentials;
 import org.apache.commons.httpclient.UsernamePasswordCredentials;
 import org.apache.commons.httpclient.auth.AuthScope;
 import org.apache.commons.httpclient.methods.GetMethod;
@@ -43,6 +44,8 @@ import org.apache.commons.io.IOUtils;
  */
 public class HttpClientRemotePeer extends AbstractRemoteStorage {
 
+    // TODO: ready for refactoring
+
     private HttpMethodRetryHandler httpRetryHandler = null;
 
     private HttpClient httpClient = null;
@@ -50,20 +53,22 @@ public class HttpClientRemotePeer extends AbstractRemoteStorage {
     private boolean followRedirection = true;
 
     private String queryString = null;
-    
+
     private int connectionTimeout = 5000;
 
     private int retrievalRetryCount = 3;
 
     private String proxyHost = null;
-    
+
     private int proxyPort = 8080;
-    
-    private String proxyRealm = null;
-    
+
     private String proxyUsername = null;
-    
+
     private String proxyPassword = null;
+
+    private String proxyNtlmDomain = null;
+
+    private String proxyNtlmHost = null;
 
     public String getProxyHost() {
         return proxyHost;
@@ -89,20 +94,28 @@ public class HttpClientRemotePeer extends AbstractRemoteStorage {
         this.proxyPort = proxyPort;
     }
 
-    public String getProxyRealm() {
-        return proxyRealm;
-    }
-
-    public void setProxyRealm(String proxyRealm) {
-        this.proxyRealm = proxyRealm;
-    }
-
     public String getProxyUsername() {
         return proxyUsername;
     }
 
     public void setProxyUsername(String proxyUsername) {
         this.proxyUsername = proxyUsername;
+    }
+
+    public String getProxyNtlmDomain() {
+        return proxyNtlmDomain;
+    }
+
+    public void setProxyNtlmDomain(String proxyNtlmDomain) {
+        this.proxyNtlmDomain = proxyNtlmDomain;
+    }
+
+    public String getProxyNtlmHost() {
+        return proxyNtlmHost;
+    }
+
+    public void setProxyNtlmHost(String proxyNtlmHost) {
+        this.proxyNtlmHost = proxyNtlmHost;
     }
 
     public String getQueryString() {
@@ -184,13 +197,14 @@ public class HttpClientRemotePeer extends AbstractRemoteStorage {
                     logger.debug("Constructing ProxiedItem");
                     ProxiedItem result = new ProxiedItem();
                     if (properties.isFile()) {
-                        // TODO: Solve this in  a better way
+                        // TODO: Solve this in a better way
                         File tmpFile = File.createTempFile(PathHelper.getFileName(path), null);
                         FileOutputStream fos = new FileOutputStream(tmpFile);
                         int bytes = IOUtils.copy(get.getResponseBodyAsStream(), fos);
                         fos.flush();
                         fos.close();
-                        properties.setSize(bytes); // set the actual size in bytes we received
+                        properties.setSize(bytes); // set the actual size in
+                        // bytes we received
                         InputStream is = new FileInputStream(tmpFile);
                         result.setStream(is);
                     } else {
@@ -226,12 +240,27 @@ public class HttpClientRemotePeer extends AbstractRemoteStorage {
             httpClient = new HttpClient(new MultiThreadedHttpConnectionManager());
             httpClient.getParams().setConnectionManagerTimeout(getConnectionTimeout());
             if (getProxyHost() != null) {
-                logger.info("... proxy setup with host " + getProxyHost() + ", port "+ getProxyPort());
+                logger.info("... proxy setup with host " + getProxyHost() + ", port " + getProxyPort());
                 httpClient.getHostConfiguration().setProxy(getProxyHost(), getProxyPort());
-                if (getProxyRealm() != null) {
-                    logger.info("... proxy authenticationsetup for realm " + getProxyRealm() + " and username " + getProxyUsername());
-                    httpClient.getState().setProxyCredentials(new AuthScope(proxyHost, proxyPort, proxyRealm), new UsernamePasswordCredentials(proxyUsername, proxyPassword));
+                
+                if (getProxyUsername() != null) {
+
+                    if (getProxyNtlmDomain() != null) {
+                        logger.info("... proxy authentication setup for NTLM domain " + getProxyNtlmDomain()
+                                + " with username " + getProxyUsername());
+                        httpClient.getState().setProxyCredentials(
+                                new AuthScope(getProxyHost(), getProxyPort()),
+                                new NTCredentials(getProxyUsername(), getProxyPassword(), getProxyNtlmHost(),
+                                        getProxyNtlmDomain()));
+                    } else {
+                        logger.info("... proxy authentication setup for http proxy " + getProxyHost()
+                                + " with username " + getProxyUsername());
+                        httpClient.getState().setProxyCredentials(new AuthScope(getProxyHost(), getProxyPort()),
+                                new UsernamePasswordCredentials(getProxyUsername(), getProxyPassword()));
+
+                    }
                 }
+
             }
         }
         return httpClient;
@@ -290,7 +319,7 @@ public class HttpClientRemotePeer extends AbstractRemoteStorage {
         // TODO: ibiblio behaves like this, check for others
         result.setDirectory(lastModifiedHeader == null);
         result.setFile(lastModifiedHeader != null);
-        
+
         if (lastModifiedHeader != null) {
             result.setLastModified(makeDateFromString(lastModifiedHeader.getValue()));
         } else {
@@ -302,7 +331,8 @@ public class HttpClientRemotePeer extends AbstractRemoteStorage {
             if (contentLength != null) {
                 result.setSize(Long.parseLong(contentLength.getValue()));
             }
-            //result.setSize(((GetMethod) executedMethod).getResponseContentLength());
+            // result.setSize(((GetMethod)
+            // executedMethod).getResponseContentLength());
         } else {
             result.setSize(0);
         }

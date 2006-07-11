@@ -228,8 +228,13 @@
 			<property name="proxyPort" value="8080" />
 		-->
 		<!-- Proxy authentication setup, uncomment if proxy needs this
-			<property name="proxyRealm" value="ProxyRealm" />
 			<property name="proxyUsername" value="userOnProxy" />
+			<property name="proxyPassword" value="bigSecret" />
+		-->
+		<!-- Proxy NTLM authentication setup, uncomment if proxy needs this
+			<property name="proxyNtlmDomain" value="domain to authenticate within" />
+			<property name="proxyNtlmHost" value="originating hostname" />
+			<property name="proxyUsername" value="userOnProxyWithoutDomainPrefix" />
 			<property name="proxyPassword" value="bigSecret" />
 		-->
 	</bean>
@@ -284,8 +289,13 @@
 			<property name="proxyPort" value="8080" />
 		-->
 		<!-- Proxy authentication setup, uncomment if proxy needs this
-			<property name="proxyRealm" value="ProxyRealm" />
 			<property name="proxyUsername" value="userOnProxy" />
+			<property name="proxyPassword" value="bigSecret" />
+		-->
+		<!-- Proxy NTLM authentication setup, uncomment if proxy needs this
+			<property name="proxyNtlmDomain" value="domain to authenticate within" />
+			<property name="proxyNtlmHost" value="originating hostname" />
+			<property name="proxyUsername" value="userOnProxyWithoutDomainPrefix" />
 			<property name="proxyPassword" value="bigSecret" />
 		-->
 	</bean>
@@ -340,8 +350,13 @@
 			<property name="proxyPort" value="8080" />
 		-->
 		<!-- Proxy authentication setup, uncomment if proxy needs this
-			<property name="proxyRealm" value="ProxyRealm" />
 			<property name="proxyUsername" value="userOnProxy" />
+			<property name="proxyPassword" value="bigSecret" />
+		-->
+		<!-- Proxy NTLM authentication setup, uncomment if proxy needs this
+			<property name="proxyNtlmDomain" value="domain to authenticate within" />
+			<property name="proxyNtlmHost" value="originating hostname" />
+			<property name="proxyUsername" value="userOnProxyWithoutDomainPrefix" />
 			<property name="proxyPassword" value="bigSecret" />
 		-->
 	</bean>
