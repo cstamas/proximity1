@@ -102,13 +102,11 @@ public class LuceneIndexer extends AbstractIndexer {
             // prevent duplication on idx
             IndexReader reader = IndexReader.open(indexDirectory);
             int deleted = reader.delete(new Term("UID", UID));
+            dirtyItems = dirtyItems + deleted;
             reader.close();
             IndexWriter writer = new IndexWriter(indexDirectory, analyzer, false);
-            Document ipDoc = itemProperties2Document(item);
-            ipDoc.add(Field.Keyword("UID", UID));
-            writer.addDocument(ipDoc);
-            dirtyItems = deleted + 1;
-            optimizeIndexIfNeededAndClose(writer);
+            addItemToIndex(writer, UID, item);
+            writer.close();
         } catch (IOException ex) {
             logger.error("Got IOException during index addition.", ex);
             throw new StorageException("Got IOException during addition.", ex);
@@ -124,19 +122,17 @@ public class LuceneIndexer extends AbstractIndexer {
             for (Iterator i = uidWithItems.keySet().iterator(); i.hasNext();) {
                 UID = (String) i.next();
                 // prevent duplication on idx
-                reader.delete(new Term("UID", UID));
+                int deleted = reader.delete(new Term("UID", UID));
+                dirtyItems = dirtyItems + deleted;
             }
             reader.close();
-
             IndexWriter writer = new IndexWriter(indexDirectory, analyzer, false);
             for (Iterator i = uidWithItems.keySet().iterator(); i.hasNext();) {
                 UID = (String) i.next();
-                // prevent duplication on idx
                 item = (ItemProperties) uidWithItems.get(UID);
-                Document ipDoc = itemProperties2Document(item);
-                ipDoc.add(Field.Keyword("UID", UID));
-                writer.addDocument(ipDoc);
+                addItemToIndex(writer, UID, item);
             }
+            // forcing optimize after a batch addition
             writer.optimize();
             writer.close();
             dirtyItems = 0;
@@ -155,7 +151,15 @@ public class LuceneIndexer extends AbstractIndexer {
             reader.close();
             logger.info("Deleted " + deleted + " items from index for UID=" + UID);
             dirtyItems = dirtyItems + deleted;
-            optimizeIndexIfNeededAndClose(new IndexWriter(indexDirectory, analyzer, false));
+
+            if (dirtyItems > dirtyItemTreshold) {
+                IndexWriter writer = new IndexWriter(indexDirectory, analyzer, false);
+                logger.info("Optimizing Lucene index as dirtyItemTreshold is exceeded.");
+                writer.optimize();
+                dirtyItems = 0;
+                writer.close();
+            }
+
         } catch (IOException ex) {
             logger.error("Got IOException during index deletion.", ex);
             throw new StorageException("Got IOException during deletion.", ex);
@@ -197,6 +201,19 @@ public class LuceneIndexer extends AbstractIndexer {
         }
     }
 
+    protected Document itemProperties2Document(ItemProperties item) {
+        Document result = new Document();
+        for (Iterator i = item.getAllMetadata().keySet().iterator(); i.hasNext();) {
+            String key = (String) i.next();
+            result.add(Field.Keyword(key, item.getMetadata(key)));
+        }
+        return postProcessDocument(item, result);
+    }
+
+    protected Document postProcessDocument(ItemProperties item, Document doc) {
+        return doc;
+    }
+
     public List searchByQuery(String queryStr) throws IndexerException, StorageException {
         try {
             IndexSearcher searcher = new IndexSearcher(indexDirectory);
@@ -228,17 +245,15 @@ public class LuceneIndexer extends AbstractIndexer {
         }
     }
 
-    private void optimizeIndexIfNeededAndClose(IndexWriter writer) {
-        try {
-            if (dirtyItems > dirtyItemTreshold) {
-                logger.info("Optimizing Lucene index");
-                writer.optimize();
-                dirtyItems = 0;
-            }
-            writer.close();
-        } catch (IOException ex) {
-            logger.error("Got IOException during index optimization.", ex);
-            throw new StorageException("Got IOException during optimization.", ex);
+    private void addItemToIndex(IndexWriter writer, String UID, ItemProperties item) throws IOException {
+        Document ipDoc = itemProperties2Document(item);
+        ipDoc.add(Field.Keyword("UID", UID));
+        writer.addDocument(ipDoc);
+        dirtyItems++;
+        if (dirtyItems > dirtyItemTreshold) {
+            logger.info("Optimizing Lucene index as dirtyItemTreshold is exceeded.");
+            writer.optimize();
+            dirtyItems = 0;
         }
     }
 

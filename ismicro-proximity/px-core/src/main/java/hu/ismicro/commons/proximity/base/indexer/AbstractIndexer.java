@@ -13,8 +13,6 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.lucene.document.Document;
-import org.apache.lucene.document.Field;
 
 public abstract class AbstractIndexer implements Indexer {
 
@@ -44,19 +42,6 @@ public abstract class AbstractIndexer implements Indexer {
         result.add(ItemProperties.METADATA_IS_FILE);
         result.add(ItemProperties.METADATA_ORIGINATING_URL);
         return result;
-    }
-
-    protected Document itemProperties2Document(ItemProperties item) {
-        Document result = new Document();
-        for (Iterator i = item.getAllMetadata().keySet().iterator(); i.hasNext();) {
-            String key = (String) i.next();
-            result.add(Field.Keyword(key, item.getMetadata(key)));
-        }
-        return postProcessDocument(item, result);
-    }
-
-    protected Document postProcessDocument(ItemProperties item, Document doc) {
-        return doc;
     }
 
     protected ProxiedItem retrieveItemFromStorages(String path) {
