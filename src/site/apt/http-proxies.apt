@@ -1,0 +1,52 @@
+                           ----------------------
+                           Proximity and HTTP proxies
+                           ----------------------
+                           Cservenak Tamas
+                           ----------------------
+                           2006. 07. 11.
+
+
+Proximity and HTTP Proxies
+
+  In many corporate environments a HTTP Proxy is placed between inner (private) network and outer (public)
+Internet. Since Proximity uses {{{http://jakarta.apache.org/commons/httpclient/} Commons HttpClient}} as
+one of the remote repository implementation, all HTTP proxies supported by Commons HttpClient is transitively
+supported by Proximity.
+
+  Proximity offers the maximum of configurability by letting proxy configurations per remotePeer. Thus, for 
+example you can use one remotePeer to access some Maven repository from the "outer world" using HTTP Proxy, and 
+the other to access your colleagues Proximity instance on the same subnet without use of HTTP proxy!
+
+* Setting HTTP Proxy on Remote Peer
+
+  There are general parameters to turn HTTP proxy usage on a Remote Peer. Those parameters are:
+  
+    * <<proxyHost>> - the hostname or IP address of the HTTP proxy
+    * <<proxyPort>> - the port used for HTTP Proxy access
+    
+  When the <<proxyHost>> parameter is set, Proximity automatically activates HTTP Proxy usage on a given remote
+peer. Remember, this is per remotePeer setting!
+
+  This completes the HTTP Proxy setup if we have a passwordless HTTP Proxy. For authentication, read
+further.
+
+* Password protected HTTP Proxy
+
+  For password protected proxy, you have to set further parameters on remotePeer the are required for authentication.
+Those parameters are:
+
+    * <<proxyUsername>> - the username used for HTTP Proxy authentication
+    * <<proxyPassword>> - the password used for HTTP Proxy authentication
+
+  This way, we are able to access password protected HTTP proxies using HTTP Basic and Digest authentication
+methods.
+
+* MS Windows Proxy (using NTLM authentication)
+
+  For NTLM authentication, you have two more parameters to set on remotePeer:
+    
+    * <<proxyNtlmDomain>> - The Windows domain to authenticate within
+    * <<proxyNtlmHost>> - The host the authentication request is originating from.  Essentially, the computer 
+      name for machine running Proximity.
+
+  That's completes the NTLM authentication HTTP proxy authentication setup.

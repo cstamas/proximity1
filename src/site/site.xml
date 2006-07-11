@@ -28,8 +28,9 @@
     </menu>
 
     <menu name="Guides">
+      <item name="Configuration Reference" href="configuration.html"/>
+      <item name="Proximity and HTTP Proxies" href="http-proxies.html"/>
       <item name="Quick start" href="quick-start.html"/>
-      <item name="Configuration" href="configuration.html"/>
       <item name="Repositories" href="repositories.html"/>
       <item name="Corporate Environments" href="corporate-environment.html"/>
       <item name="Developers guide" href="developers-guide.html"/>
