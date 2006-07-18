@@ -69,9 +69,9 @@ public class MavenAwareLuceneIndexer extends LuceneIndexer {
 
                     
                 } catch (XmlPullParserException ex) {
-                    logger.error("Got XmlPullParserException during reading POM, WILL NOT INDEX!", ex);
+                    logger.warn("Got XmlPullParserException during reading POM, content will not be indexed on " + ip.getPath(), ex);
                 } catch (IOException ex) {
-                    logger.error("Got IOException during reading POM, WILL NOT INDEX!", ex);
+                    logger.error("Got IOException during reading POM, content will not be indexed on " + ip.getPath(), ex);
                 }
             }
 
