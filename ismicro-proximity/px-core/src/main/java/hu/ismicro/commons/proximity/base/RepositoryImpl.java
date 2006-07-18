@@ -249,8 +249,8 @@ public class RepositoryImpl implements Repository {
     public void initialize() {
         logger.info("Initializing...");
 
-        if (getLocalStorage() != null) {
-            indexer.registerLocalStorage(getLocalStorage());
+        if (getIndexer() != null && getLocalStorage() != null) {
+            getIndexer().registerLocalStorage(getLocalStorage());
         }
 
         if (recreateMetadata) {

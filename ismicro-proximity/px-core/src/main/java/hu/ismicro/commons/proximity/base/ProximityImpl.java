@@ -61,8 +61,12 @@ public class ProximityImpl implements Proximity {
 
     public void initialize() {
         logger.info("Starting Initialization...");
-        statisticsGatherer.initialize();
-        indexer.initialize();
+        if (getStatisticsGatherer() != null) {
+            getStatisticsGatherer().initialize();
+        }
+        if (getIndexer() != null) {
+            getIndexer().initialize();
+        }
         logger.info("Initializing all defined repositories");
         for (Iterator i = repositoryOrder.iterator(); i.hasNext();) {
             String repoId = (String) i.next();
