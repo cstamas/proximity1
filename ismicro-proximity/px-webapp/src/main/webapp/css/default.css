@@ -3,12 +3,11 @@ body {
      background-position: top right;
      background-repeat: no-repeat;
      margin: 0px;
-     font-family: Trebuchet MS, Bitstream Vera Sans, Helvetica, Arial;
 }
 
 body td {
      padding: 0px;
-     font-size: 9pt;
+     font: normal 13px verdana,arial,'Bitstream Vera Sans',helvetica,sans-serif;
      vertical-align: top;
 }
 
