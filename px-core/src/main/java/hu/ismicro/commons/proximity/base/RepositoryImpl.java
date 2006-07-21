@@ -157,6 +157,9 @@ public class RepositoryImpl implements Repository {
         }
         this.repositoryLogic = repositoryLogic;
     }
+    
+    // ---------------------------------------------------------------------------------
+    // Entry methods
 
     public ProxiedItemProperties retrieveItemProperties(ProximityRequest request) throws RepositoryNotAvailableException, ItemNotFoundException,
             StorageException, AccessDeniedException {
@@ -246,6 +249,9 @@ public class RepositoryImpl implements Repository {
         return result;
     }
 
+    // ---------------------------------------------------------------------------------
+    // Housekeeping
+
     public void initialize() {
         logger.info("Initializing...");
 
@@ -263,6 +269,9 @@ public class RepositoryImpl implements Repository {
         }
     }
 
+    // ---------------------------------------------------------------------------------
+    // Protected
+
     protected String removePathPrefix(String path) {
         if (getUriPrefix() != null && getUriPrefix().length() != 0) {
             return path.substring(getUriPrefix().length());
@@ -273,12 +282,12 @@ public class RepositoryImpl implements Repository {
 
     protected String putPathPrefix(String path) {
         if (getUriPrefix() != null && getUriPrefix().length() != 0) {
-            return PathHelper.absolutizePathFromBase(getUriPrefix(), path);
+            return PathHelper.concatPaths(getUriPrefix(), path);
         } else {
             return path;
         }
     }
-
+    
     protected ProxiedItem retrieveItem(boolean propsOnly, ProximityRequest request) throws RepositoryNotAvailableException, ItemNotFoundException,
             StorageException {
         ProxiedItem localResult = null;
