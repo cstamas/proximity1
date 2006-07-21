@@ -55,6 +55,8 @@
 			<scope>compile</scope>
 		</dependency>
 
+<!--  TODO: review this, is it needed in webapp environment?
+      PX uses Commons Logging.
 		<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
@@ -62,6 +64,8 @@
 			<type>jar</type>
 			<scope>runtime</scope>
 		</dependency>
+-->
+
 		<dependency>
 			<groupId>dwr</groupId>
 			<artifactId>dwr</artifactId>
