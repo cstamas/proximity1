@@ -32,5 +32,9 @@ public abstract class AbstractRemoteStorage extends AbstractStorage implements R
     protected String getAbsoluteUrl(String path) {
         return PathHelper.walkThePath(getRemoteUrl(), path);
     }
+    
+    protected URL getRemoteUrlAsUrl() {
+        return remoteUrl;
+    }
 
 }

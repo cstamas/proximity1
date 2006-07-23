@@ -13,46 +13,24 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
+import java.net.SocketException;
 import java.net.URL;
-import java.util.Date;
 
-import org.apache.commons.httpclient.DefaultHttpMethodRetryHandler;
-import org.apache.commons.httpclient.Header;
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpException;
-import org.apache.commons.httpclient.HttpMethod;
-import org.apache.commons.httpclient.HttpMethodRetryHandler;
-import org.apache.commons.httpclient.HttpStatus;
-import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
-import org.apache.commons.httpclient.NTCredentials;
-import org.apache.commons.httpclient.UsernamePasswordCredentials;
-import org.apache.commons.httpclient.auth.AuthScope;
-import org.apache.commons.httpclient.methods.GetMethod;
-import org.apache.commons.httpclient.methods.HeadMethod;
-import org.apache.commons.httpclient.params.HttpMethodParams;
-import org.apache.commons.httpclient.util.DateParseException;
-import org.apache.commons.httpclient.util.DateUtil;
-import org.apache.commons.io.IOUtils;
+import org.apache.commons.net.ftp.FTPClient;
+import org.apache.commons.net.ftp.FTPClientConfig;
+import org.apache.commons.net.ftp.FTPFile;
 
 /**
- * Naive remote storage implementation based on Apache Commons HttpClient's
- * library. It uses HTTP HEAD method for existence checking and HTTP GET for
- * item retrieval.
+ * Naive remote storage implementation based on Apache Commons Net FTPClient's
+ * library. It uses FTP LIST method for existence checking and FTP GET for item
+ * retrieval.
  * 
  * @author cstamas
  * 
  */
 public class CommonsNetFtpRemotePeer extends AbstractRemoteStorage {
 
-    // TODO: ready for refactoring
-
-    private HttpMethodRetryHandler httpRetryHandler = null;
-
-    private HttpClient httpClient = null;
-
-    private boolean followRedirection = true;
-
-    private String queryString = null;
+    private FTPClientConfig ftpClientConfig = new FTPClientConfig(FTPClientConfig.SYST_UNIX);
 
     private int connectionTimeout = 5000;
 
@@ -66,9 +44,33 @@ public class CommonsNetFtpRemotePeer extends AbstractRemoteStorage {
 
     private String proxyPassword = null;
 
-    private String proxyNtlmDomain = null;
+    private String ftpUsername = null;
 
-    private String proxyNtlmHost = null;
+    private String ftpPassword = null;
+
+    public FTPClientConfig getFtpClientConfig() {
+        return ftpClientConfig;
+    }
+
+    public void setFtpClientConfig(FTPClientConfig ftpClientConfig) {
+        this.ftpClientConfig = ftpClientConfig;
+    }
+
+    public String getFtpUsername() {
+        return ftpUsername;
+    }
+
+    public void setFtpUsername(String ftpUsername) {
+        this.ftpUsername = ftpUsername;
+    }
+
+    public String getFtpPassword() {
+        return ftpPassword;
+    }
+
+    public void setFtpPassword(String ftpPassword) {
+        this.ftpPassword = ftpPassword;
+    }
 
     public String getProxyHost() {
         return proxyHost;
@@ -102,30 +104,6 @@ public class CommonsNetFtpRemotePeer extends AbstractRemoteStorage {
         this.proxyUsername = proxyUsername;
     }
 
-    public String getProxyNtlmDomain() {
-        return proxyNtlmDomain;
-    }
-
-    public void setProxyNtlmDomain(String proxyNtlmDomain) {
-        this.proxyNtlmDomain = proxyNtlmDomain;
-    }
-
-    public String getProxyNtlmHost() {
-        return proxyNtlmHost;
-    }
-
-    public void setProxyNtlmHost(String proxyNtlmHost) {
-        this.proxyNtlmHost = proxyNtlmHost;
-    }
-
-    public String getQueryString() {
-        return queryString;
-    }
-
-    public void setQueryString(String queryString) {
-        this.queryString = queryString;
-    }
-
     public void setConnectionTimeout(int connectionTimeout) {
         this.connectionTimeout = connectionTimeout;
     }
@@ -142,197 +120,132 @@ public class CommonsNetFtpRemotePeer extends AbstractRemoteStorage {
         this.retrievalRetryCount = retrievalRetryCount;
     }
 
-    public void setFollowRedirection(boolean followRedirection) {
-        this.followRedirection = followRedirection;
-    }
-
-    public boolean isFollowRedirection() {
-        return followRedirection;
-    }
-
     public boolean containsItemProperties(String path) {
         return containsItem(path);
     }
 
-    public boolean containsItem(String path) {
-        HeadMethod head = new HeadMethod(getAbsoluteUrl(path));
-        int response = executeMethod(head);
-        return response == HttpStatus.SC_OK;
+    public boolean containsItem(String path) throws StorageException {
+        try {
+            return retrieveItemProperties(path) != null;
+        } catch (ItemNotFoundException ex) {
+            return false;
+        }
     }
 
     public ProxiedItemProperties retrieveItemProperties(String path) throws ItemNotFoundException, StorageException {
         String originatingUrlString = getAbsoluteUrl(path);
-        HeadMethod method = new HeadMethod(originatingUrlString);
+        FTPClient client = null;
         try {
+            client = getFTPClient();
             try {
-                int response = executeMethod(method);
-                if (response == HttpStatus.SC_OK) {
-                    logger.info("Item " + path + " properties fetched from remote peer of " + getRemoteUrl());
-                    return constructItemPropertiesFromGetResponse(path, originatingUrlString, method);
+                if (client.changeWorkingDirectory(PathHelper.getDirName(path))) {
+                    FTPFile[] fileList = client.listFiles(PathHelper.getFileName(path));
+                    if (fileList.length == 1) {
+                        return constructItemPropertiesFromGetResponse(path, originatingUrlString, fileList[0]);
+                    } else {
+                        logger.info("Item " + path + " not found in FTP remote peer of " + getRemoteUrl());
+                        throw new ItemNotFoundException("Item " + path + " not found in FTP remote peer of "
+                                + getRemoteUrl());
+                    }
                 } else {
-                    logger.error("The method execution returned result code " + response);
-                    throw new StorageException("The method execution returned result code " + response);
+                    logger.info("Path " + PathHelper.getDirName(path) + " not found in FTP remote peer of "
+                            + getRemoteUrl());
+                    throw new ItemNotFoundException("Path " + PathHelper.getDirName(path)
+                            + " not found in FTP remote peer of " + getRemoteUrl());
                 }
-            } catch (MalformedURLException ex) {
-                logger.error("The path " + path + " is malformed!", ex);
-                throw new StorageException("The method execution got MalformedURLException!", ex);
+            } catch (IOException ex) {
+                throw new StorageException("Cannot execute FTP operation on remote peer.", ex);
             }
         } finally {
-            method.releaseConnection();
+            try {
+                if (client.isConnected()) {
+                    client.disconnect();
+                }
+            } catch (IOException ex) {
+                logger.warn("Could not disconnect FTPClient", ex);
+            }
         }
     }
 
     public ProxiedItem retrieveItem(String path) throws ItemNotFoundException, StorageException {
         String originatingUrlString = getAbsoluteUrl(path);
-        GetMethod get = new GetMethod(originatingUrlString);
+        FTPClient client = null;
         try {
+            client = getFTPClient();
             try {
-                int response = executeMethod(get);
-                if (response == HttpStatus.SC_OK) {
-                    logger.info("Item " + path + " fetched from remote peer of " + getRemoteUrl());
-                    logger.debug("Constructing ProxiedItemProperties");
-                    ProxiedItemProperties properties = constructItemPropertiesFromGetResponse(path,
-                            originatingUrlString, get);
-
-                    logger.debug("Constructing ProxiedItem");
-                    ProxiedItem result = new ProxiedItem();
-                    if (properties.isFile()) {
-                        // TODO: Solve this in a better way
-                        File tmpFile = File.createTempFile(PathHelper.getFileName(path), null);
-                        FileOutputStream fos = new FileOutputStream(tmpFile);
-                        int bytes = IOUtils.copy(get.getResponseBodyAsStream(), fos);
-                        fos.flush();
-                        fos.close();
-                        properties.setSize(bytes); // set the actual size in
-                        // bytes we received
-                        InputStream is = new FileInputStream(tmpFile);
-                        result.setStream(is);
+                if (client.changeWorkingDirectory(PathHelper.getDirName(path))) {
+                    FTPFile[] fileList = client.listFiles(PathHelper.getFileName(path));
+                    if (fileList.length == 1) {
+                        FTPFile ftpFile = fileList[0];
+                        ProxiedItemProperties properties = constructItemPropertiesFromGetResponse(path,
+                                originatingUrlString, ftpFile);
+                        ProxiedItem result = new ProxiedItem();
+                        if (properties.isFile()) {
+                            // TODO: Solve this in a better way
+                            File tmpFile = File.createTempFile(PathHelper.getFileName(path), null);
+                            FileOutputStream fos = new FileOutputStream(tmpFile);
+                            client.retrieveFile(PathHelper.getFileName(path), fos);
+                            fos.flush();
+                            fos.close();
+                            InputStream is = new FileInputStream(tmpFile);
+                            result.setStream(is);
+                        } else {
+                            result.setStream(null);
+                        }
+                        result.setProperties(properties);
+                        return result;
                     } else {
-                        result.setStream(null);
+                        logger.info("Item " + path + " not found in FTP remote peer of " + getRemoteUrl());
+                        throw new ItemNotFoundException("Item " + path + " not found in FTP remote peer of "
+                                + getRemoteUrl());
                     }
-                    result.setProperties(properties);
-                    return result;
                 } else {
-                    if (response == HttpStatus.SC_NOT_FOUND) {
-                        logger.error("The path " + path + " is not found on " + getRemoteUrl() + "!");
-                        throw new ItemNotFoundException(path);
-                    } else {
-                        logger.error("The method execution returned result code " + response);
-                        throw new StorageException("The method execution returned result code " + response);
-                    }
+                    logger.info("Path " + PathHelper.getDirName(path) + " not found in FTP remote peer of "
+                            + getRemoteUrl());
+                    throw new ItemNotFoundException("Path " + PathHelper.getDirName(path)
+                            + " not found in FTP remote peer of " + getRemoteUrl());
                 }
-            } catch (MalformedURLException ex) {
-                logger.error("The path " + path + " is malformed!", ex);
-                throw new StorageException("The path " + path + " is malformed!", ex);
             } catch (IOException ex) {
-                logger.error("IO Error during response stream handling!", ex);
-                throw new StorageException("IO Error during response stream handling!", ex);
+                throw new StorageException("Cannot execute FTP operation on remote peer.", ex);
             }
         } finally {
-            get.releaseConnection();
-        }
-    }
-
-    public HttpClient getHttpClient() {
-        if (httpClient == null) {
-            logger.info("Creating CommonsHttpClient instance");
-            httpRetryHandler = new DefaultHttpMethodRetryHandler(retrievalRetryCount, false);
-            httpClient = new HttpClient(new MultiThreadedHttpConnectionManager());
-            httpClient.getParams().setConnectionManagerTimeout(getConnectionTimeout());
-            if (getProxyHost() != null) {
-                logger.info("... proxy setup with host " + getProxyHost() + ", port " + getProxyPort());
-                httpClient.getHostConfiguration().setProxy(getProxyHost(), getProxyPort());
-                
-                if (getProxyUsername() != null) {
-
-                    if (getProxyNtlmDomain() != null) {
-                        logger.info("... proxy authentication setup for NTLM domain " + getProxyNtlmDomain()
-                                + " with username " + getProxyUsername());
-                        httpClient.getState().setProxyCredentials(
-                                new AuthScope(getProxyHost(), getProxyPort()),
-                                new NTCredentials(getProxyUsername(), getProxyPassword(), getProxyNtlmHost(),
-                                        getProxyNtlmDomain()));
-                    } else {
-                        logger.info("... proxy authentication setup for http proxy " + getProxyHost()
-                                + " with username " + getProxyUsername());
-                        httpClient.getState().setProxyCredentials(new AuthScope(getProxyHost(), getProxyPort()),
-                                new UsernamePasswordCredentials(getProxyUsername(), getProxyPassword()));
-
-                    }
-                }
-
-            }
-        }
-        return httpClient;
-    }
-
-    protected int executeMethod(HttpMethod method) {
-        method.setFollowRedirects(isFollowRedirection());
-        method.getParams().setParameter(HttpMethodParams.RETRY_HANDLER, httpRetryHandler);
-        method.setQueryString(getQueryString());
-        int resultCode = 0;
-        try {
-            logger.debug("Executing " + method + " on URI " + method.getURI());
-            resultCode = getHttpClient().executeMethod(method);
-        } catch (HttpException ex) {
-            logger.error("Protocol error while executing " + method.getName() + " method with query string "
-                    + method.getQueryString(), ex);
-        } catch (IOException ex) {
-            logger.error("Tranport error while executing " + method.getName() + " method with query string "
-                    + method.getQueryString(), ex);
-        }
-        logger.debug("Received response code [" + resultCode + "] for executing [" + method.getName()
-                + "] method with path [" + method.getPath() + "]");
-        return resultCode;
-    }
-
-    protected Date makeDateFromString(String date) {
-        Date result = null;
-        if (date != null) {
             try {
-                result = DateUtil.parseDate(date);
-            } catch (DateParseException ex) {
-                logger.warn("Could not parse date " + date + ", using NOW");
-                result = new Date();
+                if (client.isConnected()) {
+                    client.disconnect();
+                }
+            } catch (IOException ex) {
+                logger.warn("Could not disconnect FTPClient", ex);
             }
-        } else {
-            result = new Date();
         }
-        return result;
+    }
+
+    public FTPClient getFTPClient() {
+        try {
+            logger.info("Creating CommonsNetFTPClient instance");
+            FTPClient ftpc = new FTPClient();
+            ftpc.configure(ftpClientConfig);
+            ftpc.connect(getRemoteUrlAsUrl().getHost());
+            ftpc.login(getFtpUsername(), getFtpPassword());
+            ftpc.setFileType(FTPClient.BINARY_FILE_TYPE);
+            return ftpc;
+        } catch (SocketException ex) {
+            throw new StorageException("Got SocketException while creating FTPClient", ex);
+        } catch (IOException ex) {
+            throw new StorageException("Got IOException while creating FTPClient", ex);
+        }
     }
 
     protected ProxiedItemProperties constructItemPropertiesFromGetResponse(String path, String originatingUrlString,
-            HttpMethod executedMethod) throws MalformedURLException {
-        Header locationHeader = executedMethod.getResponseHeader("location");
-        Header contentLength = executedMethod.getRequestHeader("content-length");
-        Header lastModifiedHeader = executedMethod.getResponseHeader("last-modified");
-        if (locationHeader != null) {
-            // we may had redirection
-            logger.debug("We got location header " + locationHeader.getValue());
-            originatingUrlString = locationHeader.getValue();
-        }
+            FTPFile remoteFile) throws MalformedURLException {
         URL originatingUrl = new URL(originatingUrlString);
-
         ProxiedItemProperties result = new ProxiedItemProperties();
         result.setAbsolutePath(PathHelper.changePathLevel(path, PathHelper.PATH_PARENT));
-
-        // TODO: ibiblio behaves like this, check for others
-        result.setDirectory(lastModifiedHeader == null);
-        result.setFile(lastModifiedHeader != null);
-
-        if (lastModifiedHeader != null) {
-            result.setLastModified(makeDateFromString(lastModifiedHeader.getValue()));
-        } else {
-            // get system time
-            result.setLastModified(new Date());
-        }
+        result.setDirectory(remoteFile.isDirectory());
+        result.setFile(remoteFile.isFile());
+        result.setLastModified(remoteFile.getTimestamp().getTime());
         result.setName(PathHelper.getFileName(originatingUrl.getPath()));
         if (result.isFile()) {
-            if (contentLength != null) {
-                result.setSize(Long.parseLong(contentLength.getValue()));
-            }
-            // result.setSize(((GetMethod)
-            // executedMethod).getResponseContentLength());
+            result.setSize(remoteFile.getSize());
         } else {
             result.setSize(0);
         }
