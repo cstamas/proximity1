@@ -26,8 +26,8 @@
   <dependencies>
 
     <dependency>
-      <groupId>commons-logging</groupId>
-      <artifactId>commons-logging</artifactId>
+      <groupId>commons-logging-api</groupId>
+      <artifactId>commons-logging-api</artifactId>
       <version>1.0.4</version>
       <type>jar</type>
       <scope>compile</scope>
@@ -43,6 +43,13 @@
       <groupId>commons-httpclient</groupId>
       <artifactId>commons-httpclient</artifactId>
       <version>3.0.1</version>
+      <type>jar</type>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>commons-net</groupId>
+      <artifactId>commons-net</artifactId>
+      <version>1.4.1</version>
       <type>jar</type>
       <scope>compile</scope>
     </dependency>
