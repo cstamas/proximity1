@@ -141,7 +141,7 @@
 	</bean>
 
 	<bean id="centralRemotePeer"
-		class="hu.ismicro.commons.proximity.base.remote.HttpClientRemotePeer">
+		class="hu.ismicro.commons.proximity.base.remote.CommonsHttpClientRemotePeer">
 		<property name="remoteUrl"
 			value="http://repo1.maven.org/maven2/" />
 		<property name="connectionTimeout" value="10000" />
@@ -177,7 +177,7 @@
 	</bean>
 
 	<bean id="ibiblioRemotePeer"
-		class="hu.ismicro.commons.proximity.base.remote.HttpClientRemotePeer">
+		class="hu.ismicro.commons.proximity.base.remote.CommonsHttpClientRemotePeer">
 		<property name="remoteUrl"
 			value="http://www.ibiblio.org/maven2/" />
 		<property name="connectionTimeout" value="10000" />
@@ -214,7 +214,7 @@
 	</bean>
 
 	<bean id="codehausRemotePeer"
-		class="hu.ismicro.commons.proximity.base.remote.HttpClientRemotePeer">
+		class="hu.ismicro.commons.proximity.base.remote.CommonsHttpClientRemotePeer">
 		<property name="remoteUrl" value="http://dist.codehaus.org/" />
 		<property name="connectionTimeout" value="10000" />
 		<property name="queryString" value="" />

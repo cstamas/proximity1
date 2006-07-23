@@ -42,7 +42,7 @@ import org.apache.commons.io.IOUtils;
  * @author cstamas
  * 
  */
-public class HttpClientRemotePeer extends AbstractRemoteStorage {
+public class CommonsHttpClientRemotePeer extends AbstractRemoteStorage {
 
     // TODO: ready for refactoring
 
