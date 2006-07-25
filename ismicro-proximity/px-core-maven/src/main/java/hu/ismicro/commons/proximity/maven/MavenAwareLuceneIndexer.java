@@ -67,11 +67,15 @@ public class MavenAwareLuceneIndexer extends LuceneIndexer {
                         doc.add(Field.Text(POM_URL_KEY, pom.getUrl()));
                     }
 
-                    
+
                 } catch (XmlPullParserException ex) {
                     logger.warn("Got XmlPullParserException during reading POM, content will not be indexed on " + ip.getPath(), ex);
                 } catch (IOException ex) {
                     logger.error("Got IOException during reading POM, content will not be indexed on " + ip.getPath(), ex);
+                } finally {
+                    try {
+                        item.getStream().close();
+                    } catch (Exception e) { /* Ignore it */ }
                 }
             }
 

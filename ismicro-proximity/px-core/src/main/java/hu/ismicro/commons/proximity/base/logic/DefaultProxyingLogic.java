@@ -57,13 +57,16 @@ public class DefaultProxyingLogic implements RepositoryLogic {
 	public boolean shouldStoreLocallyAfterRemoteRetrieval(ProxiedItem localItem, ProxiedItem remoteItem) {
 		return true;
 	}
-    
+
 
     /**
      * Always give the best what we have.
      */
     public ProxiedItem afterRetrieval(ProxiedItem localItem, ProxiedItem remoteItem) {
         if (remoteItem != null) {
+            if (localItem != null) {
+                localItem.close();
+            }
             return remoteItem;
         };
         if (localItem != null) {

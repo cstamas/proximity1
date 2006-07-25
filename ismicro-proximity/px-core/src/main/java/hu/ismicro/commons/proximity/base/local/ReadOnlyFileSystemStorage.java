@@ -239,7 +239,9 @@ public class ReadOnlyFileSystemStorage extends AbstractStorage {
             File target = new File(new File(getMetadataBaseDir(), iProps.getAbsolutePath()), iProps.getName());
             if (target.exists() && target.isFile()) {
                 Properties metadata = new Properties();
-                metadata.load(new FileInputStream(target));
+                FileInputStream fis = new FileInputStream(target);
+                metadata.load(fis);
+                fis.close();
                 for (Enumeration i = metadata.propertyNames(); i.hasMoreElements();) {
                     String key = (String) i.nextElement();
                     String value = metadata.getProperty(key);

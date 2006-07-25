@@ -167,7 +167,16 @@ public class RepositoryImpl implements Repository {
             throw new RepositoryNotAvailableException("The repository " + getId() + " is NOT available!");
         }
         accessManager.decide(request, null);
-        return (ProxiedItemProperties) retrieveItem(true, request).getProperties();
+        ProxiedItem item = null;
+        try {
+            logger.info("Getting item");
+            item = retrieveItem(true, request);
+            return (ProxiedItemProperties) item.getProperties();
+        } finally {
+            if (item != null) {
+                item.close();
+            }
+        }
     }
 
     public ProxiedItem retrieveItem(ProximityRequest request) throws RepositoryNotAvailableException, ItemNotFoundException, StorageException,
