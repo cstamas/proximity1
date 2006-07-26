@@ -28,7 +28,7 @@
 
 	<issueManagement>
 		<system>Trac</system>
-		<url>https://is-micro.myip.hu/trac/ismicro-proximity/</url>
+		<url>http://trac.abstracthorizon.org/proximity</url>
 	</issueManagement>
 
 	<ciManagement>
@@ -37,7 +37,7 @@
 		<notifiers>
 			<notifier>
 				<configuration>
-					<address>ismicro-commons@is-micro.myip.hu</address>
+					<address>proximity@abstracthorizon.org</address>
 				</configuration>
 			</notifier>
 		</notifiers>
@@ -49,13 +49,11 @@
 	<!-- any mailing lists for the project -->
 	<mailingLists>
 		<mailingList>
-			<name>ISmicro Commons Project</name>
-			<subscribe>ismicro-commons@is-micro.myip.hu</subscribe>
+			<name>Proximity Project</name>
+			<subscribe></subscribe>
 			<unsubscribe></unsubscribe>
-			<post>ismicro-commons@is-micro.myip.hu</post>
-			<archive>
-				http://mail.is-micro.hu/pipermail/ismicro-commons/
-			</archive>
+			<post>proximity@abstracthorizon.org</post>
+			<archive></archive>
 		</mailingList>
 	</mailingLists>
 
@@ -65,11 +63,21 @@
 			<id>cstamas</id>
 			<name>CSERVENAK, Tamas</name>
 			<email>t.cservenak@gmail.com</email>
-			<organization>ISmicro Ltd</organization>
+			<organization>Abstract Horizon</organization>
 			<roles>
 				<role>Lead Developer</role>
 			</roles>
 			<timezone>2</timezone>
+		</developer>
+		<developer>
+			<id>click</id>
+			<name>SENDULA, Daniel</name>
+			<email>xxxx@gmail.com</email>
+			<organization>Abstract Horizon</organization>
+			<roles>
+				<role>Developer</role>
+			</roles>
+			<timezone>0</timezone>
 		</developer>
 	</developers>
 
@@ -97,15 +105,9 @@
 
 	<!-- SCM -->
 	<scm>
-		<connection>
-			scm:svn:https://is-micro.myip.hu/svn/ismicro-commons/trunk/ismicro-proximity/
-		</connection>
-		<developerConnection>
-			scm:svn:https://is-micro.myip.hu/svn/ismicro-commons/trunk/ismicro-proximity/
-		</developerConnection>
-		<url>
-			https://is-micro.myip.hu/trac/ismicro-commons/browser/trunk/ismicro-proximity
-		</url>
+		<connection>scm:svn:http://svn.abstracthorizon.org/proximity/</connection>
+		<developerConnection>scm:svn:https://svn.abstracthorizon.org/proximity/</developerConnection>
+		<url>http://trac.abstracthorizon.org/proximity/browser/trunk/</url>
 	</scm>
 
 	<!-- details about the organization that 'owns' the project -->
@@ -131,9 +133,7 @@
 				<plugin>
 					<artifactId>maven-release-plugin</artifactId>
 					<configuration>
-						<tagBase>
-							https://is-micro.myip.hu.org/svn/ismicro-commons/tags
-						</tagBase>
+						<tagBase>https://svn.abstracthorizon.org/proximity/tags/</tagBase>
 					</configuration>
 				</plugin>
 			</plugins>
@@ -148,22 +148,18 @@
 
 	<distributionManagement>
 		<repository>
-			<id>ismicro</id>
-			<name>ISmicro Central Repository</name>
-			<url>
-				scp://file.is-micro.hu/srv/jds2/home/ismicro-commons/deploy/proximity
-			</url>
+			<id>abstracthorizon</id>
+			<name>Abstract Horizon Central Repository</name>
+			<url>scp://213.232.95.19/srv/abstracthorizon.org/html/repository</url>
 		</repository>
 		<snapshotRepository>
-			<id>ismicro</id>
-			<name>ISmicro Central Development Repository</name>
-			<url>
-				scp://file.is-micro.hu/srv/jds2/home/ismicro-commons/deploy/proximity
-			</url>
+			<id>abstracthorizon-snapshot</id>
+			<name>Abstract Horizon Central Development Repository</name>
+			<url>scp://213.232.95.19/srv/abstracthorizon.org/html/repository</url>
 		</snapshotRepository>
 		<site>
 			<id>abstracthorizon.org</id>
-			<url>ftp://ftp.abstracthorizon.org/proximity</url>
+			<url>scp://213.232.95.19/srv/abstracthorizon.org/html/proximity</url>
 		</site>
 	</distributionManagement>
 
