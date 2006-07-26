@@ -17,22 +17,28 @@
 
     <links>
       <item name="Abstract Horizon" href="http://www.abstracthorizon.org/" />
-      <item name="Proximity WIKI" href="https://is-micro.myip.hu/trac/ismicro-proximity/" />
+      <item name="Proximity Wiki" href="http://trac.abstracthorizon.org/proximity/" />
+      <item name="Proximity Support Forum" href="http://forum.abstracthorizon.org/index.php?c=9" />
     </links>
 
     <menu ref="parent" />
 
     <menu name="About Proximity">
-      <item name="About" href="index.html"/>
+      <item name="About" href="about-proximity.html"/>
       <item name="Download" href="downloads.html"/>
+      <item name="Wiki" href="http://trac.abstracthorizon.org/proximity/" />
+      <item name="Support Forum" href="http://forum.abstracthorizon.org/index.php?c=9" />
     </menu>
 
-    <menu name="Guides">
+    <menu name="Reference">
       <item name="Quick Start" href="quick-start.html"/>
       <item name="Corporate Environments" href="corporate-environment.html"/>
       <item name="Proximity and HTTP Proxies" href="http-proxies.html"/>
       <item name="Repositories" href="repositories.html"/>
       <item name="Configuration Reference" href="configuration.html"/>
+    </menu>
+
+    <menu name="Developers">
       <item name="Developers guide" href="developers-guide.html"/>
     </menu>
 
