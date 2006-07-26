@@ -107,7 +107,7 @@
 	<scm>
 		<connection>scm:svn:http://svn.abstracthorizon.org/proximity/</connection>
 		<developerConnection>scm:svn:https://svn.abstracthorizon.org/proximity/</developerConnection>
-		<url>http://trac.abstracthorizon.org/proximity/browser/trunk/</url>
+		<url>http://trac.abstracthorizon.org/proximity/browser/trunk/ismicro-proximity/</url>
 	</scm>
 
 	<!-- details about the organization that 'owns' the project -->
