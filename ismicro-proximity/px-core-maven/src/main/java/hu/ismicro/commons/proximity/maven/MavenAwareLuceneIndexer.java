@@ -1,6 +1,7 @@
 package hu.ismicro.commons.proximity.maven;
 
 import hu.ismicro.commons.proximity.Item;
+import hu.ismicro.commons.proximity.ItemNotFoundException;
 import hu.ismicro.commons.proximity.ItemProperties;
 import hu.ismicro.commons.proximity.base.indexer.LuceneIndexer;
 
@@ -47,37 +48,39 @@ public class MavenAwareLuceneIndexer extends LuceneIndexer {
         if (MavenArtifactRecognizer.isPom(ip.getName())) {
             doc.add(Field.Keyword(KIND_KEY, KIND_POM));
 
-            Item item = retrieveItemFromStorages(ip.getPath());
-            if (item != null) {
+            Item item = null;
+            try {
+
+                item = retrieveItemFromStorages(ip.getPath());
+
+                MavenXpp3Reader reader = new MavenXpp3Reader();
+                InputStreamReader ir = new InputStreamReader(item.getStream());
+                Model pom = reader.read(ir);
+
+                if (pom.getGroupId() != null) {
+                    doc.add(Field.Keyword(POM_GID_KEY, pom.getGroupId()));
+                }
+                if (pom.getArtifactId() != null) {
+                    doc.add(Field.Keyword(POM_AID_KEY, pom.getArtifactId()));
+                }
+                if (pom.getPackaging() != null) {
+                    doc.add(Field.Keyword(POM_PCK_KEY, pom.getPackaging()));
+                }
+                if (pom.getUrl() != null) {
+                    doc.add(Field.Text(POM_URL_KEY, pom.getUrl()));
+                }
+
+            } catch (ItemNotFoundException ex) {
+                logger.warn("Could not retrieve " + ip.getPath(), ex);
+            } catch (XmlPullParserException ex) {
+                logger.warn("Got XmlPullParserException during reading POM, content will not be indexed on "
+                        + ip.getPath(), ex);
+            } catch (IOException ex) {
+                logger.error("Got IOException during reading POM, content will not be indexed on " + ip.getPath(), ex);
+            } finally {
                 try {
-                    MavenXpp3Reader reader = new MavenXpp3Reader();
-                    InputStreamReader ir = new InputStreamReader(item.getStream());
-                    Model pom = reader.read(ir);
-
-                    if (pom.getGroupId() != null) {
-                        doc.add(Field.Keyword(POM_GID_KEY, pom.getGroupId()));
-                    }
-                    if (pom.getArtifactId() != null) {
-                        doc.add(Field.Keyword(POM_AID_KEY, pom.getArtifactId()));
-                    }
-                    if (pom.getPackaging() != null) {
-                        doc.add(Field.Keyword(POM_PCK_KEY, pom.getPackaging()));
-                    }
-                    if (pom.getUrl() != null) {
-                        doc.add(Field.Text(POM_URL_KEY, pom.getUrl()));
-                    }
-
-                } catch (XmlPullParserException ex) {
-                    logger.warn("Got XmlPullParserException during reading POM, content will not be indexed on "
-                            + ip.getPath(), ex);
-                } catch (IOException ex) {
-                    logger.error("Got IOException during reading POM, content will not be indexed on " + ip.getPath(),
-                            ex);
-                } finally {
-                    try {
-                        item.getStream().close();
-                    } catch (Exception e) { /* Ignore it */
-                    }
+                    item.getStream().close();
+                } catch (Exception e) { /* Ignore it */
                 }
             }
 
