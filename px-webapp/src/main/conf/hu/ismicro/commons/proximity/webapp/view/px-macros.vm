@@ -1,9 +1,9 @@
 #macro( mavenItem $item )
     #if( $item.getName().indexOf("SNAPSHOT") > -1  )
 		<img src="#springUrl('/images/maven-snapshot.png')" alt="Maven 1/2 snapshot"/>&nbsp;
-    #elseif( $item.getName().endsWith(".pom") )
+    #elseif( $item.getName().indexOf(".pom") > -1 )
 		<img src="#springUrl('/images/maven2-pom.png')" alt="Maven2 POM"/>&nbsp;
-    #elseif( $item.getName().startsWith("maven-metadata.xml") || $item.getName().endsWith(".sha1") || $item.getName().endsWith(".md5") )
+    #elseif( $item.getName().startsWith("maven-metadata.xml") )
 		<img src="#springUrl('/images/maven2-metadata.png')" alt="Maven2 metadata"/>&nbsp;
     #else
 		<img src="#springUrl('/images/artifact.png')" alt="Artifact"/>&nbsp;
@@ -16,4 +16,17 @@
 	#else
 	    #mavenItem($item)
 	#end
+#end
+
+#macro( itemLink $item )
+
+    <a href="#springUrl('/repository')${item.path}?repositoryId=${item.repositoryId}" onmouseover="return escape(
+    '<b>Complete property list:</b>'+
+    '<ul>'+
+	#foreach( $key in $item.getAllMetadata().keySet() )
+		'<li>$key = $item.getAllMetadata().get($key)</li>'+
+	#end
+	'</ul>'
+    )">${item.name}</a>
+   
 #end

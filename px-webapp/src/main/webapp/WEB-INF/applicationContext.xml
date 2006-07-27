@@ -190,6 +190,7 @@
 	<bean id="central"
 		class="hu.ismicro.commons.proximity.base.RepositoryImpl">
 		<property name="id" value="central" />
+		<property name="groupId" value="public" />
 		<property name="localStorage" ref="centralFSStorage" />
 		<property name="remoteStorage" ref="centralRemotePeer" />
 		<property name="indexer" ref="indexer" />
@@ -270,6 +271,7 @@
 	<bean id="ibiblio"
 		class="hu.ismicro.commons.proximity.base.RepositoryImpl">
 		<property name="id" value="ibiblio" />
+		<property name="groupId" value="public" />
 		<property name="localStorage" ref="ibiblioFSStorage" />
 		<property name="remoteStorage" ref="ibiblioRemotePeer" />
 		<property name="indexer" ref="indexer" />
@@ -332,6 +334,7 @@
 	<bean id="codehaus"
 		class="hu.ismicro.commons.proximity.base.RepositoryImpl">
 		<property name="id" value="codehaus" />
+		<property name="groupId" value="public" />
 		<property name="localStorage" ref="codehausFSStorage" />
 		<property name="remoteStorage" ref="codehausRemotePeer" />
 		<property name="indexer" ref="indexer" />
@@ -391,6 +394,7 @@
 	<bean id="inhouse"
 		class="hu.ismicro.commons.proximity.base.RepositoryImpl">
 		<property name="id" value="inhouse" />
+		<property name="groupId" value="private" />
 		<property name="localStorage" ref="inhouseFSStorage" />
 		<property name="indexer" ref="indexer" />
 		<property name="statisticsGatherer" ref="stats" />
@@ -424,6 +428,7 @@
 	<bean id="extNonFree"
 		class="hu.ismicro.commons.proximity.base.RepositoryImpl">
 		<property name="id" value="extNonFree" />
+		<property name="groupId" value="private" />
 		<property name="localStorage" ref="extNonFreeFSStorage" />
 		<property name="indexer" ref="indexer" />
 		<property name="statisticsGatherer" ref="stats" />
@@ -457,6 +462,7 @@
 	<bean id="extFree"
 		class="hu.ismicro.commons.proximity.base.RepositoryImpl">
 		<property name="id" value="extFree" />
+		<property name="groupId" value="private" />
 		<property name="localStorage" ref="extFreeFSStorage" />
 		<property name="indexer" ref="indexer" />
 		<property name="statisticsGatherer" ref="stats" />
