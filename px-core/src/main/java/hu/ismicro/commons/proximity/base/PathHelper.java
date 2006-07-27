@@ -54,9 +54,7 @@ public class PathHelper {
                 if (explodedPath[i].length() > 0) {
                     if (PATH_PARENT.equals(explodedPath[i])) {
                         stack.pop();
-                    } else if (PATH_SELF.equals(explodedPath[i])) {
-                        // noop
-                    } else {
+                    } else if (!PATH_SELF.equals(explodedPath[i])) {
                         stack.push(explodedPath[i]);
                     }
                 }
