@@ -27,6 +27,8 @@ public interface ItemProperties {
 
     public static final String METADATA_OWNING_REPOSITORY = "repository.id";
 
+    public static final String METADATA_OWNING_REPOSITORY_GROUP = "repository.groupId";
+
     /**
      * Returns the absolute path of the item. Using this path appended with
      * getName() will fetch the Item represented by this properties.
@@ -79,11 +81,18 @@ public interface ItemProperties {
     Date getLastModified();
 
     /**
-     * Returns the name of the source repository.
+     * Returns the id of the source repository.
      * 
      * @return
      */
     String getRepositoryId();
+
+    /**
+     * Returns the groupId of the source repository.
+     * 
+     * @return
+     */
+    String getRepositoryGroupId();
 
     /**
      * Returns the metadata value.

@@ -36,6 +36,7 @@ public abstract class AbstractIndexer implements Indexer {
         // set the default ItemProperties
         result.add(ItemProperties.METADATA_NAME);
         result.add(ItemProperties.METADATA_OWNING_REPOSITORY);
+        result.add(ItemProperties.METADATA_OWNING_REPOSITORY_GROUP);
         result.add(ItemProperties.METADATA_ABSOLUTE_PATH);
         result.add(ItemProperties.METADATA_FILESIZE);
         result.add(ItemProperties.METADATA_IS_DIRECTORY);

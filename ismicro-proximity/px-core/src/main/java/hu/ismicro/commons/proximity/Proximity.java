@@ -1,5 +1,7 @@
 package hu.ismicro.commons.proximity;
 
+import hu.ismicro.commons.proximity.base.ProximityLogic;
+
 import java.util.List;
 import java.util.Map;
 
@@ -17,6 +19,14 @@ public interface Proximity {
      * @return List of active repositories.
      */
     List getRepositories();
+
+    /**
+     * Sets the logic to drive proximity. The repository by default uses
+     * DefaultProximityLogic class unless overridden. May not be null.
+     * 
+     * @param logic
+     */
+    void setProximityLogic(ProximityLogic logic);
 
     /**
      * Fetches a given item properties on the supplied path.

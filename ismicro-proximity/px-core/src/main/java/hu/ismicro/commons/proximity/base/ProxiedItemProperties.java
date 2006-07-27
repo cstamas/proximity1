@@ -77,6 +77,14 @@ public class ProxiedItemProperties implements ItemProperties {
         setMetadata(METADATA_OWNING_REPOSITORY, id);
     }
 
+    public String getRepositoryGroupId() {
+        return getMetadata(METADATA_OWNING_REPOSITORY_GROUP);
+    }
+
+    public void setRepositoryGroupId(String id) {
+        setMetadata(METADATA_OWNING_REPOSITORY_GROUP, id);
+    }
+
     public String getMetadata(String key) {
         return (String) getMetadataMap().get(key);
     }

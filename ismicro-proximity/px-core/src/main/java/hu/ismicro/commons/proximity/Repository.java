@@ -26,12 +26,11 @@ public interface Repository {
     String getId();
 
     /**
-     * Returns the prefix that serves this repository or null if this repos is
-     * unfiltered.
+     * Returns the group ID of the repository.
      * 
      * @return
      */
-    String getUriPrefix();
+    String getGroupId();
 
     /**
      * Is Repository available? If no, it will reject all incoming requests.
