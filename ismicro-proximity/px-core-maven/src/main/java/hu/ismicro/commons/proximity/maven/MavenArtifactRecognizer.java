@@ -1,17 +1,54 @@
 package hu.ismicro.commons.proximity.maven;
 
+/**
+ * <p>
+ * Class that simply "recognizes" the item by its name.
+ * 
+ * <p>
+ * It works simply by substring matching like in case of POM: <tty>
+ * name.endsWith(".pom") || name.endsWith(".pom.sha1") || name.endsWith(".pom.md5")
+ * </tty>
+ * 
+ * <p>
+ * This is "ugly" but simple implementation.
+ * 
+ * @author cstamas
+ *
+ */
 public class MavenArtifactRecognizer {
 
+    /**
+     * Is this item M1/M2 POM?
+     * 
+     * @param name
+     *            the full name of item.
+     * @return true if it is M1/M2 POM, false otherwise.
+     */
     public static boolean isPom(String name) {
-        return name.endsWith(".pom");
+        return name.endsWith(".pom") || name.endsWith(".pom.sha1") || name.endsWith(".pom.md5");
     }
 
+    /**
+     * Is this item M1/M2 snapshot?
+     * 
+     * @param name
+     *            the full name of item.
+     * @return true if it is M1/M2 snapshot, false otherwise.
+     */
     public static boolean isSnapshot(String name) {
         return name.indexOf("SNAPSHOT") != -1;
     }
 
+    /**
+     * Is this item M2 metadata?
+     * 
+     * @param name
+     *            the full name of item.
+     * @return true if it is M2 metadata, false otherwise.
+     */
     public static boolean isMetadata(String name) {
-        return name.startsWith("maven-metadata.xml") || name.endsWith(".sha1") || name.endsWith(".md5");
+        return name.endsWith("maven-metadata.xml") || name.endsWith("maven-metadata.xml.sha1")
+                || name.endsWith("maven-metadata.xml.md5");
     }
 
 }
