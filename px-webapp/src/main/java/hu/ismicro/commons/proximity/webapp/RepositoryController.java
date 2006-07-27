@@ -44,11 +44,13 @@ public class RepositoryController extends MultiActionController {
         logger.info("Got repository request on URI " + requestURI);
         String orderBy = request.getParameter("orderBy") == null ? "name" : request.getParameter("orderBy");
         String targetRepository = request.getParameter("repositoryId");
+        String targetGroup = request.getParameter("groupId");
 
         ItemProperties itemProps = null;
         ProximityRequest pRequest = new ProximityRequest();
         pRequest.setPath(requestURI);
         pRequest.setTargetedReposId(targetRepository);
+        pRequest.setTargetedReposGroupId(targetGroup);
         pRequest.setGrantee(null);
         pRequest.getAttributes().put(ProximityRequest.REQUEST_REMOTE_ADDRESS, request.getRemoteAddr());
         try {
