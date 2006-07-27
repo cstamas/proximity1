@@ -92,10 +92,8 @@ public class WritableFileSystemStorage extends ReadOnlyFileSystemStorage {
     public void deleteItemProperties(String path) throws StorageException {
         logger.debug("Deleting " + path + " metadata in " + getMetadataBaseDir());
         File file = new File(getMetadataBaseDir(), path);
-        if (file.exists()) {
-            if (!file.delete()) {
-                throw new StorageException("Unable to delete file " + file.getPath());
-            }
+        if (file.exists() && !file.delete()) {
+            throw new StorageException("Unable to delete file " + file.getPath());
         }
     }
 
