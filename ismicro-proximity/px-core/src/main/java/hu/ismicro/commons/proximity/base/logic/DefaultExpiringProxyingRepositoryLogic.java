@@ -15,7 +15,7 @@ import java.util.Date;
  * @author cstamas
  * 
  */
-public class DefaultExpiringProxyingLogic extends DefaultProxyingLogic {
+public class DefaultExpiringProxyingRepositoryLogic extends DefaultProxyingRepositoryLogic {
     
     public static final long NO_EXPIRATION = -1000;
 
@@ -36,10 +36,10 @@ public class DefaultExpiringProxyingLogic extends DefaultProxyingLogic {
      * repository if needed.
      */
     public ProxiedItem afterLocalCopyFound(ProxiedItem item, Repository repository) {
-        if (item.getProperties().getMetadata(DefaultExpiringProxyingLogic.METADATA_EXPIRES) != null) {
+        if (item.getProperties().getMetadata(DefaultExpiringProxyingRepositoryLogic.METADATA_EXPIRES) != null) {
             logger.debug("Item has expiration, checking it.");
             Date expires = new Date(Long.parseLong(item.getProperties().getMetadata(
-                    DefaultExpiringProxyingLogic.METADATA_EXPIRES)));
+                    DefaultExpiringProxyingRepositoryLogic.METADATA_EXPIRES)));
             if (expires.before(new Date(System.currentTimeMillis()))) {
                 logger.info("Item has expired on " + expires + ", DELETING it.");
                 try {
@@ -61,7 +61,7 @@ public class DefaultExpiringProxyingLogic extends DefaultProxyingLogic {
         if (itemExpirationPeriod != NO_EXPIRATION) {
             Date expires = new Date(System.currentTimeMillis() + itemExpirationPeriod);
             logger.info("Setting expires on item  to " + expires.toString());
-            remoteItem.getProperties().setMetadata(DefaultExpiringProxyingLogic.METADATA_EXPIRES,
+            remoteItem.getProperties().setMetadata(DefaultExpiringProxyingRepositoryLogic.METADATA_EXPIRES,
                     Long.toString(expires.getTime()));
         }
         return remoteItem;

@@ -9,7 +9,7 @@ import hu.ismicro.commons.proximity.Repository;
 import hu.ismicro.commons.proximity.RepositoryNotAvailableException;
 import hu.ismicro.commons.proximity.access.AccessManager;
 import hu.ismicro.commons.proximity.access.OpenAccessManager;
-import hu.ismicro.commons.proximity.base.logic.DefaultProxyingLogic;
+import hu.ismicro.commons.proximity.base.logic.DefaultProxyingRepositoryLogic;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -49,7 +49,7 @@ public class RepositoryImpl implements Repository {
 
     private StatisticsGatherer statisticsGatherer;
 
-    private RepositoryLogic repositoryLogic = new DefaultProxyingLogic();
+    private RepositoryLogic repositoryLogic = new DefaultProxyingRepositoryLogic();
 
     public StatisticsGatherer getStatisticsGatherer() {
         return statisticsGatherer;
