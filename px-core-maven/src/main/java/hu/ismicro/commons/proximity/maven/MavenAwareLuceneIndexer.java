@@ -41,7 +41,7 @@ public class MavenAwareLuceneIndexer extends LuceneIndexer {
         result.add(POM_URL_KEY);
         return result;
     }
-    
+
     protected Document postProcessDocument(ItemProperties ip, Document doc) {
         // if we have "meat" we should do our job
         if (MavenArtifactRecognizer.isPom(ip.getName())) {
@@ -53,7 +53,7 @@ public class MavenAwareLuceneIndexer extends LuceneIndexer {
                     MavenXpp3Reader reader = new MavenXpp3Reader();
                     InputStreamReader ir = new InputStreamReader(item.getStream());
                     Model pom = reader.read(ir);
-                    
+
                     if (pom.getGroupId() != null) {
                         doc.add(Field.Keyword(POM_GID_KEY, pom.getGroupId()));
                     }
@@ -67,15 +67,17 @@ public class MavenAwareLuceneIndexer extends LuceneIndexer {
                         doc.add(Field.Text(POM_URL_KEY, pom.getUrl()));
                     }
 
-
                 } catch (XmlPullParserException ex) {
-                    logger.warn("Got XmlPullParserException during reading POM, content will not be indexed on " + ip.getPath(), ex);
+                    logger.warn("Got XmlPullParserException during reading POM, content will not be indexed on "
+                            + ip.getPath(), ex);
                 } catch (IOException ex) {
-                    logger.error("Got IOException during reading POM, content will not be indexed on " + ip.getPath(), ex);
+                    logger.error("Got IOException during reading POM, content will not be indexed on " + ip.getPath(),
+                            ex);
                 } finally {
                     try {
                         item.getStream().close();
-                    } catch (Exception e) { /* Ignore it */ }
+                    } catch (Exception e) { /* Ignore it */
+                    }
                 }
             }
 

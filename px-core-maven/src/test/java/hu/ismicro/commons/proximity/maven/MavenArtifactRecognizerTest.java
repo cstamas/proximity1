@@ -4,7 +4,7 @@ import junit.framework.Assert;
 import junit.framework.TestCase;
 
 public class MavenArtifactRecognizerTest extends TestCase {
-    
+
     public void testIsPom() {
         Assert.assertEquals(true, MavenArtifactRecognizer.isPom("aaa.pom"));
         Assert.assertEquals(true, MavenArtifactRecognizer.isPom("zxc-1-2-3.pom"));

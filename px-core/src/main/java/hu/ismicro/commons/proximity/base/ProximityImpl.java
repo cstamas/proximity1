@@ -140,7 +140,8 @@ public class ProximityImpl implements Proximity {
                 } catch (RepositoryNotAvailableException ex) {
                     logger.info("Repository unavailable", ex);
                 } catch (ItemNotFoundException ex) {
-                    logger.info("ItemProperties " + request.getPath() + " not found in targeted repository " + repo.getId());
+                    logger.info("ItemProperties " + request.getPath() + " not found in targeted repository "
+                            + repo.getId());
                     throw ex;
                 }
             }
@@ -246,7 +247,7 @@ public class ProximityImpl implements Proximity {
             return new ArrayList();
         }
     }
-    
+
     public List searchItem(String query) throws IndexerException {
         logger.debug("Got searchItem with query " + query);
         if (getIndexer() != null) {

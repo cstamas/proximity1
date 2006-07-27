@@ -242,7 +242,7 @@ public class CommonsHttpClientRemotePeer extends AbstractRemoteStorage {
             if (getProxyHost() != null) {
                 logger.info("... proxy setup with host " + getProxyHost() + ", port " + getProxyPort());
                 httpClient.getHostConfiguration().setProxy(getProxyHost(), getProxyPort());
-                
+
                 if (getProxyUsername() != null) {
 
                     if (getProxyNtlmDomain() != null) {

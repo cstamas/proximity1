@@ -3,9 +3,9 @@ package hu.ismicro.commons.proximity.webapp.view;
 import junit.framework.TestCase;
 
 public class FormatFileSizeTest extends TestCase {
-    
+
     private FormatFileSize ffs = new FormatFileSize();
-    
+
     public void testSimple() {
         System.out.println("1=" + ffs.getFileSizeAsString("1"));
         System.out.println("1a=" + ffs.getFileSizeAsString("1a"));

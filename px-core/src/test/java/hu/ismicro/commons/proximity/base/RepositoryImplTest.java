@@ -4,9 +4,9 @@ import junit.framework.Assert;
 import junit.framework.TestCase;
 
 public class RepositoryImplTest extends TestCase {
-    
+
     private RepositoryImpl repo = new RepositoryImpl();
-    
+
     public void testPrefixRemoval() {
         repo.setUriPrefix("/someprefix");
         Assert.assertEquals("/test", repo.removePathPrefix("/someprefix/test"));

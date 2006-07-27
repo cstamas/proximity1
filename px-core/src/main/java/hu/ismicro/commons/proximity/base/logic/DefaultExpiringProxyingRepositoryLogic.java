@@ -16,7 +16,7 @@ import java.util.Date;
  * 
  */
 public class DefaultExpiringProxyingRepositoryLogic extends DefaultProxyingRepositoryLogic {
-    
+
     public static final long NO_EXPIRATION = -1000;
 
     public static final String METADATA_EXPIRES = "item.expires";
