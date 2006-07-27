@@ -109,6 +109,12 @@ table {
      font-style: normal;
 }
 
+hr {
+	 color: #FFCC99;
+     background-color: #FFCC99;
+     width: 100%;
+     height: 5px;
+}
 .tda td {
      padding: 4px;
      background: #FFFFCC;
