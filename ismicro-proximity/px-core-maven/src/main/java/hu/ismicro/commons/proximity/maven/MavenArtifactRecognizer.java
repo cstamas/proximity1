@@ -24,6 +24,17 @@ public class MavenArtifactRecognizer {
      *            the full name of item.
      * @return true if it is M1/M2 POM, false otherwise.
      */
+    public static boolean isChecksum(String name) {
+        return name.endsWith(".sha1") || name.endsWith(".md5");
+    }
+
+    /**
+     * Is this item M1/M2 POM?
+     * 
+     * @param name
+     *            the full name of item.
+     * @return true if it is M1/M2 POM, false otherwise.
+     */
     public static boolean isPom(String name) {
         return name.endsWith(".pom") || name.endsWith(".pom.sha1") || name.endsWith(".pom.md5");
     }

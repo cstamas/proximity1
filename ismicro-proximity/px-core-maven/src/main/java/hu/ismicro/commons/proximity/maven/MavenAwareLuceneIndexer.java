@@ -45,7 +45,7 @@ public class MavenAwareLuceneIndexer extends LuceneIndexer {
 
     protected Document postProcessDocument(ItemProperties ip, Document doc) {
         // if we have "meat" we should do our job
-        if (MavenArtifactRecognizer.isPom(ip.getName())) {
+        if (MavenArtifactRecognizer.isPom(ip.getName()) && !MavenArtifactRecognizer.isChecksum(ip.getName())) {
             doc.add(Field.Keyword(KIND_KEY, KIND_POM));
 
             Item item = null;
