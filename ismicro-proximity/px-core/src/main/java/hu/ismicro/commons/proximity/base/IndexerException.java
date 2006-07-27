@@ -9,7 +9,7 @@ public class IndexerException extends ProximityException {
     public IndexerException(String msg) {
         super(msg);
     }
-    
+
     public IndexerException(String msg, Throwable thr) {
         super(msg, thr);
     }

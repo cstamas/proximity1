@@ -11,7 +11,7 @@ import java.util.Map;
  * 
  */
 public class ProximityRequest implements Serializable {
-    
+
     public static final String REQUEST_REMOTE_ADDRESS = "request.remoteAddr";
 
     private static final long serialVersionUID = -3576402488409590517L;

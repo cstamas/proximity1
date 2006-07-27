@@ -11,7 +11,7 @@ import java.net.URL;
  * This class is a base abstract class for remot storages.
  * 
  * @author cstamas
- *
+ * 
  */
 public abstract class AbstractRemoteStorage extends AbstractStorage implements RemoteStorage {
 
@@ -20,9 +20,9 @@ public abstract class AbstractRemoteStorage extends AbstractStorage implements R
     public String getRemoteUrl() {
         return this.remoteUrl.toString();
     }
-    
+
     public boolean isMetadataAware() {
-    		return false;
+        return false;
     }
 
     public void setRemoteUrl(String url) throws MalformedURLException {
@@ -32,7 +32,7 @@ public abstract class AbstractRemoteStorage extends AbstractStorage implements R
     protected String getAbsoluteUrl(String path) {
         return PathHelper.walkThePath(getRemoteUrl(), path);
     }
-    
+
     protected URL getRemoteUrlAsUrl() {
         return remoteUrl;
     }

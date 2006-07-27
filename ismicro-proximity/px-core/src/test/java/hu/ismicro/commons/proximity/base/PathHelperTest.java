@@ -56,7 +56,7 @@ public class PathHelperTest extends TestCase {
         Assert.assertEquals("file", PathHelper.getFileName("/a/b/c/file///"));
         Assert.assertEquals("file-2.0.jar", PathHelper.getFileName("/a/b/c/file-2.0.jar"));
     }
-    
+
     public void testConcatPaths() {
         Assert.assertEquals("a/b", PathHelper.concatPaths("a", "b"));
         Assert.assertEquals("a/b", PathHelper.concatPaths("a/", "b"));

@@ -33,7 +33,7 @@ public class ProxiedItem implements Item {
     }
 
     public String toString() {
-               return getProperties().toString();
+        return getProperties().toString();
     }
 
     public void close() {

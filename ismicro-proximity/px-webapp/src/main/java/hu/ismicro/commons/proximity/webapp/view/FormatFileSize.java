@@ -3,23 +3,28 @@ package hu.ismicro.commons.proximity.webapp.view;
 import java.text.DecimalFormat;
 
 /**
- * A stupid little class to format file sizes in "human readable" form.
- * Used in Proximity webapp as part of Velocity toolbox.
+ * A stupid little class to format file sizes in "human readable" form. Used in
+ * Proximity webapp as part of Velocity toolbox.
  * 
  * @author cstamas
- *
+ * 
  */
 public class FormatFileSize {
-    
+
     private DecimalFormat formatInteger = new DecimalFormat("0");
+
     private DecimalFormat formatDecimals = new DecimalFormat("0.00");
-    
+
     private String BytesSuffix = "Byte";
+
     private String kBytesSuffix = "KB";
+
     private String mBytesSuffix = "MB";
+
     private String gBytesSuffix = "GB";
+
     private String tBytesSuffix = "TB";
-    
+
     public double base = 1024;
 
     public FormatFileSize() {
@@ -37,21 +42,21 @@ public class FormatFileSize {
         }
         if (Math.rint(sizeLong / base) == 0) {
             // we do not have decimals
-            return formatInteger.format(sizeLong) + " " + getBytesSuffix(); 
-        } else if (Math.rint(sizeLong / (base*base)) == 0) {
+            return formatInteger.format(sizeLong) + " " + getBytesSuffix();
+        } else if (Math.rint(sizeLong / (base * base)) == 0) {
             suffix = getKBytesSuffix();
             sizeLong = sizeLong / base;
-        } else if (Math.rint(sizeLong / (base*base*base)) == 0) {
+        } else if (Math.rint(sizeLong / (base * base * base)) == 0) {
             suffix = getMBytesSuffix();
-            sizeLong = sizeLong / (base*base);
-        } else if (Math.rint(sizeLong / (base*base*base*base)) == 0) {
+            sizeLong = sizeLong / (base * base);
+        } else if (Math.rint(sizeLong / (base * base * base * base)) == 0) {
             suffix = getGBytesSuffix();
-            sizeLong = sizeLong / (base*base*base);
-        } else if (Math.rint(sizeLong / (base*base*base*base*base)) == 0) {
+            sizeLong = sizeLong / (base * base * base);
+        } else if (Math.rint(sizeLong / (base * base * base * base * base)) == 0) {
             suffix = getTBytesSuffix();
-            sizeLong = sizeLong / (base*base*base*base);
+            sizeLong = sizeLong / (base * base * base * base);
         }
-        return formatDecimals.format(sizeLong) + " " + suffix; 
+        return formatDecimals.format(sizeLong) + " " + suffix;
     }
 
     public double getBase() {

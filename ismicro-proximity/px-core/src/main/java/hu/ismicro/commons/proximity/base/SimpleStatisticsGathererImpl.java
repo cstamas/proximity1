@@ -15,18 +15,18 @@ import org.apache.commons.logging.LogFactory;
 public class SimpleStatisticsGathererImpl implements StatisticsGatherer {
 
     protected Log logger = LogFactory.getLog(this.getClass());
-    
+
     private List last10LocalHits = new ArrayList(10);
-    
+
     private List last10RemoteHits = new ArrayList(10);
-    
+
     private List last10Artifacts = new ArrayList(10);
-    
+
     private List last10IpAddresses = new ArrayList(10);
 
     public void initialize() {
         logger.info("Initializing...");
-        //nothing
+        // nothing
     }
 
     public void localHit(ProximityRequest req, Repository repo, ItemProperties ip, boolean propsOnly) {
@@ -57,7 +57,7 @@ public class SimpleStatisticsGathererImpl implements StatisticsGatherer {
         result.put("last10IpAddresses", last10IpAddresses);
         return new HashMap(result);
     }
-    
+
     protected void addMaxTen(List list, Object obj) {
         while (list.size() > 10) {
             list.remove(0);

@@ -9,38 +9,38 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
- * Abstract Storage class. It have ID and defines logger. Predefines all
- * write methods with throwing UnsupportedOperationException-s. 
+ * Abstract Storage class. It have ID and defines logger. Predefines all write
+ * methods with throwing UnsupportedOperationException-s.
  * 
  * @author cstamas
- *
+ * 
  */
 public abstract class AbstractStorage implements Storage {
 
-	protected Log logger = LogFactory.getLog(this.getClass());
+    protected Log logger = LogFactory.getLog(this.getClass());
 
-	public boolean isWritable() {
-		return false;
-	}
+    public boolean isWritable() {
+        return false;
+    }
 
-	public List listItems(String path) throws StorageException {
+    public List listItems(String path) throws StorageException {
         throw new UnsupportedOperationException("The " + getClass().getName() + " storage is not listable!");
-	}
+    }
 
-	public void storeItemProperties(ItemProperties item) throws StorageException {
+    public void storeItemProperties(ItemProperties item) throws StorageException {
         throw new UnsupportedOperationException("The " + getClass().getName() + " storage is ReadOnly!");
-	}
+    }
 
-	public void storeItem(Item item) throws StorageException {
+    public void storeItem(Item item) throws StorageException {
         throw new UnsupportedOperationException("The " + getClass().getName() + " storage is ReadOnly!");
-	}
+    }
 
-	public void deleteItemProperties(String path) throws StorageException {
+    public void deleteItemProperties(String path) throws StorageException {
         throw new UnsupportedOperationException("The " + getClass().getName() + " storage is ReadOnly!");
-	}
+    }
 
-	public void deleteItem(String path) throws StorageException {
+    public void deleteItem(String path) throws StorageException {
         throw new UnsupportedOperationException("The " + getClass().getName() + " storage is ReadOnly!");
-	}
+    }
 
 }

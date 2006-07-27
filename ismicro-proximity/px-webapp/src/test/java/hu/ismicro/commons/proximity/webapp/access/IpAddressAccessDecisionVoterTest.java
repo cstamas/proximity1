@@ -6,15 +6,15 @@ import junit.framework.Assert;
 import junit.framework.TestCase;
 
 public class IpAddressAccessDecisionVoterTest extends TestCase {
-    
+
     private IpAddressAccessDecisionVoter voter = new IpAddressAccessDecisionVoter();
-    
+
     protected ProximityRequest getDummyRq(String ipAddr) {
         ProximityRequest result = new ProximityRequest();
         result.getAttributes().put(ProximityRequest.REQUEST_REMOTE_ADDRESS, ipAddr);
         return result;
     }
-    
+
     public void testApproved1() {
         voter.setAllowDeny(true);
         voter.setAllowFromPattern("192\\.168\\.0\\..*");

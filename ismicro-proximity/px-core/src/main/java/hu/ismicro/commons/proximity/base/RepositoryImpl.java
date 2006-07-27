@@ -28,11 +28,11 @@ public class RepositoryImpl implements Repository {
     private String id;
 
     private String uriPrefix = null;
-    
+
     private boolean available = true;
-    
+
     private boolean offline = false;
-    
+
     private boolean listable = true;
 
     private boolean reindex = true;
@@ -157,12 +157,12 @@ public class RepositoryImpl implements Repository {
         }
         this.repositoryLogic = repositoryLogic;
     }
-    
+
     // ---------------------------------------------------------------------------------
     // Entry methods
 
-    public ProxiedItemProperties retrieveItemProperties(ProximityRequest request) throws RepositoryNotAvailableException, ItemNotFoundException,
-            StorageException, AccessDeniedException {
+    public ProxiedItemProperties retrieveItemProperties(ProximityRequest request)
+            throws RepositoryNotAvailableException, ItemNotFoundException, StorageException, AccessDeniedException {
         if (!isAvailable()) {
             throw new RepositoryNotAvailableException("The repository " + getId() + " is NOT available!");
         }
@@ -179,8 +179,8 @@ public class RepositoryImpl implements Repository {
         }
     }
 
-    public ProxiedItem retrieveItem(ProximityRequest request) throws RepositoryNotAvailableException, ItemNotFoundException, StorageException,
-            AccessDeniedException {
+    public ProxiedItem retrieveItem(ProximityRequest request) throws RepositoryNotAvailableException,
+            ItemNotFoundException, StorageException, AccessDeniedException {
         if (!isAvailable()) {
             throw new RepositoryNotAvailableException("The repository " + getId() + " is NOT available!");
         }
@@ -296,9 +296,9 @@ public class RepositoryImpl implements Repository {
             return path;
         }
     }
-    
-    protected ProxiedItem retrieveItem(boolean propsOnly, ProximityRequest request) throws RepositoryNotAvailableException, ItemNotFoundException,
-            StorageException {
+
+    protected ProxiedItem retrieveItem(boolean propsOnly, ProximityRequest request)
+            throws RepositoryNotAvailableException, ItemNotFoundException, StorageException {
         ProxiedItem localResult = null;
         ProxiedItem remoteResult = null;
         try {
@@ -323,7 +323,8 @@ public class RepositoryImpl implements Repository {
                     }
                 }
             }
-            if (!isOffline() && getRepositoryLogic().shouldCheckForRemoteCopy(request, localResult) && getRemoteStorage() != null) {
+            if (!isOffline() && getRepositoryLogic().shouldCheckForRemoteCopy(request, localResult)
+                    && getRemoteStorage() != null) {
                 if ((propsOnly && getRemoteStorage().containsItemProperties(request.getPath()))
                         || (getRemoteStorage().containsItem(request.getPath()))) {
                     logger.debug("Found " + request.getPath() + " item in remote storage of repository " + getId());
@@ -401,7 +402,8 @@ public class RepositoryImpl implements Repository {
                             PathHelper.walkThePath(ip.getAbsolutePath(), ip.getName()));
                     stack.push(subdir);
                 } else {
-                    // TODO: possible memory problem here with large repositories!
+                    // TODO: possible memory problem here with large
+                    // repositories!
                     batch.put(getItemUid(ip), ip);
                     indexed++;
                 }

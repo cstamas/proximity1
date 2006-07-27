@@ -4,9 +4,9 @@ import java.net.MalformedURLException;
 
 /**
  * Remote storage.
- *  
+ * 
  * @author cstamas
- *
+ * 
  */
 public interface RemoteStorage extends Storage {
 

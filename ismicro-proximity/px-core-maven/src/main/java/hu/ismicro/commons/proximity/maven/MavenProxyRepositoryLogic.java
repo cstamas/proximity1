@@ -91,8 +91,8 @@ public class MavenProxyRepositoryLogic extends DefaultExpiringProxyingRepository
     }
 
     public boolean shouldCheckForRemoteCopy(ProximityRequest request, ProxiedItem localItem) {
-        
-        if (! shouldServeByPolicies(request)) {
+
+        if (!shouldServeByPolicies(request)) {
             return false;
         }
 
@@ -156,7 +156,7 @@ public class MavenProxyRepositoryLogic extends DefaultExpiringProxyingRepository
 
     // =========================================================================
     // Logic iface
-    
+
     /**
      * Simply apply the policies.
      * 
@@ -172,9 +172,9 @@ public class MavenProxyRepositoryLogic extends DefaultExpiringProxyingRepository
             return isShouldServeSnapshots();
         }
 
-        // in any other case take it as release 
+        // in any other case take it as release
         return isShouldServeReleases();
-        
+
     }
 
 }

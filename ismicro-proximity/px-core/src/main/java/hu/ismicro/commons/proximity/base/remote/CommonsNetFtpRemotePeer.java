@@ -138,7 +138,8 @@ public class CommonsNetFtpRemotePeer extends AbstractRemoteStorage {
         try {
             client = getFTPClient();
             try {
-                if (client.changeWorkingDirectory(PathHelper.concatPaths(getRemoteUrlAsUrl().getPath(),PathHelper.getDirName(path)))) {
+                if (client.changeWorkingDirectory(PathHelper.concatPaths(getRemoteUrlAsUrl().getPath(), PathHelper
+                        .getDirName(path)))) {
                     FTPFile[] fileList = client.listFiles(PathHelper.getFileName(path));
                     if (fileList.length == 1) {
                         return constructItemPropertiesFromGetResponse(path, originatingUrlString, fileList[0]);
@@ -173,7 +174,8 @@ public class CommonsNetFtpRemotePeer extends AbstractRemoteStorage {
         try {
             client = getFTPClient();
             try {
-                if (client.changeWorkingDirectory(PathHelper.concatPaths(getRemoteUrlAsUrl().getPath(),PathHelper.getDirName(path)))) {
+                if (client.changeWorkingDirectory(PathHelper.concatPaths(getRemoteUrlAsUrl().getPath(), PathHelper
+                        .getDirName(path)))) {
                     FTPFile[] fileList = client.listFiles(PathHelper.getFileName(path));
                     if (fileList.length == 1) {
                         FTPFile ftpFile = fileList[0];
