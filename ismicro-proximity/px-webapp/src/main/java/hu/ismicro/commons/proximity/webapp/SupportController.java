@@ -35,20 +35,33 @@ public class SupportController extends MultiActionController {
         logger.debug("Got request for search");
         ProxiedItemProperties example = null;
         String query = null;
-        if (RequestUtils.getStringParameter(request, "searchAll") != null
-                && RequestUtils.getRequiredStringParameter(request, "searchAllRegexp") != null) {
+
+        if (RequestUtils.getStringParameter(request, "searchAllRegexp") != null) {
+            
             example = new ProxiedItemProperties();
             example.setName(RequestUtils.getRequiredStringParameter(request, "searchAllRegexp") + "*");
-        } else if (RequestUtils.getStringParameter(request, "searchSelected") != null
-                && RequestUtils.getRequiredStringParameter(request, "searchSelectedRepos") != null
-                && RequestUtils.getRequiredStringParameter(request, "searchSelectedRegexp") != null) {
+
+        } else if (RequestUtils.getStringParameter(request, "searchRepositoryRegexp") != null
+                && RequestUtils.getRequiredStringParameter(request, "searchRepositoryId") != null) {
+
             example = new ProxiedItemProperties();
-            example.setName(RequestUtils.getRequiredStringParameter(request, "searchSelectedRegexp") + "*");
+            example.setName(RequestUtils.getRequiredStringParameter(request, "searchRepositoryRegexp") + "*");
             example.setMetadata(ProxiedItemProperties.METADATA_OWNING_REPOSITORY, RequestUtils
-                    .getRequiredStringParameter(request, "searchSelectedRepos"));
+                    .getRequiredStringParameter(request, "searchRepositoryId"));
+
+        } else if (RequestUtils.getStringParameter(request, "searchGroupRegexp") != null
+                && RequestUtils.getRequiredStringParameter(request, "searchGroupId") != null) {
+
+            example = new ProxiedItemProperties();
+            example.setName(RequestUtils.getRequiredStringParameter(request, "searchGroupRegexp") + "*");
+            example.setMetadata(ProxiedItemProperties.METADATA_OWNING_REPOSITORY_GROUP, RequestUtils
+                    .getRequiredStringParameter(request, "searchGroupId"));
+
         } else if (RequestUtils.getStringParameter(request, "searchLQL") != null
                 && RequestUtils.getRequiredStringParameter(request, "searchLQLQuery") != null) {
+
             query = RequestUtils.getRequiredStringParameter(request, "searchLQLQuery");
+
         }
 
         logger.debug("example=" + (example == null ? null : example.getName()) + ", query=" + query);
@@ -62,10 +75,9 @@ public class SupportController extends MultiActionController {
             List results = getProximity().searchItem(query);
             context.put("results", results);
         }
-        List keywords = getProximity().getSearchableKeywords();
-        context.put("searchableKeywords", keywords);
-        List repositories = getProximity().getRepositories();
-        context.put("repositories", repositories);
+        context.put("searchableKeywords", getProximity().getSearchableKeywords());
+        context.put("repositories", getProximity().getRepositories());
+        context.put("groups", getProximity().getRepositoryGroupIds());
         return new ModelAndView("search", context);
     }
 
