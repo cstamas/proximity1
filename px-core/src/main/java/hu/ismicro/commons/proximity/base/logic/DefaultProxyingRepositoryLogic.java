@@ -67,7 +67,6 @@ public class DefaultProxyingRepositoryLogic implements RepositoryLogic {
             }
             return remoteItem;
         }
-        ;
         if (localItem != null) {
             return localItem;
         }
