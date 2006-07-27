@@ -27,7 +27,7 @@ public class RepositoryImpl implements Repository {
 
     private String id;
 
-    private String uriPrefix = null;
+    private String groupId = "default";
 
     private boolean available = true;
 
@@ -91,12 +91,12 @@ public class RepositoryImpl implements Repository {
         this.offline = offline;
     }
 
-    public String getUriPrefix() {
-        return uriPrefix;
+    public String getGroupId() {
+        return groupId;
     }
 
-    public void setUriPrefix(String uriPrefix) {
-        this.uriPrefix = uriPrefix;
+    public void setGroupId(String groupId) {
+        this.groupId = groupId;
     }
 
     public Storage getLocalStorage() {
@@ -251,6 +251,7 @@ public class RepositoryImpl implements Repository {
                 for (Iterator i = list.iterator(); i.hasNext();) {
                     ItemProperties ip = (ItemProperties) i.next();
                     ip.setMetadata(ItemProperties.METADATA_OWNING_REPOSITORY, this.getId());
+                    ip.setMetadata(ItemProperties.METADATA_OWNING_REPOSITORY_GROUP, this.getGroupId());
                 }
                 result.addAll(list);
             }
@@ -281,22 +282,6 @@ public class RepositoryImpl implements Repository {
     // ---------------------------------------------------------------------------------
     // Protected
 
-    protected String removePathPrefix(String path) {
-        if (getUriPrefix() != null && getUriPrefix().length() != 0) {
-            return path.substring(getUriPrefix().length());
-        } else {
-            return path;
-        }
-    }
-
-    protected String putPathPrefix(String path) {
-        if (getUriPrefix() != null && getUriPrefix().length() != 0) {
-            return PathHelper.concatPaths(getUriPrefix(), path);
-        } else {
-            return path;
-        }
-    }
-
     protected ProxiedItem retrieveItem(boolean propsOnly, ProximityRequest request)
             throws RepositoryNotAvailableException, ItemNotFoundException, StorageException {
         ProxiedItem localResult = null;
@@ -314,6 +299,7 @@ public class RepositoryImpl implements Repository {
                             localResult = getLocalStorage().retrieveItem(request.getPath());
                         }
                         localResult.getProperties().setMetadata(ItemProperties.METADATA_OWNING_REPOSITORY, getId());
+                        localResult.getProperties().setMetadata(ItemProperties.METADATA_OWNING_REPOSITORY_GROUP, getGroupId());
                         if (getStatisticsGatherer() != null) {
                             getStatisticsGatherer().localHit(request, this, localResult.getProperties(), propsOnly);
                         }
@@ -335,6 +321,7 @@ public class RepositoryImpl implements Repository {
                         remoteResult = getRemoteStorage().retrieveItem(request.getPath());
                     }
                     remoteResult.getProperties().setMetadata(ItemProperties.METADATA_OWNING_REPOSITORY, getId());
+                    remoteResult.getProperties().setMetadata(ItemProperties.METADATA_OWNING_REPOSITORY_GROUP, getGroupId());
                     if (getStatisticsGatherer() != null) {
                         getStatisticsGatherer().remoteHit(request, this, remoteResult.getProperties(), propsOnly);
                     }
@@ -397,6 +384,7 @@ public class RepositoryImpl implements Repository {
             for (Iterator i = dir.iterator(); i.hasNext();) {
                 ItemProperties ip = (ItemProperties) i.next();
                 ip.setMetadata(ItemProperties.METADATA_OWNING_REPOSITORY, getId());
+                ip.setMetadata(ItemProperties.METADATA_OWNING_REPOSITORY_GROUP, getGroupId());
                 if (ip.isDirectory()) {
                     List subdir = getLocalStorage().listItems(
                             PathHelper.walkThePath(ip.getAbsolutePath(), ip.getName()));
@@ -442,6 +430,7 @@ public class RepositoryImpl implements Repository {
             for (Iterator i = dir.iterator(); i.hasNext();) {
                 ItemProperties ip = (ItemProperties) i.next();
                 ip.setMetadata(ItemProperties.METADATA_OWNING_REPOSITORY, getId());
+                ip.setMetadata(ItemProperties.METADATA_OWNING_REPOSITORY_GROUP, getGroupId());
                 if (ip.isDirectory()) {
                     List subdir = getLocalStorage().listItems(
                             PathHelper.walkThePath(ip.getAbsolutePath(), ip.getName()));

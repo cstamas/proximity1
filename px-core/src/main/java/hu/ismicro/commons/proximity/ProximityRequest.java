@@ -28,6 +28,9 @@ public class ProximityRequest implements Serializable {
     /** The ID of the targeted repos if any or null */
     private String targetedReposId = null;
 
+    /** The ID of the targeted repos group if any or null */
+    private String targetedReposGroupId = null;
+
     /** Map of attributes if any */
     private Map attributes = new HashMap();
 
@@ -61,6 +64,14 @@ public class ProximityRequest implements Serializable {
 
     public void setTargetedReposId(String targetedReposId) {
         this.targetedReposId = targetedReposId;
+    }
+
+    public String getTargetedReposGroupId() {
+        return targetedReposGroupId;
+    }
+
+    public void setTargetedReposGroupId(String targetedReposGroupId) {
+        this.targetedReposGroupId = targetedReposGroupId;
     }
 
     public String toString() {
