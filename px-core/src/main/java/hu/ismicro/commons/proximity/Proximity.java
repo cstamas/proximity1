@@ -21,6 +21,13 @@ public interface Proximity {
     List getRepositories();
 
     /**
+     * Returns the list of known groupIds configured within Proximity.
+     * 
+     * @return List of known groupId.
+     */
+    List getRepositoryGroupIds();
+
+    /**
      * Sets the logic to drive proximity. The repository by default uses
      * DefaultProximityLogic class unless overridden. May not be null.
      * 

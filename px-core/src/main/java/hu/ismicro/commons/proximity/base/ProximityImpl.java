@@ -13,7 +13,9 @@ import hu.ismicro.commons.proximity.access.AccessManager;
 import hu.ismicro.commons.proximity.access.OpenAccessManager;
 import hu.ismicro.commons.proximity.base.logic.DefaultProximityLogic;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -111,6 +113,7 @@ public class ProximityImpl implements Proximity {
     public void setRepositories(List reposList) {
         logger.info("Received " + reposList.size() + " repositories in a List.");
         repositories.clear();
+        repositoryOrder.clear();
         repositoryGroups.clear();
         for (Iterator i = reposList.iterator(); i.hasNext();) {
             Repository repo = (Repository) i.next();
@@ -126,17 +129,20 @@ public class ProximityImpl implements Proximity {
         }
         return result;
     }
+    
+    public List getRepositoryGroupIds() {
+        return Arrays.asList(repositoryGroups.keySet().toArray());
+    }
 
     public void addRepository(Repository repository) {
         repositories.put(repository.getId(), repository);
-        repositoryOrder.add(repository);
-        List repositoryGroupOrder;
-        if (repositoryGroups.containsKey(repository.getGroupId())) {
-            repositoryGroupOrder = (List) repositoryGroups.get(repository.getGroupId());
-        } else {
-            repositoryGroupOrder = new ArrayList();
+        repositoryOrder.add(repository.getId());
+
+        if (!repositoryGroups.containsKey(repository.getGroupId())) {
+            repositoryGroups.put(repository.getGroupId(), new ArrayList());
         }
-        repositoryGroupOrder.add(repository);
+        List repositoryGroupOrder = (List) repositoryGroups.get(repository.getGroupId());
+        repositoryGroupOrder.add(repository.getId());
         logger.info("Added repository id=[" + repository.getId() + "], groupId=[" + repository.getGroupId() + "]");
     }
 
@@ -297,6 +303,8 @@ public class ProximityImpl implements Proximity {
 
             }
             
+        } catch (IOException ex) {
+            logger.error("Got IOException during retrieveItem.", ex);
         } catch (ItemNotFoundException ex) {
             logger.info(request.getPath() + " not found.", ex);
             throw ex;
