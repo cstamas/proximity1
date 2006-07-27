@@ -7,16 +7,9 @@ public class RepositoryImplTest extends TestCase {
 
     private RepositoryImpl repo = new RepositoryImpl();
 
-    public void testPrefixRemoval() {
-        repo.setUriPrefix("/someprefix");
-        Assert.assertEquals("/test", repo.removePathPrefix("/someprefix/test"));
-        Assert.assertEquals("/test?a=b", repo.removePathPrefix("/someprefix/test?a=b"));
-    }
-
-    public void testPrefixAddition() {
-        repo.setUriPrefix("/someprefix");
-        Assert.assertEquals("/someprefix/test", repo.putPathPrefix("/test"));
-        Assert.assertEquals("/someprefix/test?a=b", repo.putPathPrefix("/test?a=b"));
+    /** Dummy method */
+    public void testDummy() {
+        Assert.assertEquals(repo.getGroupId(), repo.getGroupId());
     }
 
 }
