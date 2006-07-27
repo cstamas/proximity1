@@ -123,7 +123,7 @@ public class ProximityImpl implements Proximity {
 
     public List getRepositories() {
         List result = new ArrayList();
-        for (Iterator i = repositories.keySet().iterator(); i.hasNext();) {
+        for (Iterator i = repositoryOrder.iterator(); i.hasNext();) {
             String repoKey = (String) i.next();
             result.add(repositories.get(repoKey));
         }
