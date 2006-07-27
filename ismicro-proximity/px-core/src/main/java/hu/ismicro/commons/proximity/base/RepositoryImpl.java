@@ -169,7 +169,6 @@ public class RepositoryImpl implements Repository {
         accessManager.decide(request, null);
         ProxiedItem item = null;
         try {
-            logger.info("Getting item");
             item = retrieveItem(true, request);
             return (ProxiedItemProperties) item.getProperties();
         } finally {
@@ -197,11 +196,11 @@ public class RepositoryImpl implements Repository {
                 try {
                     ItemProperties itemProps = getLocalStorage().retrieveItemProperties(path);
                     getIndexer().deleteItemProperties(getItemUid(itemProps), itemProps);
+                    getLocalStorage().deleteItemProperties(path);
                 } catch (ItemNotFoundException ex) {
                     logger.info("Path [" + path + "] not found but deletion requested.", ex);
                 }
             }
-            getLocalStorage().deleteItemProperties(path);
         } else {
             throw new UnsupportedOperationException("The repository " + getId() + " have no local storage!");
         }
@@ -216,11 +215,11 @@ public class RepositoryImpl implements Repository {
                 try {
                     ItemProperties itemProps = getLocalStorage().retrieveItemProperties(path);
                     getIndexer().deleteItemProperties(getItemUid(itemProps), itemProps);
+                    getLocalStorage().deleteItem(path);
                 } catch (ItemNotFoundException ex) {
                     logger.info("Path [" + path + "] not found but deletion requested.", ex);
                 }
             }
-            getLocalStorage().deleteItem(path);
         } else {
             throw new UnsupportedOperationException("The repository " + getId() + " have no local storage!");
         }
@@ -348,7 +347,7 @@ public class RepositoryImpl implements Repository {
             if (result == null) {
                 throw new ItemNotFoundException(request.getPath());
             }
-            logger.info(((propsOnly) ? ("Item ") : ("ItemProperties ")) + request.getPath() + " found in repository "
+            logger.debug(((propsOnly) ? ("Item ") : ("ItemProperties ")) + request.getPath() + " found in repository "
                     + getId());
             return result;
         } catch (ItemNotFoundException ex) {
