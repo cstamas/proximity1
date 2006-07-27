@@ -19,7 +19,7 @@ import hu.ismicro.commons.proximity.base.RepositoryLogic;
  * @author cstamas
  *
  */
-public class DefaultProxyingLogic implements RepositoryLogic {
+public class DefaultProxyingRepositoryLogic implements RepositoryLogic {
 
 	protected Log logger = LogFactory.getLog(this.getClass());
 
