@@ -95,7 +95,6 @@ public class MavenProximityLogic extends DefaultProximityLogic {
         metadataWriter.write(osw, mergedMetadata);
         osw.flush();
         osw.close();
-        logger.info(" *** " + bos.toString());
         ByteArrayInputStream is = new ByteArrayInputStream(bos.toByteArray());
         item.setStream(is);
         itemProps.setSize(bos.size());
