@@ -2,6 +2,7 @@ package hu.ismicro.commons.proximity.base;
 
 import hu.ismicro.commons.proximity.ProximityRequest;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface ProximityLogic {
@@ -17,6 +18,6 @@ public interface ProximityLogic {
      */
     boolean isGroupSearchNeeded(ProximityRequest request);
 
-    ProxiedItem postprocessItemList(List listOfProxiedItems);
+    ProxiedItem postprocessItemList(List listOfProxiedItems) throws IOException;
 
 }

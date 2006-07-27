@@ -18,7 +18,7 @@ public abstract class AbstractRemoteStorage extends AbstractStorage implements R
     private URL remoteUrl;
 
     public String getRemoteUrl() {
-        return this.remoteUrl.toString();
+        return this.remoteUrl.toString().toString();
     }
 
     public boolean isMetadataAware() {
@@ -30,7 +30,7 @@ public abstract class AbstractRemoteStorage extends AbstractStorage implements R
     }
 
     protected String getAbsoluteUrl(String path) {
-        return PathHelper.walkThePath(getRemoteUrl(), path);
+        return PathHelper.concatPaths(getRemoteUrl(), path);
     }
 
     protected URL getRemoteUrlAsUrl() {
