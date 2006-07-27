@@ -168,6 +168,10 @@
 			value="86400" />
 		<!-- everything else will never expire once downloaded -->
 		<property name="itemExpirationPeriodInSeconds" value="-1" />
+		<!-- Should repository driven by this logic serve snapshots? -->
+		<property name="shouldServeSnapshots" value="false" />
+		<!-- Should repository driven by this logic serve releases? -->
+		<property name="shouldServeReleases" value="true" />
 	</bean>
 
 	<!--
@@ -184,7 +188,7 @@
 		<property name="statisticsGatherer" ref="stats" />
 		<property name="accessManager" ref="openAccessManager" />
 		<!-- Uncomment this and delete previous accessManager declaration to restrict access to this repo
-		<property name="accessManager" ref="internalLanOnlyAccessManager" />
+			<property name="accessManager" ref="internalLanOnlyAccessManager" />
 		-->
 		<property name="repositoryLogic" ref="maven2logic" />
 		<!-- Should i reindex my content on startup? -->
@@ -215,7 +219,7 @@
 		class="hu.ismicro.commons.proximity.base.remote.CommonsHttpClientRemotePeer">
 		<property name="remoteUrl"
 			value="http://repo1.maven.org/maven2/" />
-	    <!-- The timeout of HTTP connection -->
+		<!-- The timeout of HTTP connection -->
 		<property name="connectionTimeout" value="10000" />
 		<!-- The count of retries (used by DefaultRetryHandler) -->
 		<property name="retrievalRetryCount" value="3" />
@@ -239,15 +243,15 @@
 		-->
 	</bean>
 
-<!-- 
-	<bean id="centralRemotePeer"
+	<!-- 
+		<bean id="centralRemotePeer"
 		class="hu.ismicro.commons.proximity.base.remote.CommonsNetFtpRemotePeer">
 		<property name="remoteUrl"
-			value="ftp://repo1.maven.org/pub/packages/maven2/" />
+		value="ftp://repo1.maven.org/pub/packages/maven2/" />
 		<property name="ftpUsername" value="anonymous" />
 		<property name="ftpPassword" value="someemail@somedomain.com" />
-	</bean>
--->
+		</bean>
+	-->
 
 
 	<!--
@@ -264,7 +268,7 @@
 		<property name="statisticsGatherer" ref="stats" />
 		<property name="accessManager" ref="openAccessManager" />
 		<!-- Uncomment this and delete previous row to restrict access to this repo
-		<property name="accessManager" ref="internalLanOnlyAccessManager" />
+			<property name="accessManager" ref="internalLanOnlyAccessManager" />
 		-->
 		<property name="repositoryLogic" ref="maven2logic" />
 		<!-- Should i reindex my content on startup? -->
@@ -326,7 +330,7 @@
 		<property name="statisticsGatherer" ref="stats" />
 		<property name="accessManager" ref="openAccessManager" />
 		<!-- Uncomment this and delete previous row to restrict access to this repo
-		<property name="accessManager" ref="internalLanOnlyAccessManager" />
+			<property name="accessManager" ref="internalLanOnlyAccessManager" />
 		-->
 		<property name="repositoryLogic" ref="maven2logic" />
 		<!-- Should i reindex my content on startup? -->
@@ -384,7 +388,7 @@
 		<property name="statisticsGatherer" ref="stats" />
 		<property name="accessManager" ref="openAccessManager" />
 		<!-- Uncomment this and delete previous row to restrict access to this repo
-		<property name="accessManager" ref="internalLanOnlyAccessManager" />
+			<property name="accessManager" ref="internalLanOnlyAccessManager" />
 		-->
 		<!-- Should i reindex my content on startup? -->
 		<property name="reindex" value="true" />
@@ -417,7 +421,7 @@
 		<property name="statisticsGatherer" ref="stats" />
 		<property name="accessManager" ref="openAccessManager" />
 		<!-- Uncomment this and delete previous row to restrict access to this repo
-		<property name="accessManager" ref="internalLanOnlyAccessManager" />
+			<property name="accessManager" ref="internalLanOnlyAccessManager" />
 		-->
 		<!-- Should i reindex my content on startup? -->
 		<property name="reindex" value="true" />
@@ -450,7 +454,7 @@
 		<property name="statisticsGatherer" ref="stats" />
 		<property name="accessManager" ref="openAccessManager" />
 		<!-- Uncomment this and delete previous row to restrict access to this repo
-		<property name="accessManager" ref="internalLanOnlyAccessManager" />
+			<property name="accessManager" ref="internalLanOnlyAccessManager" />
 		-->
 		<!-- Should i reindex my content on startup? -->
 		<property name="reindex" value="true" />

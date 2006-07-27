@@ -34,8 +34,14 @@ public class MavenProxyRepositoryLogic extends DefaultExpiringProxyingRepository
      */
     private long pomExpirationPeriod = 86400 * 1000; // 24 hours
 
+    /**
+     * Should repository driven by this logic serve snapshots?
+     */
     private boolean shouldServeSnapshots = false;
 
+    /**
+     * Should repository driven by this logic serve releases?
+     */
     private boolean shouldServeReleases = true;
 
     public boolean isShouldServeReleases() {
