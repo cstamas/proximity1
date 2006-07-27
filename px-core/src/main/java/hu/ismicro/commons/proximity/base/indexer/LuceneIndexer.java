@@ -167,19 +167,59 @@ public class LuceneIndexer extends AbstractIndexer {
     }
 
     public List searchByItemPropertiesExample(ItemProperties ip) throws StorageException {
+        BooleanQuery query = new BooleanQuery();
+        for (Iterator i = ip.getAllMetadata().keySet().iterator(); i.hasNext();) {
+            String key = (String) i.next();
+            Query termQ;
+            if (ip.getMetadata(key).indexOf("?") != -1 || ip.getMetadata(key).indexOf("*") != -1) {
+                termQ = new WildcardQuery(new Term(key, ip.getMetadata(key)));
+            } else {
+                termQ = new FuzzyQuery(new Term(key, ip.getMetadata(key)));
+            }
+            query.add(termQ, true, false);
+        }
+        return search(query);
+    }
+
+    public List searchByQuery(String queryStr) throws IndexerException, StorageException {
+        QueryParser qparser = new QueryParser(ItemProperties.METADATA_NAME, analyzer);
+        try {
+            Query query = qparser.parse(queryStr);
+            return search(query);
+        } catch (ParseException ex) {
+            logger.error("Bad query syntax!", ex);
+            throw new IndexerException("Bad Query syntax!", ex);
+        }
+    }
+
+    protected Document itemProperties2Document(ItemProperties item) {
+        Document result = new Document();
+        for (Iterator i = item.getAllMetadata().keySet().iterator(); i.hasNext();) {
+            String key = (String) i.next();
+            result.add(Field.Keyword(key, item.getMetadata(key)));
+        }
+        return postProcessDocument(item, result);
+    }
+
+    protected Document postProcessDocument(ItemProperties item, Document doc) {
+        return doc;
+    }
+
+    protected void addItemToIndex(IndexWriter writer, String UID, ItemProperties item) throws IOException {
+        Document ipDoc = itemProperties2Document(item);
+        ipDoc.add(Field.Keyword("UID", UID));
+        writer.addDocument(ipDoc);
+        dirtyItems++;
+        if (dirtyItems > dirtyItemTreshold) {
+            logger.info("Optimizing Lucene index as dirtyItemTreshold is exceeded.");
+            writer.optimize();
+            dirtyItems = 0;
+        }
+    }
+
+    protected List search(Query query) {
         try {
             IndexSearcher searcher = new IndexSearcher(indexDirectory);
-            BooleanQuery query = new BooleanQuery();
-            for (Iterator i = ip.getAllMetadata().keySet().iterator(); i.hasNext();) {
-                String key = (String) i.next();
-                Query termQ;
-                if (ip.getMetadata(key).indexOf("?") != -1 || ip.getMetadata(key).indexOf("*") != -1) {
-                    termQ = new WildcardQuery(new Term(key, ip.getMetadata(key)));
-                } else {
-                    termQ = new FuzzyQuery(new Term(key, ip.getMetadata(key)));
-                }
-                query.add(termQ, true, false);
-            }
             Hits hits = searcher.search(query);
             List result = new ArrayList(hits.length());
             for (int i = 0; i < hits.length(); i++) {
@@ -198,62 +238,6 @@ public class LuceneIndexer extends AbstractIndexer {
         } catch (IOException ex) {
             logger.error("Got IOException during index deletion.", ex);
             throw new StorageException("Got IOException during deletion.", ex);
-        }
-    }
-
-    protected Document itemProperties2Document(ItemProperties item) {
-        Document result = new Document();
-        for (Iterator i = item.getAllMetadata().keySet().iterator(); i.hasNext();) {
-            String key = (String) i.next();
-            result.add(Field.Keyword(key, item.getMetadata(key)));
-        }
-        return postProcessDocument(item, result);
-    }
-
-    protected Document postProcessDocument(ItemProperties item, Document doc) {
-        return doc;
-    }
-
-    public List searchByQuery(String queryStr) throws IndexerException, StorageException {
-        try {
-            IndexSearcher searcher = new IndexSearcher(indexDirectory);
-            QueryParser qparser = new QueryParser(ItemProperties.METADATA_NAME, analyzer);
-            try {
-                Query query = qparser.parse(queryStr);
-                Hits hits = searcher.search(query);
-                List result = new ArrayList(hits.length());
-                for (int i = 0; i < hits.length(); i++) {
-                    ProxiedItemProperties rip = new ProxiedItemProperties();
-                    Map props = new HashMap();
-                    Document doc = hits.doc(i);
-                    for (Enumeration fields = doc.fields(); fields.hasMoreElements();) {
-                        Field field = (Field) fields.nextElement();
-                        props.put(field.name(), field.stringValue());
-                    }
-                    rip.getAllMetadata().putAll(props);
-                    result.add(rip);
-                }
-                searcher.close();
-                return result;
-            } catch (ParseException ex) {
-                logger.error("Bad query syntax!", ex);
-                throw new IndexerException("Bad Query syntax!", ex);
-            }
-        } catch (IOException ex) {
-            logger.error("Got IOException during index deletion.", ex);
-            throw new StorageException("Got IOException during deletion.", ex);
-        }
-    }
-
-    private void addItemToIndex(IndexWriter writer, String UID, ItemProperties item) throws IOException {
-        Document ipDoc = itemProperties2Document(item);
-        ipDoc.add(Field.Keyword("UID", UID));
-        writer.addDocument(ipDoc);
-        dirtyItems++;
-        if (dirtyItems > dirtyItemTreshold) {
-            logger.info("Optimizing Lucene index as dirtyItemTreshold is exceeded.");
-            writer.optimize();
-            dirtyItems = 0;
         }
     }
 

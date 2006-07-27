@@ -44,7 +44,7 @@ public abstract class AbstractIndexer implements Indexer {
         return result;
     }
 
-    protected ProxiedItem retrieveItemFromStorages(String path) {
+    protected ProxiedItem retrieveItemFromStorages(String path) throws ItemNotFoundException {
         Storage storage = null;
         for (Iterator i = storages.iterator(); i.hasNext();) {
             storage = (Storage) i.next();
@@ -58,7 +58,7 @@ public abstract class AbstractIndexer implements Indexer {
                 }
             }
         }
-        return null;
+        throw new ItemNotFoundException("Could not find " + path + " in registered LocalStorages.");
     }
 
 }
