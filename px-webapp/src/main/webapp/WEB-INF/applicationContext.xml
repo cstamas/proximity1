@@ -157,7 +157,7 @@
 		- x = -1 - turn off for the group expiration handling.
 	-->
 	<bean id="maven2logic"
-		class="hu.ismicro.commons.proximity.maven.MavenProxyLogic">
+		class="hu.ismicro.commons.proximity.base.logic.MavenProxyRepositoryLogic">
 		<!-- SNAPSHOTSs expires after 24h -->
 		<property name="snapshotExpirationPeriodInSeconds"
 			value="86400" />

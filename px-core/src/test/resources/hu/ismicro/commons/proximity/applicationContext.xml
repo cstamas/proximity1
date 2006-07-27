@@ -101,7 +101,7 @@
 		- Logic used for Maven1 repositories.
 	-->
 	<bean id="maven1logic"
-		class="hu.ismicro.commons.proximity.base.logic.DefaultExpiringProxyingLogic">
+		class="hu.ismicro.commons.proximity.base.logic.DefaultExpiringProxyingRepositoryLogic">
 		<property name="itemExpirationPeriodInSeconds" value="-1" />
 	</bean>
 
@@ -109,7 +109,7 @@
 		- Logic used for Maven2 repositories.
 	-->
 	<bean id="maven2logic"
-		class="hu.ismicro.commons.proximity.base.logic.DefaultExpiringProxyingLogic">
+		class="hu.ismicro.commons.proximity.base.logic.DefaultExpiringProxyingRepositoryLogic">
 		<property name="itemExpirationPeriodInSeconds" value="-1" />
 	</bean>
 
