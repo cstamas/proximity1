@@ -2,6 +2,7 @@ package hu.ismicro.commons.proximity.maven;
 
 import hu.ismicro.commons.proximity.ProximityRequest;
 import hu.ismicro.commons.proximity.base.ProxiedItem;
+import hu.ismicro.commons.proximity.base.ProxiedItemProperties;
 import hu.ismicro.commons.proximity.base.logic.DefaultProximityLogic;
 
 import java.io.ByteArrayInputStream;
@@ -32,13 +33,15 @@ import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 public class MavenProximityLogic extends DefaultProximityLogic {
 
     /**
-     * This implementation says true if the request is about metadata.
+     * This implementation says true if the request is about metadata CONTENT
+     * (propertiesOnly == false) but not metadata checksum.
      * 
      * @return true if the request is about metadata.
      */
-    public boolean isGroupSearchNeeded(ProximityRequest request) {
+    public boolean isGroupSearchNeeded(ProximityRequest request, boolean propertiesOnly) {
 
-        return MavenArtifactRecognizer.isMetadata(request.getPath()) && !MavenArtifactRecognizer.isChecksum(request.getPath());
+        return !propertiesOnly && MavenArtifactRecognizer.isMetadata(request.getPath())
+                && !MavenArtifactRecognizer.isChecksum(request.getPath());
 
     }
 
@@ -48,13 +51,14 @@ public class MavenProximityLogic extends DefaultProximityLogic {
      * @return the merged metadata.
      */
     public ProxiedItem postprocessItemList(List listOfProxiedItems) throws IOException {
-
+        
         if (listOfProxiedItems.size() == 0) {
 
             throw new IllegalArgumentException("The listOfProxiedItems list cannot be 0 length!");
         }
 
         ProxiedItem item = (ProxiedItem) listOfProxiedItems.get(0);
+        ProxiedItemProperties itemProps = (ProxiedItemProperties) item.getProperties();
 
         if (listOfProxiedItems.size() == 1) {
 
@@ -62,7 +66,10 @@ public class MavenProximityLogic extends DefaultProximityLogic {
             return item;
         }
 
+        logger.info("Item found in total of " + listOfProxiedItems.size() + " repositories, will merge them.");
+
         MetadataXpp3Reader metadataReader = new MetadataXpp3Reader();
+        MetadataXpp3Writer metadataWriter = new MetadataXpp3Writer();
         InputStreamReader isr = null;
         Metadata mergedMetadata = new Metadata();
 
@@ -83,14 +90,15 @@ public class MavenProximityLogic extends DefaultProximityLogic {
 
         }
 
-        MetadataXpp3Writer metadataWriter = new MetadataXpp3Writer();
-        ByteArrayOutputStream os = new ByteArrayOutputStream();
-        OutputStreamWriter osw = new OutputStreamWriter(os);
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        OutputStreamWriter osw = new OutputStreamWriter(bos);
         metadataWriter.write(osw, mergedMetadata);
         osw.flush();
         osw.close();
-        ByteArrayInputStream is = new ByteArrayInputStream(os.toByteArray());
+        logger.info(" *** " + bos.toString());
+        ByteArrayInputStream is = new ByteArrayInputStream(bos.toByteArray());
         item.setStream(is);
+        itemProps.setSize(bos.size());
 
         return item;
 

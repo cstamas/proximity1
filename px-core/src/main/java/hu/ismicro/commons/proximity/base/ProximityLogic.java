@@ -13,10 +13,13 @@ public interface ProximityLogic {
      * 
      * @param request
      *            the current request.
+     * @param propertiesOnly
+     *            if true, this request is about Proximity metadata only and not
+     *            content.
      * @return true, if search should be conducted by groups and not the
      *         absolute repository ordering.
      */
-    boolean isGroupSearchNeeded(ProximityRequest request);
+    boolean isGroupSearchNeeded(ProximityRequest request, boolean propertiesOnly);
 
     ProxiedItem postprocessItemList(List listOfProxiedItems) throws IOException;
 

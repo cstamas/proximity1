@@ -21,6 +21,7 @@
 			<td><a href="#springUrl('/repository')${requestUri}?orderBy=name"><b>#springMessage("item.path")</b></a></td>
 			<td><a href="#springUrl('/repository')${requestUri}?orderBy=size"><b>#springMessage("item.size")</b></a></td>
 			<td><a href="#springUrl('/repository')${requestUri}?orderBy=lastModified"><b>#springMessage("item.lastModified")</b></a></td>
+			<td><a href="#springUrl('/repository')${requestUri}?orderBy=repositoryGroupId"><b>#springMessage("item.repositoryGroupId")</b></a></td>
 			<td><a href="#springUrl('/repository')${requestUri}?orderBy=repositoryId"><b>#springMessage("item.repositoryId")</b></a></td>
 		</tr>
 	</thead>
@@ -41,6 +42,7 @@
 					#end
 				</td>
 				<td>$vtldatetool.format('medium',${item.lastModified})&nbsp;</td>
+				<td><a href="#springUrl('/repository')?repositoryGroupId=${item.repositoryGroupId}">${item.repositoryGroupId}</a>&nbsp;</td>
 				<td><a href="#springUrl('/repository')?repositoryId=${item.repositoryId}">${item.repositoryId}</a>&nbsp;</td>
 			</tr>
 		#end

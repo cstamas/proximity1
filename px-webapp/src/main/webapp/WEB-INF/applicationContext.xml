@@ -64,6 +64,7 @@
 		<property name="indexer" ref="indexer" />
 		<property name="statisticsGatherer" ref="stats" />
 		<property name="accessManager" ref="openAccessManager" />
+		<property name="proximityLogic" ref="proximityLogic"/>
 
 		<property name="repositories">
 			<list>
@@ -83,6 +84,13 @@
 		</property>
 
 	</bean>
+
+	<!--
+		- "Mavenized" logic for Proximity.
+		- It does inter-repository merging of M2 metadatas.
+	-->
+	<bean id="proximityLogic"
+		class="hu.ismicro.commons.proximity.maven.MavenProximityLogic"/>
 
 	<!--
 		- Indexer, used to speed up searches ONLY.
@@ -157,7 +165,7 @@
 		- x = -1 - turn off for the group expiration handling.
 	-->
 	<bean id="maven2logic"
-		class="hu.ismicro.commons.proximity.base.logic.MavenProxyRepositoryLogic">
+		class="hu.ismicro.commons.proximity.maven.MavenProxyRepositoryLogic">
 		<!-- SNAPSHOTSs expires after 24h -->
 		<property name="snapshotExpirationPeriodInSeconds"
 			value="86400" />
