@@ -129,7 +129,7 @@ public class ProximityImpl implements Proximity {
         }
         return result;
     }
-    
+
     public List getRepositoryGroupIds() {
         return Arrays.asList(repositoryGroups.keySet().toArray());
     }
@@ -264,8 +264,8 @@ public class ProximityImpl implements Proximity {
         }
     }
 
-    protected ProxiedItem retrieveItem(ProximityRequest request, boolean propertiesOnly)
-            throws ItemNotFoundException, AccessDeniedException, NoSuchRepositoryException {
+    protected ProxiedItem retrieveItem(ProximityRequest request, boolean propertiesOnly) throws ItemNotFoundException,
+            AccessDeniedException, NoSuchRepositoryException {
 
         ProxiedItem item = null;
 
@@ -282,12 +282,13 @@ public class ProximityImpl implements Proximity {
             } else {
 
                 item = retrieveItemByAbsoluteOrder(request, propertiesOnly);
-                
-                if (proximityLogic.isGroupSearchNeeded(request)) {
 
-                    List repositoryGroupOrder = (List) repositoryGroups.get(item.getProperties().getRepositoryGroupId());
+                if (proximityLogic.isGroupSearchNeeded(request, propertiesOnly)) {
+
+                    List repositoryGroupOrder = (List) repositoryGroups
+                            .get(item.getProperties().getRepositoryGroupId());
                     List itemList = new ArrayList();
-                    itemList.add(item);
+
                     for (Iterator i = repositoryGroupOrder.iterator(); i.hasNext();) {
                         String reposId = (String) i.next();
                         try {
@@ -296,13 +297,13 @@ public class ProximityImpl implements Proximity {
                             logger.debug(request.getPath() + " not found in repository " + reposId);
                         }
                     }
-                    
+
                     item = proximityLogic.postprocessItemList(itemList);
 
                 }
 
             }
-            
+
         } catch (IOException ex) {
             logger.error("Got IOException during retrieveItem.", ex);
         } catch (ItemNotFoundException ex) {
@@ -311,7 +312,7 @@ public class ProximityImpl implements Proximity {
         }
 
         return item;
-        
+
     }
 
     protected ProxiedItem retrieveItemByAbsoluteOrder(ProximityRequest request, boolean propertiesOnly)
