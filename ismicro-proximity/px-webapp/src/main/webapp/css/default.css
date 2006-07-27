@@ -99,7 +99,7 @@ table {
 
 .menuseparator {
      margin-top: 3px;
-     border-top: 1px solid #aaaaaa;
+     border-top: 1px solid #FFCC99;
 }
 
 .submenu {
@@ -111,12 +111,12 @@ table {
 
 .tda td {
      padding: 4px;
-     background: #eeeeee;
+     background: #FFFFCC;
 }
 
 .tdb td {
      padding: 4px;
-     background: #ddddee;
+     background: #FFCC99;
 }
 
 .command {
@@ -125,7 +125,7 @@ table {
 #  background-position: -4px;
      padding-left: 3px;
      padding-right: 3px;
-     background: #eeeeee;
+     background: #FFCC99;
      border: 1px #c2c2c2 solid;
 }
 
@@ -138,7 +138,7 @@ table {
      border: solid red 2px;
      padding: 5px;
      margin-bottom: 15px;
-     background: #eeeeee;
+     background: #FFCC99;
      color: red;
 }
 
@@ -190,11 +190,11 @@ a:active, a:hover {
 
 h2, .header {
 #     display: block;
-     background: #eeeeee;
+     background: #FF9900;
      width: 100%;
 #     border-top: 1px;
 #     border-bottom:1px;
-     border: solid #ddddee 2px;
+     border: solid #FF9900 2px;
      margin-right: -2px;
      margin-left: -2px;
      margin-top: -2px;
@@ -208,11 +208,11 @@ h2, .header {
 
 h3 {
      display: block;
-     background: #eeeeee;
+     background: #FF9900;
 #     width: 100%;
      border-top:1px;
      border-bottom:1px;
-     border: solid #ddddee 2px;
+     border: solid #FF9900 2px;
 #     margin-left: -22px;
      margin-top:5px;
      margin-bottom:5px;
@@ -225,11 +225,11 @@ h3 {
 
 h4 {
      display: block;
-     background: #eeeeee;
+     background: #FF9900;
 #     width: 100%;
      border-top:1px;
      border-bottom:1px;
-     border: solid #ddddee 2px;
+     border: solid #FF9900 2px;
 #     margin-left: -22px;
      margin-top:5px;
      margin-bottom:5px;
@@ -242,11 +242,11 @@ h4 {
 
 .title {
      font-size: 25pt;
-     color: yellow;
+     color: FF9900;
 }
 
 a:hover {
-     color: #8800ff;
+     color: #FF9900;
      border-bottom: none;
      text-decoration: underline;
 }

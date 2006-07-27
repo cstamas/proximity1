@@ -33,7 +33,10 @@
 				<td>
 				    #kindImage($item)
 				</td>
-				<td><a href="#springUrl('/repository')${item.path}?repositoryId=${item.repositoryId}">${item.name}</a>&nbsp;</td>
+				<td>
+				    #itemLink($item)
+				    &nbsp;
+				</td>
 				<td>
 					#if(${item.isDirectory()})
 						&nbsp;
