@@ -76,7 +76,7 @@ group column, which indicates which repositories will be <<aggregated>>.
   Also, notice the cool but useful feature: leave the mouse over the artifact or directory
 link, and you will know about as much as Proximity does! Here is it:
 
-[images/proximity-properties.jpg] Properties shown.
+[images/proximity-properties.png] Properties shown.
 
 
 * Using it with Maven2
@@ -126,14 +126,17 @@ that Maven2 issues a HTTP GET command to Proximity, it does what it should (even
 accessing remote site and download requested item) and then as a response "quickly" hand
 the requested artifact to Maven2.
 
+
   To finish this long story, here is a sample "benchmark": First, we built with <<empty
 local repository>> and <<fresh Proximity installation>>. We built -- of course -- the
 Proximity itself :)
 
-[images/maven2-build1.jpg] Building with M2.
+[images/maven2-build1.png] Building with M2.
 
   Next, we <<deleted>> the local repository, and built again using the same running instance
 of Proximity.
+
+[images/maven2-build2.png] Building with M2.
 
   Wow. 45 seconds alright. But where the hell is 12 minutes?!?!?
 
