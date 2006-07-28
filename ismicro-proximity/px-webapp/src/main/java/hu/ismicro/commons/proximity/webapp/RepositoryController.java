@@ -41,7 +41,7 @@ public class RepositoryController extends MultiActionController {
         if (requestURI.length() == 0) {
             requestURI = "/";
         }
-        logger.info("Got repository request on URI " + requestURI);
+        logger.debug("Got repository request on URI " + requestURI);
         String orderBy = request.getParameter("orderBy") == null ? "name" : request.getParameter("orderBy");
         String targetRepository = request.getParameter("repositoryId");
         String targetGroup = request.getParameter("groupId");
@@ -54,7 +54,7 @@ public class RepositoryController extends MultiActionController {
         pRequest.setGrantee(null);
         pRequest.getAttributes().put(ProximityRequest.REQUEST_REMOTE_ADDRESS, request.getRemoteAddr());
         try {
-            logger.info("Got request for " + targetRepository + " repository on URI: " + requestURI);
+            logger.debug("Got request for " + targetRepository + " repository on URI: " + requestURI);
             itemProps = proximity.retrieveItemProperties(pRequest);
 
             if (itemProps.isDirectory()) {
