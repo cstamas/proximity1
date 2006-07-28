@@ -139,7 +139,7 @@
 		<property name="metadataPrefix" value="metadata" />
 		<property name="storagePrefix" value="storage" />
 	</bean>
-<!-- 
+
 	<bean id="centralRemotePeer"
 		class="hu.ismicro.commons.proximity.base.remote.CommonsHttpClientRemotePeer">
 		<property name="remoteUrl"
@@ -148,7 +148,7 @@
 		<property name="queryString" value="" />
 		<property name="followRedirection" value="true" />
 	</bean>
--->
+<!--
 	<bean id="centralRemotePeer"
 		class="hu.ismicro.commons.proximity.base.remote.CommonsNetFtpRemotePeer">
 		<property name="remoteUrl"
@@ -156,7 +156,7 @@
 		<property name="ftpUsername" value="anonymous" />
 		<property name="ftpPassword" value="someemail@somedomain.com" />
 	</bean>
-
+-->
 
 	<!--
 		- MAVEN1
