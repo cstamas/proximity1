@@ -22,13 +22,15 @@ already used Proximity, while the newly installed will on many links show empty 
   After installation, with opening our beloved browser on the Proximity URL we should have
 the following page. 
 
-  In case we got something other, like 404 error, look at the $TOMCAT_HOME/logs/proximity.log 
-file and ask for help or {{{https://is-micro.myip.hu/trac/ismicro-proximity/}<<issue a ticket>>}}.
-In case house is burning, you can mail me at t.cservenakATgmailDOTcom.
+  In case we got something other, like HTTP 404 or 500 error, look at the $TOMCAT_HOME/logs/proximity.log 
+file and ask for help or {{{http://trac.abstracthorizon.org/proximity/newticket}<<issue a ticket>>}}.
+In case house is burning, you can mail me at cstamas.AT.abstracthorizon.DOT.org.
 
 Let's take a short tour...
 
-[images/proximity-documentation.png] Proximity is up, showing default page.
+  Proximity is up, showing default page.
+
+[images/proximity-documentation.jpg] Proximity is up, showing default page.
 
   The second page is the Search page. On this page we can search amongst <<downloaded>> artifacts. 
 There a "simple" search and Lucene Query search. The simple search searches on index searching for 
@@ -36,9 +38,10 @@ items that has names that starts with the search input.
 
   The Lucene query search is more powerful. The interesting thing is the search engine is extensible. 
 Currently, the MavenAwareLuceneIndexer parses the POM and extracts various interesting infos 
-from it. Searchable keywords are listed on page with some samples.
+from it. Searchable keywords are listed on page with some samples. Here, we sarched with Lucene
+Query for "kind:pom".
 
-[images/proximity-search.png] Proximity searching.
+[images/proximity-search.jpg] Proximity searching.
 
   Next, Proximity on Repositories page shows the list of configured repositories. Repositories
 that have localStorage will be shown with their directories. Proxy repositories will be shown
@@ -48,26 +51,32 @@ behaviour is to create storages on Java System Propery "user.home" appended with
   This page should became more interesting from the moment when runtime Repository configuration
 becomes possible (scheduled for later releases).
 
-[images/proximity-repositories.png] Proximity showing his repositories.
+[images/proximity-repositories.jpg] Proximity showing his repositories.
 
-[images/proximity-repositories1.png] Proximity showing his repositories (continued).
+[images/proximity-repositories1.jpg] Proximity showing his repositories (continued).
 
   Proximity collects statistics during runtime (if configured so). Initially statistics
 page will be empty, since no activity happend on Proximity. Currently Proximity just collects
 simple stats. As you see, various info about requests and requested artifacts are logged. 
 
-[images/proximity-statistics.png] Proximity showing statistics (unfinished feature).
+[images/proximity-statistics.jpg] Proximity showing statistics (unfinished feature).
 
   Proximity have a maintenance page. This page currently holds only the reindexing tool.
 Reindexing is possible to whole Proximity (all registered repositories) and targeted at some
 chosen repository.
 
-[images/proximity-maintenance.png] Proximity maintenance page.
+[images/proximity-maintenance.jpg] Proximity maintenance page.
 
   And finally, we have the repository browsing function. Notice how Proximity differentiates
-between repositories? You can also filter to them and sort artifacts...
+between repositories? You can also filter to them and sort artifacts... Also, there is the 
+group column, which indicates which repositories will be <<aggregated>>.
 
-[images/proximity-browse.png] Browsing proximity repository.
+[images/proximity-browse.jpg] Browsing proximity repository.
+
+  Also, notice the cool but useful feature: leave the mouse over the artifact or directory
+link, and you will know about as much as Proximity does! Here is it:
+
+[images/proximity-properties.jpg] Properties shown.
 
 
 * Using it with Maven2
@@ -77,10 +86,11 @@ Proximity is assumed. Also, installed and working Maven2 is also assumed. Go to
 {{{http://maven.apache.org/}Apache Maven}} to get infos how to setup Maven2.
 
   First, you need a settings.xml file to instruct Maven to use Proximity as a mirror
-of central repo. <<Mirror, not http proxy!>> Below, we see the minimal file to achieve this, below
-is a code to copy+paste.
+of central repo. <<Mirror, not http proxy!>>
 
-[images/maven2-settings.png] Setting up Maven2 to use Proximity as central mirror.
+[images/maven2-settings.jpg] Setting up Maven2 to use Proximity as central mirror.
+
+  Below, we see the minimal file to achieve this, below is a code to copy+paste.
 
 ----------------------------------------
 <settings>
@@ -106,14 +116,25 @@ direct access to central repository.
     
     * on Unix/Linux, $HOME defaults to <</home/[USERNAME]>>.
 
-  Next, we can use Maven2 and build.
+  Next, we can use Maven2 and build. Notice the download URLs!
 
-[images/maven2-build.png] Building with M2 (notice the download URLs).
+[images/maven2-build.jpg] Building with M2.
 
   Notice the URLs from where downloads Maven2 now. Also, you will see a slight change in
 behaviour of Maven2: the download counter will appear as not working. This is due fact,
 that Maven2 issues a HTTP GET command to Proximity, it does what it should (eventually
 accessing remote site and download requested item) and then as a response "quickly" hand
 the requested artifact to Maven2.
+
+  To finish this long story, here is a sample "benchmark": First, we built with <<empty
+local repository>> and <<fresh Proximity installation>>. We built -- of course -- the
+Proximity itself :)
+
+[images/maven2-build1.jpg] Building with M2.
+
+  Next, we <<deleted>> the local repository, and built again using the same running instance
+of Proximity.
+
+  Wow. 45 seconds alright. But where the hell is 12 minutes?!?!?
 
   Have fun!

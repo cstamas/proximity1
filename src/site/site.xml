@@ -17,8 +17,8 @@
 
     <links>
       <item name="Abstract Horizon" href="http://www.abstracthorizon.org/" />
-      <item name="Proximity Wiki" href="http://trac.abstracthorizon.org/proximity/" />
-      <item name="Proximity Support Forum" href="http://forum.abstracthorizon.org/index.php?c=9" />
+      <item name="Wiki" href="http://trac.abstracthorizon.org/proximity/" />
+      <item name="Support Forum" href="http://forum.abstracthorizon.org/index.php?c=9" />
     </links>
 
     <menu ref="parent" />
@@ -30,15 +30,16 @@
       <item name="Support Forum" href="http://forum.abstracthorizon.org/index.php?c=9" />
     </menu>
 
-    <menu name="Reference">
+    <menu name="Guides">
       <item name="Quick Start" href="quick-start.html"/>
+      <item name="Repositories" href="repositories.html"/>
       <item name="Corporate Environments" href="corporate-environment.html"/>
       <item name="Proximity and HTTP Proxies" href="http-proxies.html"/>
-      <item name="Repositories" href="repositories.html"/>
-      <item name="Configuration Reference" href="configuration.html"/>
+      <item name="Configuring Proximity" href="configuration.html"/>
+      <item name="Configuration Reference" href="factory-conf.html"/>
     </menu>
 
-    <menu name="Developers">
+    <menu name="For developers">
       <item name="Developers guide" href="developers-guide.html"/>
     </menu>
 

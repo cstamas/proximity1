@@ -45,7 +45,7 @@ control may be configured on Proximity level and on repository level independent
 
 <li><b>HTTP, HTTPS and HTTP Proxy support</b> - On it's front, Proximity is unaware is it serving
 artifacts over plain HTTP or HTTPS (it is container setup, eg. Tomcat). On it's back
-Proximity Remote Peer is powered with latest <i>Jakarta Commons HttpClient</i> thus has all
+Proximity Remote Peer is powered with <i>Jakarta Commons HttpClient</i> thus has all
 the capabilities that Commons HttpClient has. HttpClient configuration is fully
 exposed through Spring context, allowing easy reconfiguration (like http proxy setup). 
 Furthermore, by employing custom front-ends (the Servlet controller class) and appropriate
@@ -93,13 +93,58 @@ and in Codehaus Plexus container (together with embedded Maven2), SAS and/or Dan
 
 </section>
 
-<section name="How to use">
+
+<section name="Using Proximity as corporate Maven proxy">
+
+<p>See <a href="corporate-environment.html">corporate environmemt</a> for full description
+about Proximity usage in such environment.</p>
+
+<p>The Proximity has the following features, that enables it to act as
+Maven-aware caching proxy:</p>
+
+<ul>
+<li>With pluggable proxying logic it is able to handle maven artifacts in 
+"maven-way" (there is a Logic implementation out-of-the-box)</li>
+<li>It is possible to define more remote repositories, thus Proximity is
+aggregating these repositores and also is caching the and reduces outbound
+traffic.</li>
+<li>The flexibility to define repositories allows administrator to include
+a local only repository to publish in-house artifacts, or other commercial
+artifacts that are not found or ibiblio or other mainstream maven repo.</li>
+<li>Proximity is able to cope with multiple different repositories using non-aggregating
+reposes (see repository relocation alias prefixing).</li>
+</ul>
+
+<p>In contrast to existing maven proxy implementations:</p>
+<ul>
+<li>Proximity Core is transport and environment independent (no javax.* deps) and
+embeddable in any environment (one example is PX Webapp + Spring).</li>
+<li>Ultimately flexible, see <a href="configuration.html">configuration</a>.</li>
+<li>Flexible logic implementations. Some repo may have different retrieval
+logic, as per Repos configuration allows.</li>
+<li>Not fighting against WAR deployment (I need WAR, since one Tomcat
+already runs in my office).</li>
+</ul>
+
+<p>Proximity consists of PX Core module, which is <b>environment and
+transport independent</b>, so it is capable to run in J2SE and
+J2EE environment too. The Maven1/2 awareness is added by new module called
+PX Core Maven that contains Px Maven bindings.</p>
+
+<p>The PX Webapp is a thin module (2 classes + some Velocity templates!) based 
+on Spring IoC framework and it's MVC implementation, and makes the Proximity 
+Servlet implementation.</p>
+
+</section>
+
+
+<section name="Every day use">
 
 <p>This paragraph will give brief instructions on using Proximity with Maven1 and Maven2.</p>
 
 <p>Install it as it should with distribution you downloaded. WAR file should be
 deployed on a J2EE servlet container. Bundled releases should be installed as
-described.</p>
+described in README file.</p>
 
 <p>For WAR distribution: All you have to do is install Proximity WAR on some Servlet 
 container that has access to outer world (for reaching central, codehaus, etc. 
@@ -107,29 +152,6 @@ This is NOT mandatory since you can use Proximity to serve only your own artifac
 
 <p>The examples assumes that Proximity runs on a localhost and at HTTP port 8080 (as wih default
 Apache Tomcat deployment). Follows a few simple scenarios for using Proximity server:</p>
-
-<subsection name="With Maven1">
-
-<p>If you have installed and working Proximity, you have to configure
-Maven1 to use Proximity as his repository (use appropriate URLs, these below are just samples!)
-instead the default at central:</p>
-
-<div>
-<pre>
-  maven -Dmaven.repo.remote=http://localhost:8080/px-webapp/repository clean jar
-</pre>
-</div>
-
-<p>Alternatively, you can place the following line in <b>build.properties</b> of project, or better,
-in your home (on Unix /home/_USERNAME_, on Windows C:\Documents And Settings\_USERNAME_):</p>
-
-<div>
-<pre>
-  maven.repo.remote=http://localhost:8080/px-webapp/repository
-</pre>
-</div>
-
-</subsection>
 
 <subsection name="With Maven 2">
 
@@ -158,6 +180,28 @@ that comes with Maven2 as template at $M2_HOME/conf/settings.xml. Example:
 
 </subsection>
 
+<subsection name="With Maven1">
+
+<p>If you have installed and working Proximity, you have to configure
+Maven1 to use Proximity as his repository instead the default at central:</p>
+
+<div>
+<pre>
+  maven -Dmaven.repo.remote=http://localhost:8080/px-webapp/repository clean jar
+</pre>
+</div>
+
+<p>Alternatively, you can place the following line in <b>build.properties</b> of project, or better,
+in your home (on Unix /home/_USERNAME_, on Windows C:\Documents And Settings\_USERNAME_):</p>
+
+<div>
+<pre>
+  maven.repo.remote=http://localhost:8080/px-webapp/repository
+</pre>
+</div>
+
+</subsection>
+
 <subsection name="With anything other">
 
 <p>Proximity is general Proxy like application, it is <b>NOT</b> just Maven proxy.
@@ -171,49 +215,6 @@ on repository level. No other Maven dependency exists!</p>
 <p>Have fun!</p>
 
 </subsection>
-
-</section>
-
-<section name="Using Proximity as corporate Maven proxy">
-
-<p>See <a href="corporate-environment.html">corporate environmemt</a> for full description
-about Proximity usage in such environment.</p>
-
-<p>The Proximity has the following features, that enables it to act as
-Maven-aware caching proxy:</p>
-
-<ul>
-<li>With pluggable proxying logic it is able to handle maven artifacts in 
-"maven-way" (there is a Logic implementation out-of-the-box)</li>
-<li>It is possible to define more remote repositories, thus Proximity is
-aggregating these repositores and also is caching the and reduces outbound
-traffic.</li>
-<li>The flexibility to define repositories allows administrator to include
-a local only repository to publish in-house artifacts, or other commercial
-artifacts that are not found or ibiblio or other mainstream maven repo.</li>
-<li>Proximity is able to cope with multiple different repositories using non-aggregating
-reposes (see repository relocation alias prefixing).</li>
-</ul>
-
-<p>In contrast to existing maven proxy implementations:</p>
-<ul>
-<li>Proximity Core is transport and environment independent (no javax.* deps) and
-embeddable in any environment (one example is PX Webapp + Spring).</li>
-<li>More flexible, see <a href="configuration.html">configuration</a>.</li>
-<li>Flexible logic implementations. Some repo may have different retrieval
-logic, as per Repos configuration allows.</li>
-<li>Not fighting against WAR deployment (I need WAR, since one Tomcat
-already runs in my office).</li>
-</ul>
-
-<p>Proximity consists of PX Core module, which is <b>environment and
-transport independent</b>, so it is capable to run in J2SE and
-J2EE environment too. The Maven1/2 awareness is added by new module called
-PX Core Maven that contains Px Maven bindings.</p>
-
-<p>The PX Webapp is a thin module (2 classes + some Velocity templates!) based 
-on Spring IoC framework and it's MVC implementation, and makes the Proximity 
-Servlet implementation.</p>
 
 </section>
 
