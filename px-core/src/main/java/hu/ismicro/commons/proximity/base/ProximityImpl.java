@@ -307,7 +307,7 @@ public class ProximityImpl implements Proximity {
         } catch (IOException ex) {
             logger.error("Got IOException during retrieveItem.", ex);
         } catch (ItemNotFoundException ex) {
-            logger.info(request.getPath() + " not found.", ex);
+            logger.info("Item " + request.getPath() + " not found.");
             throw ex;
         }
 
