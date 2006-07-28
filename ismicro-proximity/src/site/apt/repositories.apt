@@ -55,3 +55,48 @@ The local repository
 as new artifacts are fetched from remote repositories and as the developer <<installs>> artifacts into it
 locally. Simple formulation would be: the local repository will contain the <union of all artifacts and
 their dependencies> ever built with Maven2 using the given local repository.
+
+
+Repository aggregation
+
+  As we said already, Proximity <<aggregates>> multiple repositories. What does it mean actually? Well,
+first of all, you don't need to reference four (as provided in default config) different remote repositories 
+(IT nightmare), it is enough only to reference Proximity.
+
+  Aggregation does brings some difficulties: what happens if some path (eg. /ant/ant/1.6.5/ant-1.6.5.pom)
+have defined contents in more then one repository? Proximity solves this by "who serve first - wins"
+algorithm. When Maven client issues a HTTP GET command with absolute URL (which is computed from
+artifact's groupId, artifactId and version), Proximity start looking for that item by iterating over
+his repositories. This is the reason why is <<so important the repository order>> in configuration.
+
+* Artifact "spoofing"
+
+  By placing repository A with similar content before repository B in repository list, we do an <<intentional
+spoof>> of artifacts from B with artifacts from A. This brings endless possibilities (but possibilities to
+errors too) to us.
+
+* Metadata merging
+
+  Beside this. for Maven2 to function properly, good metadata (maven-metadata.xml) is very important. But
+metadata falls in a special category as opposed to those "general" artifacts descibed before. Spoofing is
+not always a good solution for them. Imagine a case, when you have configured the following repositories:
+
+  * <<inhouse>>, hosted
+  
+  * <<central>>, proxied from http://repo1.maven.org/maven2
+  
+  * <<apache-snapshot>>, proxied from http://people.apache.org/maven-snapshot-repository
+  
+  Let's say, you request artifact Doxia core. You can check yourself, but the 
+/org/apache/maven/doxia/doxia-core/maven-metadata.xml file exists in both, <<central>> and 
+<<apache-snapshot>> repositories. Which one should be served to Maven if requested?
+
+  Since this file is <<Maven metadata>> file, it should be <<merged>>. The merge operation within
+Proximity depends on repository's groupId. <<If the repositories are in the same group, the metadata
+will be merged, otherwise spoofed>>.
+
+  Using these techniques, we can fight against various "unstable" repositories, or simply "defend" a temporary
+malfunction (like dissapearance of Jakarta VFS unreleased version). If we would depend on it, we are able
+with Proximity to "spoof" it back into place without to be doomed to failing builds until the remote
+repository that is proxied by Proximity is brought back to its original state.
+
