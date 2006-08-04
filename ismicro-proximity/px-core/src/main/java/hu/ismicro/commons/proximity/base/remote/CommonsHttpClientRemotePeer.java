@@ -18,6 +18,7 @@ import java.util.Date;
 
 import org.apache.commons.httpclient.DefaultHttpMethodRetryHandler;
 import org.apache.commons.httpclient.Header;
+import org.apache.commons.httpclient.HostConfiguration;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.HttpMethod;
@@ -47,6 +48,8 @@ public class CommonsHttpClientRemotePeer extends AbstractRemoteStorage {
     // TODO: ready for refactoring
 
     private HttpMethodRetryHandler httpRetryHandler = null;
+    
+    private HostConfiguration httpConfiguration = null;
 
     private HttpClient httpClient = null;
 
@@ -239,23 +242,28 @@ public class CommonsHttpClientRemotePeer extends AbstractRemoteStorage {
             httpRetryHandler = new DefaultHttpMethodRetryHandler(retrievalRetryCount, false);
             httpClient = new HttpClient(new MultiThreadedHttpConnectionManager());
             httpClient.getParams().setConnectionManagerTimeout(getConnectionTimeout());
+            httpConfiguration = httpClient.getHostConfiguration();
+
             if (getProxyHost() != null) {
                 logger.info("... proxy setup with host " + getProxyHost() + ", port " + getProxyPort());
-                httpClient.getHostConfiguration().setProxy(getProxyHost(), getProxyPort());
-
+                httpConfiguration.setProxy(getProxyHost(), getProxyPort());
+                
                 if (getProxyUsername() != null) {
 
                     if (getProxyNtlmDomain() != null) {
                         logger.info("... proxy authentication setup for NTLM domain " + getProxyNtlmDomain()
                                 + " with username " + getProxyUsername());
+                        httpConfiguration.setHost(getProxyNtlmHost());
+
                         httpClient.getState().setProxyCredentials(
-                                new AuthScope(getProxyHost(), getProxyPort()),
+                                AuthScope.ANY,
                                 new NTCredentials(getProxyUsername(), getProxyPassword(), getProxyNtlmHost(),
                                         getProxyNtlmDomain()));
                     } else {
                         logger.info("... proxy authentication setup for http proxy " + getProxyHost()
                                 + " with username " + getProxyUsername());
-                        httpClient.getState().setProxyCredentials(new AuthScope(getProxyHost(), getProxyPort()),
+
+                        httpClient.getState().setProxyCredentials(AuthScope.ANY,
                                 new UsernamePasswordCredentials(getProxyUsername(), getProxyPassword()));
 
                     }
@@ -273,7 +281,7 @@ public class CommonsHttpClientRemotePeer extends AbstractRemoteStorage {
         int resultCode = 0;
         try {
             logger.debug("Executing " + method + " on URI " + method.getURI());
-            resultCode = getHttpClient().executeMethod(method);
+            resultCode = getHttpClient().executeMethod(httpConfiguration, method);
         } catch (HttpException ex) {
             logger.error("Protocol error while executing " + method.getName() + " method with query string "
                     + method.getQueryString(), ex);
