@@ -1,0 +1,137 @@
+                           ----------------------
+                           Repository configuration
+                           ----------------------
+                           Cservenak Tamas
+                           ----------------------
+                           2006. 06. 21.
+
+
+Repository Configuration
+
+  The Proximity gathers one or more repositories. Each repository have well defined API and behaviour.
+The behaviour of a repository is affected by multiple factors.
+
+  A repository at glance in Proximity have these properties:
+  
+[images/repo-arch.png] Repo arch.
+
+  The two most important component, the localStorage and remotePeer is the main factor in repository
+behaviour. The second most important is the repositoryLogic. All these components are "pluggable",
+and loosely coupled, since they are actually implementations of their respective interfaces.
+
+* From nonsense to proxying
+
+  As we have seen, the repository itself is like rubber, and is robust to compete with almost every
+component combinations. Naturally, some of these will be rather nonse to use, but it is up to user to
+do a proper configuration.
+
+*-----------------*--------------------*------------------------*
+|                 | With remote peer   | Without remote peer    |
+*-----------------*--------------------*------------------------*
+| Without local   | non-caching proxy  | will work, but nonsense |
+| storage         | (will not speed up anything) | (without content) |
+*-----------------*--------------------*------------------------*
+| With ReadOnly   | non-caching proxy  | inhouse repository     |
+| local storage   | (usable for        | (with local static content,|
+|                 | intentional        | usable for inhouse repository |
+|                 | artifact spoofing) | hosting)               |
+*-----------------*--------------------*------------------------*
+| With ReadWrite  | caching proxy      | inhouse repository     |
+| local storage   | (the real value,   | (but write operation will never occur|
+|                 | will proxy and     | on local storage, logical equivalent of upper one) |
+|                 | cache)             |                        |
+*-----------------*--------------------*-------------------------*
+Possible configurations
+
+  Thus, first we have to choose what intention will repository serve for us, and configure it the needed 
+way. But remember, the {{{repository-configuration.html#RepositoryLogic}Repository Logic}} has also large influence on how repository works!
+
+* Repository configuration reference
+
+  * <<id>> - the Proximity-wide unique ID of the repository (java.lang.String), mandatory.
+    
+    Used in "direct addressing" the given repository. Used for example on WWW interface and "piping".
+    
+  * <<groupId>> - the group that belongs this repository (java.lang.String), not mandatory.
+  
+    If more than one repository is member of one group (have same groupId's), their <<metadata content
+    will be merged>>. Usable for Maven plugin developers, who needs snapshots from snapshot repositories.
+    If not specified, the "default" string will be used.
+    
+  * <<localStorage>> - the local storage (hu.ismicro.commons.proximity.base.Storage), not mandatory.
+  
+    Local storage implementation. Currently two implementation exists: ReadOnlyFileSystemStorage usable
+    for hosted repositories and WritableFileSystemStorage usable for proxied repositories.
+    If not specified, the repository will have no local storage (see upper table).
+    
+  * <<remoteStorage>> - the remote storage (hu.ismicro.commons.proximity.base.Storage), not mandatory.
+  
+    Remote storage implementation. Currently two implementation exists: CommonsHttpClientRemotePeer and
+    CommonsNetFtpRemotePeer. Obviously, Jakarta Commons HttpClient and Net components are used in their
+    implementations. If not specified, the repository will have no remote storage (see upper table).
+    
+  * <<indexer>> - the indexer to use (hu.ismicro.commons.proximity.base.Indexer), not mandatory.
+  
+    Indexer to use within repository. Indexer is <<used in searching only>>, Proximity is happy to
+    operate even without it. If not specified, no indexer will be used, no indexing services (search) will be available.
+    
+  * <<statisticsGatherer>> - the statistics gatherer to use (hu.ismicro.commons.proximity.base.StatisticsGatherer), not mandatory.
+  
+    The statistics gatherer is simply a type of "listener" for local and remote hits. Currently the least
+    worked out component of Proximity. Will see to expand it. If not specified, no stats will be available.
+    
+  * <<accessManager>> - access manager for repository (hu.ismicro.commons.proximity.access.AccessManager), not mandatory.
+  
+    The access manager is an extensible manager to allow or forbid access even at artifact level (using various implementations).
+    It is recommended to use IP or certificate based AccessManagers at Proximity level, and ACL-like AccessManagers on repository
+    level. If not specified, it defaults to OpenAccessManager, which simply accepts all requests.
+    
+  * <<repositoryLogic>> - repository logic that orchestrates the retrieval (hu.ismicro.commons.proximity.base.RepositoryLogic), not mandatory.
+  
+    The most trickiest part of Repository. The logic "drives" the retrieval of the current request. This is the 
+    part where Proximity-M offers "Mavenized" logic to drive retrieval. If not specified, repository 
+    defaults to DefaultProxyingRepositoryLogic which is <<not Maven aware>>.
+    
+  * <<reindex>> - should reindex the storage at startup (boolean), not mandatory.
+  
+    <<If>> indexer is defined, and <<if>> reindex is true, reindexing will occur on Proximity startup.
+    If indexer is not specified, this parameter is neglected. If not specified, it defaults to <<true>>.
+    
+  * <<recreateMetadata>> - should recreate metadata on startup (boolean), not mandatory.
+  
+    <<If>> repository have local storage, <<and if>> local storage is writable, <<and if>> local storage is set to be
+    metadata aware, the metadata will be recreated at startup. Defaults to true.
+    
+  * <<listable>> - is repository listable on Proximity browsing UI (boolean), not mandatory.
+  
+    <<If>> true, the content of the repository appears on repository browsing page. If false, it will
+    be not browsable, but <<it will be still reachable by direct HTTP GET requests>>, thus it will
+    be still available to Maven. Defaults to true.
+
+  * <<available>> - is repository available (boolean), not mandatory.
+  
+    <<If>> false, repository <<will reject all incoming requests>>. Defaults to true.
+    
+  * <<offline>> - is the remote peer offline (boolean), not mandatory.
+  
+    <<If>> true, and <<if>> repository have remote peer, the repository <<will not try to fetch
+    anything from remote peer>>, it will serve what it have in cache (if have cache). Defaults to false.
+    
+
+* {RepositoryLogic} reference
+
+  Proximity offers three Repository Logic implementations:
+  
+  * {{{px-core/xref/hu/ismicro/commons/proximity/base/logic/DefaultProxyingRepositoryLogic.html}DefaultProxyingRepositoryLogic}} - that behaves like a "simple" proxying logic.
+  
+  * {{{px-core/xref/hu/ismicro/commons/proximity/base/logic/DefaultExpiringProxyingRepositoryLogic.html}DefaultExpiringProxyingRepositoryLogic}} - extends the former one with timeouts.
+
+  []
+  
+  and finally, the Maven "specialized" one, that "recognizes" Maven internals:
+
+  * {{{px-core-maven/xref/hu/ismicro/commons/proximity/maven/MavenProxyRepositoryLogic.html}MavenProxyRepositoryLogic}} - Maven logic.
+
+  []
+  
+  Look at their sources for setup possibilites.

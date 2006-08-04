@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://web.resource.org/cc/"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="744.09448819"
+   height="1052.3622047"
+   id="svg9805"
+   sodipodi:version="0.32"
+   inkscape:version="0.44"
+   sodipodi:docbase="/home/cstamas/worx/projects/ismicro-proximity/eclipse/proximity/src/site/resources/images"
+   sodipodi:docname="repo-arch.svg">
+  <defs
+     id="defs9807" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     gridtolerance="10000"
+     guidetolerance="10"
+     objecttolerance="10"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1.4"
+     inkscape:cx="435.77206"
+     inkscape:cy="674.94017"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     inkscape:window-width="1268"
+     inkscape:window-height="945"
+     inkscape:window-x="6"
+     inkscape:window-y="47" />
+  <metadata
+     id="metadata9810">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <g
+       id="g9896"
+       transform="translate(0,95.71429)"
+       inkscape:export-filename="/home/cstamas/worx/projects/ismicro-proximity/eclipse/proximity/src/site/resources/images/repo-arch.png"
+       inkscape:export-xdpi="81.217781"
+       inkscape:export-ydpi="81.217781">
+      <rect
+         rx="24.243662"
+         ry="24.243662"
+         y="222.13934"
+         x="57.263302"
+         height="170.71577"
+         width="201.02036"
+         id="rect9813"
+         style="fill:#ff994c;fill-opacity:1;stroke:none;stroke-width:5;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+      <text
+         id="text9815"
+         y="243.35254"
+         x="70.395271"
+         style="font-size:12px;font-style:normal;font-weight:normal;fill:black;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+         xml:space="preserve"><tspan
+           y="243.35254"
+           x="70.395271"
+           id="tspan9817"
+           sodipodi:role="line">Px Repository</tspan><tspan
+           id="tspan9857"
+           y="258.35254"
+           x="70.395271"
+           sodipodi:role="line" /><tspan
+           id="tspan9859"
+           y="273.35254"
+           x="70.395271"
+           sodipodi:role="line">- repo Id, group Id</tspan><tspan
+           id="tspan9861"
+           y="288.35254"
+           x="70.395271"
+           sodipodi:role="line">- repository logic</tspan><tspan
+           id="tspan9863"
+           y="303.35254"
+           x="70.395271"
+           sodipodi:role="line">- availability, offline switches</tspan><tspan
+           id="tspan9865"
+           y="318.35254"
+           x="70.395271"
+           sodipodi:role="line">- listable switch</tspan><tspan
+           id="tspan9867"
+           y="333.35254"
+           x="70.395271"
+           sodipodi:role="line" /><tspan
+           id="tspan9869"
+           y="348.35254"
+           x="70.395271"
+           sodipodi:role="line">- indexer</tspan><tspan
+           id="tspan9871"
+           y="363.35254"
+           x="70.395271"
+           sodipodi:role="line">- statistic gatherer</tspan><tspan
+           id="tspan9873"
+           y="378.35254"
+           x="70.395271"
+           sodipodi:role="line">- access manager</tspan></text>
+    </g>
+    <g
+       id="g9887"
+       inkscape:export-filename="/home/cstamas/worx/projects/ismicro-proximity/eclipse/proximity/src/site/resources/images/repo-arch.png"
+       inkscape:export-xdpi="81.217781"
+       inkscape:export-ydpi="81.217781">
+      <rect
+         rx="24.243662"
+         ry="24.243662"
+         y="218.43092"
+         x="456.27267"
+         height="155.56349"
+         width="155.56349"
+         id="rect9819"
+         style="fill:#ff994c;fill-opacity:1;stroke:none;stroke-width:5;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+      <text
+         xml:space="preserve"
+         style="font-size:12px;font-style:normal;font-weight:normal;fill:black;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+         x="464.39526"
+         y="239.06685"
+         id="text9823"><tspan
+           sodipodi:role="line"
+           id="tspan9825"
+           x="464.39526"
+           y="239.06685">Local Storage</tspan><tspan
+           id="tspan9847"
+           sodipodi:role="line"
+           x="464.39526"
+           y="254.06685" /><tspan
+           id="tspan9849"
+           sodipodi:role="line"
+           x="464.39526"
+           y="269.06685">- currently RO and RW</tspan><tspan
+           id="tspan9851"
+           sodipodi:role="line"
+           x="464.39526"
+           y="284.06685">- filesystem, fast</tspan><tspan
+           sodipodi:role="line"
+           x="464.39526"
+           y="299.06685"
+           id="tspan9922">- storage location</tspan><tspan
+           id="tspan9853"
+           sodipodi:role="line"
+           x="464.39526"
+           y="314.06685">- metadata &quot;awareness&quot;</tspan></text>
+    </g>
+    <g
+       id="g9875"
+       transform="translate(-0.714294,0)"
+       inkscape:export-filename="/home/cstamas/worx/projects/ismicro-proximity/eclipse/proximity/src/site/resources/images/repo-arch.png"
+       inkscape:export-xdpi="81.217781"
+       inkscape:export-ydpi="81.217781">
+      <rect
+         style="fill:#ff994c;fill-opacity:1;stroke:none;stroke-width:5;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         id="rect9821"
+         width="155.56349"
+         height="155.56349"
+         x="456.98697"
+         y="414.1452"
+         ry="24.243662"
+         rx="24.243662" />
+      <text
+         id="text9827"
+         y="434.78113"
+         x="467.10956"
+         style="font-size:12px;font-style:normal;font-weight:normal;fill:black;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+         xml:space="preserve"><tspan
+           y="434.78113"
+           x="467.10956"
+           id="tspan9829"
+           sodipodi:role="line">Remote Peer</tspan><tspan
+           id="tspan9831"
+           y="449.78113"
+           x="467.10956"
+           sodipodi:role="line" /><tspan
+           id="tspan9833"
+           y="464.78113"
+           x="467.10956"
+           sodipodi:role="line">- currently HTTP or FTP</tspan><tspan
+           id="tspan9855"
+           y="479.78113"
+           x="467.10956"
+           sodipodi:role="line">- network, slow</tspan><tspan
+           id="tspan9837"
+           y="494.78113"
+           x="467.10956"
+           sodipodi:role="line">- remote URL</tspan><tspan
+           id="tspan9841"
+           y="509.78113"
+           x="467.10956"
+           sodipodi:role="line">- connection settings</tspan><tspan
+           id="tspan9843"
+           y="524.78113"
+           x="467.10956"
+           sodipodi:role="line">- proxy settings</tspan><tspan
+           id="tspan9845"
+           y="539.78113"
+           x="467.10956"
+           sodipodi:role="line">- piping settings</tspan></text>
+    </g>
+    <path
+       style="fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:black;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 258.28366,374.63055 L 456.27267,318.3306"
+       id="path9910"
+       inkscape:connector-type="polyline"
+       inkscape:connection-start="#g9896"
+       inkscape:connection-end="#g9887"
+       inkscape:export-filename="/home/cstamas/worx/projects/ismicro-proximity/eclipse/proximity/src/site/resources/images/repo-arch.png"
+       inkscape:export-xdpi="81.217781"
+       inkscape:export-ydpi="81.217781" />
+    <path
+       style="fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:black;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 258.28366,426.90872 L 456.27267,473.58841"
+       id="path9912"
+       inkscape:connector-type="polyline"
+       inkscape:connection-start="#g9896"
+       inkscape:connection-end="#g9875"
+       inkscape:export-filename="/home/cstamas/worx/projects/ismicro-proximity/eclipse/proximity/src/site/resources/images/repo-arch.png"
+       inkscape:export-xdpi="81.217781"
+       inkscape:export-ydpi="81.217781" />
+    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:normal;font-weight:normal;fill:black;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+       x="292.85715"
+       y="325.93362"
+       id="text9914"
+       inkscape:export-filename="/home/cstamas/worx/projects/ismicro-proximity/eclipse/proximity/src/site/resources/images/repo-arch.png"
+       inkscape:export-xdpi="81.217781"
+       inkscape:export-ydpi="81.217781"><tspan
+         sodipodi:role="line"
+         id="tspan9916"
+         x="292.85715"
+         y="325.93362">may have 0..1</tspan></text>
+    <text
+       id="text9918"
+       y="478.79077"
+       x="292.85715"
+       style="font-size:12px;font-style:normal;font-weight:normal;fill:black;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+       xml:space="preserve"
+       inkscape:export-filename="/home/cstamas/worx/projects/ismicro-proximity/eclipse/proximity/src/site/resources/images/repo-arch.png"
+       inkscape:export-xdpi="81.217781"
+       inkscape:export-ydpi="81.217781"><tspan
+         y="478.79077"
+         x="292.85715"
+         id="tspan9920"
+         sodipodi:role="line">may have 0..1</tspan></text>
+  </g>
+</svg>

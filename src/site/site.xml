@@ -36,6 +36,7 @@
       <item name="Corporate Environments" href="corporate-environment.html"/>
       <item name="Proximity and HTTP Proxies" href="http-proxies.html"/>
       <item name="Configuring Proximity" href="configuration.html"/>
+      <item name="Configuring Repositories" href="repository-configuration.html"/>
       <item name="Configuration Reference" href="factory-conf.html"/>
     </menu>
 

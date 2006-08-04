@@ -77,7 +77,7 @@ errors too) to us.
 
 * Metadata merging
 
-  Beside this. for Maven2 to function properly, good metadata (maven-metadata.xml) is very important. But
+  Beside this. for Maven2 to function properly, proper metadata (maven-metadata.xml) is very important. But
 metadata falls in a special category as opposed to those "general" artifacts descibed before. Spoofing is
 not always a good solution for them. Imagine a case, when you have configured the following repositories:
 
@@ -86,6 +86,8 @@ not always a good solution for them. Imagine a case, when you have configured th
   * <<central>>, proxied from http://repo1.maven.org/maven2
   
   * <<apache-snapshot>>, proxied from http://people.apache.org/maven-snapshot-repository
+
+  []
   
   Let's say, you request artifact Doxia core. You can check yourself, but the 
 /org/apache/maven/doxia/doxia-core/maven-metadata.xml file exists in both, <<central>> and 
@@ -97,6 +99,6 @@ will be merged, otherwise spoofed>>.
 
   Using these techniques, we can fight against various "unstable" repositories, or simply "defend" a temporary
 malfunction (like dissapearance of Jakarta VFS unreleased version). If we would depend on it, we are able
-with Proximity to "spoof" it back into place without to be doomed to failing builds until the remote
+with Proximity to "spoof" it back into place at company level without to be doomed to failing builds until the remote
 repository that is proxied by Proximity is brought back to its original state.
 

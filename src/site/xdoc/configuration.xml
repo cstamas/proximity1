@@ -15,23 +15,52 @@
 
 <p>This Guide is <b>work in progress</b>.</p>
 
-<p>Proximity is made up from the following components:</p>
+<p>Proximity-M is made up from the following components:</p>
 
 <ul>
 <li><b>Proximity</b> - handles one or more repository. The order of the
 configured repositories is important.</li>
 <li><b>Repository</b> - may have storage and remote peer defined. It have
-also pluggable logic to orhestrate the retrieval.</li>
-<li><b>Storage</b> - a generic interface, which covers all kind a storage.
-It may be local or remote, with any kind of underlying protocol (FTP, NFS, HTTP, etc)</li>
-<li><b>RemotePeer</b> - a storage subinterface, which covers all kind a 
-remote-storage. It may be kind of underlying protocol (FTP, NFS, HTTP, etc), but
-Repository KNOWS it is REMOTE.</li>
-<li><b>RepositoryRetrievalLogic</b> - orchestrates the retrieval.</li>
+also pluggable logic to orhestrate the retrieval See <a href="repository-configuration.html">Repository Configuration</a>.</li>
+<li><b>ProximityLogic</b> - orchestrates the inter-repository retrieval (like aggregation).</li>
+<li><b>Indexer</b> - used for fast searches only, not used in basic functionality.</li>
 <li><b>AccessManager</b> - decides whether to allow or forbid access (on Proximity or per repository level).</li>
+<li><b>StatisticsGatherer</b> - Service component, simply collects usage stats and serves them to Proximity.</li>
 </ul>
 
-<p>TODO: list of components, list of their properties.</p>
+<p>These components makes the Proximity itself.</p>
+
+<subsection name="Architecture at glance">
+
+<p>The Proximity simplified arhitecture is shown on this image:</p>
+
+<p>
+<table>
+<tr><td>
+<p>An example of Proximity configuration: two proxied repositories, one for "central" (http://repo1.maven.org/maven2)
+and one for "apache.snapshot" (http://people.apache.org/maven-snapshot-repository/). Three inhouse (hosted)
+repositories for inhouse development. Developing Maven plugins but also inhouse projects.</p>
+<p>A fictive Maven + Proximity session, starts with a simple command line invocation like:</p>
+</td></tr>
+<tr><td>
+<p><br/><img src="images/px-arch.png"/><br/></p>
+</td></tr>
+</table>
+</p>
+
+</subsection>
+
+<subsection name="A simple request">
+
+<p>TODO: "Who serves first - wins".</p>
+
+</subsection>
+
+<subsection name="An aggregated request">
+
+<p>TODO: "Who serves first - wins" + group search and aggregation.</p>
+
+</subsection>
 
 </section>
 
