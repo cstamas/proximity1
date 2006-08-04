@@ -9,9 +9,6 @@
 		<version>1.0.0</version>
 	</parent>
 
-	<!-- the version of maven's project object model -->
-	<modelVersion>4.0.0</modelVersion>
-
 	<!-- a unique name for this project -->
 	<artifactId>px-core-maven</artifactId>
 
@@ -22,14 +19,14 @@
 	<name>Px Maven bindings</name>
 
 	<!-- The version of the project under development -->
-	<version>1.0.0-RC2</version>
+	<version>1.0.0-RC3</version>
 
 	<dependencies>
 
 		<dependency>
 			<groupId>hu.ismicro.proximity</groupId>
 			<artifactId>px-core</artifactId>
-			<version>1.0.0-RC2</version>
+			<version>1.0.0-RC3</version>
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
