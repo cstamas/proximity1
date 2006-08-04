@@ -105,9 +105,15 @@
 
 	<!-- SCM -->
 	<scm>
-		<connection>scm:svn:http://svn.abstracthorizon.org/proximity/</connection>
-		<developerConnection>scm:svn:https://svn.abstracthorizon.org/proximity/</developerConnection>
-		<url>http://trac.abstracthorizon.org/proximity/browser/trunk/ismicro-proximity/</url>
+		<connection>
+			scm:svn:http://svn.abstracthorizon.org/proximity/
+		</connection>
+		<developerConnection>
+			scm:svn:https://svn.abstracthorizon.org/proximity/
+		</developerConnection>
+		<url>
+			http://trac.abstracthorizon.org/proximity/browser/trunk/ismicro-proximity/
+		</url>
 	</scm>
 
 	<!-- details about the organization that 'owns' the project -->
@@ -133,7 +139,9 @@
 				<plugin>
 					<artifactId>maven-release-plugin</artifactId>
 					<configuration>
-						<tagBase>https://svn.abstracthorizon.org/proximity/tags/</tagBase>
+						<tagBase>
+							https://svn.abstracthorizon.org/proximity/tags/
+						</tagBase>
 					</configuration>
 				</plugin>
 			</plugins>
@@ -150,16 +158,22 @@
 		<repository>
 			<id>abstracthorizon</id>
 			<name>Abstract Horizon Central Repository</name>
-			<url>scp://213.232.95.19/srv/abstracthorizon.org/html/repository</url>
+			<url>
+				scp://213.232.95.19/srv/abstracthorizon.org/html/repository
+			</url>
 		</repository>
 		<snapshotRepository>
 			<id>abstracthorizon-snapshot</id>
 			<name>Abstract Horizon Central Development Repository</name>
-			<url>scp://213.232.95.19/srv/abstracthorizon.org/html/repository</url>
+			<url>
+				scp://213.232.95.19/srv/abstracthorizon.org/html/repository
+			</url>
 		</snapshotRepository>
 		<site>
 			<id>abstracthorizon.org</id>
-			<url>scp://213.232.95.19/srv/abstracthorizon.org/html/proximity</url>
+			<url>
+				scp://213.232.95.19/srv/abstracthorizon.org/html/proximity
+			</url>
 		</site>
 	</distributionManagement>
 
