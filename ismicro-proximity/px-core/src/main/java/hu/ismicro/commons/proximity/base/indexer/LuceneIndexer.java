@@ -24,6 +24,7 @@ import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.queryParser.ParseException;
 import org.apache.lucene.queryParser.QueryParser;
+import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.FuzzyQuery;
 import org.apache.lucene.search.Hits;
@@ -101,7 +102,7 @@ public class LuceneIndexer extends AbstractIndexer {
         try {
             // prevent duplication on idx
             IndexReader reader = IndexReader.open(indexDirectory);
-            int deleted = reader.delete(new Term("UID", UID));
+            int deleted = reader.deleteDocuments(new Term("UID", UID));
             dirtyItems = dirtyItems + deleted;
             reader.close();
             IndexWriter writer = new IndexWriter(indexDirectory, analyzer, false);
@@ -122,7 +123,7 @@ public class LuceneIndexer extends AbstractIndexer {
             for (Iterator i = uidWithItems.keySet().iterator(); i.hasNext();) {
                 UID = (String) i.next();
                 // prevent duplication on idx
-                int deleted = reader.delete(new Term("UID", UID));
+                int deleted = reader.deleteDocuments(new Term("UID", UID));
                 dirtyItems = dirtyItems + deleted;
             }
             reader.close();
@@ -147,7 +148,7 @@ public class LuceneIndexer extends AbstractIndexer {
         logger.debug("Deleting item from index");
         try {
             IndexReader reader = IndexReader.open(indexDirectory);
-            int deleted = reader.delete(new Term("UID", UID));
+            int deleted = reader.deleteDocuments(new Term("UID", UID));
             reader.close();
             logger.info("Deleted " + deleted + " items from index for UID=" + UID);
             dirtyItems = dirtyItems + deleted;
@@ -176,7 +177,7 @@ public class LuceneIndexer extends AbstractIndexer {
             } else {
                 termQ = new FuzzyQuery(new Term(key, ip.getMetadata(key)));
             }
-            query.add(termQ, true, false);
+            query.add(termQ, BooleanClause.Occur.SHOULD);
         }
         return search(query);
     }
@@ -196,7 +197,7 @@ public class LuceneIndexer extends AbstractIndexer {
         Document result = new Document();
         for (Iterator i = item.getAllMetadata().keySet().iterator(); i.hasNext();) {
             String key = (String) i.next();
-            result.add(Field.Keyword(key, item.getMetadata(key)));
+            result.add(new Field(key, item.getMetadata(key), Field.Store.YES, Field.Index.UN_TOKENIZED));
         }
         return postProcessDocument(item, result);
     }
@@ -207,7 +208,7 @@ public class LuceneIndexer extends AbstractIndexer {
 
     protected void addItemToIndex(IndexWriter writer, String UID, ItemProperties item) throws IOException {
         Document ipDoc = itemProperties2Document(item);
-        ipDoc.add(Field.Keyword("UID", UID));
+        ipDoc.add(new Field("UID", UID, Field.Store.YES, Field.Index.UN_TOKENIZED));
         writer.addDocument(ipDoc);
         dirtyItems++;
         if (dirtyItems > dirtyItemTreshold) {
