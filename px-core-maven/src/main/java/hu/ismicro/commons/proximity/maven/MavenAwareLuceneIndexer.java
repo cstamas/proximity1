@@ -33,6 +33,10 @@ public class MavenAwareLuceneIndexer extends LuceneIndexer {
 
     public static final String POM_URL_KEY = "pom.url";
 
+    public static final String POM_VERSION_KEY = "pom.version";
+
+    public static final String POM_DESCRIPTION_KEY = "pom.prjDesc";
+
     public List getSearchableKeywords() {
         List result = super.getSearchableKeywords();
         result.add(KIND_KEY);
@@ -47,27 +51,39 @@ public class MavenAwareLuceneIndexer extends LuceneIndexer {
         // if we have "meat" we should do our job
         if (MavenArtifactRecognizer.isPom(ip.getName()) && !MavenArtifactRecognizer.isChecksum(ip.getName())) {
             doc.add(Field.Keyword(KIND_KEY, KIND_POM));
+            ip.setMetadata(KIND_KEY, KIND_POM);
 
             Item item = null;
             try {
-
+                
                 item = retrieveItemFromStorages(ip.getPath());
 
                 MavenXpp3Reader reader = new MavenXpp3Reader();
                 InputStreamReader ir = new InputStreamReader(item.getStream());
                 Model pom = reader.read(ir);
-
+                
                 if (pom.getGroupId() != null) {
                     doc.add(Field.Keyword(POM_GID_KEY, pom.getGroupId()));
+                    ip.setMetadata(POM_GID_KEY, pom.getGroupId());
                 }
                 if (pom.getArtifactId() != null) {
                     doc.add(Field.Keyword(POM_AID_KEY, pom.getArtifactId()));
+                    ip.setMetadata(POM_AID_KEY, pom.getArtifactId());
                 }
                 if (pom.getPackaging() != null) {
                     doc.add(Field.Keyword(POM_PCK_KEY, pom.getPackaging()));
+                    ip.setMetadata(POM_PCK_KEY, pom.getPackaging());
                 }
                 if (pom.getUrl() != null) {
                     doc.add(Field.Text(POM_URL_KEY, pom.getUrl()));
+                    ip.setMetadata(POM_URL_KEY, pom.getUrl());
+                }
+                if (pom.getVersion() != null) {
+                    doc.add(Field.Text(POM_VERSION_KEY, pom.getVersion()));
+                    ip.setMetadata(POM_URL_KEY, pom.getUrl());
+                }
+                if (pom.getDescription() != null) {
+                    doc.add(Field.Text(POM_VERSION_KEY, pom.getDescription()));
                 }
 
             } catch (ItemNotFoundException ex) {
@@ -86,8 +102,10 @@ public class MavenAwareLuceneIndexer extends LuceneIndexer {
 
         } else if (MavenArtifactRecognizer.isMetadata(ip.getName())) {
             doc.add(Field.Keyword(KIND_KEY, KIND_METADATA));
+            ip.setMetadata(KIND_KEY, KIND_METADATA);
         } else if (MavenArtifactRecognizer.isSnapshot(ip.getName())) {
             doc.add(Field.Keyword(KIND_KEY, KIND_SNAPSHOT));
+            ip.setMetadata(KIND_KEY, KIND_SNAPSHOT);
         }
         return doc;
     }
