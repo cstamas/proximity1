@@ -50,7 +50,7 @@ public class MavenAwareLuceneIndexer extends LuceneIndexer {
     protected Document postProcessDocument(ItemProperties ip, Document doc) {
         // if we have "meat" we should do our job
         if (MavenArtifactRecognizer.isPom(ip.getName()) && !MavenArtifactRecognizer.isChecksum(ip.getName())) {
-            doc.add(Field.Keyword(KIND_KEY, KIND_POM));
+            doc.add(new Field(KIND_KEY, KIND_POM, Field.Store.YES, Field.Index.UN_TOKENIZED));
             ip.setMetadata(KIND_KEY, KIND_POM);
 
             Item item = null;
@@ -63,27 +63,27 @@ public class MavenAwareLuceneIndexer extends LuceneIndexer {
                 Model pom = reader.read(ir);
                 
                 if (pom.getGroupId() != null) {
-                    doc.add(Field.Keyword(POM_GID_KEY, pom.getGroupId()));
+                    doc.add(new Field(POM_GID_KEY, pom.getGroupId(), Field.Store.YES, Field.Index.UN_TOKENIZED));
                     ip.setMetadata(POM_GID_KEY, pom.getGroupId());
                 }
                 if (pom.getArtifactId() != null) {
-                    doc.add(Field.Keyword(POM_AID_KEY, pom.getArtifactId()));
+                    doc.add(new Field(POM_AID_KEY, pom.getArtifactId(), Field.Store.YES, Field.Index.UN_TOKENIZED));
                     ip.setMetadata(POM_AID_KEY, pom.getArtifactId());
                 }
                 if (pom.getPackaging() != null) {
-                    doc.add(Field.Keyword(POM_PCK_KEY, pom.getPackaging()));
+                    doc.add(new Field(POM_PCK_KEY, pom.getPackaging(), Field.Store.YES, Field.Index.UN_TOKENIZED));
                     ip.setMetadata(POM_PCK_KEY, pom.getPackaging());
                 }
                 if (pom.getUrl() != null) {
-                    doc.add(Field.Text(POM_URL_KEY, pom.getUrl()));
+                    doc.add(new Field(POM_URL_KEY, pom.getUrl(), Field.Store.YES, Field.Index.TOKENIZED));
                     ip.setMetadata(POM_URL_KEY, pom.getUrl());
                 }
                 if (pom.getVersion() != null) {
-                    doc.add(Field.Text(POM_VERSION_KEY, pom.getVersion()));
-                    ip.setMetadata(POM_URL_KEY, pom.getUrl());
+                    doc.add(new Field(POM_VERSION_KEY, pom.getVersion(), Field.Store.YES, Field.Index.TOKENIZED));
+                    ip.setMetadata(POM_URL_KEY, pom.getVersion());
                 }
                 if (pom.getDescription() != null) {
-                    doc.add(Field.Text(POM_VERSION_KEY, pom.getDescription()));
+                    doc.add(new Field(POM_DESCRIPTION_KEY, pom.getDescription(), Field.Store.YES, Field.Index.TOKENIZED));
                 }
 
             } catch (ItemNotFoundException ex) {
@@ -101,10 +101,10 @@ public class MavenAwareLuceneIndexer extends LuceneIndexer {
             }
 
         } else if (MavenArtifactRecognizer.isMetadata(ip.getName())) {
-            doc.add(Field.Keyword(KIND_KEY, KIND_METADATA));
+            doc.add(new Field(KIND_KEY, KIND_METADATA, Field.Store.YES, Field.Index.UN_TOKENIZED));
             ip.setMetadata(KIND_KEY, KIND_METADATA);
         } else if (MavenArtifactRecognizer.isSnapshot(ip.getName())) {
-            doc.add(Field.Keyword(KIND_KEY, KIND_SNAPSHOT));
+            doc.add(new Field(KIND_KEY, KIND_SNAPSHOT, Field.Store.YES, Field.Index.UN_TOKENIZED));
             ip.setMetadata(KIND_KEY, KIND_SNAPSHOT);
         }
         return doc;
