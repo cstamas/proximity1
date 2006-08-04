@@ -230,12 +230,12 @@ public class RepositoryImpl implements Repository {
             throw new RepositoryNotAvailableException("The repository " + getId() + " is NOT available!");
         }
         if (getLocalStorage() != null && getLocalStorage().isWritable()) {
+            if (getIndexer() != null && getRepositoryLogic().shouldIndex(item.getProperties())) {
+                getIndexer().addItemProperties(getItemUid(item.getProperties()), item.getProperties());
+            }
             getLocalStorage().storeItem(item);
         } else {
             throw new UnsupportedOperationException("The repository " + getId() + " have no local storage!");
-        }
-        if (getIndexer() != null && getRepositoryLogic().shouldIndex(item.getProperties())) {
-            getIndexer().addItemProperties(getItemUid(item.getProperties()), item.getProperties());
         }
     }
 
