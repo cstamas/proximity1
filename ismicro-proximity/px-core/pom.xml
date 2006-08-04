@@ -8,9 +8,6 @@
 	<version>1.0.0</version>
   </parent>
 
-  <!-- the version of maven's project object model -->
-  <modelVersion>4.0.0</modelVersion>
-  
   <!-- a unique name for this project -->
   <artifactId>px-core</artifactId>
   
@@ -21,21 +18,21 @@
   <name>Px Core</name>
   
   <!-- The version of the project under development -->
-  <version>1.0.0-RC2</version>
+  <version>1.0.0-RC3</version>
 
   <dependencies>
 
     <dependency>
       <groupId>commons-logging</groupId>
       <artifactId>commons-logging</artifactId>
-      <version>1.0.4</version>
+      <version>1.1</version>
       <type>jar</type>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>commons-io</groupId>
       <artifactId>commons-io</artifactId>
-      <version>1.1</version>
+      <version>1.2</version>
       <type>jar</type>
       <scope>compile</scope>
     </dependency>
@@ -54,9 +51,9 @@
       <scope>compile</scope>
     </dependency>
     <dependency>
-      <groupId>lucene</groupId>
-      <artifactId>lucene</artifactId>
-      <version>1.4.3</version>
+      <groupId>org.apache.lucene</groupId>
+      <artifactId>lucene-core</artifactId>
+      <version>2.0.0</version>
       <type>jar</type>
       <scope>compile</scope>
     </dependency>
