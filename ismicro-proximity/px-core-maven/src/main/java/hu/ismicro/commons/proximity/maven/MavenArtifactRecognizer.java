@@ -18,11 +18,11 @@ package hu.ismicro.commons.proximity.maven;
 public class MavenArtifactRecognizer {
 
     /**
-     * Is this item M1/M2 POM?
+     * Is this item M1/M2 Checksum?
      * 
      * @param name
      *            the full name of item.
-     * @return true if it is M1/M2 POM, false otherwise.
+     * @return true if it is Checksum, false otherwise.
      */
     public static boolean isChecksum(String name) {
         return name.endsWith(".sha1") || name.endsWith(".md5");
