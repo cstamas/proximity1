@@ -24,7 +24,7 @@
     '<b>Complete property list:</b>'+
     '<ul>'+
 	#foreach( $key in $item.getAllMetadata().keySet() )
-		'<li>$key = $item.getAllMetadata().get($key)</li>'+
+		'<li>$key = $esc.javascript($item.getAllMetadata().get($key))</li>'+
 	#end
 	'</ul>'
     )">${item.name}</a>
