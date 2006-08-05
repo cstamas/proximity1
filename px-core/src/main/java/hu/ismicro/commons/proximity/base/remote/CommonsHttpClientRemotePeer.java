@@ -14,7 +14,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.apache.commons.httpclient.DefaultHttpMethodRetryHandler;
 import org.apache.commons.httpclient.Header;
@@ -27,6 +29,7 @@ import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
 import org.apache.commons.httpclient.NTCredentials;
 import org.apache.commons.httpclient.UsernamePasswordCredentials;
+import org.apache.commons.httpclient.auth.AuthPolicy;
 import org.apache.commons.httpclient.auth.AuthScope;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.HeadMethod;
@@ -250,7 +253,15 @@ public class CommonsHttpClientRemotePeer extends AbstractRemoteStorage {
                 
                 if (getProxyUsername() != null) {
 
+                    List authPrefs = new ArrayList(2);
+                    authPrefs.add(AuthPolicy.DIGEST);
+                    authPrefs.add(AuthPolicy.BASIC);
+
                     if (getProxyNtlmDomain() != null) {
+                        
+                        // Using NTLM auth, adding it as first in policies
+                        authPrefs.add(0, AuthPolicy.NTLM);
+
                         logger.info("... proxy authentication setup for NTLM domain " + getProxyNtlmDomain()
                                 + " with username " + getProxyUsername());
                         httpConfiguration.setHost(getProxyNtlmHost());
@@ -260,6 +271,8 @@ public class CommonsHttpClientRemotePeer extends AbstractRemoteStorage {
                                 new NTCredentials(getProxyUsername(), getProxyPassword(), getProxyNtlmHost(),
                                         getProxyNtlmDomain()));
                     } else {
+                        
+                        // Using Username/Pwd auth, will not add NTLM
                         logger.info("... proxy authentication setup for http proxy " + getProxyHost()
                                 + " with username " + getProxyUsername());
 
@@ -267,6 +280,7 @@ public class CommonsHttpClientRemotePeer extends AbstractRemoteStorage {
                                 new UsernamePasswordCredentials(getProxyUsername(), getProxyPassword()));
 
                     }
+                    httpClient.getParams().setParameter(AuthPolicy.AUTH_SCHEME_PRIORITY, authPrefs);
                 }
 
             }
