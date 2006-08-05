@@ -1,11 +1,13 @@
 package hu.ismicro.commons.proximity.base.remote;
 
-import hu.ismicro.commons.proximity.base.AbstractStorage;
 import hu.ismicro.commons.proximity.base.PathHelper;
 import hu.ismicro.commons.proximity.base.RemoteStorage;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  * This class is a base abstract class for remot storages.
@@ -13,28 +15,26 @@ import java.net.URL;
  * @author cstamas
  * 
  */
-public abstract class AbstractRemoteStorage extends AbstractStorage implements RemoteStorage {
+public abstract class AbstractRemoteStorage implements RemoteStorage {
+
+    protected Log logger = LogFactory.getLog(this.getClass());
 
     private URL remoteUrl;
 
-    public String getRemoteUrl() {
-        return this.remoteUrl.toString().toString();
+    public URL getRemoteUrl() {
+        return this.remoteUrl;
     }
 
-    public boolean isMetadataAware() {
-        return false;
-    }
-
-    public void setRemoteUrl(String url) throws MalformedURLException {
-        this.remoteUrl = new URL(url);
+    public void setRemoteUrl(URL url) throws MalformedURLException {
+        this.remoteUrl = url;
     }
 
     protected String getAbsoluteUrl(String path) {
-        return PathHelper.concatPaths(getRemoteUrl(), path);
+        return PathHelper.concatPaths(getRemoteUrlAsString(), path);
     }
 
-    protected URL getRemoteUrlAsUrl() {
-        return remoteUrl;
+    protected String getRemoteUrlAsString() {
+        return remoteUrl.toString();
     }
 
 }

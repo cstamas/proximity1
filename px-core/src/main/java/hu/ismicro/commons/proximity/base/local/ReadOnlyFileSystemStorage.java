@@ -1,7 +1,7 @@
 package hu.ismicro.commons.proximity.base.local;
 
 import hu.ismicro.commons.proximity.ItemNotFoundException;
-import hu.ismicro.commons.proximity.base.AbstractStorage;
+import hu.ismicro.commons.proximity.ItemProperties;
 import hu.ismicro.commons.proximity.base.PathHelper;
 import hu.ismicro.commons.proximity.base.ProxiedItem;
 import hu.ismicro.commons.proximity.base.ProxiedItemProperties;
@@ -10,12 +10,15 @@ import hu.ismicro.commons.proximity.base.StorageException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
+import java.util.Stack;
 
 /**
  * Read-only storage implemented on plain file system.
@@ -28,7 +31,7 @@ import java.util.Properties;
  * @author cstamas
  * 
  */
-public class ReadOnlyFileSystemStorage extends AbstractStorage {
+public class ReadOnlyFileSystemStorage extends AbstractLocalStorage {
 
     /**
      * The default METADATA prefix.
@@ -152,25 +155,9 @@ public class ReadOnlyFileSystemStorage extends AbstractStorage {
         }
     }
 
-    public boolean containsItemProperties(String path) {
-        if (isMetadataAware()) {
-            logger.debug("Checking for existence of " + path + " in " + getMetadataBaseDir());
-            return checkForExistence(getMetadataBaseDir(), path);
-        } else {
-            logger.debug("Checking for existence of " + path + " in " + baseDir);
-            return checkForExistence(getStorageBaseDir(), path);
-        }
-    }
-
     public boolean containsItem(String path) {
         logger.debug("Checking for existence of " + path + " in " + getStorageBaseDir());
         return checkForExistence(getStorageBaseDir(), path);
-    }
-
-    public ProxiedItemProperties retrieveItemProperties(String path) throws StorageException {
-        logger.debug("Retrieving " + path + " properties in " + getStorageBaseDir());
-        File target = new File(getStorageBaseDir(), path);
-        return constructItemProperties(target, path);
     }
 
     public ProxiedItem retrieveItem(String path) throws ItemNotFoundException, StorageException {
@@ -180,7 +167,9 @@ public class ReadOnlyFileSystemStorage extends AbstractStorage {
             ProxiedItemProperties properties = constructItemProperties(target, path);
             ProxiedItem result = new ProxiedItem();
             result.setProperties(properties);
-            result.setStream(new FileInputStream(target));
+            if (result.getProperties().isFile()) {
+                result.setStream(new FileInputStream(target));
+            }
             return result;
         } catch (FileNotFoundException ex) {
             logger.error("FileNotFound in FS storage [" + getStorageBaseDir() + "] for path [" + path + "]", ex);
@@ -207,6 +196,28 @@ public class ReadOnlyFileSystemStorage extends AbstractStorage {
             }
         }
         return result;
+    }
+
+    public void recreateMetadata() {
+        int processed = 0;
+        Stack stack = new Stack();
+        List dir = listItems(PathHelper.PATH_SEPARATOR);
+        stack.push(dir);
+        while (!stack.isEmpty()) {
+            dir = (List) stack.pop();
+            for (Iterator i = dir.iterator(); i.hasNext();) {
+                ItemProperties ip = (ItemProperties) i.next();
+                if (ip.isDirectory()) {
+                    List subdir = listItems(
+                            PathHelper.walkThePath(ip.getAbsolutePath(), ip.getName()));
+                    stack.push(subdir);
+                } else {
+                    storeItemProperties(ip);
+                    processed++;
+                }
+            }
+        }
+        logger.info("Recreated metadata on " + processed + " items");
     }
 
     protected boolean checkForExistence(File baseDir, String path) {
@@ -253,6 +264,29 @@ public class ReadOnlyFileSystemStorage extends AbstractStorage {
             }
         } catch (IOException ex) {
             logger.error("Got IOException during metadata retrieval.", ex);
+        }
+    }
+
+    protected void storeItemProperties(ItemProperties iProps) throws StorageException {
+        if (!iProps.isFile()) {
+            throw new IllegalArgumentException("Only files can be stored!");
+        }
+        logger.debug("Storing metadata in [" + iProps.getAbsolutePath() + "] with name [" + iProps.getName() + "] in "
+                + getMetadataBaseDir());
+        try {
+            File target = new File(new File(getMetadataBaseDir(), iProps.getAbsolutePath()), iProps.getName());
+            target.getParentFile().mkdirs();
+
+            Properties metadata = new Properties();
+            metadata.putAll(iProps.getAllMetadata());
+            FileOutputStream os = new FileOutputStream(target);
+            metadata.store(os, null);
+            os.flush();
+            os.close();
+            target.setLastModified(iProps.getLastModified().getTime());
+        } catch (IOException ex) {
+            logger.error("IOException in FS storage " + getMetadataBaseDir(), ex);
+            throw new StorageException("IOException in FS storage " + getMetadataBaseDir(), ex);
         }
     }
 

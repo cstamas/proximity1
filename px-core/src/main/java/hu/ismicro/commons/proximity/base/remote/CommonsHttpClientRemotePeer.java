@@ -166,28 +166,6 @@ public class CommonsHttpClientRemotePeer extends AbstractRemoteStorage {
         return response == HttpStatus.SC_OK;
     }
 
-    public ProxiedItemProperties retrieveItemProperties(String path) throws ItemNotFoundException, StorageException {
-        String originatingUrlString = getAbsoluteUrl(path);
-        HeadMethod method = new HeadMethod(originatingUrlString);
-        try {
-            try {
-                int response = executeMethod(method);
-                if (response == HttpStatus.SC_OK) {
-                    logger.info("Item " + path + " properties fetched from remote peer of " + getRemoteUrl());
-                    return constructItemPropertiesFromGetResponse(path, originatingUrlString, method);
-                } else {
-                    logger.error("The method execution returned result code " + response);
-                    throw new StorageException("The method execution returned result code " + response);
-                }
-            } catch (MalformedURLException ex) {
-                logger.error("The path " + path + " is malformed!", ex);
-                throw new StorageException("The method execution got MalformedURLException!", ex);
-            }
-        } finally {
-            method.releaseConnection();
-        }
-    }
-
     public ProxiedItem retrieveItem(String path) throws ItemNotFoundException, StorageException {
         String originatingUrlString = getAbsoluteUrl(path);
         GetMethod get = new GetMethod(originatingUrlString);

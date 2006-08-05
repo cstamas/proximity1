@@ -1,11 +1,12 @@
 package hu.ismicro.commons.proximity;
 
+import hu.ismicro.commons.proximity.access.AccessManager;
 import hu.ismicro.commons.proximity.base.Indexer;
+import hu.ismicro.commons.proximity.base.LocalStorage;
 import hu.ismicro.commons.proximity.base.ProxiedItem;
-import hu.ismicro.commons.proximity.base.ProxiedItemProperties;
+import hu.ismicro.commons.proximity.base.RemoteStorage;
 import hu.ismicro.commons.proximity.base.RepositoryLogic;
 import hu.ismicro.commons.proximity.base.StatisticsGatherer;
-import hu.ismicro.commons.proximity.base.Storage;
 import hu.ismicro.commons.proximity.base.StorageException;
 
 import java.util.List;
@@ -25,12 +26,16 @@ public interface Repository {
      */
     String getId();
 
+    void setId(String id);
+
     /**
      * Returns the group ID of the repository.
      * 
      * @return
      */
     String getGroupId();
+
+    void setGroupId(String groupId);
 
     /**
      * Is Repository available? If no, it will reject all incoming requests.
@@ -39,11 +44,6 @@ public interface Repository {
      */
     boolean isAvailable();
 
-    /**
-     * Set repo availability.
-     * 
-     * @param val
-     */
     void setAvailable(boolean val);
 
     /**
@@ -54,11 +54,6 @@ public interface Repository {
      */
     boolean isOffline();
 
-    /**
-     * Set repo offline status.
-     * 
-     * @param val
-     */
     void setOffline(boolean val);
 
     /**
@@ -68,12 +63,10 @@ public interface Repository {
      */
     boolean isListable();
 
-    /**
-     * Set repo listable status.
-     * 
-     * @param val
-     */
     void setListable(boolean val);
+
+
+    LocalStorage getLocalStorage();
 
     /**
      * Sets the local storage of the repository. May be null if this is an
@@ -81,17 +74,21 @@ public interface Repository {
      * 
      * @param storage
      */
-    void setLocalStorage(Storage storage);
+    void setLocalStorage(LocalStorage storage);
 
-    /**
+    RemoteStorage getRemoteStorage();
+
+        /**
      * Sets the remote storage of the repository. May be null if this is a Local
      * repository only.
      * 
      * @param storage
      */
-    void setRemoteStorage(Storage storage);
+    void setRemoteStorage(RemoteStorage storage);
 
-    /**
+    RepositoryLogic getRepositoryLogic();
+
+        /**
      * Sets the logic to drive this repository. The repository by default uses
      * DefaultProxyingLogic class unless overridden. May not be null.
      * 
@@ -99,12 +96,18 @@ public interface Repository {
      */
     void setRepositoryLogic(RepositoryLogic logic);
 
+    Indexer getIndexer();
+
     /**
      * Sets the indexer used by repository. May be null, to switch indexing off.
      * 
      * @param indexer
      */
     void setIndexer(Indexer indexer);
+
+    AccessManager getAccessManager();
+
+    void setAccessManager(AccessManager accessManager);
 
     /**
      * Initializes repository. Reindexing, recreating metadata, etc...
@@ -124,23 +127,14 @@ public interface Repository {
      */
     void recreateMetadata();
 
+    StatisticsGatherer getStatisticsGatherer();
+    
     /**
      * Sets the statistics gatherer. May be null, to switch stats gathering off.
      * 
      * @param stats
      */
     void setStatisticsGatherer(StatisticsGatherer stats);
-
-    /**
-     * Retrieves the item properties from the given path.
-     * 
-     * @param path
-     * @return
-     * @throws ItemNotFoundException
-     * @throws StorageException
-     */
-    ProxiedItemProperties retrieveItemProperties(ProximityRequest request) throws RepositoryNotAvailableException,
-            ItemNotFoundException, StorageException, AccessDeniedException;
 
     /**
      * Retrieves item with content from the path.
@@ -152,14 +146,6 @@ public interface Repository {
      */
     ProxiedItem retrieveItem(ProximityRequest request) throws RepositoryNotAvailableException, ItemNotFoundException,
             StorageException, AccessDeniedException;
-
-    /**
-     * Deletes item properties from the path.
-     * 
-     * @param path
-     * @throws StorageException
-     */
-    void deleteItemProperties(String path) throws RepositoryNotAvailableException, StorageException;
 
     /**
      * Deletes item from the path.

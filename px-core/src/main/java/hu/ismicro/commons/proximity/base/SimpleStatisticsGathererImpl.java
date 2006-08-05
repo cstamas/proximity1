@@ -29,7 +29,7 @@ public class SimpleStatisticsGathererImpl implements StatisticsGatherer {
         // nothing
     }
 
-    public void localHit(ProximityRequest req, Repository repo, ItemProperties ip, boolean propsOnly) {
+    public void localHit(ProximityRequest req, Repository repo, ItemProperties ip) {
         if (ip.isFile()) {
             addMaxTen(last10Artifacts, ip);
             addMaxTen(last10LocalHits, ip);
@@ -39,7 +39,7 @@ public class SimpleStatisticsGathererImpl implements StatisticsGatherer {
         }
     }
 
-    public void remoteHit(ProximityRequest req, Repository repo, ItemProperties ip, boolean propsOnly) {
+    public void remoteHit(ProximityRequest req, Repository repo, ItemProperties ip) {
         if (ip.isFile()) {
             addMaxTen(last10Artifacts, ip);
             addMaxTen(last10RemoteHits, ip);

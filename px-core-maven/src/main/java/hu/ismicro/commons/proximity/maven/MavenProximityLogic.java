@@ -38,9 +38,9 @@ public class MavenProximityLogic extends DefaultProximityLogic {
      * 
      * @return true if the request is about metadata.
      */
-    public boolean isGroupSearchNeeded(ProximityRequest request, boolean propertiesOnly) {
+    public boolean isGroupSearchNeeded(ProximityRequest request) {
 
-        return !propertiesOnly && MavenArtifactRecognizer.isMetadata(request.getPath())
+        return MavenArtifactRecognizer.isMetadata(request.getPath())
                 && !MavenArtifactRecognizer.isChecksum(request.getPath());
 
     }
