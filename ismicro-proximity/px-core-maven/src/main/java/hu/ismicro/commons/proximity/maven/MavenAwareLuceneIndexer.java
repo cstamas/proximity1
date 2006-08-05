@@ -44,6 +44,8 @@ public class MavenAwareLuceneIndexer extends LuceneIndexer {
         result.add(POM_AID_KEY);
         result.add(POM_PCK_KEY);
         result.add(POM_URL_KEY);
+        result.add(POM_VERSION_KEY);
+        result.add(POM_DESCRIPTION_KEY);
         return result;
     }
 
@@ -83,7 +85,7 @@ public class MavenAwareLuceneIndexer extends LuceneIndexer {
                     ip.setMetadata(POM_URL_KEY, pom.getVersion());
                 }
                 if (pom.getDescription() != null) {
-                    doc.add(new Field(POM_DESCRIPTION_KEY, pom.getDescription(), Field.Store.YES, Field.Index.TOKENIZED));
+                    doc.add(new Field(POM_DESCRIPTION_KEY, pom.getDescription(), Field.Store.NO, Field.Index.TOKENIZED));
                 }
 
             } catch (ItemNotFoundException ex) {
