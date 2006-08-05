@@ -1,14 +1,12 @@
 package hu.ismicro.commons.proximity.base.local;
 
 import hu.ismicro.commons.proximity.Item;
-import hu.ismicro.commons.proximity.ItemProperties;
 import hu.ismicro.commons.proximity.base.StorageException;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Properties;
 
 import org.apache.commons.io.IOUtils;
 
@@ -50,29 +48,6 @@ public class WritableFileSystemStorage extends ReadOnlyFileSystemStorage {
         } catch (IOException ex) {
             logger.error("IOException in FS storage " + getStorageBaseDir(), ex);
             throw new StorageException("IOException in FS storage " + getStorageBaseDir(), ex);
-        }
-    }
-
-    public void storeItemProperties(ItemProperties iProps) throws StorageException {
-        if (!iProps.isFile()) {
-            throw new IllegalArgumentException("Only files can be stored!");
-        }
-        logger.debug("Storing metadata in [" + iProps.getAbsolutePath() + "] with name [" + iProps.getName() + "] in "
-                + getMetadataBaseDir());
-        try {
-            File target = new File(new File(getMetadataBaseDir(), iProps.getAbsolutePath()), iProps.getName());
-            target.getParentFile().mkdirs();
-
-            Properties metadata = new Properties();
-            metadata.putAll(iProps.getAllMetadata());
-            FileOutputStream os = new FileOutputStream(target);
-            metadata.store(os, null);
-            os.flush();
-            os.close();
-            target.setLastModified(iProps.getLastModified().getTime());
-        } catch (IOException ex) {
-            logger.error("IOException in FS storage " + getMetadataBaseDir(), ex);
-            throw new StorageException("IOException in FS storage " + getMetadataBaseDir(), ex);
         }
     }
 

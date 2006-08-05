@@ -125,34 +125,20 @@ public class CommonsNetFtpRemotePeer extends AbstractRemoteStorage {
     }
 
     public boolean containsItem(String path) throws StorageException {
-        try {
-            return retrieveItemProperties(path) != null;
-        } catch (ItemNotFoundException ex) {
-            return false;
-        }
-    }
-
-    public ProxiedItemProperties retrieveItemProperties(String path) throws ItemNotFoundException, StorageException {
-        String originatingUrlString = getAbsoluteUrl(path);
         FTPClient client = null;
         try {
             client = getFTPClient();
             try {
-                if (client.changeWorkingDirectory(PathHelper.concatPaths(getRemoteUrlAsUrl().getPath(), PathHelper
+                if (client.changeWorkingDirectory(PathHelper.concatPaths(getRemoteUrl().getPath(), PathHelper
                         .getDirName(path)))) {
                     FTPFile[] fileList = client.listFiles(PathHelper.getFileName(path));
                     if (fileList.length == 1) {
-                        return constructItemPropertiesFromGetResponse(path, originatingUrlString, fileList[0]);
+                        return true;
                     } else {
-                        logger.info("Item " + path + " not found in FTP remote peer of " + getRemoteUrl());
-                        throw new ItemNotFoundException("Item " + path + " not found in FTP remote peer of "
-                                + getRemoteUrl());
+                        return false;
                     }
                 } else {
-                    logger.info("Path " + PathHelper.getDirName(path) + " not found in FTP remote peer of "
-                            + getRemoteUrl());
-                    throw new ItemNotFoundException("Path " + PathHelper.getDirName(path)
-                            + " not found in FTP remote peer of " + getRemoteUrl());
+                    return false;
                 }
             } catch (IOException ex) {
                 throw new StorageException("Cannot execute FTP operation on remote peer.", ex);
@@ -174,7 +160,7 @@ public class CommonsNetFtpRemotePeer extends AbstractRemoteStorage {
         try {
             client = getFTPClient();
             try {
-                if (client.changeWorkingDirectory(PathHelper.concatPaths(getRemoteUrlAsUrl().getPath(), PathHelper
+                if (client.changeWorkingDirectory(PathHelper.concatPaths(getRemoteUrl().getPath(), PathHelper
                         .getDirName(path)))) {
                     FTPFile[] fileList = client.listFiles(PathHelper.getFileName(path));
                     if (fileList.length == 1) {
@@ -226,7 +212,7 @@ public class CommonsNetFtpRemotePeer extends AbstractRemoteStorage {
             logger.info("Creating CommonsNetFTPClient instance");
             FTPClient ftpc = new FTPClient();
             ftpc.configure(ftpClientConfig);
-            ftpc.connect(getRemoteUrlAsUrl().getHost());
+            ftpc.connect(getRemoteUrl().getHost());
             ftpc.login(getFtpUsername(), getFtpPassword());
             ftpc.setFileType(FTPClient.BINARY_FILE_TYPE);
             return ftpc;

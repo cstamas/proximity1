@@ -1,6 +1,9 @@
 package hu.ismicro.commons.proximity;
 
+import hu.ismicro.commons.proximity.access.AccessManager;
+import hu.ismicro.commons.proximity.base.Indexer;
 import hu.ismicro.commons.proximity.base.ProximityLogic;
+import hu.ismicro.commons.proximity.base.StatisticsGatherer;
 
 import java.util.List;
 import java.util.Map;
@@ -12,20 +15,13 @@ public interface Proximity {
      * 
      */
     void initialize();
-
+    
     /**
-     * Returns the List of Repositories configured within Proximity.
+     * Returns the current logic that drives Proximity.
      * 
-     * @return List of active repositories.
+     * @return logic
      */
-    List getRepositories();
-
-    /**
-     * Returns the list of known groupIds configured within Proximity.
-     * 
-     * @return List of known groupId.
-     */
-    List getRepositoryGroupIds();
+    ProximityLogic getProximityLogic();
 
     /**
      * Sets the logic to drive proximity. The repository by default uses
@@ -36,15 +32,46 @@ public interface Proximity {
     void setProximityLogic(ProximityLogic logic);
 
     /**
-     * Fetches a given item properties on the supplied path.
+     * Returns the current statistic Gatherer. May be null.
      * 
-     * @param path
-     * @return the wanted ItemProperties
-     * @throws ItemNotFoundException
-     *             if Proximity has not found item on the path
+     * @return current statGatherer
      */
-    ItemProperties retrieveItemProperties(ProximityRequest request) throws ItemNotFoundException,
-            AccessDeniedException, NoSuchRepositoryException;
+    StatisticsGatherer getStatisticsGatherer();
+
+    /**
+     * Sets the current statistic Gatherer.
+     * 
+     * @param statisticsGatherer
+     */
+    void setStatisticsGatherer(StatisticsGatherer statisticsGatherer);
+
+    Indexer getIndexer();
+
+    void setIndexer(Indexer indexer);
+
+    AccessManager getAccessManager();
+
+    void setAccessManager(AccessManager accessManager);
+
+    void setRepositories(List reposList);
+
+    List getRepositories();
+    
+    void addRepository(Repository repository);
+    
+    void removeRepository(String repoId) throws NoSuchRepositoryException;
+
+
+    /**
+     * Returns the list of known groupIds configured within Proximity.
+     * 
+     * @return List of known groupId.
+     */
+    List getRepositoryGroupIds();
+    
+    
+    // ============================================================================================
+    // Proxy stuff
 
     /**
      * Fetches a given item on the supplied path.
@@ -56,6 +83,10 @@ public interface Proximity {
      */
     Item retrieveItem(ProximityRequest request) throws ItemNotFoundException, AccessDeniedException,
             NoSuchRepositoryException;
+
+    
+    // ============================================================================================
+    // Search and list
 
     /**
      * Returns an aggregated List of all item properties in all configured
@@ -91,6 +122,10 @@ public interface Proximity {
      * @return List of ItemProperties, possibly 0 length.
      */
     public List searchItem(String query) throws ProximityException;
+
+    
+    // ============================================================================================
+    // Maintenance
 
     /**
      * Forces reindex of repositories.

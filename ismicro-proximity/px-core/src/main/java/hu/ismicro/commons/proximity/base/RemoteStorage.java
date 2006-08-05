@@ -1,6 +1,7 @@
 package hu.ismicro.commons.proximity.base;
 
 import java.net.MalformedURLException;
+import java.net.URL;
 
 /**
  * Remote storage.
@@ -10,6 +11,6 @@ import java.net.MalformedURLException;
  */
 public interface RemoteStorage extends Storage {
 
-    void setRemoteUrl(String url) throws MalformedURLException;
+    void setRemoteUrl(URL url) throws MalformedURLException;
 
 }

@@ -89,6 +89,7 @@ public class ProximityImpl implements Proximity {
         for (Iterator i = repositories.keySet().iterator(); i.hasNext();) {
             String repoId = (String) i.next();
             Repository repo = (Repository) repositories.get(repoId);
+            repo.setIndexer(getIndexer());
             logger.info("Initializing " + repoId);
             repo.initialize();
         }
@@ -130,10 +131,6 @@ public class ProximityImpl implements Proximity {
         return result;
     }
 
-    public List getRepositoryGroupIds() {
-        return Arrays.asList(repositoryGroups.keySet().toArray());
-    }
-
     public void addRepository(Repository repository) {
         repositories.put(repository.getId(), repository);
         repositoryOrder.add(repository.getId());
@@ -163,12 +160,8 @@ public class ProximityImpl implements Proximity {
         }
     }
 
-    public ItemProperties retrieveItemProperties(ProximityRequest request) throws ItemNotFoundException,
-            AccessDeniedException, NoSuchRepositoryException {
-
-        logger.debug("Got retrieveItemProperties with " + request);
-        accessManager.decide(request, null);
-        return retrieveItem(request, true).getProperties();
+    public List getRepositoryGroupIds() {
+        return Arrays.asList(repositoryGroups.keySet().toArray());
     }
 
     public Item retrieveItem(ProximityRequest request) throws ItemNotFoundException, AccessDeniedException,
@@ -176,7 +169,7 @@ public class ProximityImpl implements Proximity {
 
         logger.debug("Got retrieveItem with " + request);
         accessManager.decide(request, null);
-        return retrieveItem(request, false);
+        return retrieveItemController(request);
     }
 
     public List listItems(ProximityRequest request) throws AccessDeniedException, NoSuchRepositoryException {
@@ -264,7 +257,7 @@ public class ProximityImpl implements Proximity {
         }
     }
 
-    protected ProxiedItem retrieveItem(ProximityRequest request, boolean propertiesOnly) throws ItemNotFoundException,
+    protected ProxiedItem retrieveItemController(ProximityRequest request) throws ItemNotFoundException,
             AccessDeniedException, NoSuchRepositoryException {
 
         ProxiedItem item = null;
@@ -273,17 +266,17 @@ public class ProximityImpl implements Proximity {
 
             if (request.getTargetedReposId() != null) {
 
-                item = retrieveItemByRepoId(request.getTargetedReposId(), request, propertiesOnly);
+                item = retrieveItemByRepoId(request.getTargetedReposId(), request);
 
             } else if (request.getTargetedReposGroupId() != null) {
 
-                item = retrieveItemByRepoGroupId(request.getTargetedReposGroupId(), request, propertiesOnly);
+                item = retrieveItemByRepoGroupId(request.getTargetedReposGroupId(), request);
 
             } else {
 
-                item = retrieveItemByAbsoluteOrder(request, propertiesOnly);
+                item = retrieveItemByAbsoluteOrder(request);
 
-                if (proximityLogic.isGroupSearchNeeded(request, propertiesOnly)) {
+                if (proximityLogic.isGroupSearchNeeded(request)) {
 
                     List repositoryGroupOrder = (List) repositoryGroups
                             .get(item.getProperties().getRepositoryGroupId());
@@ -292,7 +285,7 @@ public class ProximityImpl implements Proximity {
                     for (Iterator i = repositoryGroupOrder.iterator(); i.hasNext();) {
                         String reposId = (String) i.next();
                         try {
-                            itemList.add(retrieveItemByRepoId(reposId, request, propertiesOnly));
+                            itemList.add(retrieveItemByRepoId(reposId, request));
                         } catch (ItemNotFoundException ex) {
                             logger.debug(request.getPath() + " not found in repository " + reposId);
                         }
@@ -315,20 +308,13 @@ public class ProximityImpl implements Proximity {
 
     }
 
-    protected ProxiedItem retrieveItemByAbsoluteOrder(ProximityRequest request, boolean propertiesOnly)
+    protected ProxiedItem retrieveItemByAbsoluteOrder(ProximityRequest request)
             throws ItemNotFoundException, AccessDeniedException, NoSuchRepositoryException {
         for (Iterator i = repositoryOrder.iterator(); i.hasNext();) {
             String reposId = (String) i.next();
             try {
                 Repository repo = (Repository) repositories.get(reposId);
-                ProxiedItem item = null;
-                if (propertiesOnly) {
-                    ItemProperties props = repo.retrieveItemProperties(request);
-                    item = new ProxiedItem();
-                    item.setProperties(props);
-                } else {
-                    item = repo.retrieveItem(request);
-                }
+                ProxiedItem item = repo.retrieveItem(request);
                 return item;
             } catch (RepositoryNotAvailableException ex) {
                 logger.info("Repository unavailable", ex);
@@ -339,21 +325,14 @@ public class ProximityImpl implements Proximity {
         throw new ItemNotFoundException(request.getPath());
     }
 
-    protected ProxiedItem retrieveItemByRepoGroupId(String groupId, ProximityRequest request, boolean propertiesOnly)
+    protected ProxiedItem retrieveItemByRepoGroupId(String groupId, ProximityRequest request)
             throws ItemNotFoundException, AccessDeniedException, NoSuchRepositoryException {
         List repositoryGroupOrder = (List) repositoryGroups.get(groupId);
         for (Iterator i = repositoryGroupOrder.iterator(); i.hasNext();) {
             String reposId = (String) i.next();
             try {
                 Repository repo = (Repository) repositories.get(reposId);
-                ProxiedItem item = null;
-                if (propertiesOnly) {
-                    ItemProperties props = repo.retrieveItemProperties(request);
-                    item = new ProxiedItem();
-                    item.setProperties(props);
-                } else {
-                    item = repo.retrieveItem(request);
-                }
+                ProxiedItem item = repo.retrieveItem(request);
                 return item;
             } catch (RepositoryNotAvailableException ex) {
                 logger.info("Repository unavailable", ex);
@@ -364,19 +343,12 @@ public class ProximityImpl implements Proximity {
         throw new ItemNotFoundException(request.getPath());
     }
 
-    protected ProxiedItem retrieveItemByRepoId(String repoId, ProximityRequest request, boolean propertiesOnly)
+    protected ProxiedItem retrieveItemByRepoId(String repoId, ProximityRequest request)
             throws ItemNotFoundException, AccessDeniedException, NoSuchRepositoryException {
         if (repositories.containsKey(repoId)) {
             Repository repo = (Repository) repositories.get(repoId);
             try {
-                ProxiedItem item = null;
-                if (propertiesOnly) {
-                    ItemProperties props = repo.retrieveItemProperties(request);
-                    item = new ProxiedItem();
-                    item.setProperties(props);
-                } else {
-                    item = repo.retrieveItem(request);
-                }
+                ProxiedItem item = repo.retrieveItem(request);
                 return item;
             } catch (RepositoryNotAvailableException ex) {
                 logger.info("Repository unavailable", ex);

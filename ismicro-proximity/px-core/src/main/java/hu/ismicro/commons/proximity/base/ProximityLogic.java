@@ -19,7 +19,7 @@ public interface ProximityLogic {
      * @return true, if search should be conducted by groups and not the
      *         absolute repository ordering.
      */
-    boolean isGroupSearchNeeded(ProximityRequest request, boolean propertiesOnly);
+    boolean isGroupSearchNeeded(ProximityRequest request);
 
     ProxiedItem postprocessItemList(List listOfProxiedItems) throws IOException;
 

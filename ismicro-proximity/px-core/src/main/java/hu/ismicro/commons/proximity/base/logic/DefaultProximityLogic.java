@@ -21,7 +21,7 @@ public class DefaultProximityLogic implements ProximityLogic {
     
     protected Log logger = LogFactory.getLog(this.getClass());
 
-    public boolean isGroupSearchNeeded(ProximityRequest request, boolean propertiesOnly) {
+    public boolean isGroupSearchNeeded(ProximityRequest request) {
         return false;
     }
 

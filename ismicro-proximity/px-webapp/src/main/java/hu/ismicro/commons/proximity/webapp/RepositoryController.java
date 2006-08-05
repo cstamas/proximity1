@@ -3,7 +3,6 @@ package hu.ismicro.commons.proximity.webapp;
 import hu.ismicro.commons.proximity.AccessDeniedException;
 import hu.ismicro.commons.proximity.Item;
 import hu.ismicro.commons.proximity.ItemNotFoundException;
-import hu.ismicro.commons.proximity.ItemProperties;
 import hu.ismicro.commons.proximity.Proximity;
 import hu.ismicro.commons.proximity.ProximityRequest;
 
@@ -44,9 +43,9 @@ public class RepositoryController extends MultiActionController {
         logger.debug("Got repository request on URI " + requestURI);
         String orderBy = request.getParameter("orderBy") == null ? "name" : request.getParameter("orderBy");
         String targetRepository = request.getParameter("repositoryId");
-        String targetGroup = request.getParameter("groupId");
+        String targetGroup = request.getParameter("repositoryGroupId");
 
-        ItemProperties itemProps = null;
+        Item item = null;
         ProximityRequest pRequest = new ProximityRequest();
         pRequest.setPath(requestURI);
         pRequest.setTargetedReposId(targetRepository);
@@ -55,9 +54,9 @@ public class RepositoryController extends MultiActionController {
         pRequest.getAttributes().put(ProximityRequest.REQUEST_REMOTE_ADDRESS, request.getRemoteAddr());
         try {
             logger.debug("Got request for " + targetRepository + " repository on URI: " + requestURI);
-            itemProps = proximity.retrieveItemProperties(pRequest);
+            item = proximity.retrieveItem(pRequest);
 
-            if (itemProps.isDirectory()) {
+            if (item.getProperties().isDirectory()) {
                 List items = null;
                 items = proximity.listItems(pRequest);
                 PropertyComparator.sort(items, new MutableSortDefinition(orderBy, true, true));
@@ -68,10 +67,6 @@ public class RepositoryController extends MultiActionController {
                 result.put("requestPathList", explodeUriToList(requestURI));
                 return new ModelAndView("repository/repositoryList", result);
             } else {
-                Item item = null;
-                // TODO: Optimize? Maybe a search first?
-                item = proximity.retrieveItem(pRequest);
-                // TODO: Made this proper (content type by ext, size, etc...)
                 response.setContentType("application/octet-stream");
                 response.setContentLength((int) item.getProperties().getSize());
                 response.setDateHeader("Last-Modified", item.getProperties().getLastModified().getTime());
