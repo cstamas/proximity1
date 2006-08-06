@@ -32,9 +32,11 @@
 
     <menu name="Guides">
       <item name="Quick Start" href="quick-start.html"/>
-      <item name="Repositories" href="repositories.html"/>
+      <item name="Deployment" href="deployment-guide.html"/>
+      <item name="Using Proximity" href="using-proximity.html"/>
+      <item name="About repositories" href="repositories.html"/>
       <item name="Corporate Environments" href="corporate-environment.html"/>
-      <item name="Proximity and HTTP Proxies" href="http-proxies.html"/>
+      <item name="HTTP Proxies" href="http-proxies.html"/>
       <item name="Configuring Proximity" href="configuration.html"/>
       <item name="Configuring Repositories" href="repository-configuration.html"/>
       <item name="Configuration Reference" href="factory-conf.html"/>
