@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<document>
+
+  <properties>
+    <author email="t.cservenak@gmail.com">CSERVENAK, Tamas</author>
+    <title>Deployment Guide</title>
+  </properties>
+
+  <meta name="keyword" content="ismicro java"/>
+
+<body>
+
+<section name="Deployment guide">
+
+<p>This Guide is <b>work in progress</b>.</p>
+
+<p>The prepackaged WAR Proximity comes with following general configurations (for details see 
+<a href="factory-conf.html">Proximity Default Configuration</a>):</p>
+
+<ul>
+<li>The preconfigured repositories are central (proxied http://repo1.maven.org/maven2), and three hosted ones (inhouse, extNonFree and extFree).</li>
+<li>The root of proximity storages are in <b>user home</b> directory.</li>
+<li>The Proximity log files are placed in <b>user home</b> directory.</li>
+</ul>
+
+<p>Now, we will see some web container specific tasks for Proximity deployment.</p>
+
+<subsection name="Apache Tomcat">
+
+<p>Proximity has been extensively tested on Tomcat 5.x line. For deployment on Tomcat, you simply need 
+to "drop" the WAR file in $CATALINA_HOME/webapps directory.</p>
+
+<p>Advanced users may <b>unpack</b> the WAR and gain access to configuration files. Also, please
+review the logging settings (Log4j currently), since it may not be suited your needs!</p>
+
+</subsection>
+
+<subsection name="Jetty">
+
+<p>Proximity has been extensively tested on Jetty 5.11 line. For deployment on Jetty, you need some
+additional steps:</p>
+
+<ul>
+<li>Copy the log4j.jar from Proximity WAR file to the $JETTY_HOME/ext directory.</li>
+</ul>
+
+<p>Finally, simply "drop" the WAR file in $JETTY_HOME/webapps directory.</p>
+
+<p>Advanced users may <b>unpack</b> the WAR and gain access to configuration files. Also, please
+review the logging settings (Log4j currently), since it may not be suited your needs!</p>
+
+</subsection>
+
+</section>
+
+</body>
+</document>

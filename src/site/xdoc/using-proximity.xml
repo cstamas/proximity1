@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<document>
+
+  <properties>
+    <author email="t.cservenak@gmail.com">CSERVENAK, Tamas</author>
+    <title>Using Proximity</title>
+  </properties>
+
+  <meta name="keyword" content="ismicro java"/>
+
+<body>
+
+<section name="Using Proximity">
+
+<p>This Guide is <b>work in progress</b>.</p>
+
+<p>Proximity is some kind of extensible proactive-mirror. The Core of Proximity is <b>transport, container 
+(as Spring and as webapp container) and Maven independent</b>. The WAR package is specialized instance of Proximity created to be a Maven Proxy.
+The key feature in this customization is <b>extensibility</b> of Proximity, thus all Maven "awareness" is
+provided by four (4) Java class file.</p>
+
+<p>Proximity's local storages are able to be "metadata"-aware. What does it mean? It simply changes the
+behaviour of local storage a little bit: the storage root, you have configured are split in two subdirectory.
+One of its serve as "real" storage (default name is "storage" altough it is configurable) containing
+the <b>remote (proxied) content in unmodified directory hierarchy and originial file contents</b>. The other
+directory (default name is "metadata" altough it is configurable too) shares the same structure at a first
+glance. Browsing this directory, you will see the same subdirectories and same file names, <b>but with
+special contents</b>! These file are <b>regular Java java.util.Properties files</b>, and they contains
+the "metadata" about their "storage" file counterparts. The amount of metadatas and their content is completely
+extensible, this is how "Maven Proxy" build upon Proximity Core.</p>
+
+<p>Proximity itself (since it's Core is a simple multi homed HTTP Proxy) maintains some default properties of "item" (Proximity
+notation for a file) like name, path, size, etc. In Proximity Maven Proxy, a special class, called 
+<a href="px-core-maven/xref/hu/ismicro/commons/proximity/maven/MavenItemPropertiesConstructor.html">MavenItemPropertiesConstructor</a>
+is responsible for "filling" up all the "extra" (Maven) properties of the file.</p>
+
+<p>The Maven specific things are all extending the core functionalities of Proximity, achieving this web application
+you are using.</p>
+
+<subsection name="Browsing repository">
+
+<p>The repository browsing is the same surface that uses Maven itself. All the HTML gimmicks there are for human users,
+since Maven issues absolute HTTP GET commands to retrieve artifacts. It is the same action when You click on some JAR
+or XML file and the "Save as..." dialog opens in your browser.</p>
+
+<p>This view completely relies on the underlying localStorage. Listing items are actually like issuing "ls/dir" commands
+on the file system. When you request an item (or directory) that not exists in this view, Proximity will try to fetch it
+from all available remote peers. If you requested a locally non-existent but remotely existent file, it appears in this view
+as soon it is served to You.</p>
+
+</subsection>
+
+<subsection name="Browsing artifacts">
+
+<p>An alternative view of the repository browsing is the artifact browsing. Here, you can browse the "namespace" of
+groupId's, artifactId's and versions.</p>
+
+<p>This view <b>completely relies on the Indexer and Proximity Maven extension</b>! It just demonstrates the
+extensibility of the Proximity itself. Look at the responsible controller Java class:
+<a href="px-webapp/xref/hu/ismicro/commons/proximity/webapp/ArtifactsController.html">ArtifactsController.java</a> 
+and you will in the moment get the picture.</p>
+
+<p>This view actually "tricks" the Proximity and uses it's powerful Lucene based search engine.</p>
+
+</subsection>
+
+</section>
+
+</body>
+</document>
