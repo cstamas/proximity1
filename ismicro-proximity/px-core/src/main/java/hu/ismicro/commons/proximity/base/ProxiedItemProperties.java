@@ -126,6 +126,17 @@ public class ProxiedItemProperties implements ItemProperties {
         return result;
     }
 
+    public Map getNonIndexableMetadata() {
+        HashMap result = new HashMap();
+        for (Iterator i = getAllMetadata().keySet().iterator(); i.hasNext(); ) {
+            String key = (String) i.next();
+            if (!getIndexableMetadataKeys().contains(key)) {
+                result.put(key, getMetadata(key));
+            }
+        }
+        return result;
+    }
+
     public boolean isMetadataIndexable(String key) {
         return getIndexableMetadataKeys().contains(key);
     }
