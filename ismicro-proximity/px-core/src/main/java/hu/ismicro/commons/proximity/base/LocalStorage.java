@@ -9,6 +9,8 @@ public interface LocalStorage extends Storage {
     boolean isWritable();
 
     boolean isMetadataAware();
+    
+    void setProxiedItemPropertiesConstructor(ProxiedItemPropertiesConstructor pic);
 
     void recreateMetadata();
 

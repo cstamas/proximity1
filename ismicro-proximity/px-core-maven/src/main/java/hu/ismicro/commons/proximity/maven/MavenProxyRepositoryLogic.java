@@ -135,9 +135,8 @@ public class MavenProxyRepositoryLogic extends DefaultExpiringProxyingRepository
                 logger.info("Item is Maven 1/2 Snapshot, setting expires on it to " + snapshotExpirationPeriod / 1000
                         + " seconds.");
                 remoteItem.getProperties().setMetadata(DefaultExpiringProxyingRepositoryLogic.METADATA_EXPIRES,
-                        Long.toString(System.currentTimeMillis() + snapshotExpirationPeriod));
+                        Long.toString(System.currentTimeMillis() + snapshotExpirationPeriod), false);
             }
-            remoteItem.getProperties().setMetadata("item.isSnapshot", Boolean.TRUE.toString());
 
         } else if (MavenArtifactRecognizer.isPom(remoteItem.getProperties().getName())) {
             
@@ -146,9 +145,8 @@ public class MavenProxyRepositoryLogic extends DefaultExpiringProxyingRepository
                         .info("Item is Maven 2 POM, setting expires on it to " + pomExpirationPeriod / 1000
                                 + " seconds.");
                 remoteItem.getProperties().setMetadata(DefaultExpiringProxyingRepositoryLogic.METADATA_EXPIRES,
-                        Long.toString(System.currentTimeMillis() + pomExpirationPeriod));
+                        Long.toString(System.currentTimeMillis() + pomExpirationPeriod), false);
             }
-            remoteItem.getProperties().setMetadata("item.isPom", Boolean.TRUE.toString());
         
         } else if (MavenArtifactRecognizer.isMetadata(remoteItem.getProperties().getName())) {
             
@@ -156,9 +154,8 @@ public class MavenProxyRepositoryLogic extends DefaultExpiringProxyingRepository
                 logger.info("Item is Maven 2 Metadata, setting expires on it to " + metadataExpirationPeriod / 1000
                         + " seconds.");
                 remoteItem.getProperties().setMetadata(DefaultExpiringProxyingRepositoryLogic.METADATA_EXPIRES,
-                        Long.toString(System.currentTimeMillis() + metadataExpirationPeriod));
+                        Long.toString(System.currentTimeMillis() + metadataExpirationPeriod), false);
             }
-            remoteItem.getProperties().setMetadata("item.isMetadata", Boolean.TRUE.toString());
         
         } else {
 

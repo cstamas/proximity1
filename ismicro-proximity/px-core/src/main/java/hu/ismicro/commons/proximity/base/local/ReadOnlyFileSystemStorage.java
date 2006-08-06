@@ -255,12 +255,18 @@ public class ReadOnlyFileSystemStorage extends AbstractLocalStorage {
                 fis.close();
                 for (Enumeration i = metadata.propertyNames(); i.hasMoreElements();) {
                     String key = (String) i.nextElement();
-                    String value = metadata.getProperty(key);
-                    iProps.setMetadata(key, value);
+                    if (key.startsWith("__")) {
+                        // not indexable
+                        iProps.setMetadata(key.substring(2), metadata.getProperty(key), false);
+                    } else {
+                        // indexable
+                        iProps.setMetadata(key, metadata.getProperty(key), true);
+                    }
                 }
             } else {
-                logger.info("No metadata exists for [" + iProps.getName() + "] on path [" + iProps.getAbsolutePath()
-                        + "]");
+                logger.debug("No metadata exists for [" + iProps.getName() + "] on path [" + iProps.getAbsolutePath()
+                        + "] -- RECREATING");
+                getProxiedItemPropertiesConstructor().expandItemProperties(iProps, new File(new File(getStorageBaseDir(), iProps.getAbsolutePath()), iProps.getName()));
             }
         } catch (IOException ex) {
             logger.error("Got IOException during metadata retrieval.", ex);
@@ -274,16 +280,24 @@ public class ReadOnlyFileSystemStorage extends AbstractLocalStorage {
         logger.debug("Storing metadata in [" + iProps.getAbsolutePath() + "] with name [" + iProps.getName() + "] in "
                 + getMetadataBaseDir());
         try {
+            
             File target = new File(new File(getMetadataBaseDir(), iProps.getAbsolutePath()), iProps.getName());
             target.getParentFile().mkdirs();
-
             Properties metadata = new Properties();
-            metadata.putAll(iProps.getAllMetadata());
+            for (Iterator i = iProps.getAllMetadata().keySet().iterator(); i.hasNext(); ) {
+                String key = (String) i.next();
+                if (iProps.isMetadataIndexable(key)) {
+                    metadata.put(key, iProps.getMetadata(key));
+                } else {
+                    metadata.put("__" + key, iProps.getMetadata(key));
+                }
+            }
             FileOutputStream os = new FileOutputStream(target);
             metadata.store(os, null);
             os.flush();
             os.close();
             target.setLastModified(iProps.getLastModified().getTime());
+
         } catch (IOException ex) {
             logger.error("IOException in FS storage " + getMetadataBaseDir(), ex);
             throw new StorageException("IOException in FS storage " + getMetadataBaseDir(), ex);

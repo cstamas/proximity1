@@ -8,12 +8,9 @@ public interface ProxiedItemPropertiesConstructor {
      * Returns filled in item properties for file that is located on path.
      * 
      * @param file
-     *            the file for which we constructs item properties.
-     * 
-     * @param path
-     *            the repo path where this item is located.
+     *            The file about we need more to know.
      * @return filled up ProxiedItemProperties.
      */
-    ProxiedItemProperties buildItemProperties(File file, String path);
+    void expandItemProperties(ProxiedItemProperties ip, File file);
 
 }

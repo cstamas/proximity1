@@ -2,20 +2,25 @@ package hu.ismicro.commons.proximity.base;
 
 import hu.ismicro.commons.proximity.ItemProperties;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 public class ProxiedItemProperties implements ItemProperties {
 
     private Map metadataMap;
+    
+    private List indexableMetadataKeys;
 
     public String getAbsolutePath() {
         return getMetadata(METADATA_ABSOLUTE_PATH);
     }
 
     public void setAbsolutePath(String absolutePath) {
-        setMetadata(METADATA_ABSOLUTE_PATH, absolutePath);
+        setMetadata(METADATA_ABSOLUTE_PATH, absolutePath, true);
     }
 
     public String getName() {
@@ -23,7 +28,7 @@ public class ProxiedItemProperties implements ItemProperties {
     }
 
     public void setName(String name) {
-        setMetadata(METADATA_NAME, name);
+        setMetadata(METADATA_NAME, name, true);
     }
 
     public String getPath() {
@@ -42,7 +47,7 @@ public class ProxiedItemProperties implements ItemProperties {
     }
 
     public void setDirectory(boolean directory) {
-        setMetadata(METADATA_IS_DIRECTORY, Boolean.toString(directory));
+        setMetadata(METADATA_IS_DIRECTORY, Boolean.toString(directory), true);
     }
 
     public boolean isFile() {
@@ -50,7 +55,7 @@ public class ProxiedItemProperties implements ItemProperties {
     }
 
     public void setFile(boolean file) {
-        setMetadata(METADATA_IS_FILE, Boolean.toString(file));
+        setMetadata(METADATA_IS_FILE, Boolean.toString(file), true);
     }
 
     public Date getLastModified() {
@@ -58,7 +63,7 @@ public class ProxiedItemProperties implements ItemProperties {
     }
 
     public void setLastModified(Date lastModified) {
-        setMetadata(METADATA_LAST_MODIFIED, Long.toString(lastModified.getTime()));
+        setMetadata(METADATA_LAST_MODIFIED, Long.toString(lastModified.getTime()), true);
     }
 
     public long getSize() {
@@ -66,7 +71,7 @@ public class ProxiedItemProperties implements ItemProperties {
     }
 
     public void setSize(long size) {
-        setMetadata(METADATA_FILESIZE, Long.toString(size));
+        setMetadata(METADATA_FILESIZE, Long.toString(size), true);
     }
 
     public String getRepositoryId() {
@@ -74,7 +79,7 @@ public class ProxiedItemProperties implements ItemProperties {
     }
 
     public void setRepositoryId(String id) {
-        setMetadata(METADATA_OWNING_REPOSITORY, id);
+        setMetadata(METADATA_OWNING_REPOSITORY, id, true);
     }
 
     public String getRepositoryGroupId() {
@@ -82,19 +87,39 @@ public class ProxiedItemProperties implements ItemProperties {
     }
 
     public void setRepositoryGroupId(String id) {
-        setMetadata(METADATA_OWNING_REPOSITORY_GROUP, id);
+        setMetadata(METADATA_OWNING_REPOSITORY_GROUP, id, true);
     }
 
     public String getMetadata(String key) {
         return (String) getMetadataMap().get(key);
     }
 
-    public void setMetadata(String key, String value) {
+    public void setMetadata(String key, String value, boolean indexable) {
+        if (indexable) {
+            getIndexableMetadataKeys().add(key);
+        }
         getMetadataMap().put(key, value);
+    }
+
+    public void setMetadata(String key, String value) {
+        setMetadata(key, value, false);
     }
 
     public Map getAllMetadata() {
         return getMetadataMap();
+    }
+
+    public Map getIndexableMetadata() {
+        HashMap result = new HashMap();
+        for (Iterator i = getIndexableMetadataKeys().iterator(); i.hasNext(); ) {
+            String key = (String) i.next();
+            result.put(key, getMetadata(key));
+        }
+        return result;
+    }
+
+    public boolean isMetadataIndexable(String key) {
+        return getIndexableMetadataKeys().contains(key);
     }
 
     protected Map getMetadataMap() {
@@ -102,6 +127,13 @@ public class ProxiedItemProperties implements ItemProperties {
             metadataMap = new HashMap();
         }
         return metadataMap;
+    }
+
+    protected List getIndexableMetadataKeys() {
+        if (indexableMetadataKeys == null) {
+            indexableMetadataKeys = new ArrayList();
+        }
+        return indexableMetadataKeys;
     }
 
     public String toString() {

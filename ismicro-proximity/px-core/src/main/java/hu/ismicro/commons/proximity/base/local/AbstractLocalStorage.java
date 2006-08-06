@@ -1,7 +1,9 @@
 package hu.ismicro.commons.proximity.base.local;
 
 import hu.ismicro.commons.proximity.Item;
+import hu.ismicro.commons.proximity.base.DefaultProxiedItemPropertiesConstructor;
 import hu.ismicro.commons.proximity.base.LocalStorage;
+import hu.ismicro.commons.proximity.base.ProxiedItemPropertiesConstructor;
 import hu.ismicro.commons.proximity.base.StorageException;
 
 import java.util.List;
@@ -20,6 +22,16 @@ public abstract class AbstractLocalStorage implements LocalStorage {
 
     protected Log logger = LogFactory.getLog(this.getClass());
 
+    protected ProxiedItemPropertiesConstructor proxiedItemPropertiesConstructor = new DefaultProxiedItemPropertiesConstructor();
+
+    public void setProxiedItemPropertiesConstructor(ProxiedItemPropertiesConstructor pic) {
+        this.proxiedItemPropertiesConstructor = pic;
+    }
+    
+    public ProxiedItemPropertiesConstructor getProxiedItemPropertiesConstructor() {
+        return this.proxiedItemPropertiesConstructor;
+    }
+    
     public boolean isWritable() {
         return false;
     }

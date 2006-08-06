@@ -195,7 +195,7 @@ public class LuceneIndexer extends AbstractIndexer {
 
     protected Document itemProperties2Document(ItemProperties item) {
         Document result = new Document();
-        for (Iterator i = item.getAllMetadata().keySet().iterator(); i.hasNext();) {
+        for (Iterator i = item.getIndexableMetadata().keySet().iterator(); i.hasNext();) {
             String key = (String) i.next();
             result.add(new Field(key, item.getMetadata(key), Field.Store.YES, Field.Index.UN_TOKENIZED));
         }

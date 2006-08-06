@@ -336,7 +336,7 @@ public class CommonsHttpClientRemotePeer extends AbstractRemoteStorage {
         } else {
             result.setSize(0);
         }
-        result.setMetadata(ItemProperties.METADATA_ORIGINATING_URL, originatingUrl.toString());
+        result.setMetadata(ItemProperties.METADATA_ORIGINATING_URL, originatingUrl.toString(), false);
         return result;
     }
 

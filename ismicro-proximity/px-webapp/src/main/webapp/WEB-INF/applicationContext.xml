@@ -94,10 +94,9 @@
 
 	<!--
 		- Indexer, used to speed up searches ONLY.
-		- This indexer parses POMs and takes some info from them.
 	-->
 	<bean id="indexer"
-		class="hu.ismicro.commons.proximity.maven.MavenAwareLuceneIndexer">
+		class="hu.ismicro.commons.proximity.base.indexer.LuceneIndexer">
 		<!-- Where to store indexes? -->
 		<property name="indexDirectory" value="${indexer.dir}" />
 		<!-- On webapp start should i recreate Lucene indexes? -->
@@ -111,6 +110,12 @@
 	-->
 	<bean id="stats"
 		class="hu.ismicro.commons.proximity.base.SimpleStatisticsGathererImpl" />
+
+	<!--
+		- ItemPropertiesConstructor, creates "extra" metadata about files.
+	-->
+	<bean id="mavenItemPropertiesConstructor"
+		class="hu.ismicro.commons.proximity.maven.MavenItemPropertiesConstructor" />
 
 	<!--
 		- AccessManagers. With OpenAccessManager Proximity is wide open.
@@ -218,6 +223,8 @@
 		<property name="baseDir" value="${centralFSStorage.baseDir}" />
 		<!-- If true, two subfolders will be created with identical structure but different content. -->
 		<property name="metadataAware" value="true" />
+		<!-- Using Maven-aware properties constructor -->
+		<property name="proxiedItemPropertiesConstructor" ref="mavenItemPropertiesConstructor" />
 		<!-- The prefix for metadata subfolder. -->
 		<property name="metadataPrefix" value="metadata" />
 		<!-- The prefix for storage subfolder. -->
