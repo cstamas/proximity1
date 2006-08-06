@@ -28,14 +28,14 @@ directory (default name is "metadata" altough it is configurable too) shares the
 glance. Browsing this directory, you will see the same subdirectories and same file names, <b>but with
 special contents</b>! These file are <b>regular Java java.util.Properties files</b>, and they contains
 the "metadata" about their "storage" file counterparts. The amount of metadatas and their content is completely
-extensible, this is how "Maven Proxy" build upon Proximity Core.</p>
+extensible, this is how "Maven Proxy" builds upon Proximity Core.</p>
 
 <p>Proximity itself (since it's Core is a simple multi homed HTTP Proxy) maintains some default properties of "item" (Proximity
 notation for a file) like name, path, size, etc. In Proximity Maven Proxy, a special class, called 
 <a href="px-core-maven/xref/hu/ismicro/commons/proximity/maven/MavenItemPropertiesConstructor.html">MavenItemPropertiesConstructor</a>
 is responsible for "filling" up all the "extra" (Maven) properties of the file.</p>
 
-<p>The Maven specific things are all extending the core functionalities of Proximity, achieving this web application
+<p>The Maven specific things are all extending the core functionalities of Proximity, enabling this web application
 you are using.</p>
 
 <subsection name="Browsing repository">

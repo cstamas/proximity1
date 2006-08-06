@@ -71,13 +71,35 @@ chosen repository.
 between repositories? You can also filter to them and sort artifacts... Also, there is the 
 group column, which indicates which repositories will be <<aggregated>>.
 
-[images/proximity-browse.jpg] Browsing proximity repository.
+[images/proximity-browse-files.jpg] Browsing proximity repository.
+
+[images/proximity-browse-files1.jpg] Browsing proximity repository.
+
 
   Also, notice the cool but useful feature: leave the mouse over the artifact or directory
-link, and you will know about as much as Proximity does! Here is it:
+link, and you will know about as much as Proximity does! The indexed properties keys are
+searchable on Search page! Here is it:
 
-[images/proximity-properties.png] Properties shown.
+[images/proximity-browse-files2.jpg] Browsing proximity repository.
 
+  A single line shows: kind icon, item name, link to project's home (if POM contains it), link to
+it's original location (eg. link to central), item deletion (uninmplemented), size, date,
+repository group and repository:
+
+[images/proximity-browse-files3.jpg] Browsing proximity repository.
+
+  Proximity shows which folders are proxied (network icon) and which are hosted:
+
+[images/proximity-browse-files4.jpg] Browsing proximity repository.
+
+  A new view is the Artifact browsing function. It simply leads in groupId, artifactId, version namespace:
+  
+[images/proximity-browse-artifacts.jpg] Browsing proximity repository.
+  
+[images/proximity-browse-artifacts1.jpg] Browsing proximity repository.
+  
+[images/proximity-browse-artifacts2.jpg] Browsing proximity repository.
+  
 
 * Using it with Maven2
 
