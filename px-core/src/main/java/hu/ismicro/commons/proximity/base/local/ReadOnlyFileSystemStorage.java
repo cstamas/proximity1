@@ -17,6 +17,7 @@ import java.util.Date;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Stack;
 
@@ -198,7 +199,7 @@ public class ReadOnlyFileSystemStorage extends AbstractLocalStorage {
         return result;
     }
 
-    public void recreateMetadata() {
+    public void recreateMetadata(Map extraProps) {
         int processed = 0;
         Stack stack = new Stack();
         List dir = listItems(PathHelper.PATH_SEPARATOR);
@@ -207,9 +208,11 @@ public class ReadOnlyFileSystemStorage extends AbstractLocalStorage {
             dir = (List) stack.pop();
             for (Iterator i = dir.iterator(); i.hasNext();) {
                 ItemProperties ip = (ItemProperties) i.next();
+                if (extraProps != null) {
+                    ip.getAllMetadata().putAll(extraProps);
+                }
                 if (ip.isDirectory()) {
-                    List subdir = listItems(
-                            PathHelper.walkThePath(ip.getAbsolutePath(), ip.getName()));
+                    List subdir = listItems(PathHelper.walkThePath(ip.getAbsolutePath(), ip.getName()));
                     stack.push(subdir);
                 } else {
                     storeItemProperties(ip);
@@ -266,7 +269,8 @@ public class ReadOnlyFileSystemStorage extends AbstractLocalStorage {
             } else {
                 logger.debug("No metadata exists for [" + iProps.getName() + "] on path [" + iProps.getAbsolutePath()
                         + "] -- RECREATING");
-                getProxiedItemPropertiesConstructor().expandItemProperties(iProps, new File(new File(getStorageBaseDir(), iProps.getAbsolutePath()), iProps.getName()));
+                getProxiedItemPropertiesConstructor().expandItemProperties(iProps,
+                        new File(new File(getStorageBaseDir(), iProps.getAbsolutePath()), iProps.getName()));
             }
         } catch (IOException ex) {
             logger.error("Got IOException during metadata retrieval.", ex);
@@ -280,11 +284,11 @@ public class ReadOnlyFileSystemStorage extends AbstractLocalStorage {
         logger.debug("Storing metadata in [" + iProps.getAbsolutePath() + "] with name [" + iProps.getName() + "] in "
                 + getMetadataBaseDir());
         try {
-            
+
             File target = new File(new File(getMetadataBaseDir(), iProps.getAbsolutePath()), iProps.getName());
             target.getParentFile().mkdirs();
             Properties metadata = new Properties();
-            for (Iterator i = iProps.getAllMetadata().keySet().iterator(); i.hasNext(); ) {
+            for (Iterator i = iProps.getAllMetadata().keySet().iterator(); i.hasNext();) {
                 String key = (String) i.next();
                 if (iProps.isMetadataIndexable(key)) {
                     metadata.put(key, iProps.getMetadata(key));

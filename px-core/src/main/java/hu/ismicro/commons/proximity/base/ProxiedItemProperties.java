@@ -58,6 +58,14 @@ public class ProxiedItemProperties implements ItemProperties {
         setMetadata(METADATA_IS_FILE, Boolean.toString(file), true);
     }
 
+    public boolean hasRemoteOrigin() {
+        return getAllMetadata().containsKey(METADATA_ORIGINATING_URL);
+    }
+
+    public String getRemotePath() {
+        return getMetadata(METADATA_ORIGINATING_URL);
+    }
+
     public Date getLastModified() {
         return new Date(Long.parseLong(getMetadata(METADATA_LAST_MODIFIED)));
     }

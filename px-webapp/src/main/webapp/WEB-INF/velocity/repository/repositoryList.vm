@@ -17,12 +17,12 @@
 <table>
 	<thead>
 		<tr class="tdb">
-			<td>#springMessage("item.kind")</td>
+			<td width="40">#springMessage("item.kind")</td>
 			<td><a href="#springUrl('/repository')${requestUri}?orderBy=name"><b>#springMessage("item.path")</b></a></td>
-			<td><a href="#springUrl('/repository')${requestUri}?orderBy=size"><b>#springMessage("item.size")</b></a></td>
-			<td><a href="#springUrl('/repository')${requestUri}?orderBy=lastModified"><b>#springMessage("item.lastModified")</b></a></td>
-			<td><a href="#springUrl('/repository')${requestUri}?orderBy=repositoryGroupId"><b>#springMessage("item.repositoryGroupId")</b></a></td>
-			<td><a href="#springUrl('/repository')${requestUri}?orderBy=repositoryId"><b>#springMessage("item.repositoryId")</b></a></td>
+			<td width="100"><a href="#springUrl('/repository')${requestUri}?orderBy=size"><b>#springMessage("item.size")</b></a></td>
+			<td width="160"><a href="#springUrl('/repository')${requestUri}?orderBy=lastModified"><b>#springMessage("item.lastModified")</b></a></td>
+			<td width="80"><a href="#springUrl('/repository')${requestUri}?orderBy=repositoryGroupId"><b>#springMessage("item.repositoryGroupId")</b></a></td>
+			<td width="80"><a href="#springUrl('/repository')${requestUri}?orderBy=repositoryId"><b>#springMessage("item.repositoryId")</b></a></td>
 		</tr>
 	</thead>
 	
@@ -31,7 +31,7 @@
 		#foreach($item in $items)
 			<tr class="tda">
 				<td>
-				    #kindImage($item)
+				    #itemImage($item)
 				</td>
 				<td>
 				    #itemLink($item)

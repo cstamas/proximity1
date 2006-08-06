@@ -18,7 +18,7 @@ import org.apache.commons.logging.LogFactory;
 public abstract class AbstractRemoteStorage implements RemoteStorage {
 
     protected Log logger = LogFactory.getLog(this.getClass());
-
+    
     private URL remoteUrl;
 
     public URL getRemoteUrl() {
@@ -29,7 +29,7 @@ public abstract class AbstractRemoteStorage implements RemoteStorage {
         this.remoteUrl = url;
     }
 
-    protected String getAbsoluteUrl(String path) {
+    public String getAbsoluteUrl(String path) {
         return PathHelper.concatPaths(getRemoteUrlAsString(), path);
     }
 

@@ -1,22 +1,19 @@
 package hu.ismicro.commons.proximity.webapp;
 
 import hu.ismicro.commons.proximity.AccessDeniedException;
-import hu.ismicro.commons.proximity.Item;
 import hu.ismicro.commons.proximity.ItemNotFoundException;
 import hu.ismicro.commons.proximity.Proximity;
-import hu.ismicro.commons.proximity.ProximityRequest;
+import hu.ismicro.commons.proximity.base.ProxiedItemProperties;
 
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.io.IOUtils;
 import org.springframework.beans.support.MutableSortDefinition;
 import org.springframework.beans.support.PropertyComparator;
 import org.springframework.web.servlet.ModelAndView;
@@ -40,42 +37,82 @@ public class ArtifactsController extends MultiActionController {
         if (requestURI.length() == 0) {
             requestURI = "/";
         }
-        logger.debug("Got repository request on URI " + requestURI);
+        logger.debug("Got artifact request on URI " + requestURI);
         String orderBy = request.getParameter("orderBy") == null ? "name" : request.getParameter("orderBy");
         String targetRepository = request.getParameter("repositoryId");
         String targetGroup = request.getParameter("repositoryGroupId");
+        List requestPathList = explodeUriToList(requestURI);
 
-        Item item = null;
-        ProximityRequest pRequest = new ProximityRequest();
-        pRequest.setPath(requestURI);
-        pRequest.setTargetedReposId(targetRepository);
-        pRequest.setTargetedReposGroupId(targetGroup);
-        pRequest.setGrantee(null);
-        pRequest.getAttributes().put(ProximityRequest.REQUEST_REMOTE_ADDRESS, request.getRemoteAddr());
+        String gid = null;
+        String aid = null;
+        String version = null;
+
+        if (requestPathList.size() > 0) {
+            gid = (String) requestPathList.get(0);
+        }
+        if (requestPathList.size() > 1) {
+            aid = (String) requestPathList.get(1);
+        }
+        if (requestPathList.size() > 2) {
+            version = (String) requestPathList.get(2);
+        }
+
+        // this view relies on search only, thats the trick:
+        // level 1: search for "kind:pom", extract the "pom.gid" properties,
+        // make them unique, show
+        // level 2: search for "kind:pom AND pom.gid:SELECTION", extract the
+        // "pom.aid" properties, make them unqie, show
+        // level 3: search for "kind:pom AND pom.gid:SELECTION AND
+        // pom.aid:SELECTION", extract the "pom.version" ...
+        // level 4: search for "kind:pom AND pom.gid:SELECTION AND
+        // pom.aid:SELECTION AND pom.version:SELECTION" and offer pom.pck
+        // download?
+
+        // URI: /pom.gid/pom.aid/pom.version
+
         try {
-            logger.debug("Got request for " + targetRepository + " repository on URI: " + requestURI);
-            item = proximity.retrieveItem(pRequest);
+            logger.debug("Got request for artifactList on URI=" + requestURI);
 
-            if (item.getProperties().isDirectory()) {
-                List items = null;
-                items = proximity.listItems(pRequest);
-                PropertyComparator.sort(items, new MutableSortDefinition(orderBy, true, true));
-                Map result = new HashMap();
-                result.put("items", items);
-                result.put("orderBy", orderBy);
-                result.put("requestUri", requestURI);
-                result.put("requestPathList", explodeUriToList(requestURI));
-                return new ModelAndView("repository/artifactList", result);
-            } else {
-                response.setContentType("application/octet-stream");
-                response.setContentLength((int) item.getProperties().getSize());
-                response.setDateHeader("Last-Modified", item.getProperties().getLastModified().getTime());
-                InputStream is = item.getStream();
-                OutputStream os = response.getOutputStream();
-                IOUtils.copy(is, os);
-                is.close();
-                return null;
+            String searchExpr = "kind:pom";
+            if (targetRepository != null) {
+                searchExpr += " AND repository.id:" + targetRepository;
             }
+            if (targetGroup != null) {
+                searchExpr += " AND repository.groupId:" + targetGroup;
+            }
+            if (gid != null) {
+                searchExpr += " AND pom.gid:" + gid;
+            }
+            if (aid != null) {
+                searchExpr += " AND pom.aid:" + aid;
+            }
+            if (version != null) {
+                searchExpr += " AND pom.version:" + version;
+            }
+
+            // make list unique and ordered on smthn
+            List artifactList = null;
+            if (version != null) {
+                artifactList = sortAndMakeUnique(proximity.searchItem(searchExpr), "pom.version");
+            } else if (aid != null) {
+                artifactList = sortAndMakeUnique(proximity.searchItem(searchExpr), "pom.version");
+            } else if (gid != null) {
+                artifactList = sortAndMakeUnique(proximity.searchItem(searchExpr), "pom.aid");
+            } else {
+                artifactList = sortAndMakeUnique(proximity.searchItem(searchExpr), "pom.gid");
+            }
+
+            Map result = new HashMap();
+            result.put("gid", gid);
+            result.put("aid", aid);
+            result.put("version", version);
+            result.put("items", artifactList);
+            result.put("orderBy", orderBy);
+            result.put("requestUri", requestURI);
+            result.put("requestPathList", requestPathList);
+
+            return new ModelAndView("repository/artifactList", result);
+
         } catch (ItemNotFoundException ex) {
             logger.info("Item not found on URI " + requestURI);
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
@@ -99,4 +136,19 @@ public class ArtifactsController extends MultiActionController {
         return result;
     }
 
+    protected List sortAndMakeUnique(List artifactList, String metadataKey) {
+        // we do a little trick here, moving the needed key to name field
+        List result = new ArrayList(artifactList.size());
+        List uniqueItemList = new ArrayList(artifactList.size());
+        for (Iterator i = artifactList.iterator(); i.hasNext();) {
+            ProxiedItemProperties item = (ProxiedItemProperties) i.next();
+            if (!uniqueItemList.contains(item.getMetadata(metadataKey))) {
+                uniqueItemList.add(item.getMetadata(metadataKey));
+                item.setName(item.getMetadata(metadataKey));
+                result.add(item);
+            }
+        }
+        PropertyComparator.sort(result, new MutableSortDefinition("name", true, true));
+        return result;
+    }
 }

@@ -1,13 +1,13 @@
-<h2>#springMessage("repositorylist.name")</h2>
+<h2>#springMessage("artifactslist.name")</h2>
 
 <div class="left">
-	<b>#springMessage("repositorylist.pathLinks")</b>&nbsp;
-	<a href="#springUrl('/repository')">#springMessage("repositorylist.root")</a>
+	<b>#springMessage("artifactslist.pathLinks")</b>&nbsp;
+	<a href="#springUrl('/artifacts')">#springMessage("artifactslist.root")</a>
 
 #foreach($path in $requestPathList)
     #set ( $currpath = "$!currpath/$path" )
-	&nbsp;#springMessage("repositorylist.pathSeparator")&nbsp;
-	<a href="#springUrl('/repository')$currpath">$path</a>
+	&nbsp;#springMessage("artifactslist.pathSeparator")&nbsp;
+	<a href="#springUrl('/artifacts')$currpath">$path</a>
 #end
 
 </div>
@@ -17,10 +17,20 @@
 <table>
 	<thead>
 		<tr class="tdb">
-			<td>#springMessage("item.kind")</td>
-			<td><a href="#springUrl('/repository')${requestUri}?orderBy=name"><b>#springMessage("item.path")</b></a></td>
-			<td><a href="#springUrl('/repository')${requestUri}?orderBy=repositoryGroupId"><b>#springMessage("item.repositoryGroupId")</b></a></td>
-			<td><a href="#springUrl('/repository')${requestUri}?orderBy=repositoryId"><b>#springMessage("item.repositoryId")</b></a></td>
+			<td width="40">#springMessage("item.kind")</td>
+			<td><b>
+			    #if( $version )
+					#springMessage('artifactslist.version')
+			    #elseif( $aid )
+					#springMessage('artifactslist.version')
+			    #elseif( $gid)
+					#springMessage('artifactslist.artifact')
+			    #else
+					#springMessage('artifactslist.group')
+			    #end
+			</b></td>
+			<td width="80"><b>#springMessage("item.repositoryGroupId")</b></td>
+			<td width="80"><b>#springMessage("item.repositoryId")</b></td>
 		</tr>
 	</thead>
 	
@@ -29,14 +39,14 @@
 		#foreach($item in $items)
 			<tr class="tda">
 				<td>
-				    #kindImage($item)
+				    #artifactImage($item)
 				</td>
 				<td>
 				    #artifactLink($item)
 				    &nbsp;
 				</td>
-				<td><a href="#springUrl('/repository')?repositoryGroupId=${item.repositoryGroupId}">${item.repositoryGroupId}</a>&nbsp;</td>
-				<td><a href="#springUrl('/repository')?repositoryId=${item.repositoryId}">${item.repositoryId}</a>&nbsp;</td>
+				<td><a href="#springUrl('/artifacts')?repositoryGroupId=${item.repositoryGroupId}">${item.repositoryGroupId}</a>&nbsp;</td>
+				<td><a href="#springUrl('/artifacts')?repositoryId=${item.repositoryId}">${item.repositoryId}</a>&nbsp;</td>
 			</tr>
 		#end
   

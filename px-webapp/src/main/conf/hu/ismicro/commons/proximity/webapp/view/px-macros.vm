@@ -1,20 +1,24 @@
-#macro( mavenItem $item )
+#macro( itemMavenImage $item )
     #if( $item.getName().indexOf("SNAPSHOT") > -1  )
-		<img src="#springUrl('/images/maven-snapshot.png')" alt="Maven 1/2 snapshot"/>&nbsp;
+		<img src="#springUrl('/images/maven-snapshot.png')" alt="#springMessage('repositorylist.snapshot')" title="#springMessage('repositorylist.snapshot')"/>&nbsp;
     #elseif( $item.getName().indexOf(".pom") > -1 )
-		<img src="#springUrl('/images/maven2-pom.png')" alt="Maven2 POM"/>&nbsp;
+		<img src="#springUrl('/images/maven2-pom.png')"  alt="#springMessage('repositorylist.pom')" title="#springMessage('repositorylist.pom')"/>&nbsp;
     #elseif( $item.getName().startsWith("maven-metadata.xml") )
-		<img src="#springUrl('/images/maven2-metadata.png')" alt="Maven2 metadata"/>&nbsp;
+		<img src="#springUrl('/images/maven2-metadata.png')"  alt="#springMessage('repositorylist.metadata')" title="#springMessage('repositorylist.metadata')"/>&nbsp;
     #else
-		<img src="#springUrl('/images/artifact.png')" alt="Artifact"/>&nbsp;
+		<img src="#springUrl('/images/artifact.png')"  alt="#springMessage('repositorylist.artifact')" title="#springMessage('repositorylist.artifact')"/>&nbsp;
 	#end
 #end
 
-#macro( kindImage $item )
+#macro( itemImage $item )
 	#if(${item.isDirectory()})
-		<img src="#springUrl('/images/folder-local.png')"/>&nbsp;
+	    #if(${item.hasRemoteOrigin()})
+  			<img src="#springUrl('/images/folder-remote.png')" alt="#springMessage('repositorylist.proxied')" title="#springMessage('repositorylist.proxied')"/>&nbsp;
+	    #else
+  			<img src="#springUrl('/images/folder-home.png')" alt="#springMessage('repositorylist.hosted')" title="#springMessage('repositorylist.hosted')"/>&nbsp;
+	    #end
 	#else
-	    #mavenItem($item)
+	    #itemMavenImage($item)
 	#end
 #end
 
@@ -31,15 +35,36 @@
    
 #end
 
+
+
+
+#macro( artifactMavenImage $item )
+    #if( $version )
+		<img src="#springUrl('/images/maven-snapshot.png')" alt="#springMessage('artifactslist.version')" title="#springMessage('artifactslist.version')"/>&nbsp;
+    #elseif( $aid )
+		<img src="#springUrl('/images/maven-snapshot.png')" alt="#springMessage('artifactslist.version')" title="#springMessage('artifactslist.version')"/>&nbsp;
+    #elseif( $gid)
+		<img src="#springUrl('/images/folder-local.png')" alt="#springMessage('artifactslist.artifact')" title="#springMessage('artifactslist.artifact')"/>&nbsp;
+    #else
+		<img src="#springUrl('/images/folder-local.png')"  alt="#springMessage('artifactslist.group')" title="#springMessage('artifactslist.group')"/>&nbsp;
+    #end
+#end
+
+#macro( artifactImage $item )
+	#artifactMavenImage($item)
+#end
+
 #macro( artifactLink $item )
 
-    <a href="#springUrl('/artifacts')${item.name}?repositoryId=${item.repositoryId}" onmouseover="return escape(
-    '<b>Complete property list:</b>'+
-    '<ul>'+
-	#foreach( $key in $item.getAllMetadata().keySet() )
-		'<li>$key = $esc.javascript($item.getAllMetadata().get($key))</li>'+
-	#end
-	'</ul>'
-    )">${item.name}</a>
-   
+    #if( $version )
+	    #springMessage("artifactslist.artifact") <a href="#springUrl('/repository')${item.absolutePath}/${aid}-${version}.${item.getMetadata('pom.pck')}">${aid}-${version}.${item.getMetadata('pom.pck')}</a>
+	    [<a href="#springUrl('/repository')${item.absolutePath}">${item.absolutePath}</a>]
+    #elseif( $aid )
+	    <a href="#springUrl('/artifacts')/${gid}/${aid}/${item.getMetadata('pom.version')}">${item.getMetadata('pom.version')}</a>
+    #elseif( $gid)
+	    <a href="#springUrl('/artifacts')/${gid}/${item.getMetadata('pom.aid')}">${item.getMetadata('pom.aid')}</a>
+	#else
+	    <a href="#springUrl('/artifacts')/${item.getMetadata('pom.gid')}">${item.getMetadata('pom.gid')}</a>
+    #end
+
 #end
