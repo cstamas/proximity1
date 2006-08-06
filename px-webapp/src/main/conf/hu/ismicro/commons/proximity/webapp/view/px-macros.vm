@@ -25,13 +25,29 @@
 #macro( itemLink $item )
 
     <a href="#springUrl('/repository')${item.path}?repositoryId=${item.repositoryId}" onmouseover="return escape(
-    '<b>Complete property list:</b>'+
+    '<b>Indexed properties:</b>'+
     '<ul>'+
-	#foreach( $key in $item.getAllMetadata().keySet() )
+	#foreach( $key in $item.getIndexableMetadata().keySet() )
+		'<li>$key = $esc.javascript($item.getAllMetadata().get($key))</li>'+
+	#end
+	'</ul><br/>'+
+    '<b>Non-Indexed properties:</b>'+
+    '<ul>'+
+	#foreach( $key in $item.getNonIndexableMetadata().keySet() )
 		'<li>$key = $esc.javascript($item.getAllMetadata().get($key))</li>'+
 	#end
 	'</ul>'
-    )">${item.name}</a>
+    )">${item.name}</a><br/>
+
+    #if(${item.getMetadata('pom.url')})
+		<a href="${item.getMetadata('pom.url')}"><img src="#springUrl('/images/go-home.png')" width="16" height="16" alt="#springMessage('repositorylist.prjHome')" title="#springMessage('repositorylist.prjHome')"/></a>
+		&nbsp;
+    #end
+
+    #if(${item.getMetadata('pom.url')})
+		<a href="${item.getMetadata('item.origin')}"><img src="#springUrl('/images/go-jump.png')" width="16" height="16" alt="#springMessage('repositorylist.getOriginal')" title="#springMessage('repositorylist.getOriginal')"/></a>
+		&nbsp;
+    #end
    
 #end
 
@@ -40,7 +56,7 @@
 
 #macro( artifactMavenImage $item )
     #if( $version )
-		<img src="#springUrl('/images/maven-snapshot.png')" alt="#springMessage('artifactslist.version')" title="#springMessage('artifactslist.version')"/>&nbsp;
+		<img src="#springUrl('/images/go-down.png')" alt="#springMessage('artifactslist.artifact')" title="#springMessage('artifactslist.artifact')"/>&nbsp;
     #elseif( $aid )
 		<img src="#springUrl('/images/maven-snapshot.png')" alt="#springMessage('artifactslist.version')" title="#springMessage('artifactslist.version')"/>&nbsp;
     #elseif( $gid)
@@ -57,8 +73,9 @@
 #macro( artifactLink $item )
 
     #if( $version )
-	    #springMessage("artifactslist.artifact") <a href="#springUrl('/repository')${item.absolutePath}/${aid}-${version}.${item.getMetadata('pom.pck')}">${aid}-${version}.${item.getMetadata('pom.pck')}</a>
-	    [<a href="#springUrl('/repository')${item.absolutePath}">${item.absolutePath}</a>]
+	    <a href="#springUrl('/repository')${item.absolutePath}/${aid}-${version}.${item.getMetadata('pom.pck')}">
+	    #springMessage("artifactslist.getartifact") ${aid}-${version}.${item.getMetadata('pom.pck')}</a><br/>
+	    [#springMessage("artifactslist.location") <a href="#springUrl('/repository')${item.absolutePath}">${item.absolutePath}</a>]
     #elseif( $aid )
 	    <a href="#springUrl('/artifacts')/${gid}/${aid}/${item.getMetadata('pom.version')}">${item.getMetadata('pom.version')}</a>
     #elseif( $gid)

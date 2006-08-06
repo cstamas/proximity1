@@ -19,6 +19,10 @@ table {
   margin-right: 0px;
 }
 
+img {
+  border: 0px;
+}
+	
 .contentBox {
      width: 100%;
      vertical-align: top;

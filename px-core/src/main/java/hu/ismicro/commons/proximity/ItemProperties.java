@@ -155,4 +155,11 @@ public interface ItemProperties {
      */
     Map getIndexableMetadata();
 
+    /**
+     * Returns all non-indexable metadata in map.
+     * 
+     * @return
+     */
+    Map getNonIndexableMetadata();
+
 }
