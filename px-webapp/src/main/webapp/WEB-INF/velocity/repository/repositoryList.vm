@@ -35,7 +35,6 @@
 				</td>
 				<td>
 				    #itemLink($item)
-				    &nbsp;
 				</td>
 				<td>
 					#if(${item.isDirectory()})
