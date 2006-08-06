@@ -43,7 +43,6 @@
 				</td>
 				<td>
 				    #artifactLink($item)
-				    &nbsp;
 				</td>
 				<td><a href="#springUrl('/artifacts')?repositoryGroupId=${item.repositoryGroupId}">${item.repositoryGroupId}</a>&nbsp;</td>
 				<td><a href="#springUrl('/artifacts')?repositoryId=${item.repositoryId}">${item.repositoryId}</a>&nbsp;</td>

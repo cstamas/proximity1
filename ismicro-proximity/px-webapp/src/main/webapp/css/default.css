@@ -22,7 +22,16 @@ table {
 img {
   border: 0px;
 }
-	
+
+.controlButtons {
+     text-align: right;
+     border-top:0px;
+     border-bottom:0px;
+     margin-top:0px;
+     margin-bottom:0px;
+     padding:0px;
+}
+
 .contentBox {
      width: 100%;
      vertical-align: top;

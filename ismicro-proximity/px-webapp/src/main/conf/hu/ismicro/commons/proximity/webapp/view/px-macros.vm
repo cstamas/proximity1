@@ -37,17 +37,24 @@
 		'<li>$key = $esc.javascript($item.getAllMetadata().get($key))</li>'+
 	#end
 	'</ul>'
-    )">${item.name}</a><br/>
+    )">${item.name}</a>
+	
+	<div class="controlButtons">
 
     #if(${item.getMetadata('pom.url')})
 		<a href="${item.getMetadata('pom.url')}"><img src="#springUrl('/images/go-home.png')" width="16" height="16" alt="#springMessage('repositorylist.prjHome')" title="#springMessage('repositorylist.prjHome')"/></a>
 		&nbsp;
     #end
 
-    #if(${item.getMetadata('pom.url')})
+    #if(${item.getMetadata('item.origin')})
 		<a href="${item.getMetadata('item.origin')}"><img src="#springUrl('/images/go-jump.png')" width="16" height="16" alt="#springMessage('repositorylist.getOriginal')" title="#springMessage('repositorylist.getOriginal')"/></a>
 		&nbsp;
     #end
+
+	<img src="#springUrl('/images/delete.png')" width="16" height="16" alt="#springMessage('repositorylist.delete')" title="#springMessage('repositorylist.delete')"/>
+	&nbsp;
+	
+	</div>
    
 #end
 
@@ -76,6 +83,24 @@
 	    <a href="#springUrl('/repository')${item.absolutePath}/${aid}-${version}.${item.getMetadata('pom.pck')}">
 	    #springMessage("artifactslist.getartifact") ${aid}-${version}.${item.getMetadata('pom.pck')}</a><br/>
 	    [#springMessage("artifactslist.location") <a href="#springUrl('/repository')${item.absolutePath}">${item.absolutePath}</a>]
+
+		<div class="controlButtons">
+	
+	    #if(${item.getMetadata('pom.url')})
+			<a href="${item.getMetadata('pom.url')}"><img src="#springUrl('/images/go-home.png')" width="16" height="16" alt="#springMessage('repositorylist.prjHome')" title="#springMessage('repositorylist.prjHome')"/></a>
+			&nbsp;
+	    #end
+	
+	    #if(${item.getMetadata('item.origin')})
+			<a href="${item.getMetadata('item.origin')}"><img src="#springUrl('/images/go-jump.png')" width="16" height="16" alt="#springMessage('repositorylist.getOriginal')" title="#springMessage('repositorylist.getOriginal')"/></a>
+			&nbsp;
+	    #end
+	
+		<img src="#springUrl('/images/delete.png')" width="16" height="16" alt="#springMessage('repositorylist.delete')" title="#springMessage('repositorylist.delete')"/>
+		&nbsp;
+		
+		</div>
+
     #elseif( $aid )
 	    <a href="#springUrl('/artifacts')/${gid}/${aid}/${item.getMetadata('pom.version')}">${item.getMetadata('pom.version')}</a>
     #elseif( $gid)
