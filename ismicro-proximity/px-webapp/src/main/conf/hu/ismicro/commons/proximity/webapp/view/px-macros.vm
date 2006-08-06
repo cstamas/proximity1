@@ -30,3 +30,16 @@
     )">${item.name}</a>
    
 #end
+
+#macro( artifactLink $item )
+
+    <a href="#springUrl('/artifacts')${item.name}?repositoryId=${item.repositoryId}" onmouseover="return escape(
+    '<b>Complete property list:</b>'+
+    '<ul>'+
+	#foreach( $key in $item.getAllMetadata().keySet() )
+		'<li>$key = $esc.javascript($item.getAllMetadata().get($key))</li>'+
+	#end
+	'</ul>'
+    )">${item.name}</a>
+   
+#end

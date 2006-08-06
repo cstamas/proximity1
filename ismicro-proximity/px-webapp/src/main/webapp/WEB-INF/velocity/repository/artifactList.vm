@@ -1,0 +1,45 @@
+<h2>#springMessage("repositorylist.name")</h2>
+
+<div class="left">
+	<b>#springMessage("repositorylist.pathLinks")</b>&nbsp;
+	<a href="#springUrl('/repository')">#springMessage("repositorylist.root")</a>
+
+#foreach($path in $requestPathList)
+    #set ( $currpath = "$!currpath/$path" )
+	&nbsp;#springMessage("repositorylist.pathSeparator")&nbsp;
+	<a href="#springUrl('/repository')$currpath">$path</a>
+#end
+
+</div>
+
+<p/>
+
+<table>
+	<thead>
+		<tr class="tdb">
+			<td>#springMessage("item.kind")</td>
+			<td><a href="#springUrl('/repository')${requestUri}?orderBy=name"><b>#springMessage("item.path")</b></a></td>
+			<td><a href="#springUrl('/repository')${requestUri}?orderBy=repositoryGroupId"><b>#springMessage("item.repositoryGroupId")</b></a></td>
+			<td><a href="#springUrl('/repository')${requestUri}?orderBy=repositoryId"><b>#springMessage("item.repositoryId")</b></a></td>
+		</tr>
+	</thead>
+	
+	<tbody>
+  
+		#foreach($item in $items)
+			<tr class="tda">
+				<td>
+				    #kindImage($item)
+				</td>
+				<td>
+				    #artifactLink($item)
+				    &nbsp;
+				</td>
+				<td><a href="#springUrl('/repository')?repositoryGroupId=${item.repositoryGroupId}">${item.repositoryGroupId}</a>&nbsp;</td>
+				<td><a href="#springUrl('/repository')?repositoryId=${item.repositoryId}">${item.repositoryId}</a>&nbsp;</td>
+			</tr>
+		#end
+  
+	</tbody>
+	
+</table>
