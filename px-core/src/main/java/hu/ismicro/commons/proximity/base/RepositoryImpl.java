@@ -213,8 +213,8 @@ public class RepositoryImpl implements Repository {
                 List list = getLocalStorage().listItems(request.getPath());
                 for (Iterator i = list.iterator(); i.hasNext();) {
                     ItemProperties ip = (ItemProperties) i.next();
-                    ip.setMetadata(ItemProperties.METADATA_OWNING_REPOSITORY, this.getId());
-                    ip.setMetadata(ItemProperties.METADATA_OWNING_REPOSITORY_GROUP, this.getGroupId());
+                    ip.setMetadata(ItemProperties.METADATA_OWNING_REPOSITORY, this.getId(), true);
+                    ip.setMetadata(ItemProperties.METADATA_OWNING_REPOSITORY_GROUP, this.getGroupId(), true);
                 }
                 result.addAll(list);
             }
@@ -255,8 +255,8 @@ public class RepositoryImpl implements Repository {
                     if (getLocalStorage().containsItem(request.getPath())) {
                         logger.debug("Found " + request.getPath() + " item in storage of repository " + getId());
                         localResult = getLocalStorage().retrieveItem(request.getPath());
-                        localResult.getProperties().setMetadata(ItemProperties.METADATA_OWNING_REPOSITORY, getId());
-                        localResult.getProperties().setMetadata(ItemProperties.METADATA_OWNING_REPOSITORY_GROUP, getGroupId());
+                        localResult.getProperties().setMetadata(ItemProperties.METADATA_OWNING_REPOSITORY, getId(), true);
+                        localResult.getProperties().setMetadata(ItemProperties.METADATA_OWNING_REPOSITORY_GROUP, getGroupId(), true);
                         if (getStatisticsGatherer() != null) {
                             getStatisticsGatherer().localHit(request, this, localResult.getProperties());
                         }
@@ -271,8 +271,8 @@ public class RepositoryImpl implements Repository {
                 if (getRemoteStorage().containsItem(request.getPath())) {
                     logger.debug("Found " + request.getPath() + " item in remote storage of repository " + getId());
                     remoteResult = getRemoteStorage().retrieveItem(request.getPath());
-                    remoteResult.getProperties().setMetadata(ItemProperties.METADATA_OWNING_REPOSITORY, getId());
-                    remoteResult.getProperties().setMetadata(ItemProperties.METADATA_OWNING_REPOSITORY_GROUP, getGroupId());
+                    remoteResult.getProperties().setMetadata(ItemProperties.METADATA_OWNING_REPOSITORY, getId(), true);
+                    remoteResult.getProperties().setMetadata(ItemProperties.METADATA_OWNING_REPOSITORY_GROUP, getGroupId(), true);
                     if (getStatisticsGatherer() != null) {
                         getStatisticsGatherer().remoteHit(request, this, remoteResult.getProperties());
                     }
@@ -308,6 +308,24 @@ public class RepositoryImpl implements Repository {
     }
 
     /**
+     * Forces metadata creation if the underlying storage is metadata aware.
+     * Otherwise the call will do nothing.
+     * 
+     */
+    public void recreateMetadata() {
+        if (getLocalStorage() == null) {
+            logger.info("Will NOT recreate metadata on " + getId() + ", since it have no local storage defined.");
+            return;
+        }
+        if (!getLocalStorage().isMetadataAware()) {
+            logger.info("Will NOT recreate metadata on " + getId()
+                    + ", since it have no metadata-aware local storage defined.");
+            return;
+        }
+        getLocalStorage().recreateMetadata();
+    }
+
+    /**
      * Forces repository reindexing. If there is no indexer supplied with repos,
      * this call will do nothing.
      * 
@@ -330,8 +348,8 @@ public class RepositoryImpl implements Repository {
             dir = (List) stack.pop();
             for (Iterator i = dir.iterator(); i.hasNext();) {
                 ItemProperties ip = (ItemProperties) i.next();
-                ip.setMetadata(ItemProperties.METADATA_OWNING_REPOSITORY, getId());
-                ip.setMetadata(ItemProperties.METADATA_OWNING_REPOSITORY_GROUP, getGroupId());
+                ip.setMetadata(ItemProperties.METADATA_OWNING_REPOSITORY, getId(), true);
+                ip.setMetadata(ItemProperties.METADATA_OWNING_REPOSITORY_GROUP, getGroupId(), true);
                 if (ip.isDirectory()) {
                     List subdir = getLocalStorage().listItems(
                             PathHelper.walkThePath(ip.getAbsolutePath(), ip.getName()));
@@ -346,24 +364,6 @@ public class RepositoryImpl implements Repository {
         }
         getIndexer().addItemProperties(batch);
         logger.info("Indexed " + indexed + " items");
-    }
-
-    /**
-     * Forces metadata creation if the underlying storage is metadata aware.
-     * Otherwise the call will do nothing.
-     * 
-     */
-    public void recreateMetadata() {
-        if (getLocalStorage() == null) {
-            logger.info("Will NOT recreate metadata on " + getId() + ", since it have no local storage defined.");
-            return;
-        }
-        if (!getLocalStorage().isMetadataAware()) {
-            logger.info("Will NOT recreate metadata on " + getId()
-                    + ", since it have no metadata-aware local storage defined.");
-            return;
-        }
-        getLocalStorage().recreateMetadata();
     }
 
 }

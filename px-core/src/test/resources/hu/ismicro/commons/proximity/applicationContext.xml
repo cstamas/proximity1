@@ -123,7 +123,6 @@
 		<property name="id" value="central" />
 		<property name="localStorage" ref="centralFSStorage" />
 		<property name="remoteStorage" ref="centralRemotePeer" />
-		<property name="indexer" ref="indexer" />
 		<property name="reindex" value="true" />
 		<property name="recreateMetadata" value="true" />
 		<property name="statisticsGatherer" ref="stats" />
@@ -168,7 +167,6 @@
 		<property name="id" value="ibiblio" />
 		<property name="localStorage" ref="ibiblioFSStorage" />
 		<property name="remoteStorage" ref="ibiblioRemotePeer" />
-		<property name="indexer" ref="indexer" />
 		<property name="reindex" value="true" />
 		<property name="recreateMetadata" value="true" />
 		<property name="statisticsGatherer" ref="stats" />
@@ -205,7 +203,6 @@
 		<property name="id" value="codehaus" />
 		<property name="localStorage" ref="codehausFSStorage" />
 		<property name="remoteStorage" ref="codehausRemotePeer" />
-		<property name="indexer" ref="indexer" />
 		<property name="reindex" value="true" />
 		<property name="recreateMetadata" value="true" />
 		<property name="statisticsGatherer" ref="stats" />
@@ -238,7 +235,6 @@
 		class="hu.ismicro.commons.proximity.base.RepositoryImpl">
 		<property name="id" value="inhouse" />
 		<property name="localStorage" ref="inhouseFSStorage" />
-		<property name="indexer" ref="indexer" />
 		<property name="reindex" value="true" />
 		<property name="recreateMetadata" value="true" />
 		<property name="listable" value="true" />
@@ -261,7 +257,6 @@
 		class="hu.ismicro.commons.proximity.base.RepositoryImpl">
 		<property name="id" value="extNonFree" />
 		<property name="localStorage" ref="extNonFreeFSStorage" />
-		<property name="indexer" ref="indexer" />
 		<property name="reindex" value="true" />
 		<property name="recreateMetadata" value="true" />
 		<property name="listable" value="true" />
@@ -284,7 +279,6 @@
 		class="hu.ismicro.commons.proximity.base.RepositoryImpl">
 		<property name="id" value="extFree" />
 		<property name="localStorage" ref="extFreeFSStorage" />
-		<property name="indexer" ref="indexer" />
 		<property name="reindex" value="true" />
 		<property name="recreateMetadata" value="true" />
 		<property name="listable" value="true" />

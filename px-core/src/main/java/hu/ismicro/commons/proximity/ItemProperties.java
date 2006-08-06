@@ -105,10 +105,27 @@ public interface ItemProperties {
     /**
      * Sets a metadata value.
      * 
+     * @param key the metadata key
+     * @param value the metadata value
+     * @param indexable if true, the value will be indexed
+     */
+    void setMetadata(String key, String value, boolean indexable);
+
+    /**
+     * Sets a non-indexed metadata key.
+     * 
      * @param key
      * @param value
      */
     void setMetadata(String key, String value);
+
+    /**
+     * Is key indexable?
+     * 
+     * @param key
+     * @return true if the value for the key gets indexed.
+     */
+    boolean isMetadataIndexable(String key);
 
     /**
      * Returns all metadata in a map.
@@ -116,5 +133,12 @@ public interface ItemProperties {
      * @return
      */
     Map getAllMetadata();
+    
+    /**
+     * Returns all indexable metadata in map.
+     * 
+     * @return
+     */
+    Map getIndexableMetadata();
 
 }
