@@ -3,6 +3,7 @@ package hu.ismicro.commons.proximity.base;
 import hu.ismicro.commons.proximity.Item;
 
 import java.util.List;
+import java.util.Map;
 
 public interface LocalStorage extends Storage {
 
@@ -12,7 +13,7 @@ public interface LocalStorage extends Storage {
     
     void setProxiedItemPropertiesConstructor(ProxiedItemPropertiesConstructor pic);
 
-    void recreateMetadata();
+    void recreateMetadata(Map additionalProps);
 
     List listItems(String path) throws StorageException;
 

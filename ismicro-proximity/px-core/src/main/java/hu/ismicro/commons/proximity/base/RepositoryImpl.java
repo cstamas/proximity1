@@ -194,10 +194,10 @@ public class RepositoryImpl implements Repository {
             throw new RepositoryNotAvailableException("The repository " + getId() + " is NOT available!");
         }
         if (getLocalStorage() != null && getLocalStorage().isWritable()) {
+            getLocalStorage().storeItem(item);
             if (getIndexer() != null && getRepositoryLogic().shouldIndex(item.getProperties())) {
                 getIndexer().addItemProperties(getItemUid(item.getProperties()), item.getProperties());
             }
-            getLocalStorage().storeItem(item);
         } else {
             throw new UnsupportedOperationException("The repository " + getId() + " have no local storage!");
         }
@@ -215,6 +215,10 @@ public class RepositoryImpl implements Repository {
                     ItemProperties ip = (ItemProperties) i.next();
                     ip.setMetadata(ItemProperties.METADATA_OWNING_REPOSITORY, this.getId(), true);
                     ip.setMetadata(ItemProperties.METADATA_OWNING_REPOSITORY_GROUP, this.getGroupId(), true);
+                    if (getRemoteStorage() != null) {
+                        ip.setMetadata(ItemProperties.METADATA_ORIGINATING_URL, getRemoteStorage().getAbsoluteUrl(
+                                ip.getPath()), false);
+                    }
                 }
                 result.addAll(list);
             }
@@ -245,8 +249,8 @@ public class RepositoryImpl implements Repository {
     // ---------------------------------------------------------------------------------
     // Protected
 
-    protected ProxiedItem retrieveItemController(ProximityRequest request)
-            throws RepositoryNotAvailableException, ItemNotFoundException, StorageException {
+    protected ProxiedItem retrieveItemController(ProximityRequest request) throws RepositoryNotAvailableException,
+            ItemNotFoundException, StorageException {
         ProxiedItem localResult = null;
         ProxiedItem remoteResult = null;
         try {
@@ -255,8 +259,10 @@ public class RepositoryImpl implements Repository {
                     if (getLocalStorage().containsItem(request.getPath())) {
                         logger.debug("Found " + request.getPath() + " item in storage of repository " + getId());
                         localResult = getLocalStorage().retrieveItem(request.getPath());
-                        localResult.getProperties().setMetadata(ItemProperties.METADATA_OWNING_REPOSITORY, getId(), true);
-                        localResult.getProperties().setMetadata(ItemProperties.METADATA_OWNING_REPOSITORY_GROUP, getGroupId(), true);
+                        localResult.getProperties().setMetadata(ItemProperties.METADATA_OWNING_REPOSITORY, getId(),
+                                true);
+                        localResult.getProperties().setMetadata(ItemProperties.METADATA_OWNING_REPOSITORY_GROUP,
+                                getGroupId(), true);
                         if (getStatisticsGatherer() != null) {
                             getStatisticsGatherer().localHit(request, this, localResult.getProperties());
                         }
@@ -272,7 +278,8 @@ public class RepositoryImpl implements Repository {
                     logger.debug("Found " + request.getPath() + " item in remote storage of repository " + getId());
                     remoteResult = getRemoteStorage().retrieveItem(request.getPath());
                     remoteResult.getProperties().setMetadata(ItemProperties.METADATA_OWNING_REPOSITORY, getId(), true);
-                    remoteResult.getProperties().setMetadata(ItemProperties.METADATA_OWNING_REPOSITORY_GROUP, getGroupId(), true);
+                    remoteResult.getProperties().setMetadata(ItemProperties.METADATA_OWNING_REPOSITORY_GROUP,
+                            getGroupId(), true);
                     if (getStatisticsGatherer() != null) {
                         getStatisticsGatherer().remoteHit(request, this, remoteResult.getProperties());
                     }
@@ -295,8 +302,11 @@ public class RepositoryImpl implements Repository {
             if (result == null) {
                 throw new ItemNotFoundException(request.getPath());
             }
-            logger.debug("Item " + request.getPath() + " found in repository "
-                    + getId());
+            if (getRemoteStorage() != null) {
+                result.getProperties().setMetadata(ItemProperties.METADATA_ORIGINATING_URL,
+                        getRemoteStorage().getAbsoluteUrl(result.getProperties().getPath()), false);
+            }
+            logger.debug("Item " + request.getPath() + " found in repository " + getId());
             return result;
         } catch (ItemNotFoundException ex) {
             throw new ItemNotFoundException(request.getPath(), getId());
@@ -322,7 +332,8 @@ public class RepositoryImpl implements Repository {
                     + ", since it have no metadata-aware local storage defined.");
             return;
         }
-        getLocalStorage().recreateMetadata();
+
+        getLocalStorage().recreateMetadata(null);
     }
 
     /**
@@ -350,6 +361,10 @@ public class RepositoryImpl implements Repository {
                 ItemProperties ip = (ItemProperties) i.next();
                 ip.setMetadata(ItemProperties.METADATA_OWNING_REPOSITORY, getId(), true);
                 ip.setMetadata(ItemProperties.METADATA_OWNING_REPOSITORY_GROUP, getGroupId(), true);
+                if (getRemoteStorage() != null) {
+                    ip.setMetadata(ItemProperties.METADATA_ORIGINATING_URL, getRemoteStorage().getAbsoluteUrl(
+                            ip.getPath()), false);
+                }
                 if (ip.isDirectory()) {
                     List subdir = getLocalStorage().listItems(
                             PathHelper.walkThePath(ip.getAbsolutePath(), ip.getName()));

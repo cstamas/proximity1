@@ -11,6 +11,10 @@ import java.net.URL;
  */
 public interface RemoteStorage extends Storage {
 
+    URL getRemoteUrl();
+
     void setRemoteUrl(URL url) throws MalformedURLException;
+
+    String getAbsoluteUrl(String path);
 
 }

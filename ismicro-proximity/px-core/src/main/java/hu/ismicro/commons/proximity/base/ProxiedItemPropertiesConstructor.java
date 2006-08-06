@@ -1,5 +1,7 @@
 package hu.ismicro.commons.proximity.base;
 
+import hu.ismicro.commons.proximity.ItemProperties;
+
 import java.io.File;
 
 public interface ProxiedItemPropertiesConstructor {
@@ -11,6 +13,6 @@ public interface ProxiedItemPropertiesConstructor {
      *            The file about we need more to know.
      * @return filled up ProxiedItemProperties.
      */
-    void expandItemProperties(ProxiedItemProperties ip, File file);
+    void expandItemProperties(ItemProperties ip, File file);
 
 }

@@ -1,6 +1,6 @@
 package hu.ismicro.commons.proximity.maven;
 
-import hu.ismicro.commons.proximity.base.ProxiedItemProperties;
+import hu.ismicro.commons.proximity.ItemProperties;
 import hu.ismicro.commons.proximity.base.ProxiedItemPropertiesConstructor;
 
 import java.io.File;
@@ -38,7 +38,7 @@ public class MavenItemPropertiesConstructor implements ProxiedItemPropertiesCons
 
     public static final String POM_DESCRIPTION_KEY = "pom.prjDesc";
 
-    public void expandItemProperties(ProxiedItemProperties ip, File file) {
+    public void expandItemProperties(ItemProperties ip, File file) {
 
         if (MavenArtifactRecognizer.isPom(ip.getName())) {
 
@@ -54,6 +54,10 @@ public class MavenItemPropertiesConstructor implements ProxiedItemPropertiesCons
 
                     if (pom.getGroupId() != null) {
                         ip.setMetadata(POM_GID_KEY, pom.getGroupId(), true);
+                    } else {
+                        if (pom.getParent().getGroupId() != null) {
+                            ip.setMetadata(POM_GID_KEY, pom.getParent().getGroupId(), true);
+                        }
                     }
                     if (pom.getArtifactId() != null) {
                         ip.setMetadata(POM_AID_KEY, pom.getArtifactId(), true);

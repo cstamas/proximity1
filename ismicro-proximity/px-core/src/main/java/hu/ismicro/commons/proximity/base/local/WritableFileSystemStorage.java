@@ -41,9 +41,11 @@ public class WritableFileSystemStorage extends ReadOnlyFileSystemStorage {
                 os.close();
                 item.setStream(new FileInputStream(file));
                 file.setLastModified(item.getProperties().getLastModified().getTime());
-            }
-            if (isMetadataAware()) {
-                storeItemProperties(item.getProperties());
+                if (isMetadataAware()) {
+                    getProxiedItemPropertiesConstructor().expandItemProperties(
+                            item.getProperties(), file);
+                    storeItemProperties(item.getProperties());
+                }
             }
         } catch (IOException ex) {
             logger.error("IOException in FS storage " + getStorageBaseDir(), ex);

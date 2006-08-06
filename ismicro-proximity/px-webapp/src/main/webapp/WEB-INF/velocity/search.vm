@@ -92,7 +92,7 @@
 		#foreach($item in $results)
 			<tr class="tda">
 				<td>
-				    #kindImage($item)
+				    #itemImage($item)
 				</td>
 				<td><a href="#springUrl('/repository')${item.absolutePath}?repositoryId=${item.repositoryId}">${item.absolutePath}</a>&nbsp;</td>
 				<td>

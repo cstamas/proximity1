@@ -65,6 +65,20 @@ public interface ItemProperties {
      * @return true if file, false otherwise.
      */
     boolean isFile();
+    
+    /**
+     * Tests whether this item has remote origin.
+     * 
+     * @return true if it has remote origin.
+     */
+    boolean hasRemoteOrigin();
+
+    /**
+     * Returns the remote path (URL) of the item.
+     * 
+     * @return true if it has remote origin.
+     */
+    String getRemotePath();
 
     /**
      * Returns the filesize of the item. If it is a dir, the size equals to 0.
