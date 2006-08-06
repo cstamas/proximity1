@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.analysis.SimpleAnalyzer;
+import org.apache.lucene.analysis.KeywordAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.index.IndexReader;
@@ -44,7 +44,7 @@ public class LuceneIndexer extends AbstractIndexer {
 
     private Directory indexDirectory;
 
-    private Analyzer analyzer = new SimpleAnalyzer();
+    private Analyzer analyzer = new KeywordAnalyzer();
 
     public boolean isRecreateIndexes() {
         return recreateIndexes;
