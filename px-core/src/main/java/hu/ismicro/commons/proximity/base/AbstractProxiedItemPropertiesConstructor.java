@@ -40,9 +40,7 @@ public abstract class AbstractProxiedItemPropertiesConstructor implements Proxie
         if (ip.isFile()) {
             String ext = FilenameUtils.getExtension(ip.getName());
             if (ext != null) {
-                ip.setMetadata(ItemProperties.METADATA_KIND, ext);
-            } else {
-                ip.setMetadata(ItemProperties.METADATA_KIND, "file");
+                ip.setMetadata(ItemProperties.METADATA_KIND, ext, true);
             }
         }
     }
