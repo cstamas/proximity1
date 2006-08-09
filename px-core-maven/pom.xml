@@ -22,14 +22,14 @@
 	<name>Px Maven bindings</name>
 
 	<!-- The version of the project under development -->
-	<version>1.0.0-RC3</version>
+	<version>1.0.0-RC4</version>
 
 	<dependencies>
 
 		<dependency>
 			<groupId>hu.ismicro.proximity</groupId>
 			<artifactId>px-core</artifactId>
-			<version>1.0.0-RC3</version>
+			<version>1.0.0-RC4</version>
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
