@@ -8,8 +8,8 @@ import hu.ismicro.commons.proximity.base.StorageException;
 
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Abstract Storage class. It have ID and defines logger. Predefines all write
@@ -20,7 +20,7 @@ import org.apache.commons.logging.LogFactory;
  */
 public abstract class AbstractLocalStorage implements LocalStorage {
 
-    protected Log logger = LogFactory.getLog(this.getClass());
+    protected Logger logger = LoggerFactory.getLogger(this.getClass());
 
     protected ProxiedItemPropertiesConstructor proxiedItemPropertiesConstructor = new DefaultProxiedItemPropertiesConstructor();
 

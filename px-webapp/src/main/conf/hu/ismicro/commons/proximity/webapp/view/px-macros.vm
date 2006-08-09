@@ -1,3 +1,24 @@
+#macro( itemControls $item )
+
+	<div class="controlButtons">
+
+    #if(${item.getMetadata('pom.url')})
+		<a href="${item.getMetadata('pom.url')}"><img src="#springUrl('/images/go-home.png')" width="16" height="16" onmouseover="return escape('#springMessage('repositorylist.prjHome') ${item.getMetadata('pom.url')}')"/></a>
+		&nbsp;
+    #end
+
+    #if(${item.getMetadata('item.origin')})
+		<a href="${item.getMetadata('item.origin')}"><img src="#springUrl('/images/go-jump.png')" width="16" height="16" onmouseover="return escape('#springMessage('repositorylist.getOriginal') ${item.getMetadata('item.origin')}')"/></a>
+		&nbsp;
+    #end
+
+	<img src="#springUrl('/images/delete.png')" width="16" height="16" alt="#springMessage('repositorylist.delete')" title="#springMessage('repositorylist.delete')"/>
+	&nbsp;
+	
+	</div>
+
+#end
+
 #macro( itemMavenImage $item )
     #if( $item.getName().indexOf("SNAPSHOT") > -1  )
 		<img src="#springUrl('/images/maven-snapshot.png')" alt="#springMessage('repositorylist.snapshot')" title="#springMessage('repositorylist.snapshot')"/>&nbsp;
@@ -12,7 +33,9 @@
 
 #macro( itemImage $item )
 	#if(${item.isDirectory()})
-	    #if(${item.hasRemoteOrigin()})
+	    #if( !${item.repositoryId} )
+			<img src="#springUrl('/images/item-group.png')" alt="#springMessage('repositorylist.repoGroup')" title="#springMessage('repositorylist.repoGroup')"/>&nbsp;
+	    #elseif(${item.hasRemoteOrigin()})
   			<img src="#springUrl('/images/folder-remote.png')" alt="#springMessage('repositorylist.proxied')" title="#springMessage('repositorylist.proxied')"/>&nbsp;
 	    #else
   			<img src="#springUrl('/images/folder-home.png')" alt="#springMessage('repositorylist.hosted')" title="#springMessage('repositorylist.hosted')"/>&nbsp;
@@ -24,7 +47,11 @@
 
 #macro( itemLink $item )
 
-    <a href="#springUrl('/repository')${item.path}?repositoryId=${item.repositoryId}" onmouseover="return escape(
+    #if( ${item.repositoryId} )
+      <a href="#springUrl('/repository')${item.path}?repositoryId=${item.repositoryId}" onmouseover="return escape(
+    #else
+      <a href="#springUrl('/repository')${item.path}" onmouseover="return escape(
+    #end
     '<b>Indexed properties:</b>'+
     '<ul>'+
 	#foreach( $key in $item.getIndexableMetadata().keySet() )
@@ -38,26 +65,22 @@
 	#end
 	'</ul>'
     )">${item.name}</a>
-	
-	<div class="controlButtons">
+    
+    #itemControls( $item )
 
-    #if(${item.getMetadata('pom.url')})
-		<a href="${item.getMetadata('pom.url')}"><img src="#springUrl('/images/go-home.png')" width="16" height="16" alt="#springMessage('repositorylist.prjHome')" title="#springMessage('repositorylist.prjHome')"/></a>
-		&nbsp;
-    #end
-
-    #if(${item.getMetadata('item.origin')})
-		<a href="${item.getMetadata('item.origin')}"><img src="#springUrl('/images/go-jump.png')" width="16" height="16" alt="#springMessage('repositorylist.getOriginal')" title="#springMessage('repositorylist.getOriginal')"/></a>
-		&nbsp;
-    #end
-
-	<img src="#springUrl('/images/delete.png')" width="16" height="16" alt="#springMessage('repositorylist.delete')" title="#springMessage('repositorylist.delete')"/>
-	&nbsp;
-	
-	</div>
-   
 #end
 
+
+
+#macro( plainItemLink $item )
+
+    #if( ${item.repositoryId} )
+      <a href="#springUrl('/repository')${item.path}?repositoryId=${item.repositoryId}">${item.name}</a>
+    #else
+      <a href="#springUrl('/repository')${item.path}">${item.name}</a>
+    #end
+	
+#end
 
 
 
@@ -81,25 +104,11 @@
 
     #if( $version )
 	    <a href="#springUrl('/repository')${item.absolutePath}/${aid}-${version}.${item.getMetadata('pom.pck')}">
-	    #springMessage("artifactslist.getartifact") ${aid}-${version}.${item.getMetadata('pom.pck')}</a><br/>
+	    #springMessage("artifactslist.getartifact") ${aid}-${version}.${item.getMetadata('pom.pck')}</a>
+	    <br/><br/>
 	    [#springMessage("artifactslist.location") <a href="#springUrl('/repository')${item.absolutePath}">${item.absolutePath}</a>]
 
-		<div class="controlButtons">
-	
-	    #if(${item.getMetadata('pom.url')})
-			<a href="${item.getMetadata('pom.url')}"><img src="#springUrl('/images/go-home.png')" width="16" height="16" alt="#springMessage('repositorylist.prjHome')" title="#springMessage('repositorylist.prjHome')"/></a>
-			&nbsp;
-	    #end
-	
-	    #if(${item.getMetadata('item.origin')})
-			<a href="${item.getMetadata('item.origin')}"><img src="#springUrl('/images/go-jump.png')" width="16" height="16" alt="#springMessage('repositorylist.getOriginal')" title="#springMessage('repositorylist.getOriginal')"/></a>
-			&nbsp;
-	    #end
-	
-		<img src="#springUrl('/images/delete.png')" width="16" height="16" alt="#springMessage('repositorylist.delete')" title="#springMessage('repositorylist.delete')"/>
-		&nbsp;
-		
-		</div>
+	    #itemControls( $item )
 
     #elseif( $aid )
 	    <a href="#springUrl('/artifacts')/${gid}/${aid}/${item.getMetadata('pom.version')}">${item.getMetadata('pom.version')}</a>

@@ -177,7 +177,7 @@ public class LuceneIndexer extends AbstractIndexer {
             } else {
                 termQ = new FuzzyQuery(new Term(key, ip.getMetadata(key)));
             }
-            query.add(termQ, BooleanClause.Occur.SHOULD);
+            query.add(termQ, BooleanClause.Occur.MUST);
         }
         return search(query);
     }

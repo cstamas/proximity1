@@ -21,6 +21,8 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Stack;
 
+import org.apache.commons.io.FileUtils;
+
 /**
  * Read-only storage implemented on plain file system.
  * 
@@ -199,7 +201,16 @@ public class ReadOnlyFileSystemStorage extends AbstractLocalStorage {
         return result;
     }
 
-    public void recreateMetadata(Map extraProps) {
+    public void recreateMetadata(Map extraProps) throws StorageException {
+
+        try {
+            FileUtils.deleteDirectory(getMetadataBaseDir());
+        } catch (IllegalArgumentException ex) {
+            logger.debug("Could not delete the " + getMetadataBaseDir() + " directory, is this new instance?");
+        } catch (IOException ex) {
+            logger.warn("Could not delete the " + getMetadataBaseDir() + " directory! Continuing...", ex);
+        }
+
         int processed = 0;
         Stack stack = new Stack();
         List dir = listItems(PathHelper.PATH_SEPARATOR);

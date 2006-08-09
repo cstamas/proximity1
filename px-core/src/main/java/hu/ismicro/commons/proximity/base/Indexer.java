@@ -18,13 +18,20 @@ public interface Indexer {
 
     void registerLocalStorage(Storage storage);
 
+    /**
+     * Returns the list that this indexer thinks is searchable.
+     * 
+     * @return list of keywords usable in searches.
+     */
+    List getSearchableKeywords();
+    
+    void addSearchableKeywords(List keywords);
+    
     void addItemProperties(String UID, ItemProperties ip) throws StorageException;
 
     void addItemProperties(Map uidsWithItems) throws StorageException;
 
     void deleteItemProperties(String UID, ItemProperties ip) throws ItemNotFoundException, StorageException;
-
-    List getSearchableKeywords();
 
     List searchByItemPropertiesExample(ItemProperties ip) throws StorageException;
 

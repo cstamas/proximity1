@@ -7,8 +7,8 @@ import hu.ismicro.commons.proximity.base.ProximityLogic;
 import java.io.IOException;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * The default Proximity logic. It actually does not interfere with Proximity
@@ -19,13 +19,13 @@ import org.apache.commons.logging.LogFactory;
  */
 public class DefaultProximityLogic implements ProximityLogic {
     
-    protected Log logger = LogFactory.getLog(this.getClass());
+    protected Logger logger = LoggerFactory.getLogger(this.getClass());
 
     public boolean isGroupSearchNeeded(ProximityRequest request) {
         return false;
     }
 
-    public ProxiedItem postprocessItemList(List listOfProxiedItems) throws IOException {
+    public ProxiedItem postprocessItemList(ProximityRequest request, List listOfProxiedItems) throws IOException {
         throw new UnsupportedOperationException("The DefaultProximityLogic does not implements postprocessing.");
     }
 

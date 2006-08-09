@@ -37,6 +37,8 @@ public class FormatFileSize {
         String suffix = "";
         try {
             sizeLong = Double.parseDouble(sizeInBytesObj.toString());
+        } catch (NullPointerException e) {
+            return null;
         } catch (NumberFormatException e) {
             return sizeInBytesObj.toString();
         }

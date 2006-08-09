@@ -25,6 +25,8 @@ public interface ItemProperties {
 
     public static final String METADATA_ORIGINATING_URL = "item.origin";
 
+    public static final String METADATA_KIND = "kind";
+
     public static final String METADATA_OWNING_REPOSITORY = "repository.id";
 
     public static final String METADATA_OWNING_REPOSITORY_GROUP = "repository.groupId";

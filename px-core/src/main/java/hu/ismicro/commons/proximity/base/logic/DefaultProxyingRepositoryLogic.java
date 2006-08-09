@@ -1,13 +1,13 @@
 package hu.ismicro.commons.proximity.base.logic;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import hu.ismicro.commons.proximity.ItemProperties;
 import hu.ismicro.commons.proximity.ProximityRequest;
 import hu.ismicro.commons.proximity.Repository;
 import hu.ismicro.commons.proximity.base.ProxiedItem;
 import hu.ismicro.commons.proximity.base.RepositoryLogic;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Default implementation of RepositoryLogic. It always checks for local copy,
@@ -20,7 +20,7 @@ import hu.ismicro.commons.proximity.base.RepositoryLogic;
  */
 public class DefaultProxyingRepositoryLogic implements RepositoryLogic {
 
-    protected Log logger = LogFactory.getLog(this.getClass());
+    protected Logger logger = LoggerFactory.getLogger(this.getClass());
 
     /**
      * Always returns true.

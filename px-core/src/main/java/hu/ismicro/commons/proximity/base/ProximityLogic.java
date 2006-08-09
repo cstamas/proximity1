@@ -21,6 +21,6 @@ public interface ProximityLogic {
      */
     boolean isGroupSearchNeeded(ProximityRequest request);
 
-    ProxiedItem postprocessItemList(List listOfProxiedItems) throws IOException;
+    ProxiedItem postprocessItemList(ProximityRequest request, List listOfProxiedItems) throws IOException;
 
 }
