@@ -273,8 +273,8 @@ public class ProximityImpl implements Proximity {
                         itemProps.setAbsolutePath(PathHelper.PATH_SEPARATOR);
                         itemProps.setDirectory(true);
                         itemProps.setFile(false);
-                        itemProps.setName(groupId);
-                        itemProps.setRepositoryGroupId(groupId);
+                        itemProps.setName(request.getTargetedReposGroupId());
+                        itemProps.setRepositoryGroupId(request.getTargetedReposGroupId());
                         itemProps.setLastModified(null);
                         itemProps.setSize(0);
                         response.add(itemProps);
