@@ -53,3 +53,9 @@ methods.
       name for machine running Proximity.
 
   That's completes the NTLM authentication HTTP proxy authentication setup.
+  
+  <<IMPORTANT:>> Since Proximity relles for HTTP traffic completely on Apache Jakarta 
+{{{http://jakarta.apache.org/commons/httpclient/} Commons HttpClient}} implementation, the proxy servers 
+supported by HttpClient are automatically supported by Proximity. One of known issue is broken NTLMv2 
+support for Microsoft ISA Proxy servers. For them, it is advisable to use BASIC or DIGEST authentication,
+if applicable.

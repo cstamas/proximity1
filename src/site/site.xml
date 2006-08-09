@@ -17,23 +17,24 @@
 
     <links>
       <item name="Abstract Horizon" href="http://www.abstracthorizon.org/" />
-      <item name="Wiki" href="http://trac.abstracthorizon.org/proximity/" />
-      <item name="Support Forum" href="http://forum.abstracthorizon.org/index.php?c=9" />
+      <item name="Proximity Wiki" href="http://trac.abstracthorizon.org/proximity/" />
+      <item name="Proximity Support Forum" href="http://forum.abstracthorizon.org/index.php?c=9" />
+      <item name="Proximity DEMO" href="http://proximity.abstracthorizon.org:12000/px-webapp" />
     </links>
 
     <menu ref="parent" />
 
-    <menu name="About Proximity">
-      <item name="About" href="about-proximity.html"/>
+    <menu name="Proximity">
+      <item name="About" href="index.html"/>
+      <item name="Features in brief" href="about-proximity.html"/>
       <item name="Download" href="downloads.html"/>
-      <item name="Wiki" href="http://trac.abstracthorizon.org/proximity/" />
-      <item name="Support Forum" href="http://forum.abstracthorizon.org/index.php?c=9" />
     </menu>
 
     <menu name="Guides">
       <item name="Quick Start" href="quick-start.html"/>
       <item name="Deployment" href="deployment-guide.html"/>
       <item name="Using Proximity" href="using-proximity.html"/>
+      <item name="Chaining Proximity" href="chaining-proximity.html"/>
       <item name="About repositories" href="repositories.html"/>
       <item name="Corporate Environments" href="corporate-environment.html"/>
       <item name="HTTP Proxies" href="http-proxies.html"/>

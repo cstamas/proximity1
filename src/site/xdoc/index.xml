@@ -46,12 +46,19 @@ as one logical repository and for publishing in-house and other external maven
 artifacts which are not uploadable to ibiblio (like commercial projects, J2EE
 Jars, etc...).</p>
 
-<p>See a <a href="quick-start.html">Quick Start for Proximity</a></p>
+<subsection name="Proximity places">
 
-<p>Visit <a href="http://trac.abstracthorizon.org/proximity/">Proximity WIKI</a>
-for newest docs and issue tracking.</p>
-<p>Also, you can ask for support on 
-<a href="http://forum.abstracthorizon.org/index.php?c=9">Support Forum</a>.</p>
+<p>Places to visit to get a grasp about Proximity:</p>
+
+<ul>
+	<li><a href="quick-start.html">Quick Start for Proximity</a>.</li>
+	<li><a href="http://proximity.abstracthorizon.org:12000/px-webapp">Proximity Demo LIVE Site</a>.</li>
+	<li><a href="http://trac.abstracthorizon.org/proximity/">Proximity WIKI</a>
+		for news, newest docs and issue tracking.</li>
+	<li><a href="http://forum.abstracthorizon.org/index.php?c=9">Support Forum</a>.</li>
+</ul>
+
+</subsection>
 
 </section>
 

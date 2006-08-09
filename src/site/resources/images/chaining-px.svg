@@ -1,0 +1,452 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://web.resource.org/cc/"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="744.09448819"
+   height="1052.3622047"
+   id="svg2000"
+   sodipodi:version="0.32"
+   inkscape:version="0.44"
+   sodipodi:docbase="/home/cstamas/worx/projects/ismicro-proximity/eclipse/proximity/src/site/resources/images"
+   sodipodi:docname="chaining-px.svg">
+  <defs
+     id="defs2002">
+    <marker
+       inkscape:stockid="Arrow1Lend"
+       orient="auto"
+       refY="0.0"
+       refX="0.0"
+       id="Arrow1Lend"
+       style="overflow:visible;">
+      <path
+         id="path8481"
+         d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none;"
+         transform="scale(0.8) rotate(180) translate(12.5,0)" />
+    </marker>
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     gridtolerance="10000"
+     guidetolerance="10"
+     objecttolerance="10"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.7"
+     inkscape:cx="680.11554"
+     inkscape:cy="509.11915"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     inkscape:window-width="1268"
+     inkscape:window-height="945"
+     inkscape:window-x="6"
+     inkscape:window-y="47" />
+  <metadata
+     id="metadata2005">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <path
+       style="fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:black;stroke-width:6;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:6, 6;stroke-dashoffset:0;stroke-opacity:1"
+       d="M 666.70068,314.00159 L 666.70068,357.43815 L 741.45197,357.43815"
+       id="path6469"
+       inkscape:export-filename="/home/cstamas/worx/projects/ismicro-proximity/eclipse/proximity/src/site/resources/images/chaining-px-1.png"
+       inkscape:export-xdpi="71.959999"
+       inkscape:export-ydpi="71.959999" />
+    <path
+       style="fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:black;stroke-width:6;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:6,6;stroke-dashoffset:0"
+       d="M 643.46717,318.99143 L 643.46717,381.62089 L 740.44182,381.62089"
+       id="path6471"
+       inkscape:export-filename="/home/cstamas/worx/projects/ismicro-proximity/eclipse/proximity/src/site/resources/images/chaining-px-1.png"
+       inkscape:export-xdpi="71.959999"
+       inkscape:export-ydpi="71.959999" />
+    <rect
+       style="fill:#f60;fill-opacity:1;stroke:none;stroke-width:5;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect2008"
+       width="208.09143"
+       height="172.73608"
+       x="32.304577"
+       y="147.30612"
+       rx="24.243662"
+       ry="24.243662"
+       inkscape:export-filename="/home/cstamas/worx/projects/ismicro-proximity/eclipse/proximity/src/site/resources/images/chaining-px-1.png"
+       inkscape:export-xdpi="71.959999"
+       inkscape:export-ydpi="71.959999" />
+    <rect
+       style="fill:none;fill-opacity:1;stroke:#f60;stroke-width:5;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect2010"
+       width="703.06616"
+       height="379.81735"
+       x="20.203051"
+       y="136.15382"
+       rx="24.243662"
+       ry="24.243662"
+       inkscape:export-filename="/home/cstamas/worx/projects/ismicro-proximity/eclipse/proximity/src/site/resources/images/chaining-px-1.png"
+       inkscape:export-xdpi="71.959999"
+       inkscape:export-ydpi="71.959999" />
+    <rect
+       style="fill:#f60;fill-opacity:1;stroke:none;stroke-width:5;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect3782"
+       width="208.09143"
+       height="172.73608"
+       x="503.01535"
+       y="147.81117"
+       rx="24.243662"
+       ry="24.243662"
+       inkscape:export-filename="/home/cstamas/worx/projects/ismicro-proximity/eclipse/proximity/src/site/resources/images/chaining-px-1.png"
+       inkscape:export-xdpi="71.959999"
+       inkscape:export-ydpi="71.959999" />
+    <rect
+       style="fill:#f60;fill-opacity:1;stroke:none;stroke-width:5;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect3784"
+       width="208.09143"
+       height="172.73608"
+       x="31.314728"
+       y="331.61835"
+       rx="24.243662"
+       ry="24.243662"
+       inkscape:export-filename="/home/cstamas/worx/projects/ismicro-proximity/eclipse/proximity/src/site/resources/images/chaining-px-1.png"
+       inkscape:export-xdpi="71.959999"
+       inkscape:export-ydpi="71.959999" />
+    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:normal;font-weight:normal;fill:black;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+       x="515.1778"
+       y="171.50917"
+       id="text3786"
+       inkscape:export-filename="/home/cstamas/worx/projects/ismicro-proximity/eclipse/proximity/src/site/resources/images/chaining-px-1.png"
+       inkscape:export-xdpi="71.959999"
+       inkscape:export-ydpi="71.959999"><tspan
+         sodipodi:role="line"
+         id="tspan3788"
+         x="515.1778"
+         y="171.50917">Segment DMZ</tspan></text>
+    <path
+       style="fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:black;stroke-width:5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:5, 5;stroke-dashoffset:0;stroke-opacity:1"
+       d="M 239.40615,230.09801 L 337.39095,230.09801"
+       id="path4685"
+       inkscape:export-filename="/home/cstamas/worx/projects/ismicro-proximity/eclipse/proximity/src/site/resources/images/chaining-px-1.png"
+       inkscape:export-xdpi="71.959999"
+       inkscape:export-ydpi="71.959999" />
+    <path
+       id="path5572"
+       d="M 239.40615,418.09801 L 337.39095,418.09801"
+       style="fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:black;stroke-width:5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:5, 5;stroke-dashoffset:0;stroke-opacity:1"
+       inkscape:export-filename="/home/cstamas/worx/projects/ismicro-proximity/eclipse/proximity/src/site/resources/images/chaining-px-1.png"
+       inkscape:export-xdpi="71.959999"
+       inkscape:export-ydpi="71.959999" />
+    <path
+       style="fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:black;stroke-width:5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:5, 5;stroke-dashoffset:0;stroke-opacity:1"
+       d="M 405.07117,230.20964 L 503.05597,230.20964"
+       id="path5574"
+       inkscape:export-filename="/home/cstamas/worx/projects/ismicro-proximity/eclipse/proximity/src/site/resources/images/chaining-px-1.png"
+       inkscape:export-xdpi="71.959999"
+       inkscape:export-ydpi="71.959999" />
+    <path
+       style="fill:#ffcc7f;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.89343619px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 353.53077,165.08554 C 331.92913,163.11485 312.91558,171.81175 305.12678,191.33646 C 296.13914,213.86642 278.43445,241.75853 283.71734,266.5891 C 287.13174,282.63744 328.73716,301.27144 312.57356,316.46585 C 299.68132,328.58504 294.5058,332.41777 288.37157,349.71701 C 284.09417,361.77975 282.40987,369.31167 290.23325,380.34308 C 310.05457,408.29228 335.33742,421.16037 367.49346,434.59499 C 369.88002,435.59209 373.31138,472.11213 377.73276,478.34652 C 403.86229,515.19067 437.11608,450.17708 449.40788,432.84493 C 477.21679,393.63278 440.16718,354.1877 417.75913,322.59106 C 410.49728,312.35144 433.52162,272.53979 426.13674,251.71358 C 419.35952,232.60102 399.01667,229.2794 414.03575,212.33719 C 423.07948,202.13545 433.73594,190.70024 425.2059,177.33597 C 414.34751,160.3238 390.68201,161.34725 373.07853,157.21026 C 363.59145,154.98071 361.54714,158.56859 360.0467,164.21051 C 359.51456,166.2114 355.7248,165.08554 353.53077,165.08554 z "
+       id="path3794"
+       inkscape:export-filename="/home/cstamas/worx/projects/ismicro-proximity/eclipse/proximity/src/site/resources/images/chaining-px-1.png"
+       inkscape:export-xdpi="71.959999"
+       inkscape:export-ydpi="71.959999" />
+    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:normal;font-weight:normal;fill:black;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+       x="333.35034"
+       y="325.05234"
+       id="text4681"
+       inkscape:export-filename="/home/cstamas/worx/projects/ismicro-proximity/eclipse/proximity/src/site/resources/images/chaining-px-1.png"
+       inkscape:export-xdpi="71.959999"
+       inkscape:export-ydpi="71.959999"><tspan
+         sodipodi:role="line"
+         id="tspan4683"
+         x="333.35034"
+         y="325.05234">internal LAN</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:normal;font-weight:normal;fill:black;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+       x="44.446712"
+       y="168.4787"
+       id="text6461"
+       inkscape:export-filename="/home/cstamas/worx/projects/ismicro-proximity/eclipse/proximity/src/site/resources/images/chaining-px-1.png"
+       inkscape:export-xdpi="71.959999"
+       inkscape:export-ydpi="71.959999"><tspan
+         sodipodi:role="line"
+         id="tspan6463"
+         x="44.446712"
+         y="168.4787">Segment A</tspan></text>
+    <text
+       id="text6465"
+       y="355.35693"
+       x="44.446712"
+       style="font-size:12px;font-style:normal;font-weight:normal;fill:black;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+       xml:space="preserve"
+       inkscape:export-filename="/home/cstamas/worx/projects/ismicro-proximity/eclipse/proximity/src/site/resources/images/chaining-px-1.png"
+       inkscape:export-xdpi="71.959999"
+       inkscape:export-ydpi="71.959999"><tspan
+         y="355.35693"
+         x="44.446712"
+         id="tspan6467"
+         sodipodi:role="line">Segment B</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:18px;font-style:oblique;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:black;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+       x="554.57373"
+       y="234.13863"
+       id="text7358"
+       sodipodi:linespacing="125%"
+       inkscape:export-filename="/home/cstamas/worx/projects/ismicro-proximity/eclipse/proximity/src/site/resources/images/chaining-px-1.png"
+       inkscape:export-xdpi="71.959999"
+       inkscape:export-ydpi="71.959999"><tspan
+         sodipodi:role="line"
+         id="tspan7360"
+         x="554.57373"
+         y="234.13863">PxMASTER</tspan></text>
+    <text
+       sodipodi:linespacing="125%"
+       id="text7362"
+       y="234.13863"
+       x="77.781731"
+       style="font-size:18px;font-style:oblique;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:black;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+       xml:space="preserve"
+       inkscape:export-filename="/home/cstamas/worx/projects/ismicro-proximity/eclipse/proximity/src/site/resources/images/chaining-px-1.png"
+       inkscape:export-xdpi="71.959999"
+       inkscape:export-ydpi="71.959999"><tspan
+         y="234.13863"
+         x="77.781731"
+         id="tspan7364"
+         sodipodi:role="line">PxSLAVE1</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:18px;font-style:oblique;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:black;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+       x="77.781731"
+       y="426.0676"
+       id="text7366"
+       sodipodi:linespacing="125%"
+       inkscape:export-filename="/home/cstamas/worx/projects/ismicro-proximity/eclipse/proximity/src/site/resources/images/chaining-px-1.png"
+       inkscape:export-xdpi="71.959999"
+       inkscape:export-ydpi="71.959999"><tspan
+         sodipodi:role="line"
+         id="tspan7368"
+         x="77.781731"
+         y="426.0676">PxSLAVE2</tspan></text>
+    <g
+       id="g11182"
+       transform="translate(-37.14286,0)"
+       inkscape:export-filename="/home/cstamas/worx/projects/ismicro-proximity/eclipse/proximity/src/site/resources/images/chaining-px-2.png"
+       inkscape:export-xdpi="71.959999"
+       inkscape:export-ydpi="71.959999">
+      <g
+         transform="translate(120.2082,0)"
+         id="g7406">
+        <g
+           id="g7378"
+           transform="translate(54.54824,-13.13198)">
+          <rect
+             ry="24.243662"
+             rx="24.243662"
+             y="626.07782"
+             x="36.365494"
+             height="80.812202"
+             width="80.812202"
+             id="rect7370"
+             style="fill:#f60;fill-opacity:1;stroke:none;stroke-width:6;stroke-miterlimit:4;stroke-dasharray:6, 6;stroke-dashoffset:0;stroke-opacity:1" />
+          <rect
+             style="fill:#f60;fill-opacity:1;stroke:none;stroke-width:6;stroke-miterlimit:4;stroke-dasharray:6, 6;stroke-dashoffset:0;stroke-opacity:1"
+             id="rect7372"
+             width="80.812202"
+             height="80.812202"
+             x="36.365494"
+             y="714.63452"
+             rx="24.243662"
+             ry="24.243662" />
+          <rect
+             ry="24.243662"
+             rx="24.243662"
+             y="803.19128"
+             x="36.365494"
+             height="80.812202"
+             width="80.812202"
+             id="rect7374"
+             style="fill:#f60;fill-opacity:1;stroke:none;stroke-width:6;stroke-miterlimit:4;stroke-dasharray:6, 6;stroke-dashoffset:0;stroke-opacity:1" />
+          <rect
+             style="fill:#f60;fill-opacity:1;stroke:none;stroke-width:6;stroke-miterlimit:4;stroke-dasharray:6, 6;stroke-dashoffset:0;stroke-opacity:1"
+             id="rect7376"
+             width="80.812202"
+             height="80.812202"
+             x="36.365494"
+             y="891.74799"
+             rx="24.243662"
+             ry="24.243662" />
+        </g>
+        <text
+           sodipodi:linespacing="125%"
+           id="text7398"
+           y="594.76306"
+           x="77.781731"
+           style="font-size:18px;font-style:oblique;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:black;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+           xml:space="preserve"><tspan
+             y="594.76306"
+             x="77.781731"
+             id="tspan7400"
+             sodipodi:role="line">PxSLAVE</tspan></text>
+      </g>
+      <g
+         id="g7415">
+        <g
+           transform="translate(471.7412,-13.13198)"
+           id="g7384">
+          <rect
+             style="fill:#f60;fill-opacity:1;stroke:none;stroke-width:6;stroke-miterlimit:4;stroke-dasharray:6, 6;stroke-dashoffset:0;stroke-opacity:1"
+             id="rect7386"
+             width="80.812202"
+             height="80.812202"
+             x="36.365494"
+             y="626.07782"
+             rx="24.243662"
+             ry="24.243662" />
+          <rect
+             ry="24.243662"
+             rx="24.243662"
+             y="714.63452"
+             x="36.365494"
+             height="80.812202"
+             width="80.812202"
+             id="rect7388"
+             style="fill:#f60;fill-opacity:1;stroke:none;stroke-width:6;stroke-miterlimit:4;stroke-dasharray:6, 6;stroke-dashoffset:0;stroke-opacity:1" />
+          <rect
+             style="fill:#f60;fill-opacity:1;stroke:none;stroke-width:6;stroke-miterlimit:4;stroke-dasharray:6, 6;stroke-dashoffset:0;stroke-opacity:1"
+             id="rect7390"
+             width="80.812202"
+             height="80.812202"
+             x="36.365494"
+             y="803.19128"
+             rx="24.243662"
+             ry="24.243662" />
+          <rect
+             ry="24.243662"
+             rx="24.243662"
+             y="891.74799"
+             x="36.365494"
+             height="80.812202"
+             width="80.812202"
+             id="rect7392"
+             style="fill:#f60;fill-opacity:1;stroke:none;stroke-width:6;stroke-miterlimit:4;stroke-dasharray:6, 6;stroke-dashoffset:0;stroke-opacity:1" />
+        </g>
+        <text
+           xml:space="preserve"
+           style="font-size:18px;font-style:oblique;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:black;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+           x="495.98489"
+           y="594.76306"
+           id="text7402"
+           sodipodi:linespacing="125%"><tspan
+             sodipodi:role="line"
+             id="tspan7404"
+             x="495.98489"
+             y="594.76306">PxMASTER</tspan></text>
+      </g>
+      <path
+         id="path9380"
+         d="M 300.01531,651.33162 L 501.03566,651.33162"
+         style="fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:black;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;marker-end:url(#Arrow1Lend);stroke-opacity:1" />
+      <path
+         id="path9382"
+         d="M 299.00515,739.21489 L 500.02551,739.21489"
+         style="fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:black;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;marker-end:url(#Arrow1Lend);stroke-opacity:1" />
+      <path
+         id="path9384"
+         d="M 295.9747,913.97128 L 502.04582,913.97128"
+         style="fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:black;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;marker-end:url(#Arrow1Lend);stroke-opacity:1" />
+      <text
+         id="text10271"
+         y="639.20978"
+         x="361.63461"
+         style="font-size:12px;font-style:normal;font-weight:normal;fill:black;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+         xml:space="preserve"><tspan
+           y="639.20978"
+           x="361.63461"
+           id="tspan10273"
+           sodipodi:role="line">?repoId=ID</tspan></text>
+      <text
+         xml:space="preserve"
+         style="font-size:12px;font-style:normal;font-weight:normal;fill:black;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+         x="361.63461"
+         y="724.06262"
+         id="text10275"><tspan
+           sodipodi:role="line"
+           id="tspan10277"
+           x="361.63461"
+           y="724.06262">?repoId=ID</tspan></text>
+      <text
+         id="text10279"
+         y="899.82916"
+         x="361.63461"
+         style="font-size:12px;font-style:normal;font-weight:normal;fill:black;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+         xml:space="preserve"><tspan
+           y="899.82916"
+           x="361.63461"
+           id="tspan10281"
+           sodipodi:role="line">?repoId=ID</tspan></text>
+      <text
+         transform="matrix(0,-1,1,0,0,0)"
+         sodipodi:linespacing="125%"
+         id="text10283"
+         y="201.9268"
+         x="-770.33508"
+         style="font-size:14px;font-style:oblique;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:black;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+         xml:space="preserve"><tspan
+           y="201.9268"
+           x="-770.33508"
+           id="tspan10285"
+           sodipodi:role="line">R E P O S I T O R I E S</tspan></text>
+      <path
+         style="fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:black;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;marker-end:url(#Arrow1Lend);stroke-miterlimit:4;stroke-dasharray:2, 1;stroke-dashoffset:0;stroke-opacity:1"
+         d="M 591.36411,651.12373 L 656.93055,651.12373"
+         id="path10291" />
+      <path
+         style="fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:black;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;marker-end:url(#Arrow1Lend);stroke-miterlimit:4;stroke-dasharray:2, 1;stroke-dashoffset:0;stroke-opacity:1"
+         d="M 591.03463,739.14613 L 656.60107,739.14613"
+         id="path10293" />
+      <path
+         style="fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:black;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;marker-end:url(#Arrow1Lend);stroke-miterlimit:4;stroke-dasharray:2, 1;stroke-dashoffset:0;stroke-opacity:1"
+         d="M 590.04619,914.17917 L 657.26003,914.17917"
+         id="path10295" />
+    </g>
+    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:normal;font-weight:normal;fill:black;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+       x="605.71429"
+       y="408.07648"
+       id="text11214"
+       inkscape:export-filename="/home/cstamas/worx/projects/ismicro-proximity/eclipse/proximity/src/site/resources/images/chaining-px-1.png"
+       inkscape:export-xdpi="71.959999"
+       inkscape:export-ydpi="71.959999"><tspan
+         sodipodi:role="line"
+         id="tspan11216"
+         x="605.71429"
+         y="408.07648">Broadbank link(s)</tspan><tspan
+         sodipodi:role="line"
+         x="605.71429"
+         y="423.07648"
+         id="tspan11218">to Internet</tspan></text>
+  </g>
+</svg>
