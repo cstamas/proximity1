@@ -49,6 +49,8 @@ named like:
 
   * "someProject" -- with artifacts used/shared on project level created in the mid-steps of build and
       needed for later builds.
+      
+  * ... etc
 
 * Internal network
 
@@ -105,18 +107,31 @@ but <<will not try to contact remote peer>>.
   
 A possible solution
 
-  <<TODO: refine this section>>
-
   Proximity per default comes preconfigured for Maven2 use and to cover all these needs. Proximity out-of-the-box
 brings the following repositories (in aggregated form, but with separated storages):
 
   * "extFree" -- to store OSS compatible artifacts not found on "central" repository
 
-  * "extNonFree" -- to store non-OSS artifacts
+  * "extNonFree" -- to store non-OSS artifacts, like commercial JDBC drivers, etc.
 
   * "inhouse" -- to store (eventually non-public) inhouse artifacts
 
+  * "inhouse.snapshot" -- to store (eventually non-public) inhouse artifact snapshots
+
   * "central" -- a proxied repository
 
+  * "codehaus" -- a proxied repository
+
+  * "apache.snapshot" -- a proxied repository
+
+  * "codehaus.snapshot" -- a proxied repository
+  
+  []
+
   These repositories are satisfying for almost every smaller developer group working with OSS and even
-commercial non-OSS software.
+commercial non-OSS software. The last four repositories enables a developer to use the latest maven plugins
+and tools, though these reposes (especially the "*.snapshot" ones) can be simply disabled without
+a big hassle of reconfiguration (set <<available>> to false on these repositories).
+
+  Using AccessManagers on Proximity and per-repository level, you can customize your instance of Proximity
+as you like, enabling strong developer group separation.

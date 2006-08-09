@@ -1,0 +1,78 @@
+                           ----------------------
+                           Chaining Proximity instances
+                           ----------------------
+                           Cservenak Tamas
+                           ----------------------
+                           2006. 08. 09.
+
+
+Chaining Proximity instances
+
+  One of the interesting "feature" of Proximity is "chaining". Somatimes, there is a need (or IT
+preference) to explicitly forbid direct internet access to developers within some network segment.
+This environment is sure death to Maven, since it heavily relies on network access. A possible
+solution would be some kind of "mangling" and sharing the localRepositories of users and running
+Maven2 offline, but novody would take it as a probable scenario.
+
+  Proximity is able to bring repository services to these "isolated" lands (with IT approval, of
+course :). Let's take a look on some example:
+
+[images/chaining-px-1.png] Imaginary corporate Network.
+
+  As we see, we have a DMZ zone (demilitarized zone, usually where servers like HTTP server resides),
+that is linked to internal LAN, possibly through a set of firewalls/routers. Also, two example segment 
+exists: Segmenta A and B (it could be offices or branches). Let's suppose segment A and B have no
+direct or proxied access to Internet because of some IT policy and you need Maven.
+
+  By "chaining" proximity instances, you can lay down a "pipe" from DMZ to segmens A and B, still,
+the access will be strictly controlled and beside this, you will have proxied Maven repositories.
+The configuration should be the following:
+
+* Proximity MASTER
+
+  The master Proximity will be responsible to "fetch" artifacts from the public Internet. It <<should
+not be used by Maven developers directly>>, since it should be setup to behave more than a simple "HTTP proxy" than
+"Maven Repository Proxy". So, the needed setup:
+
+  * setup all (a union of needed by A and B) your remote or inhouse repositories as you have (eg. central, inhouse, ext, etc).
+  
+  * <<Turn OFF emergeGroups>> feature.
+  
+  * Place every repo in separate group, so no Proximity "metadata mangling" will occur.
+  
+  []
+  
+* Proximity SLAVE
+
+  The slave Proximity will be serving artifacts for Maven is Segment A and B. Thus, it should be
+"fully fledged" repository proxy:
+
+  * setup the needed reposes by the given segment
+  
+  * if segment have "private" need for reposes (not shared across organization), they can have segment level hosted 
+    reposes on slave
+    
+  * <<Turn ON emergeGroups>> feature.
+  
+  * Group the repositories properly.
+  
+  * Set up on all proxied repository remote peer the "queryString" parameter as: "repositoryId=central" on central, etc.
+    Preferred is to use the same repo ID's on master and slaves!
+    
+  []
+
+  What is happening is that queryString parameter directs the MASTER repo in which repo to look in. So, the artifacts
+as popping from Internet to Master, and from Master to Slave <<never "miss" their repository>>, thay land in their
+originating repository and finally get's served to Maven. Also, if segment A requested some artifact, that artifact
+will be proxied to segment B, since their slave will get it from Master in one hop.
+
+[images/chaining-px-2.png] Piping.
+
+  This way, you can enable A and B users to use Maven without arguing with your IT manager (a lot). Also, you can
+publish your organization-wide artifacts on Px Master, and in-development process artifacts on the given slave
+Proximity.
+
+Have fun!
+
+  
+  
