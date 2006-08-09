@@ -12,13 +12,17 @@ public class MavenArtifactRecognizerTest extends TestCase {
         Assert.assertEquals(false, MavenArtifactRecognizer.isPom("aaa.pom-a"));
     }
 
-    public void testIsSnapshot() {
-        Assert.assertEquals(true, MavenArtifactRecognizer.isSnapshot("xsd-SNAPSHOT.jar"));
-        Assert.assertEquals(true, MavenArtifactRecognizer.isSnapshot("xsd-SNAPSHOT.pom"));
-        Assert.assertEquals(true, MavenArtifactRecognizer.isSnapshot("/a/b/c/xsd-1.2.3-SNAPSHOT.pom"));
-        Assert.assertEquals(false, MavenArtifactRecognizer.isSnapshot("xsd-SNAPsHOT.jar"));
-        Assert.assertEquals(false, MavenArtifactRecognizer.isSnapshot("xsd-SNAPHOT.pom"));
-        Assert.assertEquals(false, MavenArtifactRecognizer.isSnapshot("/a/b/c/xsd-1.2.3NAPSHOT.pom"));
+    public void testIsSnapshot1() {
+        Assert.assertEquals(true, MavenArtifactRecognizer.isSnapshot("/org/somewhere/aid/1.0-SNAPSHOT", "xsd-SNAPSHOT.jar"));
+        Assert.assertEquals(true, MavenArtifactRecognizer.isSnapshot("/org/somewhere/aid/1.0-SNAPSHOT", "xsd-SNAPSHOT.pom"));
+        Assert.assertEquals(true, MavenArtifactRecognizer.isSnapshot("/org/somewhere/aid/1.0-SNAPSHOT", "/a/b/c/xsd-1.2.3-SNAPSHOT.pom"));
+        Assert.assertEquals(false, MavenArtifactRecognizer.isSnapshot("/org/somewhere/aid/1.0-SNAPSHOT", "xsd-SNAPsHOT.jar"));
+        Assert.assertEquals(false, MavenArtifactRecognizer.isSnapshot("/org/somewhere/aid/1.0-SNAPSHOT", "xsd-SNAPHOT.pom"));
+        Assert.assertEquals(false, MavenArtifactRecognizer.isSnapshot("/org/somewhere/aid/1.0-SNAPSHOT", "/a/b/c/xsd-1.2.3NAPSHOT.pom"));
+    }
+
+    public void testIsSnapshot2() {
+        Assert.assertEquals(true, MavenArtifactRecognizer.isSnapshot("/org/somewhere/aid/1.0-SNAPSHOT", "appassembler-maven-plugin-1.0-20060714.142547-1.pom"));
     }
 
     public void testIsMetadata() {
