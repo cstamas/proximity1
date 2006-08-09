@@ -1,24 +1,23 @@
 package hu.ismicro.commons.proximity.maven;
 
 import hu.ismicro.commons.proximity.ItemProperties;
-import hu.ismicro.commons.proximity.base.ProxiedItemPropertiesConstructor;
+import hu.ismicro.commons.proximity.base.AbstractProxiedItemPropertiesConstructor;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-public class MavenItemPropertiesConstructor implements ProxiedItemPropertiesConstructor {
+public class MavenItemPropertiesConstructor extends AbstractProxiedItemPropertiesConstructor {
 
-    protected Log logger = LogFactory.getLog(this.getClass());
-
-    public static final String KIND_KEY = "kind";
+    protected Logger logger = LoggerFactory.getLogger(this.getClass());
 
     public static final String KIND_POM = "pom";
 
@@ -32,19 +31,27 @@ public class MavenItemPropertiesConstructor implements ProxiedItemPropertiesCons
 
     public static final String POM_PCK_KEY = "pom.pck";
 
-    public static final String POM_URL_KEY = "pom.url";
-
     public static final String POM_VERSION_KEY = "pom.version";
+
+    public static final String POM_URL_KEY = "pom.url";
 
     public static final String POM_DESCRIPTION_KEY = "pom.prjDesc";
 
-    public void expandItemProperties(ItemProperties ip, File file) {
+    protected void getCustomSearchableKeywords(List result) {
+        // set the "extra" item properties
+        result.add(POM_GID_KEY);
+        result.add(POM_AID_KEY);
+        result.add(POM_PCK_KEY);
+        result.add(POM_VERSION_KEY);
+    }
+
+    protected void expandCustomItemProperties(ItemProperties ip, File file) {
 
         if (MavenArtifactRecognizer.isPom(ip.getName())) {
 
             if (!MavenArtifactRecognizer.isChecksum(ip.getName())) {
 
-                ip.setMetadata(KIND_KEY, KIND_POM, true);
+                ip.setMetadata(ItemProperties.METADATA_KIND, KIND_POM, true);
 
                 try {
 
@@ -65,11 +72,11 @@ public class MavenItemPropertiesConstructor implements ProxiedItemPropertiesCons
                     if (pom.getPackaging() != null) {
                         ip.setMetadata(POM_PCK_KEY, pom.getPackaging(), true);
                     }
-                    if (pom.getUrl() != null) {
-                        ip.setMetadata(POM_URL_KEY, pom.getUrl(), true);
-                    }
                     if (pom.getVersion() != null) {
                         ip.setMetadata(POM_VERSION_KEY, pom.getVersion(), true);
+                    }
+                    if (pom.getUrl() != null) {
+                        ip.setMetadata(POM_URL_KEY, pom.getUrl(), false);
                     }
                     if (pom.getDescription() != null) {
                         ip.setMetadata(POM_DESCRIPTION_KEY, pom.getDescription(), false);
@@ -86,9 +93,9 @@ public class MavenItemPropertiesConstructor implements ProxiedItemPropertiesCons
             }
 
         } else if (MavenArtifactRecognizer.isMetadata(ip.getName())) {
-            ip.setMetadata(KIND_KEY, KIND_METADATA, true);
+            ip.setMetadata(ItemProperties.METADATA_KIND, KIND_METADATA, true);
         } else if (MavenArtifactRecognizer.isSnapshot(ip.getName())) {
-            ip.setMetadata(KIND_KEY, KIND_SNAPSHOT, true);
+            ip.setMetadata(ItemProperties.METADATA_KIND, KIND_SNAPSHOT, true);
         }
     }
 }

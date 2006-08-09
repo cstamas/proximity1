@@ -1,9 +1,13 @@
 package hu.ismicro.commons.proximity.base;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Stack;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * <p>
@@ -21,7 +25,7 @@ import org.apache.commons.logging.LogFactory;
  */
 public class PathHelper {
 
-    protected static Log logger = LogFactory.getLog(PathHelper.class);
+    protected static Logger logger = LoggerFactory.getLogger(PathHelper.class);
 
     public static final String PATH_SEPARATOR = "/";
 
@@ -201,6 +205,25 @@ public class PathHelper {
         } else {
             return p1.endsWith(PATH_SEPARATOR) ? p1 + p2 : p1 + PATH_SEPARATOR + p2;
         }
+    }
+    
+    /**
+     * Simply strips the path to List removing empty strings.
+     * So, "/a/b/c" becomes ["a","b","c"].
+     * 
+     * @param path
+     * @return
+     */
+    public static List explodePathToList(String path) {
+        List result = new ArrayList();
+        String[] explodedPath = path.split(PATH_SEPARATOR);
+        // StringBuffer sb = new StringBuffer("/");
+        for (int i = 0; i < explodedPath.length; i++) {
+            if (explodedPath[i].length() > 0) {
+                result.add(explodedPath[i]);
+            }
+        }
+        return result;
     }
 
 }

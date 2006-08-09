@@ -1,5 +1,6 @@
 package hu.ismicro.commons.proximity.maven;
 
+import hu.ismicro.commons.proximity.ItemProperties;
 import hu.ismicro.commons.proximity.ProximityRequest;
 import hu.ismicro.commons.proximity.Repository;
 import hu.ismicro.commons.proximity.base.ProxiedItem;
@@ -88,19 +89,19 @@ public class MavenProxyRepositoryLogic extends DefaultExpiringProxyingRepository
     // Logic iface
 
     public boolean shouldCheckForLocalCopy(ProximityRequest request) {
-        return shouldServeByPolicies(request);
+        return true;
     }
 
     public ProxiedItem afterLocalCopyFound(ProxiedItem item, Repository repository) {
         // override super, should not delete even if expired!
-        return item;
+        if (shouldServeByPolicies(item.getProperties())) {
+            return item;
+        } else {
+            return null;
+        }
     }
 
     public boolean shouldCheckForRemoteCopy(ProximityRequest request, ProxiedItem localItem) {
-
-        if (!shouldServeByPolicies(request)) {
-            return false;
-        }
 
         if (localItem != null) {
             if (localItem.getProperties().getMetadata(DefaultExpiringProxyingRepositoryLogic.METADATA_EXPIRES) != null) {
@@ -139,7 +140,7 @@ public class MavenProxyRepositoryLogic extends DefaultExpiringProxyingRepository
             }
 
         } else if (MavenArtifactRecognizer.isPom(remoteItem.getProperties().getName())) {
-            
+
             if (pomExpirationPeriod != NO_EXPIRATION) {
                 logger
                         .info("Item is Maven 2 POM, setting expires on it to " + pomExpirationPeriod / 1000
@@ -147,22 +148,29 @@ public class MavenProxyRepositoryLogic extends DefaultExpiringProxyingRepository
                 remoteItem.getProperties().setMetadata(DefaultExpiringProxyingRepositoryLogic.METADATA_EXPIRES,
                         Long.toString(System.currentTimeMillis() + pomExpirationPeriod), false);
             }
-        
+
         } else if (MavenArtifactRecognizer.isMetadata(remoteItem.getProperties().getName())) {
-            
+
             if (metadataExpirationPeriod != NO_EXPIRATION) {
                 logger.info("Item is Maven 2 Metadata, setting expires on it to " + metadataExpirationPeriod / 1000
                         + " seconds.");
                 remoteItem.getProperties().setMetadata(DefaultExpiringProxyingRepositoryLogic.METADATA_EXPIRES,
                         Long.toString(System.currentTimeMillis() + metadataExpirationPeriod), false);
             }
-        
+
         } else {
 
             remoteItem = super.afterRemoteCopyFound(localItem, remoteItem, repository);
         }
 
-        return remoteItem;
+
+        if (shouldServeByPolicies(remoteItem.getProperties())) {
+            return remoteItem;
+        } else {
+            return null;
+        }
+
+
     }
 
     // =========================================================================
@@ -172,19 +180,20 @@ public class MavenProxyRepositoryLogic extends DefaultExpiringProxyingRepository
      * Simply apply the policies.
      * 
      */
-    protected boolean shouldServeByPolicies(ProximityRequest request) {
+    protected boolean shouldServeByPolicies(ItemProperties item) {
 
-        if (MavenArtifactRecognizer.isMetadata(request.getPath())) {
+        if (MavenArtifactRecognizer.isMetadata(item.getName())) {
             // metadatas goes always
             return true;
         }
-        if (MavenArtifactRecognizer.isSnapshot(request.getPath())) {
+        if (MavenArtifactRecognizer.isSnapshot(item.getName())) {
             // snapshots goes if enabled
             return isShouldServeSnapshots();
         }
 
         // in any other case take it as release
-        return isShouldServeReleases();
+        // TODO: review this, WHAT is a "release"?
+        return item.isDirectory() || isShouldServeReleases();
 
     }
 

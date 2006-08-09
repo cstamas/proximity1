@@ -6,8 +6,8 @@ import hu.ismicro.commons.proximity.base.RemoteStorage;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class is a base abstract class for remot storages.
@@ -17,7 +17,7 @@ import org.apache.commons.logging.LogFactory;
  */
 public abstract class AbstractRemoteStorage implements RemoteStorage {
 
-    protected Log logger = LogFactory.getLog(this.getClass());
+    protected Logger logger = LoggerFactory.getLogger(this.getClass());
     
     private URL remoteUrl;
 

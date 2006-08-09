@@ -60,6 +60,8 @@ public interface Proximity {
     void addRepository(Repository repository);
     
     void removeRepository(String repoId) throws NoSuchRepositoryException;
+    
+    Map getRepositoryGroups();
 
 
     /**
@@ -68,6 +70,10 @@ public interface Proximity {
      * @return List of known groupId.
      */
     List getRepositoryGroupIds();
+    
+    boolean isEmergeRepositoryGroups();
+    
+    void setEmergeRepositoryGroups(boolean emergeGroups);
     
     
     // ============================================================================================
@@ -138,6 +144,18 @@ public interface Proximity {
      * 
      */
     void reindex(String repoId);
+
+    /**
+     * Forces metadata recreation of repositories.
+     * 
+     */
+    void recreateMetadata();
+
+    /**
+     * Forces metadata recreation of repository.
+     * 
+     */
+    void recreateMetadata(String repoId);
 
     /**
      * Returns the statistics (if any).

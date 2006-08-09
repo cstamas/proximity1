@@ -53,6 +53,7 @@
 		<property name="indexer" ref="indexer" />
 		<property name="statisticsGatherer" ref="stats" />
 		<property name="accessManager" ref="openAccessManager" />
+		<property name="emergeRepositoryGroups" value="false" />
 
 		<property name="repositories">
 			<list>

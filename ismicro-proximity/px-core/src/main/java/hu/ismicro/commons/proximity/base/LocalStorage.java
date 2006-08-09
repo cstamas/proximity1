@@ -11,9 +11,12 @@ public interface LocalStorage extends Storage {
 
     boolean isMetadataAware();
     
-    void setProxiedItemPropertiesConstructor(ProxiedItemPropertiesConstructor pic);
+    ProxiedItemPropertiesConstructor getProxiedItemPropertiesConstructor();
 
-    void recreateMetadata(Map additionalProps);
+    void setProxiedItemPropertiesConstructor(ProxiedItemPropertiesConstructor pic);
+    
+    
+    void recreateMetadata(Map additionalProps) throws StorageException;
 
     List listItems(String path) throws StorageException;
 

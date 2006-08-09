@@ -65,21 +65,25 @@
 		<property name="statisticsGatherer" ref="stats" />
 		<property name="accessManager" ref="openAccessManager" />
 		<property name="proximityLogic" ref="proximityLogic"/>
+		<property name="emergeRepositoryGroups" value="true" />
 
 		<property name="repositories">
 			<list>
 				<!-- Repos'es will be processed in THIS ORDER! -->
+
+				<!-- Maven2 local reposes, the PRIVATE group -->
 				<ref local="inhouse" />
+				<ref local="inhouse.snapshot" />
+
+				<!-- Maven2 local reposes, the EXT group -->
 				<ref local="extFree" />
 				<ref local="extNonFree" />
-				<!-- Uncomment the needed repositories! -->
-				<!-- for Maven2 -->
+
+				<!-- Maven2 remote reposes, the PUBLIC group -->
 				<ref local="central" />
-				<!-- for Maven1 -->
-				<!--
-					<ref local="ibiblio"/>
-					<ref local="codehaus"/>
-				-->
+				<ref local="codehaus" />
+				<ref local="apache.snapshot" />
+				<ref local="codehaus.snapshot" />
 			</list>
 		</property>
 
@@ -169,22 +173,43 @@
 		- x = 0 - the expiration flag is set to now, thus it will expire initially and be refetched always
 		- x = -1 - turn off for the group expiration handling.
 	-->
-	<bean id="maven2logic"
+	
+	<!-- A release (stable) repository logic, never expires nothing -->
+	<bean id="maven2ReleaseRepoLogic"
 		class="hu.ismicro.commons.proximity.maven.MavenProxyRepositoryLogic">
-		<!-- SNAPSHOTSs expires after 24h -->
+		<!-- SNAPSHOTSs expires after NEVER -->
 		<property name="snapshotExpirationPeriodInSeconds"
-			value="86400" />
-		<!-- Maven2 POMs expires after 24h -->
-		<property name="pomExpirationPeriodInSeconds" value="86400" />
-		<!-- Maven2 metadatas (maven-metadata.xml and *.sha1 and *.md5) expires after 24h -->
+			value="-1" />
+		<!-- Maven2 POMs expires after NEVER -->
+		<property name="pomExpirationPeriodInSeconds" value="-1" />
+		<!-- Maven2 metadatas (maven-metadata.xml and *.sha1 and *.md5) expires after NEVER -->
 		<property name="metadataExpirationPeriodInSeconds"
-			value="86400" />
+			value="-1" />
 		<!-- everything else will never expire once downloaded -->
 		<property name="itemExpirationPeriodInSeconds" value="-1" />
 		<!-- Should repository driven by this logic serve snapshots? -->
 		<property name="shouldServeSnapshots" value="false" />
 		<!-- Should repository driven by this logic serve releases? -->
 		<property name="shouldServeReleases" value="true" />
+	</bean>
+
+	<!-- A snapshot (unstable) repository logic, generally 24h is expiration -->
+	<bean id="maven2SnapshotRepoLogic"
+		class="hu.ismicro.commons.proximity.maven.MavenProxyRepositoryLogic">
+		<!-- SNAPSHOTSs expires after 12h -->
+		<property name="snapshotExpirationPeriodInSeconds"
+			value="43200" />
+		<!-- Maven2 POMs expires after 12h -->
+		<property name="pomExpirationPeriodInSeconds" value="43200" />
+		<!-- Maven2 metadatas (maven-metadata.xml and *.sha1 and *.md5) expires after 12h -->
+		<property name="metadataExpirationPeriodInSeconds"
+			value="43200" />
+		<!-- everything else will expire once downloaded after 12h -->
+		<property name="itemExpirationPeriodInSeconds" value="43200" />
+		<!-- Should repository driven by this logic serve snapshots? -->
+		<property name="shouldServeSnapshots" value="true" />
+		<!-- Should repository driven by this logic serve releases? -->
+		<property name="shouldServeReleases" value="false" />
 	</bean>
 
 	<!--
@@ -204,7 +229,7 @@
 		<!-- Uncomment this and delete previous accessManager declaration to restrict access to this repo
 			<property name="accessManager" ref="internalLanOnlyAccessManager" />
 		-->
-		<property name="repositoryLogic" ref="maven2logic" />
+		<property name="repositoryLogic" ref="maven2ReleaseRepoLogic" />
 		<!-- Should i reindex my content on startup? -->
 		<property name="reindex" value="true" />
 		<!-- Should i recreate metadata on startup? -->
@@ -259,7 +284,7 @@
 		-->
 	</bean>
 
-	<!-- 
+	<!-- FTP remote peer if somebody need it....
 		<bean id="centralRemotePeer"
 		class="hu.ismicro.commons.proximity.base.remote.CommonsNetFtpRemotePeer">
 		<property name="remoteUrl"
@@ -269,74 +294,10 @@
 		</bean>
 	-->
 
-
 	<!--
-		- MAVEN1
-		- IBIBLIO Repository (with writable cache storage and remote peer)
-		- A standard maven1 repository.
-	-->
-	<bean id="ibiblio"
-		class="hu.ismicro.commons.proximity.base.RepositoryImpl">
-		<property name="id" value="ibiblio" />
-		<property name="groupId" value="public" />
-		<property name="localStorage" ref="ibiblioFSStorage" />
-		<property name="remoteStorage" ref="ibiblioRemotePeer" />
-		<property name="indexer" ref="indexer" />
-		<property name="statisticsGatherer" ref="stats" />
-		<property name="accessManager" ref="openAccessManager" />
-		<!-- Uncomment this and delete previous row to restrict access to this repo
-			<property name="accessManager" ref="internalLanOnlyAccessManager" />
-		-->
-		<property name="repositoryLogic" ref="maven2logic" />
-		<!-- Should i reindex my content on startup? -->
-		<property name="reindex" value="true" />
-		<!-- Should i recreate metadata on startup? -->
-		<property name="recreateMetadata" value="true" />
-		<!-- Am I listable? -->
-		<property name="listable" value="true" />
-		<!-- Am I available? If no, i will refuse all requests -->
-		<property name="available" value="true" />
-		<!-- Am I offline? If yes, i will not touch my remote peer, will serve only from localStorage -->
-		<property name="offline" value="false" />
-	</bean>
-
-	<bean id="ibiblioFSStorage"
-		class="hu.ismicro.commons.proximity.base.local.WritableFileSystemStorage">
-		<property name="baseDir" value="${ibiblioFSStorage.baseDir}" />
-		<property name="metadataAware" value="true" />
-		<property name="metadataPrefix" value="metadata" />
-		<property name="storagePrefix" value="storage" />
-	</bean>
-
-	<bean id="ibiblioRemotePeer"
-		class="hu.ismicro.commons.proximity.base.remote.CommonsHttpClientRemotePeer">
-		<property name="remoteUrl"
-			value="http://www.ibiblio.org/maven/" />
-		<property name="connectionTimeout" value="10000" />
-		<property name="retrievalRetryCount" value="3" />
-		<property name="queryString" value="" />
-		<property name="followRedirection" value="true" />
-		<!-- Proxy setup, uncomment if needed
-			<property name="proxyHost" value="myproxyhost.company.com" />
-			<property name="proxyPort" value="8080" />
-		-->
-		<!-- Proxy authentication setup, uncomment if proxy needs this
-			<property name="proxyUsername" value="userOnProxy" />
-			<property name="proxyPassword" value="bigSecret" />
-		-->
-		<!-- Proxy NTLM authentication setup, uncomment if proxy needs this
-			<property name="proxyNtlmDomain" value="domain to authenticate within" />
-			<property name="proxyNtlmHost" value="originating hostname" />
-			<property name="proxyUsername" value="userOnProxyWithoutDomainPrefix" />
-			<property name="proxyPassword" value="bigSecret" />
-		-->
-	</bean>
-
-
-	<!--
-		- MAVEN1!
-		- Codehaus Repository (with writable storage and remote peer)
-		- A standard maven1 repository.
+		- MAVEN2 repository!
+		- repo1.maven.org Central Repository (with writable cache storage and remote peer)
+		- A standard maven2 repository.
 	-->
 	<bean id="codehaus"
 		class="hu.ismicro.commons.proximity.base.RepositoryImpl">
@@ -347,10 +308,10 @@
 		<property name="indexer" ref="indexer" />
 		<property name="statisticsGatherer" ref="stats" />
 		<property name="accessManager" ref="openAccessManager" />
-		<!-- Uncomment this and delete previous row to restrict access to this repo
+		<!-- Uncomment this and delete previous accessManager declaration to restrict access to this repo
 			<property name="accessManager" ref="internalLanOnlyAccessManager" />
 		-->
-		<property name="repositoryLogic" ref="maven2logic" />
+		<property name="repositoryLogic" ref="maven2ReleaseRepoLogic" />
 		<!-- Should i reindex my content on startup? -->
 		<property name="reindex" value="true" />
 		<!-- Should i recreate metadata on startup? -->
@@ -365,19 +326,102 @@
 
 	<bean id="codehausFSStorage"
 		class="hu.ismicro.commons.proximity.base.local.WritableFileSystemStorage">
+		<!-- Where the storage will reside -->
 		<property name="baseDir" value="${codehausFSStorage.baseDir}" />
+		<!-- If true, two subfolders will be created with identical structure but different content. -->
 		<property name="metadataAware" value="true" />
+		<!-- Using Maven-aware properties constructor -->
+		<property name="proxiedItemPropertiesConstructor" ref="mavenItemPropertiesConstructor" />
+		<!-- The prefix for metadata subfolder. -->
 		<property name="metadataPrefix" value="metadata" />
+		<!-- The prefix for storage subfolder. -->
 		<property name="storagePrefix" value="storage" />
 	</bean>
 
 	<bean id="codehausRemotePeer"
 		class="hu.ismicro.commons.proximity.base.remote.CommonsHttpClientRemotePeer">
-		<property name="remoteUrl" value="http://dist.codehaus.org/" />
+		<property name="remoteUrl"
+			value="http://repository.codehaus.org/" />
+		<!-- The timeout of HTTP connection -->
 		<property name="connectionTimeout" value="10000" />
+		<!-- The count of retries (used by DefaultRetryHandler) -->
 		<property name="retrievalRetryCount" value="3" />
-		<property name="queryString" value="" />
+		<!-- Should HttpClient follow redirections? (preferred!) -->
 		<property name="followRedirection" value="true" />
+		<!-- Fix query string appended to URL, used for ProximityPiping "repositoryId=central" -->
+		<property name="queryString" value="" />
+		<!-- Proxy setup, uncomment if needed
+			<property name="proxyHost" value="myproxyhost.company.com" />
+			<property name="proxyPort" value="8080" />
+		-->
+		<!-- Proxy authentication setup, uncomment if proxy needs this
+			<property name="proxyUsername" value="userOnProxy" />
+			<property name="proxyPassword" value="bigSecret" />
+		-->
+		<!-- Proxy NTLM authentication setup, uncomment if proxy needs this
+			<property name="proxyNtlmDomain" value="domain to authenticate within" />
+			<property name="proxyNtlmHost" value="originating hostname" />
+			<property name="proxyUsername" value="userOnProxyWithoutDomainPrefix" />
+			<property name="proxyPassword" value="bigSecret" />
+		-->
+	</bean>
+	
+	<!--
+		- MAVEN2 repository!
+		- "Official" Snapshot Repository (with writable cache storage and remote peer)
+		- A standard maven2 repository.
+	-->
+	<bean id="apache.snapshot"
+		class="hu.ismicro.commons.proximity.base.RepositoryImpl">
+		<property name="id" value="apache.snapshot" />
+		<property name="groupId" value="public" />
+		<property name="localStorage" ref="apache.snapshotFSStorage" />
+		<property name="remoteStorage" ref="apache.snapshotRemotePeer" />
+		<property name="indexer" ref="indexer" />
+		<property name="statisticsGatherer" ref="stats" />
+		<property name="accessManager" ref="openAccessManager" />
+		<!-- Uncomment this and delete previous accessManager declaration to restrict access to this repo
+			<property name="accessManager" ref="internalLanOnlyAccessManager" />
+		-->
+		<property name="repositoryLogic" ref="maven2SnapshotRepoLogic" />
+		<!-- Should i reindex my content on startup? -->
+		<property name="reindex" value="true" />
+		<!-- Should i recreate metadata on startup? -->
+		<property name="recreateMetadata" value="true" />
+		<!-- Am I listable? -->
+		<property name="listable" value="true" />
+		<!-- Am I available? If no, i will refuse all requests -->
+		<property name="available" value="true" />
+		<!-- Am I offline? If yes, i will not touch my remote peer, will serve only from localStorage -->
+		<property name="offline" value="false" />
+	</bean>
+
+	<bean id="apache.snapshotFSStorage"
+		class="hu.ismicro.commons.proximity.base.local.WritableFileSystemStorage">
+		<!-- Where the storage will reside -->
+		<property name="baseDir" value="${apache.snapshotFSStorage.baseDir}" />
+		<!-- If true, two subfolders will be created with identical structure but different content. -->
+		<property name="metadataAware" value="true" />
+		<!-- Using Maven-aware properties constructor -->
+		<property name="proxiedItemPropertiesConstructor" ref="mavenItemPropertiesConstructor" />
+		<!-- The prefix for metadata subfolder. -->
+		<property name="metadataPrefix" value="metadata" />
+		<!-- The prefix for storage subfolder. -->
+		<property name="storagePrefix" value="storage" />
+	</bean>
+
+	<bean id="apache.snapshotRemotePeer"
+		class="hu.ismicro.commons.proximity.base.remote.CommonsHttpClientRemotePeer">
+		<property name="remoteUrl"
+			value="http://people.apache.org/maven-snapshot-repository/" />
+		<!-- The timeout of HTTP connection -->
+		<property name="connectionTimeout" value="10000" />
+		<!-- The count of retries (used by DefaultRetryHandler) -->
+		<property name="retrievalRetryCount" value="3" />
+		<!-- Should HttpClient follow redirections? (preferred!) -->
+		<property name="followRedirection" value="true" />
+		<!-- Fix query string appended to URL, used for ProximityPiping "repositoryId=central" -->
+		<property name="queryString" value="" />
 		<!-- Proxy setup, uncomment if needed
 			<property name="proxyHost" value="myproxyhost.company.com" />
 			<property name="proxyPort" value="8080" />
@@ -395,6 +439,79 @@
 	</bean>
 
 	<!--
+		- MAVEN2 repository!
+		- "Official" Snapshot Repository (with writable cache storage and remote peer)
+		- A standard maven2 repository.
+	-->
+	<bean id="codehaus.snapshot"
+		class="hu.ismicro.commons.proximity.base.RepositoryImpl">
+		<property name="id" value="codehaus.snapshot" />
+		<property name="groupId" value="public" />
+		<property name="localStorage" ref="codehaus.snapshotFSStorage" />
+		<property name="remoteStorage" ref="codehaus.snapshotRemotePeer" />
+		<property name="indexer" ref="indexer" />
+		<property name="statisticsGatherer" ref="stats" />
+		<property name="accessManager" ref="openAccessManager" />
+		<!-- Uncomment this and delete previous accessManager declaration to restrict access to this repo
+			<property name="accessManager" ref="internalLanOnlyAccessManager" />
+		-->
+		<property name="repositoryLogic" ref="maven2SnapshotRepoLogic" />
+		<!-- Should i reindex my content on startup? -->
+		<property name="reindex" value="true" />
+		<!-- Should i recreate metadata on startup? -->
+		<property name="recreateMetadata" value="true" />
+		<!-- Am I listable? -->
+		<property name="listable" value="true" />
+		<!-- Am I available? If no, i will refuse all requests -->
+		<property name="available" value="true" />
+		<!-- Am I offline? If yes, i will not touch my remote peer, will serve only from localStorage -->
+		<property name="offline" value="false" />
+	</bean>
+
+	<bean id="codehaus.snapshotFSStorage"
+		class="hu.ismicro.commons.proximity.base.local.WritableFileSystemStorage">
+		<!-- Where the storage will reside -->
+		<property name="baseDir" value="${codehaus.snapshotFSStorage.baseDir}" />
+		<!-- If true, two subfolders will be created with identical structure but different content. -->
+		<property name="metadataAware" value="true" />
+		<!-- Using Maven-aware properties constructor -->
+		<property name="proxiedItemPropertiesConstructor" ref="mavenItemPropertiesConstructor" />
+		<!-- The prefix for metadata subfolder. -->
+		<property name="metadataPrefix" value="metadata" />
+		<!-- The prefix for storage subfolder. -->
+		<property name="storagePrefix" value="storage" />
+	</bean>
+
+	<bean id="codehaus.snapshotRemotePeer"
+		class="hu.ismicro.commons.proximity.base.remote.CommonsHttpClientRemotePeer">
+		<property name="remoteUrl"
+			value="http://snapshots.repository.codehaus.org/" />
+		<!-- The timeout of HTTP connection -->
+		<property name="connectionTimeout" value="10000" />
+		<!-- The count of retries (used by DefaultRetryHandler) -->
+		<property name="retrievalRetryCount" value="3" />
+		<!-- Should HttpClient follow redirections? (preferred!) -->
+		<property name="followRedirection" value="true" />
+		<!-- Fix query string appended to URL, used for ProximityPiping "repositoryId=central" -->
+		<property name="queryString" value="" />
+		<!-- Proxy setup, uncomment if needed
+			<property name="proxyHost" value="myproxyhost.company.com" />
+			<property name="proxyPort" value="8080" />
+		-->
+		<!-- Proxy authentication setup, uncomment if proxy needs this
+			<property name="proxyUsername" value="userOnProxy" />
+			<property name="proxyPassword" value="bigSecret" />
+		-->
+		<!-- Proxy NTLM authentication setup, uncomment if proxy needs this
+			<property name="proxyNtlmDomain" value="domain to authenticate within" />
+			<property name="proxyNtlmHost" value="originating hostname" />
+			<property name="proxyUsername" value="userOnProxyWithoutDomainPrefix" />
+			<property name="proxyPassword" value="bigSecret" />
+		-->
+	</bean>
+
+
+	<!--
 		- In-House Repository (with read-only storage and without remote peer)
 		- A maven repository for publishing in-house artifacts.
 	-->
@@ -405,6 +522,7 @@
 		<property name="localStorage" ref="inhouseFSStorage" />
 		<property name="indexer" ref="indexer" />
 		<property name="statisticsGatherer" ref="stats" />
+		<property name="repositoryLogic" ref="maven2ReleaseRepoLogic" />
 		<property name="accessManager" ref="openAccessManager" />
 		<!-- Uncomment this and delete previous row to restrict access to this repo
 			<property name="accessManager" ref="internalLanOnlyAccessManager" />
@@ -423,22 +541,61 @@
 
 	<bean id="inhouseFSStorage"
 		class="hu.ismicro.commons.proximity.base.local.ReadOnlyFileSystemStorage">
+		<!-- Where the storage will reside -->
 		<property name="baseDir" value="${inhouseFSStorage.baseDir}" />
-		<property name="metadataAware" value="false" />
+		<!-- If true, two subfolders will be created with identical structure but different content. -->
+		<property name="metadataAware" value="true" />
+		<!-- Using Maven-aware properties constructor -->
+		<property name="proxiedItemPropertiesConstructor" ref="mavenItemPropertiesConstructor" />
+	</bean>
+
+	<bean id="inhouse.snapshot"
+		class="hu.ismicro.commons.proximity.base.RepositoryImpl">
+		<property name="id" value="inhouse.snapshot" />
+		<property name="groupId" value="private" />
+		<property name="localStorage" ref="inhouse.snapshotFSStorage" />
+		<property name="indexer" ref="indexer" />
+		<property name="statisticsGatherer" ref="stats" />
+		<property name="repositoryLogic" ref="maven2SnapshotRepoLogic" />
+		<property name="accessManager" ref="openAccessManager" />
+		<!-- Uncomment this and delete previous row to restrict access to this repo
+			<property name="accessManager" ref="internalLanOnlyAccessManager" />
+		-->
+		<!-- Should i reindex my content on startup? -->
+		<property name="reindex" value="true" />
+		<!-- Should i recreate metadata on startup? -->
+		<property name="recreateMetadata" value="true" />
+		<!-- Am I listable? -->
+		<property name="listable" value="true" />
+		<!-- Am I available? If no, i will refuse all requests -->
+		<property name="available" value="true" />
+		<!-- Am I offline? If yes, i will not touch my remote peer, will serve only from localStorage -->
+		<property name="offline" value="false" />
+	</bean>
+
+	<bean id="inhouse.snapshotFSStorage"
+		class="hu.ismicro.commons.proximity.base.local.ReadOnlyFileSystemStorage">
+		<!-- Where the storage will reside -->
+		<property name="baseDir" value="${inhouse.snapshotFSStorage.baseDir}" />
+		<!-- If true, two subfolders will be created with identical structure but different content. -->
+		<property name="metadataAware" value="true" />
+		<!-- Using Maven-aware properties constructor -->
+		<property name="proxiedItemPropertiesConstructor" ref="mavenItemPropertiesConstructor" />
 	</bean>
 
 	<!--
 		- EXT NonFree Repository (with read-only storage and without remote peer)
-		- A maven repository for in-house use for publishing non-free artifacts 
+		- A maven repository for in-house use for publishing released non-free artifacts 
 		- not deployed on standard maven repositories (oracle JDBC, J2EE, etc...).
 	-->
 	<bean id="extNonFree"
 		class="hu.ismicro.commons.proximity.base.RepositoryImpl">
 		<property name="id" value="extNonFree" />
-		<property name="groupId" value="private" />
+		<property name="groupId" value="ext" />
 		<property name="localStorage" ref="extNonFreeFSStorage" />
 		<property name="indexer" ref="indexer" />
 		<property name="statisticsGatherer" ref="stats" />
+		<property name="repositoryLogic" ref="maven2ReleaseRepoLogic" />
 		<property name="accessManager" ref="openAccessManager" />
 		<!-- Uncomment this and delete previous row to restrict access to this repo
 			<property name="accessManager" ref="internalLanOnlyAccessManager" />
@@ -457,22 +614,27 @@
 
 	<bean id="extNonFreeFSStorage"
 		class="hu.ismicro.commons.proximity.base.local.ReadOnlyFileSystemStorage">
+		<!-- Where the storage will reside -->
 		<property name="baseDir" value="${extNonFreeFSStorage.baseDir}" />
-		<property name="metadataAware" value="false" />
+		<!-- If true, two subfolders will be created with identical structure but different content. -->
+		<property name="metadataAware" value="true" />
+		<!-- Using Maven-aware properties constructor -->
+		<property name="proxiedItemPropertiesConstructor" ref="mavenItemPropertiesConstructor" />
 	</bean>
 
 	<!--
 		- EXT Free Repository (with read-only storage and without remote peer)
-		- A maven repository for in-house use for publishing artifacts 
+		- A maven repository for in-house use for publishing released artifacts 
 		- not deployed on standard maven repositories (dwr, etc...).
 	-->
 	<bean id="extFree"
 		class="hu.ismicro.commons.proximity.base.RepositoryImpl">
 		<property name="id" value="extFree" />
-		<property name="groupId" value="private" />
+		<property name="groupId" value="ext" />
 		<property name="localStorage" ref="extFreeFSStorage" />
 		<property name="indexer" ref="indexer" />
 		<property name="statisticsGatherer" ref="stats" />
+		<property name="repositoryLogic" ref="maven2ReleaseRepoLogic" />
 		<property name="accessManager" ref="openAccessManager" />
 		<!-- Uncomment this and delete previous row to restrict access to this repo
 			<property name="accessManager" ref="internalLanOnlyAccessManager" />
@@ -491,8 +653,12 @@
 
 	<bean id="extFreeFSStorage"
 		class="hu.ismicro.commons.proximity.base.local.ReadOnlyFileSystemStorage">
+		<!-- Where the storage will reside -->
 		<property name="baseDir" value="${extFreeFSStorage.baseDir}" />
-		<property name="metadataAware" value="false" />
+		<!-- If true, two subfolders will be created with identical structure but different content. -->
+		<property name="metadataAware" value="true" />
+		<!-- Using Maven-aware properties constructor -->
+		<property name="proxiedItemPropertiesConstructor" ref="mavenItemPropertiesConstructor" />
 	</bean>
 
 </beans>

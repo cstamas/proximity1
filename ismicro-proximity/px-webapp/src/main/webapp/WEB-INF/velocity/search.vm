@@ -81,7 +81,6 @@
 			<td><b>#springMessage("item.path")</b></td>
 			<td><b>#springMessage("item.name")</b></td>
 			<td><b>#springMessage("item.size")</b></td>
-			<td><b>#springMessage("item.lastModified")</b></td>
 			<td><b>#springMessage("item.repositoryGroupId")</b></td>
 			<td><b>#springMessage("item.repositoryId")</b></td>
 		</tr>
@@ -96,7 +95,7 @@
 				</td>
 				<td><a href="#springUrl('/repository')${item.absolutePath}?repositoryId=${item.repositoryId}">${item.absolutePath}</a>&nbsp;</td>
 				<td>
-					#itemLink($item)
+					#plainItemLink($item)
 				</td>
 				<td>
 					#if(${item.isDirectory()})
@@ -105,7 +104,6 @@
 					    $formatFileSize.getFileSizeAsString($item.size)&nbsp;
 					#end
 				</td>
-				<td>$vtldatetool.format('medium',${item.lastModified})&nbsp;</td>
 				<td><a href="#springUrl('/repository')?repositoryGroupId=${item.repositoryGroupId}">${item.repositoryGroupId}</a>&nbsp;</td>
 				<td><a href="#springUrl('/repository')?repositoryId=${item.repositoryId}">${item.repositoryId}</a>&nbsp;</td>
 			</tr>

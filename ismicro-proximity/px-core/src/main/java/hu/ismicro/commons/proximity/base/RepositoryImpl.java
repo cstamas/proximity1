@@ -18,12 +18,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class RepositoryImpl implements Repository {
 
-    protected Log logger = LogFactory.getLog(this.getClass());
+    protected Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private String id;
 
@@ -230,10 +230,9 @@ public class RepositoryImpl implements Repository {
     // Housekeeping
 
     public void initialize() {
-        logger.info("Initializing...");
-
         if (getIndexer() != null && getLocalStorage() != null) {
             getIndexer().registerLocalStorage(getLocalStorage());
+            getIndexer().addSearchableKeywords(getLocalStorage().getProxiedItemPropertiesConstructor().getSearchableKeywords());
         }
 
         if (recreateMetadata) {
@@ -287,7 +286,7 @@ public class RepositoryImpl implements Repository {
                     if (remoteResult != null && !remoteResult.getProperties().isDirectory()
                             && getLocalStorage().isWritable()) {
                         if (getRepositoryLogic().shouldStoreLocallyAfterRemoteRetrieval(localResult, remoteResult)) {
-                            logger.info("Storing " + request.getPath() + " item in writable storage of repository "
+                            logger.debug("Storing " + request.getPath() + " item in writable storage of repository "
                                     + getId());
                             storeItem(remoteResult);
                             remoteResult = getLocalStorage().retrieveItem(request.getPath());

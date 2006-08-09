@@ -1,7 +1,6 @@
 package hu.ismicro.commons.proximity.base.indexer;
 
 import hu.ismicro.commons.proximity.ItemNotFoundException;
-import hu.ismicro.commons.proximity.ItemProperties;
 import hu.ismicro.commons.proximity.base.Indexer;
 import hu.ismicro.commons.proximity.base.ProxiedItem;
 import hu.ismicro.commons.proximity.base.Storage;
@@ -11,14 +10,16 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public abstract class AbstractIndexer implements Indexer {
 
-    protected Log logger = LogFactory.getLog(this.getClass());
+    protected Logger logger = LoggerFactory.getLogger(this.getClass());
 
     protected List storages = new ArrayList();
+    
+    protected List searchableKeywords = new ArrayList();
 
     public void initialize() {
         logger.info("Initializing indexer " + this.getClass().getName() + "...");
@@ -32,17 +33,16 @@ public abstract class AbstractIndexer implements Indexer {
     }
 
     public List getSearchableKeywords() {
-        List result = new ArrayList();
-        // set the default ItemProperties
-        result.add(ItemProperties.METADATA_NAME);
-        result.add(ItemProperties.METADATA_OWNING_REPOSITORY);
-        result.add(ItemProperties.METADATA_OWNING_REPOSITORY_GROUP);
-        result.add(ItemProperties.METADATA_ABSOLUTE_PATH);
-        result.add(ItemProperties.METADATA_FILESIZE);
-        result.add(ItemProperties.METADATA_IS_DIRECTORY);
-        result.add(ItemProperties.METADATA_IS_FILE);
-        result.add(ItemProperties.METADATA_ORIGINATING_URL);
-        return result;
+        return searchableKeywords;
+    }
+    
+    public void addSearchableKeywords(List kws) {
+        for (Iterator i = kws.iterator(); i.hasNext(); ) {
+            String kw = (String) i.next();
+            if (!searchableKeywords.contains(kw)) {
+                searchableKeywords.add(kw);
+            }
+        }
     }
 
     protected ProxiedItem retrieveItemFromStorages(String path) throws ItemNotFoundException {

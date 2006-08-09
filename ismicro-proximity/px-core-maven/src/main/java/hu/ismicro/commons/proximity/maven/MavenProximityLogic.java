@@ -33,15 +33,14 @@ import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 public class MavenProximityLogic extends DefaultProximityLogic {
 
     /**
-     * This implementation says true if the request is about metadata CONTENT
-     * (propertiesOnly == false) but not metadata checksum.
+     * This implementation says true if the request is about metadata.
      * 
      * @return true if the request is about metadata.
      */
     public boolean isGroupSearchNeeded(ProximityRequest request) {
 
-        return MavenArtifactRecognizer.isMetadata(request.getPath())
-                && !MavenArtifactRecognizer.isChecksum(request.getPath());
+        // will trigger for metadata and their checksums
+        return MavenArtifactRecognizer.isMetadata(request.getPath());
 
     }
 
@@ -50,7 +49,7 @@ public class MavenProximityLogic extends DefaultProximityLogic {
      * 
      * @return the merged metadata.
      */
-    public ProxiedItem postprocessItemList(List listOfProxiedItems) throws IOException {
+    public ProxiedItem postprocessItemList(ProximityRequest request, List listOfProxiedItems) throws IOException {
         
         if (listOfProxiedItems.size() == 0) {
 
@@ -66,7 +65,7 @@ public class MavenProximityLogic extends DefaultProximityLogic {
             return item;
         }
 
-        logger.info("Item found in total of " + listOfProxiedItems.size() + " repositories, will merge them.");
+        logger.info("Item for path " + request.getPath() + " found in total of " + listOfProxiedItems.size() + " repositories, will merge them.");
 
         MetadataXpp3Reader metadataReader = new MetadataXpp3Reader();
         MetadataXpp3Writer metadataWriter = new MetadataXpp3Writer();
@@ -98,6 +97,8 @@ public class MavenProximityLogic extends DefaultProximityLogic {
         ByteArrayInputStream is = new ByteArrayInputStream(bos.toByteArray());
         item.setStream(is);
         itemProps.setSize(bos.size());
+        
+        // what about checksum?
 
         return item;
 

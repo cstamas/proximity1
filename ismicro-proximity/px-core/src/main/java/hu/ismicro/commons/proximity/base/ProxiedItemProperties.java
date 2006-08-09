@@ -12,7 +12,7 @@ import java.util.Map;
 public class ProxiedItemProperties implements ItemProperties {
 
     private Map metadataMap;
-    
+
     private List indexableMetadataKeys;
 
     public String getAbsolutePath() {
@@ -67,11 +67,18 @@ public class ProxiedItemProperties implements ItemProperties {
     }
 
     public Date getLastModified() {
-        return new Date(Long.parseLong(getMetadata(METADATA_LAST_MODIFIED)));
+        String lmstr = getMetadata(METADATA_LAST_MODIFIED);
+        if (lmstr == null) {
+            return null;
+        } else {
+            return new Date(Long.parseLong(lmstr));
+        }
     }
 
     public void setLastModified(Date lastModified) {
-        setMetadata(METADATA_LAST_MODIFIED, Long.toString(lastModified.getTime()), true);
+        if (lastModified != null) {
+            setMetadata(METADATA_LAST_MODIFIED, Long.toString(lastModified.getTime()), false);
+        }
     }
 
     public long getSize() {
@@ -119,7 +126,7 @@ public class ProxiedItemProperties implements ItemProperties {
 
     public Map getIndexableMetadata() {
         HashMap result = new HashMap();
-        for (Iterator i = getIndexableMetadataKeys().iterator(); i.hasNext(); ) {
+        for (Iterator i = getIndexableMetadataKeys().iterator(); i.hasNext();) {
             String key = (String) i.next();
             result.put(key, getMetadata(key));
         }
@@ -128,7 +135,7 @@ public class ProxiedItemProperties implements ItemProperties {
 
     public Map getNonIndexableMetadata() {
         HashMap result = new HashMap();
-        for (Iterator i = getAllMetadata().keySet().iterator(); i.hasNext(); ) {
+        for (Iterator i = getAllMetadata().keySet().iterator(); i.hasNext();) {
             String key = (String) i.next();
             if (!getIndexableMetadataKeys().contains(key)) {
                 result.put(key, getMetadata(key));

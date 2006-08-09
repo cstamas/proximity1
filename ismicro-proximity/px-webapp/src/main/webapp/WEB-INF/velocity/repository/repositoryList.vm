@@ -43,9 +43,24 @@
 					    $formatFileSize.getFileSizeAsString($item.size)&nbsp;
 					#end
 				</td>
-				<td>$vtldatetool.format('medium',${item.lastModified})&nbsp;</td>
-				<td><a href="#springUrl('/repository')?repositoryGroupId=${item.repositoryGroupId}">${item.repositoryGroupId}</a>&nbsp;</td>
-				<td><a href="#springUrl('/repository')?repositoryId=${item.repositoryId}">${item.repositoryId}</a>&nbsp;</td>
+				<td>
+					#if( ${item.lastModified} )
+						$vtldatetool.format('medium',${item.lastModified})
+					#end
+					&nbsp;
+				</td>
+				<td>
+					#if( ${item.repositoryGroupId} )
+						<a href="#springUrl('/repository')?repositoryGroupId=${item.repositoryGroupId}">${item.repositoryGroupId}</a>
+					#end
+					&nbsp;
+				</td>
+				<td>
+					#if( ${item.repositoryId} )
+						<a href="#springUrl('/repository')?repositoryId=${item.repositoryId}">${item.repositoryId}</a>
+					#end
+				&nbsp;
+				</td>
 			</tr>
 		#end
   

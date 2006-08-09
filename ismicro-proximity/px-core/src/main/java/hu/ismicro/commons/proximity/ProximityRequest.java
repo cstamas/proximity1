@@ -33,6 +33,23 @@ public class ProximityRequest implements Serializable {
 
     /** Map of attributes if any */
     private Map attributes = new HashMap();
+    
+    public ProximityRequest() {
+        super();
+    }
+    
+    public ProximityRequest(String path) {
+        this();
+        setPath(path);
+    }
+    
+    public ProximityRequest(ProximityRequest rq) {
+        this(rq.getPath());
+        setGrantee(rq.getGrantee());
+        setTargetedReposId(rq.getTargetedReposId());
+        setTargetedReposGroupId(rq.getTargetedReposGroupId());
+        getAttributes().putAll(rq.getAttributes());
+    }
 
     public Object getGrantee() {
         return grantee;
@@ -87,5 +104,5 @@ public class ProximityRequest implements Serializable {
         str.append("]");
         return str.toString();
     }
-
+    
 }
