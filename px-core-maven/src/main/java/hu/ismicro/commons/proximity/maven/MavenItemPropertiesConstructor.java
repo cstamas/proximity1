@@ -94,7 +94,7 @@ public class MavenItemPropertiesConstructor extends AbstractProxiedItemPropertie
 
         } else if (MavenArtifactRecognizer.isMetadata(ip.getName())) {
             ip.setMetadata(ItemProperties.METADATA_KIND, KIND_METADATA, true);
-        } else if (MavenArtifactRecognizer.isSnapshot(ip.getName())) {
+        } else if (MavenArtifactRecognizer.isSnapshot(ip.getAbsolutePath(), ip.getName())) {
             ip.setMetadata(ItemProperties.METADATA_KIND, KIND_SNAPSHOT, true);
         }
     }
