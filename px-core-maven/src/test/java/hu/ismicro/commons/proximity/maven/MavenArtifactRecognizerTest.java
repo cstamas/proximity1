@@ -23,7 +23,7 @@ public class MavenArtifactRecognizerTest extends TestCase {
 
     public void testIsSnapshot2() {
         Assert.assertEquals(true, MavenArtifactRecognizer.isSnapshot("/org/somewhere/aid/1.0-SNAPSHOT", "appassembler-maven-plugin-1.0-20060714.142547-1.pom"));
-        Assert.assertEquals(true, MavenArtifactRecognizer.isSnapshot("/org/somewhere/aid/1.0", "appassembler-maven-plugin-1.0-20060714.142547-1.pom"));
+        Assert.assertEquals(false, MavenArtifactRecognizer.isSnapshot("/org/somewhere/aid/1.0", "appassembler-maven-plugin-1.0-20060714.142547-1.pom"));
     }
 
     public void testIsMetadata() {
