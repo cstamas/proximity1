@@ -52,15 +52,9 @@
     #else
       <a href="#springUrl('/repository')${item.path}" onmouseover="return escape(
     #end
-    '<b>Indexed properties:</b>'+
+    '<b>Properties:</b>'+
     '<ul>'+
-	#foreach( $key in $item.getIndexableMetadata().keySet() )
-		'<li>$key = $esc.javascript($item.getAllMetadata().get($key))</li>'+
-	#end
-	'</ul><br/>'+
-    '<b>Non-Indexed properties:</b>'+
-    '<ul>'+
-	#foreach( $key in $item.getNonIndexableMetadata().keySet() )
+	#foreach( $key in $item.getAllMetadata().keySet() )
 		'<li>$key = $esc.javascript($item.getAllMetadata().get($key))</li>'+
 	#end
 	'</ul>'

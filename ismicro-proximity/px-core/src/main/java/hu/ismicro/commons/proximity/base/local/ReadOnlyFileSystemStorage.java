@@ -182,7 +182,7 @@ public class ReadOnlyFileSystemStorage extends AbstractLocalStorage {
     protected ProxiedItemProperties loadItemProperties(String path) {
         File target = new File(getStorageBaseDir(), path);
         File mdTarget = new File(getMetadataBaseDir(), path);
-        ProxiedItemProperties ip = getProxiedItemPropertiesFactory().expandItemProperties(target, true);
+        ProxiedItemProperties ip = getProxiedItemPropertiesFactory().expandItemProperties(path, target, true);
         if (target.isFile() && isMetadataAware()) {
             try {
                 if (mdTarget.exists() && mdTarget.isFile()) {
@@ -194,7 +194,7 @@ public class ReadOnlyFileSystemStorage extends AbstractLocalStorage {
                 } else {
                     logger.debug("No metadata exists for [{}] on path [{}] -- RECREATING", ip.getName(), ip
                             .getAbsolutePath());
-                    ip = getProxiedItemPropertiesFactory().expandItemProperties(target, false);
+                    ip = getProxiedItemPropertiesFactory().expandItemProperties(path, target, false);
                     storeItemProperties(ip);
                 }
             } catch (IOException ex) {
