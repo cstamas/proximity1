@@ -13,8 +13,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -28,49 +26,68 @@ import org.apache.commons.io.FileUtils;
  * 
  * <p>
  * This implementation may be metadataAware, thus storing all metadata in the
- * configured workdir suffixed by "metadata" and actual artifacts in the
- * configured workdir suffixed by "storage" (these suffixes are customizable).
+ * configured metadata dir actual artifacts in the configured storage dir.
  * 
  * @author cstamas
  * 
  */
 public class ReadOnlyFileSystemStorage extends AbstractLocalStorage {
 
-    /**
-     * The default METADATA prefix.
-     */
-    private static final String METADATA = "metadata";
-
-    /**
-     * The default STORAGE prefix.
-     */
-    private static final String STORAGE = "storage";
-
-    /**
-     * The configured baseDir.
-     */
-    private String baseDir;
-
-    /**
-     * Is this storage metadata aware? Default value is TRUE.
-     */
     private boolean metadataAware = true;
 
-    private String metadataPrefix = METADATA;
+    private File storageDirFile = null;
 
-    private String storagePrefix = STORAGE;
+    private File metadataDirFile = null;
 
-    private File baseDirFile = null;
+    public File getMetadataDirFile() {
+        return metadataDirFile;
+    }
 
-    private File metadataBaseDirFile = null;
+    public void setMetadataDirFile(File metadataDirFile) {
+        if (!metadataDirFile.exists()) {
+            if (!metadataDirFile.mkdirs()) {
+                throw new IllegalArgumentException("Cannot create directories " + metadataDirFile.getAbsolutePath());
+            }
+        }
+        if (metadataDirFile.isDirectory()) {
+            this.metadataDirFile = metadataDirFile;
+        } else {
+            throw new IllegalArgumentException("The " + metadataDirFile.getAbsolutePath() + " is not a directory!");
+        }
+    }
 
-    private File storageBaseDirFile = null;
+    public File getStorageDirFile() {
+        return storageDirFile;
+    }
 
-    /**
-     * Is this storage metadata aware?
-     * 
-     * @return
-     */
+    public void setStorageDirFile(File storageDirFile) {
+        if (!storageDirFile.exists()) {
+            if (!storageDirFile.mkdirs()) {
+                throw new IllegalArgumentException("Cannot create directories " + storageDirFile.getAbsolutePath());
+            }
+        }
+        if (storageDirFile.isDirectory()) {
+            this.storageDirFile = storageDirFile;
+        } else {
+            throw new IllegalArgumentException("The " + storageDirFile.getAbsolutePath() + " is not a directory!");
+        }
+    }
+
+    public File getMetadataBaseDir() {
+        if (isMetadataAware()) {
+            return metadataDirFile;
+        } else {
+            throw new IllegalStateException("The storage is configured as metadata-unaware!");
+        }
+    }
+
+    public File getStorageBaseDir() {
+        return storageDirFile;
+    }
+    
+    // ===================================================================================================
+    // Local Storage iface
+
     public boolean isMetadataAware() {
         return metadataAware;
     }
@@ -79,122 +96,42 @@ public class ReadOnlyFileSystemStorage extends AbstractLocalStorage {
         this.metadataAware = metadataAware;
     }
 
-    public String getMetadataPrefix() {
-        return metadataPrefix;
-    }
-
-    public void setMetadataPrefix(String metadataPrefix) {
-        this.metadataPrefix = metadataPrefix;
-    }
-
-    public String getStoragePrefix() {
-        return storagePrefix;
-    }
-
-    public void setStoragePrefix(String storagePrefix) {
-        this.storagePrefix = storagePrefix;
-    }
-
-    /**
-     * Sets the baseDir on the filesystem for this local FS storage. The
-     * supplied String should be pointing to an existing directory.
-     * 
-     * @param baseDirPath
-     */
-    public void setBaseDir(String baseDirPath) {
-        baseDirFile = new File(baseDirPath);
-        if (!baseDirFile.exists()) {
-            if (!baseDirFile.mkdirs()) {
-                throw new IllegalArgumentException("The supplied directory parameter " + baseDirPath
-                        + " does not exists and cannot be created!");
-            } else {
-                logger.info("Created basedir " + baseDirFile.getAbsolutePath());
-            }
-        }
-        if (!baseDirFile.isDirectory()) {
-            throw new IllegalArgumentException("The supplied parameter " + baseDirPath + " is not a directory!");
-        }
-        this.baseDir = baseDirFile.getAbsolutePath();
-    }
-
-    /**
-     * It this storage is metadata aware, it returns baseDir appended by
-     * metadata suffix, otherwise it will throw IllegalStateException because
-     * the storage is metadata unaware.
-     * 
-     * @return
-     */
-    public File getMetadataBaseDir() {
-        if (isMetadataAware()) {
-            if (metadataBaseDirFile == null) {
-                metadataBaseDirFile = new File(baseDir, getMetadataPrefix());
-                if (!metadataBaseDirFile.exists()) {
-                    metadataBaseDirFile.mkdirs();
-                }
-            }
-            return metadataBaseDirFile;
-        } else {
-            throw new IllegalStateException("The storage is configured as metadata-unaware!");
-        }
-    }
-
-    /**
-     * If this storage is metadata aware, it returns baseDir appended by storage
-     * suffix, otherwise it will return baseDir itself unmodified.
-     * 
-     * @return
-     */
-    public File getStorageBaseDir() {
-        if (isMetadataAware()) {
-            if (storageBaseDirFile == null) {
-                storageBaseDirFile = new File(baseDir, getStoragePrefix());
-                if (!storageBaseDirFile.exists()) {
-                    storageBaseDirFile.mkdirs();
-                }
-            }
-            return storageBaseDirFile;
-        } else {
-            return baseDirFile;
-        }
-    }
-
     public boolean containsItem(String path) {
-        logger.debug("Checking for existence of " + path + " in " + getStorageBaseDir());
+        logger.debug("Checking for existence of {} in {}", path, getStorageBaseDir());
         return checkForExistence(getStorageBaseDir(), path);
     }
 
     public ProxiedItem retrieveItem(String path) throws ItemNotFoundException, StorageException {
-        logger.debug("Retrieving " + path + " in " + getStorageBaseDir());
+        logger.debug("Retrieving {} from storage directory {}", path, getStorageBaseDir());
         try {
-            File target = new File(getStorageBaseDir(), path);
-            ProxiedItemProperties properties = constructItemProperties(target, path);
+            ProxiedItemProperties properties = loadItemProperties(path);
             ProxiedItem result = new ProxiedItem();
             result.setProperties(properties);
+            File target = new File(getStorageBaseDir(), path);
             if (result.getProperties().isFile()) {
                 result.setStream(new FileInputStream(target));
             }
             return result;
         } catch (FileNotFoundException ex) {
-            logger.error("FileNotFound in FS storage [" + getStorageBaseDir() + "] for path [" + path + "]", ex);
             throw new ItemNotFoundException("FileNotFound in FS storage [" + getStorageBaseDir() + "] for path ["
                     + path + "]");
         }
     }
 
     public List listItems(String path) {
-        logger.debug("Listing " + path + " in " + getStorageBaseDir());
+        logger.debug("Listing {} in storage directory {}", path, getStorageBaseDir());
         List result = new ArrayList();
         File target = new File(getStorageBaseDir(), path);
         if (target.exists()) {
             if (target.isDirectory()) {
                 File[] files = target.listFiles();
                 for (int i = 0; i < files.length; i++) {
-                    ProxiedItemProperties item = constructItemProperties(files[i], PathHelper.concatPaths(path,
+                    ProxiedItemProperties item = loadItemProperties(PathHelper.concatPaths(path,
                             files[i].getName()));
                     result.add(item);
                 }
             } else {
-                ProxiedItemProperties item = constructItemProperties(target, path);
+                ProxiedItemProperties item = loadItemProperties(path);
                 result.add(item);
             }
         }
@@ -208,9 +145,13 @@ public class ReadOnlyFileSystemStorage extends AbstractLocalStorage {
         } catch (IllegalArgumentException ex) {
             logger.debug("Could not delete the " + getMetadataBaseDir() + " directory, is this new instance?");
         } catch (IOException ex) {
-            logger.warn("Could not delete the " + getMetadataBaseDir() + " directory! Continuing...", ex);
+            logger.warn("Could not delete the " + getMetadataBaseDir()
+                    + " directory, is storage on Network volume? Ignoring error...", ex);
         }
 
+        // the fact that we deleted all metadata will cause to be recreated by loadMD,
+        // so we now just make a recursive listing?
+        
         int processed = 0;
         Stack stack = new Stack();
         List dir = listItems(PathHelper.PATH_SEPARATOR);
@@ -226,12 +167,11 @@ public class ReadOnlyFileSystemStorage extends AbstractLocalStorage {
                     List subdir = listItems(PathHelper.walkThePath(ip.getAbsolutePath(), ip.getName()));
                     stack.push(subdir);
                 } else {
-                    storeItemProperties(ip);
                     processed++;
                 }
             }
         }
-        logger.info("Recreated metadata on " + processed + " items");
+        logger.info("Recreated metadata on {} items.", Integer.toString(processed));
     }
 
     protected boolean checkForExistence(File baseDir, String path) {
@@ -239,82 +179,49 @@ public class ReadOnlyFileSystemStorage extends AbstractLocalStorage {
         return target.exists();
     }
 
-    protected ProxiedItemProperties constructItemProperties(File target, String path) {
-        ProxiedItemProperties result = new ProxiedItemProperties();
-        result.setAbsolutePath(PathHelper.getDirName(path));
-        result.setDirectory(target.isDirectory());
-        result.setFile(target.isFile());
-        result.setLastModified(new Date(target.lastModified()));
-        result.setName(target.getName());
-        if (target.isFile()) {
-            if (isMetadataAware()) {
-                // since basic props are also stored (eg. filesize)
-                fillInMetadata(result);
-            }
-            // but we trust File and not stored filesize
-            result.setSize(target.length());
-        } else {
-            result.setSize(0);
-        }
-        return result;
-    }
-
-    protected void fillInMetadata(ProxiedItemProperties iProps) {
-        try {
-            File target = new File(new File(getMetadataBaseDir(), iProps.getAbsolutePath()), iProps.getName());
-            if (target.exists() && target.isFile()) {
-                Properties metadata = new Properties();
-                FileInputStream fis = new FileInputStream(target);
-                metadata.load(fis);
-                fis.close();
-                for (Enumeration i = metadata.propertyNames(); i.hasMoreElements();) {
-                    String key = (String) i.nextElement();
-                    if (key.startsWith("__")) {
-                        // not indexable
-                        iProps.setMetadata(key.substring(2), metadata.getProperty(key), false);
-                    } else {
-                        // indexable
-                        iProps.setMetadata(key, metadata.getProperty(key), true);
-                    }
+    protected ProxiedItemProperties loadItemProperties(String path) {
+        File target = new File(getStorageBaseDir(), path);
+        File mdTarget = new File(getMetadataBaseDir(), path);
+        ProxiedItemProperties ip = getProxiedItemPropertiesFactory().expandItemProperties(target, true);
+        if (target.isFile() && isMetadataAware()) {
+            try {
+                if (mdTarget.exists() && mdTarget.isFile()) {
+                    Properties metadata = new Properties();
+                    FileInputStream fis = new FileInputStream(mdTarget);
+                    metadata.load(fis);
+                    fis.close();
+                    ip.getAllMetadata().putAll(metadata);
+                } else {
+                    logger.debug("No metadata exists for [{}] on path [{}] -- RECREATING", ip.getName(), ip
+                            .getAbsolutePath());
+                    ip = getProxiedItemPropertiesFactory().expandItemProperties(target, false);
+                    storeItemProperties(ip);
                 }
-            } else {
-                logger.debug("No metadata exists for [" + iProps.getName() + "] on path [" + iProps.getAbsolutePath()
-                        + "] -- RECREATING");
-                getProxiedItemPropertiesConstructor().expandItemProperties(iProps,
-                        new File(new File(getStorageBaseDir(), iProps.getAbsolutePath()), iProps.getName()));
+            } catch (IOException ex) {
+                logger.error("Got IOException during metadata retrieval.", ex);
             }
-        } catch (IOException ex) {
-            logger.error("Got IOException during metadata retrieval.", ex);
         }
+        return ip;
     }
 
     protected void storeItemProperties(ItemProperties iProps) throws StorageException {
         if (!iProps.isFile()) {
             throw new IllegalArgumentException("Only files can be stored!");
         }
-        logger.debug("Storing metadata in [" + iProps.getAbsolutePath() + "] with name [" + iProps.getName() + "] in "
-                + getMetadataBaseDir());
+        logger.debug("Storing metadata in [{}] in storage directory {}", iProps.getPath(), getMetadataBaseDir());
         try {
 
-            File target = new File(new File(getMetadataBaseDir(), iProps.getAbsolutePath()), iProps.getName());
+            File target = new File(getMetadataBaseDir(), iProps.getPath());
             target.getParentFile().mkdirs();
             Properties metadata = new Properties();
-            for (Iterator i = iProps.getAllMetadata().keySet().iterator(); i.hasNext();) {
-                String key = (String) i.next();
-                if (iProps.isMetadataIndexable(key)) {
-                    metadata.put(key, iProps.getMetadata(key));
-                } else {
-                    metadata.put("__" + key, iProps.getMetadata(key));
-                }
-            }
+            metadata.putAll(iProps.getAllMetadata());
             FileOutputStream os = new FileOutputStream(target);
-            metadata.store(os, null);
+            metadata.store(os, "Written by " + this.getClass());
             os.flush();
             os.close();
             target.setLastModified(iProps.getLastModified().getTime());
 
         } catch (IOException ex) {
-            logger.error("IOException in FS storage " + getMetadataBaseDir(), ex);
             throw new StorageException("IOException in FS storage " + getMetadataBaseDir(), ex);
         }
     }

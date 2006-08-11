@@ -121,21 +121,6 @@ public class ProximityImpl implements Proximity {
         repo.reindex();
     }
 
-    public void recreateMetadata() {
-        logger.info("Forced metadata recreation of all defined repositories.");
-        for (Iterator i = repositories.keySet().iterator(); i.hasNext();) {
-            String repoId = (String) i.next();
-            Repository repo = (Repository) repositories.get(repoId);
-            repo.recreateMetadata();
-        }
-    }
-
-    public void recreateMetadata(String repoId) {
-        logger.info("Forced metadata recreation of " + repoId + " repository.");
-        Repository repo = (Repository) repositories.get(repoId);
-        repo.recreateMetadata();
-    }
-
     public void setRepositories(List reposList) {
         logger.info("Received " + reposList.size() + " repositories in a List.");
         repositories.clear();

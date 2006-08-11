@@ -26,6 +26,11 @@ public interface Repository {
      */
     String getId();
 
+    /**
+     * Sets the ID of the repository. It should be unique Proximity-wide.
+     * 
+     * @param id the ID of the repo.
+     */
     void setId(String id);
 
     /**
@@ -35,6 +40,11 @@ public interface Repository {
      */
     String getGroupId();
 
+    /**
+     * Sets the groupID of the repository.
+     * 
+     * @param groupId
+     */
     void setGroupId(String groupId);
 
     /**
@@ -44,6 +54,11 @@ public interface Repository {
      */
     boolean isAvailable();
 
+    /**
+     * Sets the repos availability. If repo is unavailable, all requests will be rejected.
+     * 
+     * @param val
+     */
     void setAvailable(boolean val);
 
     /**
@@ -54,6 +69,11 @@ public interface Repository {
      */
     boolean isOffline();
 
+    /**
+     * Sets the offline status of the repository.
+     * 
+     * @param val
+     */
     void setOffline(boolean val);
 
     /**
@@ -63,9 +83,20 @@ public interface Repository {
      */
     boolean isListable();
 
+    /**
+     * Sets the listable property of repository. If true, its content will be returned
+     * by listItems method, otherwise not. The retrieveItem will still function and
+     * return the requested item.
+     * 
+     * @param val
+     */
     void setListable(boolean val);
 
-
+    /**
+     * Returns the local storage of the repository.
+     * 
+     * @return localStorage or null.
+     */
     LocalStorage getLocalStorage();
 
     /**
@@ -76,9 +107,14 @@ public interface Repository {
      */
     void setLocalStorage(LocalStorage storage);
 
+    /**
+     * Returns the remoteStorage of the reposity.
+     * 
+     * @return remoteStorage or null. 
+     */
     RemoteStorage getRemoteStorage();
 
-        /**
+    /**
      * Sets the remote storage of the repository. May be null if this is a Local
      * repository only.
      * 
@@ -86,9 +122,14 @@ public interface Repository {
      */
     void setRemoteStorage(RemoteStorage storage);
 
+    /**
+     * Sets the repository logic to drive this repository.
+     * 
+     * @return
+     */
     RepositoryLogic getRepositoryLogic();
 
-        /**
+    /**
      * Sets the logic to drive this repository. The repository by default uses
      * DefaultProxyingLogic class unless overridden. May not be null.
      * 
@@ -96,6 +137,11 @@ public interface Repository {
      */
     void setRepositoryLogic(RepositoryLogic logic);
 
+    /**
+     * Returns the indexer used by this repository.
+     * 
+     * @return
+     */
     Indexer getIndexer();
 
     /**
@@ -105,8 +151,18 @@ public interface Repository {
      */
     void setIndexer(Indexer indexer);
 
+    /**
+     * Returns the repository level AccessManager.
+     * 
+     * @return
+     */
     AccessManager getAccessManager();
 
+    /**
+     * Sets the repository level AccessManager.
+     * 
+     * @param accessManager
+     */
     void setAccessManager(AccessManager accessManager);
 
     /**
@@ -122,11 +178,10 @@ public interface Repository {
     void reindex();
 
     /**
-     * Forces metadata recreation of repository.
+     * Gets the stats gatherer of repository.
      * 
+     * @return
      */
-    void recreateMetadata();
-
     StatisticsGatherer getStatisticsGatherer();
     
     /**
@@ -164,10 +219,10 @@ public interface Repository {
     void storeItem(Item item) throws RepositoryNotAvailableException, StorageException;
 
     /**
-     * List items on path.
+     * List items on path. If not listable, an empty list.
      * 
      * @param path
-     * @return
+     * @return list, with items or empty if not listable.
      * @throws StorageException
      */
     List listItems(ProximityRequest request) throws RepositoryNotAvailableException, StorageException;

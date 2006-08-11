@@ -28,6 +28,10 @@ public class SimpleStatisticsGathererImpl implements StatisticsGatherer {
         logger.info("Initializing...");
         // nothing
     }
+    
+    public void incomingRequest(ProximityRequest req) {
+        // nishta
+    }
 
     public void localHit(ProximityRequest req, Repository repo, ItemProperties ip) {
         if (ip.isFile()) {

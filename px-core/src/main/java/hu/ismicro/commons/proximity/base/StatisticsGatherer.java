@@ -10,6 +10,8 @@ public interface StatisticsGatherer {
 
     void initialize();
 
+    void incomingRequest(ProximityRequest req);
+
     void localHit(ProximityRequest req, Repository repo, ItemProperties ip);
 
     void remoteHit(ProximityRequest req, Repository repo, ItemProperties ip);

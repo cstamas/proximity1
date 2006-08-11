@@ -16,7 +16,7 @@ public interface Indexer {
 
     void initialize();
 
-    void registerLocalStorage(Storage storage);
+    void registerLocalStorage(LocalStorage storage);
 
     /**
      * Returns the list that this indexer thinks is searchable.

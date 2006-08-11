@@ -1,5 +1,6 @@
 package hu.ismicro.commons.proximity.base.remote;
 
+import hu.ismicro.commons.proximity.base.AbstractStorage;
 import hu.ismicro.commons.proximity.base.PathHelper;
 import hu.ismicro.commons.proximity.base.RemoteStorage;
 
@@ -15,7 +16,7 @@ import org.slf4j.LoggerFactory;
  * @author cstamas
  * 
  */
-public abstract class AbstractRemoteStorage implements RemoteStorage {
+public abstract class AbstractRemoteStorage extends AbstractStorage implements RemoteStorage {
 
     protected Logger logger = LoggerFactory.getLogger(this.getClass());
     

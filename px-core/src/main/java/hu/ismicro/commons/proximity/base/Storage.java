@@ -14,4 +14,8 @@ public interface Storage {
 
     ProxiedItem retrieveItem(String path) throws ItemNotFoundException, StorageException;
 
+    ProxiedItemPropertiesFactory getProxiedItemPropertiesFactory();
+
+    void setProxiedItemPropertiesFactory(ProxiedItemPropertiesFactory pic);
+    
 }

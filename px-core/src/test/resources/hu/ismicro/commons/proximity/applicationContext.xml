@@ -35,7 +35,9 @@
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="locations">
 			<list>
-				<value>classpath:/hu/ismicro/commons/proximity/proximity.properties</value>
+				<value>
+					classpath:/hu/ismicro/commons/proximity/proximity.properties
+				</value>
 			</list>
 		</property>
 	</bean>
@@ -61,14 +63,8 @@
 				<ref local="inhouse" />
 				<ref local="extFree" />
 				<ref local="extNonFree" />
-				<!-- Uncomment the needed repositories! -->
 				<!-- for Maven2 -->
 				<ref local="central" />
-				<!-- for Maven1 -->
-				<!--
-					<ref local="ibiblio"/>
-					<ref local="codehaus"/>
-				-->
 			</list>
 		</property>
 
@@ -115,6 +111,26 @@
 	</bean>
 
 	<!--
+		=================================================================================
+	-->
+
+	<bean id="itemPropertiesFactory"
+		class="hu.ismicro.commons.proximity.base.InspectorListProcessingProxiedItemPropertiesConstructor">
+<!-- 
+		<property name="itemInspectorList">
+			<list>
+				<bean
+					class="hu.ismicro.commons.proximity.maven.MavenItemInspector" />
+			</list>
+		</property>
+-->
+	</bean>
+
+	<!--
+		=================================================================================
+	-->
+
+	<!--
 		- MAVEN2 repository!
 		- repo1.maven.org Central Repository (with writable cache storage and remote peer)
 		- A standard maven2 repository.
@@ -134,10 +150,12 @@
 
 	<bean id="centralFSStorage"
 		class="hu.ismicro.commons.proximity.base.local.WritableFileSystemStorage">
-		<property name="baseDir" value="${centralFSStorage.baseDir}" />
 		<property name="metadataAware" value="true" />
-		<property name="metadataPrefix" value="metadata" />
-		<property name="storagePrefix" value="storage" />
+		<property name="metadataDirFile" value="${centralFSStorage.metadataDir}" />
+		<property name="storageDirFile"
+			value="${centralFSStorage.baseDir}" />
+		<property name="proxiedItemPropertiesFactory"
+			ref="itemPropertiesFactory" />
 	</bean>
 
 	<bean id="centralRemotePeer"
@@ -148,85 +166,15 @@
 		<property name="queryString" value="" />
 		<property name="followRedirection" value="true" />
 	</bean>
-<!--
-	<bean id="centralRemotePeer"
+	<!--
+		<bean id="centralRemotePeer"
 		class="hu.ismicro.commons.proximity.base.remote.CommonsNetFtpRemotePeer">
 		<property name="remoteUrl"
-			value="ftp://repo1.maven.org/pub/packages/maven2/" />
+		value="ftp://repo1.maven.org/pub/packages/maven2/" />
 		<property name="ftpUsername" value="anonymous" />
 		<property name="ftpPassword" value="someemail@somedomain.com" />
-	</bean>
--->
-
-	<!--
-		- MAVEN1
-		- IBIBLIO Repository (with writable cache storage and remote peer)
-		- A standard maven1 repository.
+		</bean>
 	-->
-	<bean id="ibiblio"
-		class="hu.ismicro.commons.proximity.base.RepositoryImpl">
-		<property name="id" value="ibiblio" />
-		<property name="localStorage" ref="ibiblioFSStorage" />
-		<property name="remoteStorage" ref="ibiblioRemotePeer" />
-		<property name="reindex" value="true" />
-		<property name="recreateMetadata" value="true" />
-		<property name="statisticsGatherer" ref="stats" />
-		<property name="listable" value="true" />
-		<property name="accessManager" ref="openAccessManager" />
-		<property name="repositoryLogic" ref="maven1logic" />
-	</bean>
-
-	<bean id="ibiblioFSStorage"
-		class="hu.ismicro.commons.proximity.base.local.WritableFileSystemStorage">
-		<property name="baseDir" value="${ibiblioFSStorage.baseDir}" />
-		<property name="metadataAware" value="true" />
-		<property name="metadataPrefix" value="metadata" />
-		<property name="storagePrefix" value="storage" />
-	</bean>
-
-	<bean id="ibiblioRemotePeer"
-		class="hu.ismicro.commons.proximity.base.remote.CommonsHttpClientRemotePeer">
-		<property name="remoteUrl"
-			value="http://www.ibiblio.org/maven2/" />
-		<property name="connectionTimeout" value="10000" />
-		<property name="queryString" value="" />
-		<property name="followRedirection" value="true" />
-	</bean>
-
-
-	<!--
-		- MAVEN1!
-		- Codehaus Repository (with writable storage and remote peer)
-		- A standard maven1 repository.
-	-->
-	<bean id="codehaus"
-		class="hu.ismicro.commons.proximity.base.RepositoryImpl">
-		<property name="id" value="codehaus" />
-		<property name="localStorage" ref="codehausFSStorage" />
-		<property name="remoteStorage" ref="codehausRemotePeer" />
-		<property name="reindex" value="true" />
-		<property name="recreateMetadata" value="true" />
-		<property name="statisticsGatherer" ref="stats" />
-		<property name="listable" value="true" />
-		<property name="accessManager" ref="openAccessManager" />
-		<property name="repositoryLogic" ref="maven1logic" />
-	</bean>
-
-	<bean id="codehausFSStorage"
-		class="hu.ismicro.commons.proximity.base.local.WritableFileSystemStorage">
-		<property name="baseDir" value="${codehausFSStorage.baseDir}" />
-		<property name="metadataAware" value="true" />
-		<property name="metadataPrefix" value="metadata" />
-		<property name="storagePrefix" value="storage" />
-	</bean>
-
-	<bean id="codehausRemotePeer"
-		class="hu.ismicro.commons.proximity.base.remote.CommonsHttpClientRemotePeer">
-		<property name="remoteUrl" value="http://dist.codehaus.org/" />
-		<property name="connectionTimeout" value="10000" />
-		<property name="queryString" value="" />
-		<property name="followRedirection" value="true" />
-	</bean>
 
 	<!--
 		- In-House Repository (with read-only storage and without remote peer)
@@ -245,8 +193,12 @@
 
 	<bean id="inhouseFSStorage"
 		class="hu.ismicro.commons.proximity.base.local.ReadOnlyFileSystemStorage">
-		<property name="baseDir" value="${inhouseFSStorage.baseDir}" />
-		<property name="metadataAware" value="false" />
+		<property name="metadataAware" value="true" />
+		<property name="metadataDirFile" value="${inhouseFSStorage.metadataDir}" />
+		<property name="storageDirFile"
+			value="${inhouseFSStorage.baseDir}" />
+		<property name="proxiedItemPropertiesFactory"
+			ref="itemPropertiesFactory" />
 	</bean>
 
 	<!--
@@ -267,8 +219,12 @@
 
 	<bean id="extNonFreeFSStorage"
 		class="hu.ismicro.commons.proximity.base.local.ReadOnlyFileSystemStorage">
-		<property name="baseDir" value="${extNonFreeFSStorage.baseDir}" />
-		<property name="metadataAware" value="false" />
+		<property name="metadataAware" value="true" />
+		<property name="metadataDirFile" value="${extNonFreeFSStorage.metadataDir}" />
+		<property name="storageDirFile"
+			value="${extNonFreeFSStorage.baseDir}" />
+		<property name="proxiedItemPropertiesFactory"
+			ref="itemPropertiesFactory" />
 	</bean>
 
 	<!--
@@ -289,8 +245,12 @@
 
 	<bean id="extFreeFSStorage"
 		class="hu.ismicro.commons.proximity.base.local.ReadOnlyFileSystemStorage">
-		<property name="baseDir" value="${extFreeFSStorage.baseDir}" />
-		<property name="metadataAware" value="false" />
+		<property name="metadataAware" value="true" />
+		<property name="metadataDirFile" value="${extFreeFSStorage.metadataDir}" />
+		<property name="storageDirFile"
+			value="${extFreeFSStorage.baseDir}" />
+		<property name="proxiedItemPropertiesFactory"
+			ref="itemPropertiesFactory" />
 	</bean>
 
 </beans>

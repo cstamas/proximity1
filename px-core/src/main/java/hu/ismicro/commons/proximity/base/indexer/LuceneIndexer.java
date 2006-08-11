@@ -76,7 +76,6 @@ public class LuceneIndexer extends AbstractIndexer {
             writer.optimize();
             writer.close();
         } catch (IOException ex) {
-            logger.error("Got IOException during index addition.", ex);
             throw new StorageException("Got IOException during index creation.", ex);
         }
     }
@@ -88,7 +87,7 @@ public class LuceneIndexer extends AbstractIndexer {
                 throw new IllegalArgumentException("The supplied directory parameter " + pathFile
                         + " does not exists and cannot be created!");
             } else {
-                logger.info("Created indexer basedir " + pathFile.getAbsolutePath());
+                logger.info("Created indexer basedir {}", pathFile.getAbsolutePath());
             }
         }
         if (!pathFile.isDirectory()) {
@@ -109,7 +108,6 @@ public class LuceneIndexer extends AbstractIndexer {
             addItemToIndex(writer, UID, item);
             writer.close();
         } catch (IOException ex) {
-            logger.error("Got IOException during index addition.", ex);
             throw new StorageException("Got IOException during addition.", ex);
         }
     }
@@ -138,7 +136,6 @@ public class LuceneIndexer extends AbstractIndexer {
             writer.close();
             dirtyItems = 0;
         } catch (IOException ex) {
-            logger.error("Got IOException during index addition.", ex);
             throw new StorageException("Got IOException during addition.", ex);
         }
     }
@@ -150,7 +147,7 @@ public class LuceneIndexer extends AbstractIndexer {
             IndexReader reader = IndexReader.open(indexDirectory);
             int deleted = reader.deleteDocuments(new Term("UID", UID));
             reader.close();
-            logger.info("Deleted " + deleted + " items from index for UID=" + UID);
+            logger.info("Deleted {} items from index for UID={}", Integer.toString(deleted), UID);
             dirtyItems = dirtyItems + deleted;
 
             if (dirtyItems > dirtyItemTreshold) {
@@ -162,7 +159,6 @@ public class LuceneIndexer extends AbstractIndexer {
             }
 
         } catch (IOException ex) {
-            logger.error("Got IOException during index deletion.", ex);
             throw new StorageException("Got IOException during deletion.", ex);
         }
     }
@@ -188,16 +184,20 @@ public class LuceneIndexer extends AbstractIndexer {
             Query query = qparser.parse(queryStr);
             return search(query);
         } catch (ParseException ex) {
-            logger.error("Bad query syntax!", ex);
             throw new IndexerException("Bad Query syntax!", ex);
         }
     }
 
     protected Document itemProperties2Document(ItemProperties item) {
         Document result = new Document();
-        for (Iterator i = item.getIndexableMetadata().keySet().iterator(); i.hasNext();) {
-            String key = (String) i.next();
-            result.add(new Field(key, item.getMetadata(key), Field.Store.YES, Field.Index.UN_TOKENIZED));
+        String key;
+        String md;
+        for (Iterator i = getSearchableKeywords().iterator(); i.hasNext(); ) {
+            key = (String) i.next();
+            md = item.getMetadata(key);
+            if (md != null) {
+                result.add(new Field(key, item.getMetadata(key), Field.Store.YES, Field.Index.UN_TOKENIZED));
+            }
         }
         return postProcessDocument(item, result);
     }
@@ -237,8 +237,7 @@ public class LuceneIndexer extends AbstractIndexer {
             searcher.close();
             return result;
         } catch (IOException ex) {
-            logger.error("Got IOException during index deletion.", ex);
-            throw new StorageException("Got IOException during deletion.", ex);
+            throw new StorageException("Got IOException during search by query.", ex);
         }
     }
 

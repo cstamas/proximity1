@@ -13,7 +13,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -48,10 +47,8 @@ import org.apache.commons.io.IOUtils;
  */
 public class CommonsHttpClientRemotePeer extends AbstractRemoteStorage {
 
-    // TODO: ready for refactoring
-
     private HttpMethodRetryHandler httpRetryHandler = null;
-    
+
     private HostConfiguration httpConfiguration = null;
 
     private HttpClient httpClient = null;
@@ -173,43 +170,41 @@ public class CommonsHttpClientRemotePeer extends AbstractRemoteStorage {
             try {
                 int response = executeMethod(get);
                 if (response == HttpStatus.SC_OK) {
-                    logger.info("Item " + path + " fetched from remote peer of " + getRemoteUrl());
-                    logger.debug("Constructing ProxiedItemProperties");
-                    ProxiedItemProperties properties = constructItemPropertiesFromGetResponse(path,
-                            originatingUrlString, get);
+                    logger.info("Item [{}] fetched from remote location {}", path, getRemoteUrl());
+                    // ProxiedItemProperties properties =
+                    // constructItemPropertiesFromGetResponse(path,
+                    // originatingUrlString, get);
 
-                    logger.debug("Constructing ProxiedItem");
                     ProxiedItem result = new ProxiedItem();
-                    if (properties.isFile()) {
-                        // TODO: Solve this in a better way
+                    ProxiedItemProperties ip = null;
+
+                    // is it a file?
+                    if (get.getResponseHeader("last-modified") != null) {
                         File tmpFile = File.createTempFile(PathHelper.getFileName(path), null);
                         FileOutputStream fos = new FileOutputStream(tmpFile);
-                        int bytes = IOUtils.copy(get.getResponseBodyAsStream(), fos);
+                        IOUtils.copy(get.getResponseBodyAsStream(), fos);
                         fos.flush();
                         fos.close();
-                        properties.setSize(bytes); // set the actual size in
-                        // bytes we received
+                        tmpFile.setLastModified(makeDateFromHeader(get.getResponseHeader("last-modified")));
+                        ip = getProxiedItemPropertiesFactory().expandItemProperties(tmpFile, true);
                         InputStream is = new FileInputStream(tmpFile);
                         result.setStream(is);
                     } else {
                         result.setStream(null);
                     }
-                    result.setProperties(properties);
+                    result.setProperties(ip);
+                    result.getProperties().setMetadata(ItemProperties.METADATA_ORIGINATING_URL, originatingUrlString);
                     return result;
                 } else {
                     if (response == HttpStatus.SC_NOT_FOUND) {
-                        logger.error("The path " + path + " is not found on " + getRemoteUrl() + "!");
                         throw new ItemNotFoundException(path);
                     } else {
-                        logger.error("The method execution returned result code " + response);
                         throw new StorageException("The method execution returned result code " + response);
                     }
                 }
             } catch (MalformedURLException ex) {
-                logger.error("The path " + path + " is malformed!", ex);
                 throw new StorageException("The path " + path + " is malformed!", ex);
             } catch (IOException ex) {
-                logger.error("IO Error during response stream handling!", ex);
                 throw new StorageException("IO Error during response stream handling!", ex);
             }
         } finally {
@@ -226,9 +221,9 @@ public class CommonsHttpClientRemotePeer extends AbstractRemoteStorage {
             httpConfiguration = httpClient.getHostConfiguration();
 
             if (getProxyHost() != null) {
-                logger.info("... proxy setup with host " + getProxyHost() + ", port " + getProxyPort());
+                logger.info("... proxy setup with host {}", getProxyHost());
                 httpConfiguration.setProxy(getProxyHost(), getProxyPort());
-                
+
                 if (getProxyUsername() != null) {
 
                     List authPrefs = new ArrayList(2);
@@ -236,12 +231,12 @@ public class CommonsHttpClientRemotePeer extends AbstractRemoteStorage {
                     authPrefs.add(AuthPolicy.BASIC);
 
                     if (getProxyNtlmDomain() != null) {
-                        
+
                         // Using NTLM auth, adding it as first in policies
                         authPrefs.add(0, AuthPolicy.NTLM);
 
-                        logger.info("... proxy authentication setup for NTLM domain " + getProxyNtlmDomain()
-                                + " with username " + getProxyUsername());
+                        logger.info("... proxy authentication setup for NTLM domain {}, username {}",
+                                getProxyNtlmDomain(), getProxyUsername());
                         httpConfiguration.setHost(getProxyNtlmHost());
 
                         httpClient.getState().setProxyCredentials(
@@ -249,10 +244,10 @@ public class CommonsHttpClientRemotePeer extends AbstractRemoteStorage {
                                 new NTCredentials(getProxyUsername(), getProxyPassword(), getProxyNtlmHost(),
                                         getProxyNtlmDomain()));
                     } else {
-                        
+
                         // Using Username/Pwd auth, will not add NTLM
-                        logger.info("... proxy authentication setup for http proxy " + getProxyHost()
-                                + " with username " + getProxyUsername());
+                        logger.info("... proxy authentication setup for http proxy {}, username {}", getProxyHost(),
+                                getProxyUsername());
 
                         httpClient.getState().setProxyCredentials(AuthScope.ANY,
                                 new UsernamePasswordCredentials(getProxyUsername(), getProxyPassword()));
@@ -272,72 +267,31 @@ public class CommonsHttpClientRemotePeer extends AbstractRemoteStorage {
         method.setQueryString(getQueryString());
         int resultCode = 0;
         try {
-            logger.debug("Executing " + method + " on URI " + method.getURI());
             resultCode = getHttpClient().executeMethod(httpConfiguration, method);
         } catch (HttpException ex) {
-            logger.error("Protocol error while executing " + method.getName() + " method with query string "
-                    + method.getQueryString(), ex);
+            logger.error("Protocol error while executing {} method", method.getName(), ex);
         } catch (IOException ex) {
-            logger.error("Tranport error while executing " + method.getName() + " method with query string "
-                    + method.getQueryString(), ex);
+            logger.error("Tranport error while executing {} method", method.getName(), ex);
         }
-        logger.debug("Received response code [" + resultCode + "] for executing [" + method.getName()
-                + "] method with path [" + method.getPath() + "]");
         return resultCode;
     }
 
-    protected Date makeDateFromString(String date) {
+    protected long makeDateFromHeader(Header date) {
         Date result = null;
         if (date != null) {
             try {
-                result = DateUtil.parseDate(date);
+                result = DateUtil.parseDate(date.getValue());
             } catch (DateParseException ex) {
-                logger.warn("Could not parse date " + date + ", using NOW");
+                logger.warn("Could not parse date {}, using system current time as item creation time.", date, ex);
+                result = new Date();
+            } catch (NullPointerException ex) {
+                logger.warn("Parsed date is null, using system current time as item creation time.", ex);
                 result = new Date();
             }
         } else {
             result = new Date();
         }
-        return result;
-    }
-
-    protected ProxiedItemProperties constructItemPropertiesFromGetResponse(String path, String originatingUrlString,
-            HttpMethod executedMethod) throws MalformedURLException {
-        Header locationHeader = executedMethod.getResponseHeader("location");
-        Header contentLength = executedMethod.getRequestHeader("content-length");
-        Header lastModifiedHeader = executedMethod.getResponseHeader("last-modified");
-        if (locationHeader != null) {
-            // we may had redirection
-            logger.debug("We got location header " + locationHeader.getValue());
-            originatingUrlString = locationHeader.getValue();
-        }
-        URL originatingUrl = new URL(originatingUrlString);
-
-        ProxiedItemProperties result = new ProxiedItemProperties();
-        result.setAbsolutePath(PathHelper.changePathLevel(path, PathHelper.PATH_PARENT));
-
-        // TODO: ibiblio behaves like this, check for others
-        result.setDirectory(lastModifiedHeader == null);
-        result.setFile(lastModifiedHeader != null);
-
-        if (lastModifiedHeader != null) {
-            result.setLastModified(makeDateFromString(lastModifiedHeader.getValue()));
-        } else {
-            // get system time
-            result.setLastModified(new Date());
-        }
-        result.setName(PathHelper.getFileName(originatingUrl.getPath()));
-        if (result.isFile()) {
-            if (contentLength != null) {
-                result.setSize(Long.parseLong(contentLength.getValue()));
-            }
-            // result.setSize(((GetMethod)
-            // executedMethod).getResponseContentLength());
-        } else {
-            result.setSize(0);
-        }
-        result.setMetadata(ItemProperties.METADATA_ORIGINATING_URL, originatingUrl.toString(), false);
-        return result;
+        return result.getTime();
     }
 
 }

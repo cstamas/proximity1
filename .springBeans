@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beansProjectDescription>
+	<configExtensions>
+		<configExtension>xml</configExtension>
+	</configExtensions>
+	<configs>
+		<config>px-webapp/src/main/webapp/WEB-INF/applicationContext.xml</config>
+		<config>px-webapp/src/main/webapp/WEB-INF/px-artifacts-servlet.xml</config>
+		<config>px-core/src/test/resources/hu/ismicro/commons/proximity/applicationContext.xml</config>
+		<config>px-webapp/src/main/webapp/WEB-INF/px-support-servlet.xml</config>
+		<config>px-webapp/src/main/webapp/WEB-INF/px-repository-servlet.xml</config>
+	</configs>
+	<configSets>
+		<configSet>
+			<name>test</name>
+			<allowBeanDefinitionOverriding>false</allowBeanDefinitionOverriding>
+			<incomplete>false</incomplete>
+			<configs>
+				<config>px-core/src/test/resources/hu/ismicro/commons/proximity/applicationContext.xml</config>
+			</configs>
+		</configSet>
+		<configSet>
+			<name>webapp</name>
+			<allowBeanDefinitionOverriding>true</allowBeanDefinitionOverriding>
+			<incomplete>false</incomplete>
+			<configs>
+				<config>px-webapp/src/main/webapp/WEB-INF/applicationContext.xml</config>
+				<config>px-webapp/src/main/webapp/WEB-INF/px-artifacts-servlet.xml</config>
+				<config>px-webapp/src/main/webapp/WEB-INF/px-repository-servlet.xml</config>
+				<config>px-webapp/src/main/webapp/WEB-INF/px-support-servlet.xml</config>
+			</configs>
+		</configSet>
+	</configSets>
+</beansProjectDescription>
