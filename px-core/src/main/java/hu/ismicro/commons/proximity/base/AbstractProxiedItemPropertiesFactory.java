@@ -21,9 +21,9 @@ public abstract class AbstractProxiedItemPropertiesFactory implements ProxiedIte
         return result;
     }
 
-    public final ProxiedItemProperties expandItemProperties(File file, boolean defaultOnly) {
+    public final ProxiedItemProperties expandItemProperties(String path, File file, boolean defaultOnly) {
         ProxiedItemProperties ip = new ProxiedItemProperties();
-        expandDefaultItemProperties(ip, file);
+        expandDefaultItemProperties(path, ip, file);
         if (!defaultOnly) {
             expandCustomItemProperties(ip, file);
         }
@@ -47,8 +47,8 @@ public abstract class AbstractProxiedItemPropertiesFactory implements ProxiedIte
         return result;
     }
 
-    protected final void expandDefaultItemProperties(ProxiedItemProperties ip, File file) {
-        ip.setAbsolutePath(PathHelper.getDirName(file.getAbsolutePath()));
+    protected final void expandDefaultItemProperties(String path, ProxiedItemProperties ip, File file) {
+        ip.setAbsolutePath(PathHelper.getDirName(path));
         ip.setName(file.getName());
         ip.setDirectory(file.isDirectory());
         ip.setFile(file.isFile());

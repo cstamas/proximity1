@@ -19,6 +19,6 @@ public interface ProxiedItemPropertiesFactory {
      *            The file about we need more to know.
      * @return filled up ProxiedItemProperties.
      */
-    ProxiedItemProperties expandItemProperties(File file, boolean defaultOnly);
+    ProxiedItemProperties expandItemProperties(String path, File file, boolean defaultOnly);
 
 }

@@ -186,7 +186,7 @@ public class CommonsHttpClientRemotePeer extends AbstractRemoteStorage {
                         fos.flush();
                         fos.close();
                         tmpFile.setLastModified(makeDateFromHeader(get.getResponseHeader("last-modified")));
-                        ip = getProxiedItemPropertiesFactory().expandItemProperties(tmpFile, true);
+                        ip = getProxiedItemPropertiesFactory().expandItemProperties(path, tmpFile, true);
                         InputStream is = new FileInputStream(tmpFile);
                         result.setStream(is);
                     } else {
