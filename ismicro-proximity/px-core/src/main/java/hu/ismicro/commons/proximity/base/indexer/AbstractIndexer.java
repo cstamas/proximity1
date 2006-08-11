@@ -1,10 +1,7 @@
 package hu.ismicro.commons.proximity.base.indexer;
 
-import hu.ismicro.commons.proximity.ItemNotFoundException;
 import hu.ismicro.commons.proximity.base.Indexer;
-import hu.ismicro.commons.proximity.base.ProxiedItem;
-import hu.ismicro.commons.proximity.base.Storage;
-import hu.ismicro.commons.proximity.base.StorageException;
+import hu.ismicro.commons.proximity.base.LocalStorage;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -22,14 +19,15 @@ public abstract class AbstractIndexer implements Indexer {
     protected List searchableKeywords = new ArrayList();
 
     public void initialize() {
-        logger.info("Initializing indexer " + this.getClass().getName() + "...");
+        logger.info("Initializing indexer {}...", this.getClass().getName());
         doInitialize();
     }
 
     protected abstract void doInitialize();
 
-    public void registerLocalStorage(Storage storage) {
+    public void registerLocalStorage(LocalStorage storage) {
         storages.add(storage);
+        addSearchableKeywords(storage.getProxiedItemPropertiesFactory().getSearchableKeywords());
     }
 
     public List getSearchableKeywords() {
@@ -43,23 +41,6 @@ public abstract class AbstractIndexer implements Indexer {
                 searchableKeywords.add(kw);
             }
         }
-    }
-
-    protected ProxiedItem retrieveItemFromStorages(String path) throws ItemNotFoundException {
-        Storage storage = null;
-        for (Iterator i = storages.iterator(); i.hasNext();) {
-            storage = (Storage) i.next();
-            if (storage.containsItem(path)) {
-                try {
-                    return storage.retrieveItem(path);
-                } catch (ItemNotFoundException ex) {
-                    // ignore this and go away
-                } catch (StorageException ex) {
-                    logger.error("Got error during artifact search in registered storages.", ex);
-                }
-            }
-        }
-        throw new ItemNotFoundException("Could not find " + path + " in registered LocalStorages.");
     }
 
 }

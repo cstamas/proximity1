@@ -62,7 +62,7 @@ public class DefaultExpiringProxyingRepositoryLogic extends DefaultProxyingRepos
             Date expires = new Date(System.currentTimeMillis() + itemExpirationPeriod);
             logger.info("Setting expires on item  to " + expires.toString());
             remoteItem.getProperties().setMetadata(DefaultExpiringProxyingRepositoryLogic.METADATA_EXPIRES,
-                    Long.toString(expires.getTime()), false);
+                    Long.toString(expires.getTime()));
         }
         return remoteItem;
     }

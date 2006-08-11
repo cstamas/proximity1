@@ -64,7 +64,7 @@
 		<property name="indexer" ref="indexer" />
 		<property name="statisticsGatherer" ref="stats" />
 		<property name="accessManager" ref="openAccessManager" />
-		<property name="proximityLogic" ref="proximityLogic"/>
+		<property name="proximityLogic" ref="proximityLogic" />
 		<property name="emergeRepositoryGroups" value="true" />
 
 		<property name="repositories">
@@ -94,7 +94,7 @@
 		- It does inter-repository merging of M2 metadatas.
 	-->
 	<bean id="proximityLogic"
-		class="hu.ismicro.commons.proximity.maven.MavenProximityLogic"/>
+		class="hu.ismicro.commons.proximity.maven.MavenProximityLogic" />
 
 	<!--
 		- Indexer, used to speed up searches ONLY.
@@ -116,10 +116,17 @@
 		class="hu.ismicro.commons.proximity.base.SimpleStatisticsGathererImpl" />
 
 	<!--
-		- ItemPropertiesConstructor, creates "extra" metadata about files.
+		- ItemPropertiesFactory, creates "extra" metadata about files.
 	-->
-	<bean id="mavenItemPropertiesConstructor"
-		class="hu.ismicro.commons.proximity.maven.MavenItemPropertiesConstructor" />
+	<bean id="itemPropertiesFactory"
+		class="hu.ismicro.commons.proximity.base.InspectorListProcessingProxiedItemPropertiesConstructor">
+		<property name="itemInspectorList">
+			<list>
+				<bean
+					class="hu.ismicro.commons.proximity.maven.MavenItemInspector" />
+			</list>
+		</property>
+	</bean>
 
 	<!--
 		- AccessManagers. With OpenAccessManager Proximity is wide open.
@@ -173,18 +180,16 @@
 		- x = 0 - the expiration flag is set to now, thus it will expire initially and be refetched always
 		- x = -1 - turn off for the group expiration handling.
 	-->
-	
+
 	<!-- A release (stable) repository logic, never expires nothing -->
 	<bean id="maven2ReleaseRepoLogic"
 		class="hu.ismicro.commons.proximity.maven.MavenProxyRepositoryLogic">
 		<!-- SNAPSHOTSs expires after NEVER -->
-		<property name="snapshotExpirationPeriodInSeconds"
-			value="-1" />
+		<property name="snapshotExpirationPeriodInSeconds" value="-1" />
 		<!-- Maven2 POMs expires after NEVER -->
 		<property name="pomExpirationPeriodInSeconds" value="-1" />
 		<!-- Maven2 metadatas (maven-metadata.xml and *.sha1 and *.md5) expires after NEVER -->
-		<property name="metadataExpirationPeriodInSeconds"
-			value="-1" />
+		<property name="metadataExpirationPeriodInSeconds" value="-1" />
 		<!-- everything else will never expire once downloaded -->
 		<property name="itemExpirationPeriodInSeconds" value="-1" />
 		<!-- Should repository driven by this logic serve snapshots? -->
@@ -244,16 +249,12 @@
 
 	<bean id="centralFSStorage"
 		class="hu.ismicro.commons.proximity.base.local.WritableFileSystemStorage">
-		<!-- Where the storage will reside -->
-		<property name="baseDir" value="${centralFSStorage.baseDir}" />
-		<!-- If true, two subfolders will be created with identical structure but different content. -->
 		<property name="metadataAware" value="true" />
-		<!-- Using Maven-aware properties constructor -->
-		<property name="proxiedItemPropertiesConstructor" ref="mavenItemPropertiesConstructor" />
-		<!-- The prefix for metadata subfolder. -->
-		<property name="metadataPrefix" value="metadata" />
-		<!-- The prefix for storage subfolder. -->
-		<property name="storagePrefix" value="storage" />
+		<property name="metadataDirFile" value="${centralFSStorage.metadataDir}" />
+		<property name="storageDirFile"
+			value="${centralFSStorage.baseDir}" />
+		<property name="proxiedItemPropertiesFactory"
+			ref="itemPropertiesFactory" />
 	</bean>
 
 	<bean id="centralRemotePeer"
@@ -326,16 +327,12 @@
 
 	<bean id="codehausFSStorage"
 		class="hu.ismicro.commons.proximity.base.local.WritableFileSystemStorage">
-		<!-- Where the storage will reside -->
-		<property name="baseDir" value="${codehausFSStorage.baseDir}" />
-		<!-- If true, two subfolders will be created with identical structure but different content. -->
 		<property name="metadataAware" value="true" />
-		<!-- Using Maven-aware properties constructor -->
-		<property name="proxiedItemPropertiesConstructor" ref="mavenItemPropertiesConstructor" />
-		<!-- The prefix for metadata subfolder. -->
-		<property name="metadataPrefix" value="metadata" />
-		<!-- The prefix for storage subfolder. -->
-		<property name="storagePrefix" value="storage" />
+		<property name="metadataDirFile" value="${codehausFSStorage.metadataDir}" />
+		<property name="storageDirFile"
+			value="${codehausFSStorage.baseDir}" />
+		<property name="proxiedItemPropertiesFactory"
+			ref="itemPropertiesFactory" />
 	</bean>
 
 	<bean id="codehausRemotePeer"
@@ -365,7 +362,7 @@
 			<property name="proxyPassword" value="bigSecret" />
 		-->
 	</bean>
-	
+
 	<!--
 		- MAVEN2 repository!
 		- "Official" Snapshot Repository (with writable cache storage and remote peer)
@@ -398,16 +395,12 @@
 
 	<bean id="apache.snapshotFSStorage"
 		class="hu.ismicro.commons.proximity.base.local.WritableFileSystemStorage">
-		<!-- Where the storage will reside -->
-		<property name="baseDir" value="${apache.snapshotFSStorage.baseDir}" />
-		<!-- If true, two subfolders will be created with identical structure but different content. -->
 		<property name="metadataAware" value="true" />
-		<!-- Using Maven-aware properties constructor -->
-		<property name="proxiedItemPropertiesConstructor" ref="mavenItemPropertiesConstructor" />
-		<!-- The prefix for metadata subfolder. -->
-		<property name="metadataPrefix" value="metadata" />
-		<!-- The prefix for storage subfolder. -->
-		<property name="storagePrefix" value="storage" />
+		<property name="metadataDirFile" value="${apache.snapshotFSStorage.metadataDir}" />
+		<property name="storageDirFile"
+			value="${apache.snapshotFSStorage.baseDir}" />
+		<property name="proxiedItemPropertiesFactory"
+			ref="itemPropertiesFactory" />
 	</bean>
 
 	<bean id="apache.snapshotRemotePeer"
@@ -448,7 +441,8 @@
 		<property name="id" value="codehaus.snapshot" />
 		<property name="groupId" value="public" />
 		<property name="localStorage" ref="codehaus.snapshotFSStorage" />
-		<property name="remoteStorage" ref="codehaus.snapshotRemotePeer" />
+		<property name="remoteStorage"
+			ref="codehaus.snapshotRemotePeer" />
 		<property name="indexer" ref="indexer" />
 		<property name="statisticsGatherer" ref="stats" />
 		<property name="accessManager" ref="openAccessManager" />
@@ -470,16 +464,12 @@
 
 	<bean id="codehaus.snapshotFSStorage"
 		class="hu.ismicro.commons.proximity.base.local.WritableFileSystemStorage">
-		<!-- Where the storage will reside -->
-		<property name="baseDir" value="${codehaus.snapshotFSStorage.baseDir}" />
-		<!-- If true, two subfolders will be created with identical structure but different content. -->
 		<property name="metadataAware" value="true" />
-		<!-- Using Maven-aware properties constructor -->
-		<property name="proxiedItemPropertiesConstructor" ref="mavenItemPropertiesConstructor" />
-		<!-- The prefix for metadata subfolder. -->
-		<property name="metadataPrefix" value="metadata" />
-		<!-- The prefix for storage subfolder. -->
-		<property name="storagePrefix" value="storage" />
+		<property name="metadataDirFile" value="${codehaus.snapshotFSStorage.metadataDir}" />
+		<property name="storageDirFile"
+			value="${codehaus.snapshotFSStorage.baseDir}" />
+		<property name="proxiedItemPropertiesFactory"
+			ref="itemPropertiesFactory" />
 	</bean>
 
 	<bean id="codehaus.snapshotRemotePeer"
@@ -541,12 +531,12 @@
 
 	<bean id="inhouseFSStorage"
 		class="hu.ismicro.commons.proximity.base.local.ReadOnlyFileSystemStorage">
-		<!-- Where the storage will reside -->
-		<property name="baseDir" value="${inhouseFSStorage.baseDir}" />
-		<!-- If true, two subfolders will be created with identical structure but different content. -->
 		<property name="metadataAware" value="true" />
-		<!-- Using Maven-aware properties constructor -->
-		<property name="proxiedItemPropertiesConstructor" ref="mavenItemPropertiesConstructor" />
+		<property name="metadataDirFile" value="${inhouseFSStorage.metadataDir}" />
+		<property name="storageDirFile"
+			value="${inhouseFSStorage.baseDir}" />
+		<property name="proxiedItemPropertiesFactory"
+			ref="itemPropertiesFactory" />
 	</bean>
 
 	<bean id="inhouse.snapshot"
@@ -575,12 +565,12 @@
 
 	<bean id="inhouse.snapshotFSStorage"
 		class="hu.ismicro.commons.proximity.base.local.ReadOnlyFileSystemStorage">
-		<!-- Where the storage will reside -->
-		<property name="baseDir" value="${inhouse.snapshotFSStorage.baseDir}" />
-		<!-- If true, two subfolders will be created with identical structure but different content. -->
 		<property name="metadataAware" value="true" />
-		<!-- Using Maven-aware properties constructor -->
-		<property name="proxiedItemPropertiesConstructor" ref="mavenItemPropertiesConstructor" />
+		<property name="metadataDirFile" value="${inhouse.snapshotFSStorage.metadataDir}" />
+		<property name="storageDirFile"
+			value="${inhouse.snapshotFSStorage.baseDir}" />
+		<property name="proxiedItemPropertiesFactory"
+			ref="itemPropertiesFactory" />
 	</bean>
 
 	<!--
@@ -614,12 +604,12 @@
 
 	<bean id="extNonFreeFSStorage"
 		class="hu.ismicro.commons.proximity.base.local.ReadOnlyFileSystemStorage">
-		<!-- Where the storage will reside -->
-		<property name="baseDir" value="${extNonFreeFSStorage.baseDir}" />
-		<!-- If true, two subfolders will be created with identical structure but different content. -->
 		<property name="metadataAware" value="true" />
-		<!-- Using Maven-aware properties constructor -->
-		<property name="proxiedItemPropertiesConstructor" ref="mavenItemPropertiesConstructor" />
+		<property name="metadataDirFile" value="${extNonFreeFSStorage.metadataDir}" />
+		<property name="storageDirFile"
+			value="${extNonFreeFSStorage.baseDir}" />
+		<property name="proxiedItemPropertiesFactory"
+			ref="itemPropertiesFactory" />
 	</bean>
 
 	<!--
@@ -653,12 +643,12 @@
 
 	<bean id="extFreeFSStorage"
 		class="hu.ismicro.commons.proximity.base.local.ReadOnlyFileSystemStorage">
-		<!-- Where the storage will reside -->
-		<property name="baseDir" value="${extFreeFSStorage.baseDir}" />
-		<!-- If true, two subfolders will be created with identical structure but different content. -->
 		<property name="metadataAware" value="true" />
-		<!-- Using Maven-aware properties constructor -->
-		<property name="proxiedItemPropertiesConstructor" ref="mavenItemPropertiesConstructor" />
+		<property name="metadataDirFile" value="${extFreeFSStorage.metadataDir}" />
+		<property name="storageDirFile"
+			value="${extFreeFSStorage.baseDir}" />
+		<property name="proxiedItemPropertiesFactory"
+			ref="itemPropertiesFactory" />
 	</bean>
 
 </beans>

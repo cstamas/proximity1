@@ -136,7 +136,7 @@ public class MavenProxyRepositoryLogic extends DefaultExpiringProxyingRepository
                 logger.info("Item is Maven 1/2 Snapshot, setting expires on it to " + snapshotExpirationPeriod / 1000
                         + " seconds.");
                 remoteItem.getProperties().setMetadata(DefaultExpiringProxyingRepositoryLogic.METADATA_EXPIRES,
-                        Long.toString(System.currentTimeMillis() + snapshotExpirationPeriod), false);
+                        Long.toString(System.currentTimeMillis() + snapshotExpirationPeriod));
             }
 
         } else if (MavenArtifactRecognizer.isPom(remoteItem.getProperties().getName())) {
@@ -146,7 +146,7 @@ public class MavenProxyRepositoryLogic extends DefaultExpiringProxyingRepository
                         .info("Item is Maven 2 POM, setting expires on it to " + pomExpirationPeriod / 1000
                                 + " seconds.");
                 remoteItem.getProperties().setMetadata(DefaultExpiringProxyingRepositoryLogic.METADATA_EXPIRES,
-                        Long.toString(System.currentTimeMillis() + pomExpirationPeriod), false);
+                        Long.toString(System.currentTimeMillis() + pomExpirationPeriod));
             }
 
         } else if (MavenArtifactRecognizer.isMetadata(remoteItem.getProperties().getName())) {
@@ -155,7 +155,7 @@ public class MavenProxyRepositoryLogic extends DefaultExpiringProxyingRepository
                 logger.info("Item is Maven 2 Metadata, setting expires on it to " + metadataExpirationPeriod / 1000
                         + " seconds.");
                 remoteItem.getProperties().setMetadata(DefaultExpiringProxyingRepositoryLogic.METADATA_EXPIRES,
-                        Long.toString(System.currentTimeMillis() + metadataExpirationPeriod), false);
+                        Long.toString(System.currentTimeMillis() + metadataExpirationPeriod));
             }
 
         } else {

@@ -25,10 +25,14 @@ import org.apache.commons.net.ftp.FTPFile;
  * library. It uses FTP LIST method for existence checking and FTP GET for item
  * retrieval.
  * 
+ * B R O K E N
+ * 
  * @author cstamas
  * 
  */
 public class CommonsNetFtpRemotePeer extends AbstractRemoteStorage {
+    
+    //TODO: CommonsNetFtpRemotePeer is curently BROKEN!
 
     private FTPClientConfig ftpClientConfig = new FTPClientConfig(FTPClientConfig.SYST_UNIX);
 
@@ -237,7 +241,7 @@ public class CommonsNetFtpRemotePeer extends AbstractRemoteStorage {
         } else {
             result.setSize(0);
         }
-        result.setMetadata(ItemProperties.METADATA_ORIGINATING_URL, originatingUrl.toString(), false);
+        result.setMetadata(ItemProperties.METADATA_ORIGINATING_URL, originatingUrl.toString());
         return result;
     }
 

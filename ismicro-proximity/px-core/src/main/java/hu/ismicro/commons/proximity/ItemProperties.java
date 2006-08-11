@@ -25,7 +25,11 @@ public interface ItemProperties {
 
     public static final String METADATA_ORIGINATING_URL = "item.origin";
 
-    public static final String METADATA_KIND = "kind";
+    public static final String METADATA_EXT = "item.ext";
+
+    public static final String METADATA_HASH_MD5 = "item.hash.md5";
+    
+    public static final String METADATA_HASH_SHA1 = "item.hash.sha1";
 
     public static final String METADATA_OWNING_REPOSITORY = "repository.id";
 
@@ -67,20 +71,6 @@ public interface ItemProperties {
      * @return true if file, false otherwise.
      */
     boolean isFile();
-    
-    /**
-     * Tests whether this item has remote origin.
-     * 
-     * @return true if it has remote origin.
-     */
-    boolean hasRemoteOrigin();
-
-    /**
-     * Returns the remote path (URL) of the item.
-     * 
-     * @return true if it has remote origin.
-     */
-    String getRemotePath();
 
     /**
      * Returns the filesize of the item. If it is a dir, the size equals to 0.
@@ -111,21 +101,26 @@ public interface ItemProperties {
     String getRepositoryGroupId();
 
     /**
+     * Tests whether this item has remote origin.
+     * 
+     * @return true if it has remote origin.
+     */
+    boolean hasRemoteOrigin();
+
+    /**
+     * Returns the remote path (URL) of the item.
+     * 
+     * @return true if it has remote origin.
+     */
+    String getRemotePath();
+
+    /**
      * Returns the metadata value.
      * 
      * @param key
      * @return
      */
     String getMetadata(String key);
-
-    /**
-     * Sets a metadata value.
-     * 
-     * @param key the metadata key
-     * @param value the metadata value
-     * @param indexable if true, the value will be indexed
-     */
-    void setMetadata(String key, String value, boolean indexable);
 
     /**
      * Sets a non-indexed metadata key.
@@ -136,32 +131,10 @@ public interface ItemProperties {
     void setMetadata(String key, String value);
 
     /**
-     * Is key indexable?
-     * 
-     * @param key
-     * @return true if the value for the key gets indexed.
-     */
-    boolean isMetadataIndexable(String key);
-
-    /**
      * Returns all metadata in a map.
      * 
      * @return
      */
     Map getAllMetadata();
-    
-    /**
-     * Returns all indexable metadata in map.
-     * 
-     * @return
-     */
-    Map getIndexableMetadata();
-
-    /**
-     * Returns all non-indexable metadata in map.
-     * 
-     * @return
-     */
-    Map getNonIndexableMetadata();
 
 }

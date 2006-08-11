@@ -8,6 +8,12 @@ import hu.ismicro.commons.proximity.base.StatisticsGatherer;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * The Proximity interface.
+ * 
+ * @author cstamas
+ *
+ */
 public interface Proximity {
 
     /**
@@ -45,34 +51,93 @@ public interface Proximity {
      */
     void setStatisticsGatherer(StatisticsGatherer statisticsGatherer);
 
+    /**
+     * Retrieve indexer.
+     * 
+     * @return
+     */
     Indexer getIndexer();
 
+    /**
+     * Sets indexer.
+     * 
+     * @param indexer
+     */
     void setIndexer(Indexer indexer);
 
+    /**
+     * Retrieve Proximity-level AccessManager.
+     * 
+     * @return
+     */
     AccessManager getAccessManager();
 
+    /**
+     * Sets Proximity level AccessManager.
+     * 
+     * @param accessManager
+     */
     void setAccessManager(AccessManager accessManager);
 
+    /**
+     * Sets the repositories that serves Proximity.
+     * 
+     * @param reposList list of Repositories.
+     * 
+     */
     void setRepositories(List reposList);
 
+    /**
+     * Returns the list of Repositories that serves Proximity.
+     * 
+     * @return
+     */
     List getRepositories();
     
+    /**
+     * Adds single repository to Proximity.
+     * 
+     * @param repository
+     */
     void addRepository(Repository repository);
     
+    /**
+     * Removes single repository from Proximity.
+     * 
+     * @param repoId
+     * @throws NoSuchRepositoryException
+     */
     void removeRepository(String repoId) throws NoSuchRepositoryException;
     
+    /**
+     * Returns existing Repository groups.
+     * 
+     * @return a map (String grouId, List<Repository>).
+     */
     Map getRepositoryGroups();
 
 
     /**
      * Returns the list of known groupIds configured within Proximity.
      * 
-     * @return List of known groupId.
+     * @return List of Strings, the known groupIds.
      */
     List getRepositoryGroupIds();
     
+    /**
+     * Is emerge active?
+     * 
+     * @return
+     */
     boolean isEmergeRepositoryGroups();
-    
+
+    /**
+     * Changes the way how Proximity functions. If emergingGroups, then the repository
+     * groups will appear as root of offered items. If not, all defined repositories are
+     * "flattened".
+     * 
+     * @param emergeGroups set to true if you want group emerge.
+     */
     void setEmergeRepositoryGroups(boolean emergeGroups);
     
     
@@ -146,20 +211,9 @@ public interface Proximity {
     void reindex(String repoId);
 
     /**
-     * Forces metadata recreation of repositories.
-     * 
-     */
-    void recreateMetadata();
-
-    /**
-     * Forces metadata recreation of repository.
-     * 
-     */
-    void recreateMetadata(String repoId);
-
-    /**
      * Returns the statistics (if any).
      * 
+     * @todo
      * @return
      */
     public Map getStatistics();
