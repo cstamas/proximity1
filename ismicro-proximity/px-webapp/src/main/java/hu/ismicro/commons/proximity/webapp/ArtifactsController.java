@@ -73,7 +73,7 @@ public class ArtifactsController extends MultiActionController {
         try {
             logger.debug("Got request for artifactList on URI=" + requestURI);
 
-            String searchExpr = "kind:pom";
+            String searchExpr = "m2kind:pom";
             if (targetRepository != null) {
                 searchExpr += " AND repository.id:" + targetRepository;
             }
