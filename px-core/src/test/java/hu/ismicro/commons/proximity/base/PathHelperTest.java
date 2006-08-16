@@ -1,5 +1,6 @@
 package hu.ismicro.commons.proximity.base;
 
+import hu.ismicro.commons.proximity.impl.PathHelper;
 import junit.framework.Assert;
 import junit.framework.TestCase;
 

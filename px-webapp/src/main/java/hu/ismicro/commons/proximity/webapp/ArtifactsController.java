@@ -3,7 +3,7 @@ package hu.ismicro.commons.proximity.webapp;
 import hu.ismicro.commons.proximity.AccessDeniedException;
 import hu.ismicro.commons.proximity.ItemNotFoundException;
 import hu.ismicro.commons.proximity.Proximity;
-import hu.ismicro.commons.proximity.base.ProxiedItemProperties;
+import hu.ismicro.commons.proximity.impl.ItemPropertiesImpl;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -141,7 +141,7 @@ public class ArtifactsController extends MultiActionController {
         List result = new ArrayList(artifactList.size());
         List uniqueItemList = new ArrayList(artifactList.size());
         for (Iterator i = artifactList.iterator(); i.hasNext();) {
-            ProxiedItemProperties item = (ProxiedItemProperties) i.next();
+            ItemPropertiesImpl item = (ItemPropertiesImpl) i.next();
             if (!uniqueItemList.contains(item.getMetadata(metadataKey))) {
                 uniqueItemList.add(item.getMetadata(metadataKey));
                 item.setName(item.getMetadata(metadataKey));

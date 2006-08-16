@@ -59,7 +59,7 @@
 		- Central proximity bean with list of repos and it's helpers.
 	-->
 	<bean id="proximity"
-		class="hu.ismicro.commons.proximity.base.ProximityImpl"
+		class="hu.ismicro.commons.proximity.impl.ProximityImpl"
 		init-method="initialize">
 		<property name="indexer" ref="indexer" />
 		<property name="statisticsGatherer" ref="stats" />
@@ -100,7 +100,7 @@
 		- Indexer, used to speed up searches ONLY.
 	-->
 	<bean id="indexer"
-		class="hu.ismicro.commons.proximity.base.indexer.LuceneIndexer">
+		class="hu.ismicro.commons.proximity.indexer.LuceneIndexer">
 		<!-- Where to store indexes? -->
 		<property name="indexDirectory" value="${indexer.dir}" />
 		<!-- On webapp start should i recreate Lucene indexes? -->
@@ -113,21 +113,21 @@
 		- StatisticsGatherer, gathers statistics. Simple in-memory implementation.
 	-->
 	<bean id="stats"
-		class="hu.ismicro.commons.proximity.base.SimpleStatisticsGathererImpl" />
+		class="hu.ismicro.commons.proximity.stats.SimpleStatisticsGathererImpl" />
 
 	<!--
 		- ItemPropertiesFactory, creates "extra" metadata about files.
 	-->
 	<bean id="itemPropertiesFactory"
-		class="hu.ismicro.commons.proximity.base.InspectorListProcessingProxiedItemPropertiesConstructor">
+		class="hu.ismicro.commons.proximity.metadata.InspectorListProcessingProxiedItemPropertiesFactory">
 		<property name="itemInspectorList">
 			<list>
 				<bean
 					class="hu.ismicro.commons.proximity.maven.MavenItemInspector" />
 				<bean
-					class="hu.ismicro.commons.proximity.base.inspectors.ZipFileInspector" />
+					class="hu.ismicro.commons.proximity.metadata.inspectors.ZipFileInspector" />
 				<bean
-					class="hu.ismicro.commons.proximity.base.inspectors.JarFileInspector" />
+					class="hu.ismicro.commons.proximity.metadata.inspectors.JarFileInspector" />
 			</list>
 		</property>
 	</bean>
@@ -227,7 +227,7 @@
 		- A standard maven2 repository.
 	-->
 	<bean id="central"
-		class="hu.ismicro.commons.proximity.base.RepositoryImpl">
+		class="hu.ismicro.commons.proximity.impl.RepositoryImpl">
 		<property name="id" value="central" />
 		<property name="groupId" value="public" />
 		<property name="localStorage" ref="centralFSStorage" />
@@ -252,7 +252,7 @@
 	</bean>
 
 	<bean id="centralFSStorage"
-		class="hu.ismicro.commons.proximity.base.local.WritableFileSystemStorage">
+		class="hu.ismicro.commons.proximity.storage.local.WritableFileSystemStorage">
 		<property name="metadataAware" value="true" />
 		<property name="metadataDirFile" value="${centralFSStorage.metadataDir}" />
 		<property name="storageDirFile"
@@ -262,7 +262,7 @@
 	</bean>
 
 	<bean id="centralRemotePeer"
-		class="hu.ismicro.commons.proximity.base.remote.CommonsHttpClientRemotePeer">
+		class="hu.ismicro.commons.proximity.storage.remote.CommonsHttpClientRemotePeer">
 		<property name="remoteUrl"
 			value="http://repo1.maven.org/maven2/" />
 		<!-- The timeout of HTTP connection -->
@@ -305,7 +305,7 @@
 		- A standard maven2 repository.
 	-->
 	<bean id="codehaus"
-		class="hu.ismicro.commons.proximity.base.RepositoryImpl">
+		class="hu.ismicro.commons.proximity.impl.RepositoryImpl">
 		<property name="id" value="codehaus" />
 		<property name="groupId" value="public" />
 		<property name="localStorage" ref="codehausFSStorage" />
@@ -330,7 +330,7 @@
 	</bean>
 
 	<bean id="codehausFSStorage"
-		class="hu.ismicro.commons.proximity.base.local.WritableFileSystemStorage">
+		class="hu.ismicro.commons.proximity.storage.local.WritableFileSystemStorage">
 		<property name="metadataAware" value="true" />
 		<property name="metadataDirFile" value="${codehausFSStorage.metadataDir}" />
 		<property name="storageDirFile"
@@ -340,7 +340,7 @@
 	</bean>
 
 	<bean id="codehausRemotePeer"
-		class="hu.ismicro.commons.proximity.base.remote.CommonsHttpClientRemotePeer">
+		class="hu.ismicro.commons.proximity.storage.remote.CommonsHttpClientRemotePeer">
 		<property name="remoteUrl"
 			value="http://repository.codehaus.org/" />
 		<!-- The timeout of HTTP connection -->
@@ -373,7 +373,7 @@
 		- A standard maven2 repository.
 	-->
 	<bean id="apache.snapshot"
-		class="hu.ismicro.commons.proximity.base.RepositoryImpl">
+		class="hu.ismicro.commons.proximity.impl.RepositoryImpl">
 		<property name="id" value="apache.snapshot" />
 		<property name="groupId" value="public" />
 		<property name="localStorage" ref="apache.snapshotFSStorage" />
@@ -398,7 +398,7 @@
 	</bean>
 
 	<bean id="apache.snapshotFSStorage"
-		class="hu.ismicro.commons.proximity.base.local.WritableFileSystemStorage">
+		class="hu.ismicro.commons.proximity.storage.local.WritableFileSystemStorage">
 		<property name="metadataAware" value="true" />
 		<property name="metadataDirFile" value="${apache.snapshotFSStorage.metadataDir}" />
 		<property name="storageDirFile"
@@ -408,7 +408,7 @@
 	</bean>
 
 	<bean id="apache.snapshotRemotePeer"
-		class="hu.ismicro.commons.proximity.base.remote.CommonsHttpClientRemotePeer">
+		class="hu.ismicro.commons.proximity.storage.remote.CommonsHttpClientRemotePeer">
 		<property name="remoteUrl"
 			value="http://people.apache.org/maven-snapshot-repository/" />
 		<!-- The timeout of HTTP connection -->
@@ -441,7 +441,7 @@
 		- A standard maven2 repository.
 	-->
 	<bean id="codehaus.snapshot"
-		class="hu.ismicro.commons.proximity.base.RepositoryImpl">
+		class="hu.ismicro.commons.proximity.impl.RepositoryImpl">
 		<property name="id" value="codehaus.snapshot" />
 		<property name="groupId" value="public" />
 		<property name="localStorage" ref="codehaus.snapshotFSStorage" />
@@ -467,7 +467,7 @@
 	</bean>
 
 	<bean id="codehaus.snapshotFSStorage"
-		class="hu.ismicro.commons.proximity.base.local.WritableFileSystemStorage">
+		class="hu.ismicro.commons.proximity.storage.local.WritableFileSystemStorage">
 		<property name="metadataAware" value="true" />
 		<property name="metadataDirFile" value="${codehaus.snapshotFSStorage.metadataDir}" />
 		<property name="storageDirFile"
@@ -477,7 +477,7 @@
 	</bean>
 
 	<bean id="codehaus.snapshotRemotePeer"
-		class="hu.ismicro.commons.proximity.base.remote.CommonsHttpClientRemotePeer">
+		class="hu.ismicro.commons.proximity.storage.remote.CommonsHttpClientRemotePeer">
 		<property name="remoteUrl"
 			value="http://snapshots.repository.codehaus.org/" />
 		<!-- The timeout of HTTP connection -->
@@ -510,7 +510,7 @@
 		- A maven repository for publishing in-house artifacts.
 	-->
 	<bean id="inhouse"
-		class="hu.ismicro.commons.proximity.base.RepositoryImpl">
+		class="hu.ismicro.commons.proximity.impl.RepositoryImpl">
 		<property name="id" value="inhouse" />
 		<property name="groupId" value="private" />
 		<property name="localStorage" ref="inhouseFSStorage" />
@@ -534,7 +534,7 @@
 	</bean>
 
 	<bean id="inhouseFSStorage"
-		class="hu.ismicro.commons.proximity.base.local.ReadOnlyFileSystemStorage">
+		class="hu.ismicro.commons.proximity.storage.local.ReadOnlyFileSystemStorage">
 		<property name="metadataAware" value="true" />
 		<property name="metadataDirFile" value="${inhouseFSStorage.metadataDir}" />
 		<property name="storageDirFile"
@@ -544,7 +544,7 @@
 	</bean>
 
 	<bean id="inhouse.snapshot"
-		class="hu.ismicro.commons.proximity.base.RepositoryImpl">
+		class="hu.ismicro.commons.proximity.impl.RepositoryImpl">
 		<property name="id" value="inhouse.snapshot" />
 		<property name="groupId" value="private" />
 		<property name="localStorage" ref="inhouse.snapshotFSStorage" />
@@ -568,7 +568,7 @@
 	</bean>
 
 	<bean id="inhouse.snapshotFSStorage"
-		class="hu.ismicro.commons.proximity.base.local.ReadOnlyFileSystemStorage">
+		class="hu.ismicro.commons.proximity.storage.local.ReadOnlyFileSystemStorage">
 		<property name="metadataAware" value="true" />
 		<property name="metadataDirFile" value="${inhouse.snapshotFSStorage.metadataDir}" />
 		<property name="storageDirFile"
@@ -583,7 +583,7 @@
 		- not deployed on standard maven repositories (oracle JDBC, J2EE, etc...).
 	-->
 	<bean id="extNonFree"
-		class="hu.ismicro.commons.proximity.base.RepositoryImpl">
+		class="hu.ismicro.commons.proximity.impl.RepositoryImpl">
 		<property name="id" value="extNonFree" />
 		<property name="groupId" value="ext" />
 		<property name="localStorage" ref="extNonFreeFSStorage" />
@@ -607,7 +607,7 @@
 	</bean>
 
 	<bean id="extNonFreeFSStorage"
-		class="hu.ismicro.commons.proximity.base.local.ReadOnlyFileSystemStorage">
+		class="hu.ismicro.commons.proximity.storage.local.ReadOnlyFileSystemStorage">
 		<property name="metadataAware" value="true" />
 		<property name="metadataDirFile" value="${extNonFreeFSStorage.metadataDir}" />
 		<property name="storageDirFile"
@@ -622,7 +622,7 @@
 		- not deployed on standard maven repositories (dwr, etc...).
 	-->
 	<bean id="extFree"
-		class="hu.ismicro.commons.proximity.base.RepositoryImpl">
+		class="hu.ismicro.commons.proximity.impl.RepositoryImpl">
 		<property name="id" value="extFree" />
 		<property name="groupId" value="ext" />
 		<property name="localStorage" ref="extFreeFSStorage" />
@@ -646,7 +646,7 @@
 	</bean>
 
 	<bean id="extFreeFSStorage"
-		class="hu.ismicro.commons.proximity.base.local.ReadOnlyFileSystemStorage">
+		class="hu.ismicro.commons.proximity.storage.local.ReadOnlyFileSystemStorage">
 		<property name="metadataAware" value="true" />
 		<property name="metadataDirFile" value="${extFreeFSStorage.metadataDir}" />
 		<property name="storageDirFile"

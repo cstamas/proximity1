@@ -1,7 +1,7 @@
 package hu.ismicro.commons.proximity.webapp;
 
 import hu.ismicro.commons.proximity.Proximity;
-import hu.ismicro.commons.proximity.base.ProxiedItemProperties;
+import hu.ismicro.commons.proximity.impl.ItemPropertiesImpl;
 
 import java.util.HashMap;
 import java.util.List;
@@ -33,28 +33,28 @@ public class SupportController extends MultiActionController {
 
     public ModelAndView search(HttpServletRequest request, HttpServletResponse response) throws Exception {
         logger.debug("Got request for search");
-        ProxiedItemProperties example = null;
+        ItemPropertiesImpl example = null;
         String query = null;
 
         if (RequestUtils.getStringParameter(request, "searchAllRegexp") != null) {
             
-            example = new ProxiedItemProperties();
+            example = new ItemPropertiesImpl();
             example.setName(RequestUtils.getRequiredStringParameter(request, "searchAllRegexp") + "*");
 
         } else if (RequestUtils.getStringParameter(request, "searchRepositoryRegexp") != null
                 && RequestUtils.getRequiredStringParameter(request, "searchRepositoryId") != null) {
 
-            example = new ProxiedItemProperties();
+            example = new ItemPropertiesImpl();
             example.setName(RequestUtils.getRequiredStringParameter(request, "searchRepositoryRegexp") + "*");
-            example.setMetadata(ProxiedItemProperties.METADATA_OWNING_REPOSITORY, RequestUtils
+            example.setMetadata(ItemPropertiesImpl.METADATA_OWNING_REPOSITORY, RequestUtils
                     .getRequiredStringParameter(request, "searchRepositoryId"));
 
         } else if (RequestUtils.getStringParameter(request, "searchGroupRegexp") != null
                 && RequestUtils.getRequiredStringParameter(request, "searchGroupId") != null) {
 
-            example = new ProxiedItemProperties();
+            example = new ItemPropertiesImpl();
             example.setName(RequestUtils.getRequiredStringParameter(request, "searchGroupRegexp") + "*");
-            example.setMetadata(ProxiedItemProperties.METADATA_OWNING_REPOSITORY_GROUP, RequestUtils
+            example.setMetadata(ItemPropertiesImpl.METADATA_OWNING_REPOSITORY_GROUP, RequestUtils
                     .getRequiredStringParameter(request, "searchGroupId"));
 
         } else if (RequestUtils.getStringParameter(request, "searchLQL") != null

@@ -1,9 +1,9 @@
 package hu.ismicro.commons.proximity;
 
 import hu.ismicro.commons.proximity.access.AccessManager;
-import hu.ismicro.commons.proximity.base.Indexer;
-import hu.ismicro.commons.proximity.base.ProximityLogic;
-import hu.ismicro.commons.proximity.base.StatisticsGatherer;
+import hu.ismicro.commons.proximity.indexer.Indexer;
+import hu.ismicro.commons.proximity.logic.ProximityLogic;
+import hu.ismicro.commons.proximity.stats.StatisticsGatherer;
 
 import java.util.List;
 import java.util.Map;
