@@ -1,14 +1,14 @@
 package hu.ismicro.commons.proximity;
 
 import hu.ismicro.commons.proximity.access.AccessManager;
-import hu.ismicro.commons.proximity.base.Indexer;
-import hu.ismicro.commons.proximity.base.LocalStorage;
-import hu.ismicro.commons.proximity.base.ProxiedItem;
-import hu.ismicro.commons.proximity.base.ProxiedItemProperties;
-import hu.ismicro.commons.proximity.base.RemoteStorage;
-import hu.ismicro.commons.proximity.base.RepositoryLogic;
-import hu.ismicro.commons.proximity.base.StatisticsGatherer;
-import hu.ismicro.commons.proximity.base.StorageException;
+import hu.ismicro.commons.proximity.impl.ItemImpl;
+import hu.ismicro.commons.proximity.impl.ItemPropertiesImpl;
+import hu.ismicro.commons.proximity.indexer.Indexer;
+import hu.ismicro.commons.proximity.logic.RepositoryLogic;
+import hu.ismicro.commons.proximity.stats.StatisticsGatherer;
+import hu.ismicro.commons.proximity.storage.StorageException;
+import hu.ismicro.commons.proximity.storage.local.LocalStorage;
+import hu.ismicro.commons.proximity.storage.remote.RemoteStorage;
 
 import java.util.List;
 
@@ -200,7 +200,7 @@ public interface Repository {
      * @throws ItemNotFoundException
      * @throws StorageException
      */
-    ProxiedItem retrieveItem(ProximityRequest request) throws RepositoryNotAvailableException, ItemNotFoundException,
+    ItemImpl retrieveItem(ProximityRequest request) throws RepositoryNotAvailableException, ItemNotFoundException,
             StorageException, AccessDeniedException;
 
     /**
@@ -211,7 +211,7 @@ public interface Repository {
      * @throws ItemNotFoundException
      * @throws StorageException
      */
-    ProxiedItemProperties retrieveItemProperties(ProximityRequest request) throws RepositoryNotAvailableException, ItemNotFoundException,
+    ItemPropertiesImpl retrieveItemProperties(ProximityRequest request) throws RepositoryNotAvailableException, ItemNotFoundException,
             StorageException, AccessDeniedException;
 
     /**

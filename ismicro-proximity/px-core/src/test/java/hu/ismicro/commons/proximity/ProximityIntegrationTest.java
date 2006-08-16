@@ -1,6 +1,6 @@
 package hu.ismicro.commons.proximity;
 
-import hu.ismicro.commons.proximity.base.ProxiedItemProperties;
+import hu.ismicro.commons.proximity.impl.ItemPropertiesImpl;
 
 import java.util.List;
 import java.util.Map;
@@ -73,15 +73,15 @@ public class ProximityIntegrationTest extends AbstractProximityIntegrationTest {
     }
 
     public void testSearchByExample1() throws ProximityException {
-        ProxiedItemProperties example = new ProxiedItemProperties();
+        ItemPropertiesImpl example = new ItemPropertiesImpl();
         example.setName("antlr-2.7.5.jar");
         List result = proximity.searchItem(example);
         logger.info("Got search result:" + result);
-        example = new ProxiedItemProperties();
+        example = new ItemPropertiesImpl();
         example.setName("antlr*");
         result = proximity.searchItem(example);
         logger.info("Got search result:" + result);
-        example = new ProxiedItemProperties();
+        example = new ItemPropertiesImpl();
         example.setAbsolutePath("/ismicro/jars");
         result = proximity.searchItem(example);
         logger.info("Got search result:" + result);

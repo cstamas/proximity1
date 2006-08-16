@@ -1,9 +1,9 @@
 package hu.ismicro.commons.proximity.maven;
 
 import hu.ismicro.commons.proximity.ProximityRequest;
-import hu.ismicro.commons.proximity.base.ProxiedItem;
-import hu.ismicro.commons.proximity.base.ProxiedItemProperties;
-import hu.ismicro.commons.proximity.base.logic.DefaultProximityLogic;
+import hu.ismicro.commons.proximity.impl.ItemImpl;
+import hu.ismicro.commons.proximity.impl.ItemPropertiesImpl;
+import hu.ismicro.commons.proximity.logic.DefaultProximityLogic;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -49,15 +49,15 @@ public class MavenProximityLogic extends DefaultProximityLogic {
      * 
      * @return the merged metadata.
      */
-    public ProxiedItem postprocessItemList(ProximityRequest request, List listOfProxiedItems) throws IOException {
+    public ItemImpl postprocessItemList(ProximityRequest request, List listOfProxiedItems) throws IOException {
         
         if (listOfProxiedItems.size() == 0) {
 
             throw new IllegalArgumentException("The listOfProxiedItems list cannot be 0 length!");
         }
 
-        ProxiedItem item = (ProxiedItem) listOfProxiedItems.get(0);
-        ProxiedItemProperties itemProps = (ProxiedItemProperties) item.getProperties();
+        ItemImpl item = (ItemImpl) listOfProxiedItems.get(0);
+        ItemPropertiesImpl itemProps = (ItemPropertiesImpl) item.getProperties();
 
         if (listOfProxiedItems.size() == 1) {
 
@@ -74,7 +74,7 @@ public class MavenProximityLogic extends DefaultProximityLogic {
 
         for (int i = 0; i < listOfProxiedItems.size(); i++) {
 
-            ProxiedItem currentItem = (ProxiedItem) listOfProxiedItems.get(i);
+            ItemImpl currentItem = (ItemImpl) listOfProxiedItems.get(i);
             try {
                 isr = new InputStreamReader(currentItem.getStream());
                 mergedMetadata.merge(metadataReader.read(isr));

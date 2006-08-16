@@ -3,8 +3,8 @@ package hu.ismicro.commons.proximity.maven;
 import hu.ismicro.commons.proximity.ItemProperties;
 import hu.ismicro.commons.proximity.ProximityRequest;
 import hu.ismicro.commons.proximity.Repository;
-import hu.ismicro.commons.proximity.base.ProxiedItem;
-import hu.ismicro.commons.proximity.base.logic.DefaultExpiringProxyingRepositoryLogic;
+import hu.ismicro.commons.proximity.impl.ItemImpl;
+import hu.ismicro.commons.proximity.logic.DefaultExpiringProxyingRepositoryLogic;
 
 import java.util.Date;
 
@@ -92,7 +92,7 @@ public class MavenProxyRepositoryLogic extends DefaultExpiringProxyingRepository
         return true;
     }
 
-    public ProxiedItem afterLocalCopyFound(ProxiedItem item, Repository repository) {
+    public ItemImpl afterLocalCopyFound(ItemImpl item, Repository repository) {
         // override super, should not delete even if expired!
         if (shouldServeByPolicies(item.getProperties())) {
             return item;
@@ -101,7 +101,7 @@ public class MavenProxyRepositoryLogic extends DefaultExpiringProxyingRepository
         }
     }
 
-    public boolean shouldCheckForRemoteCopy(ProximityRequest request, ProxiedItem localItem) {
+    public boolean shouldCheckForRemoteCopy(ProximityRequest request, ItemImpl localItem) {
 
         if (localItem != null) {
             if (localItem.getProperties().getMetadata(DefaultExpiringProxyingRepositoryLogic.METADATA_EXPIRES) != null) {
@@ -129,7 +129,7 @@ public class MavenProxyRepositoryLogic extends DefaultExpiringProxyingRepository
 
     }
 
-    public ProxiedItem afterRemoteCopyFound(ProxiedItem localItem, ProxiedItem remoteItem, Repository repository) {
+    public ItemImpl afterRemoteCopyFound(ItemImpl localItem, ItemImpl remoteItem, Repository repository) {
 
         if (MavenArtifactRecognizer.isSnapshot(remoteItem.getProperties().getAbsolutePath(), remoteItem.getProperties().getName())) {
             if (snapshotExpirationPeriod != NO_EXPIRATION) {

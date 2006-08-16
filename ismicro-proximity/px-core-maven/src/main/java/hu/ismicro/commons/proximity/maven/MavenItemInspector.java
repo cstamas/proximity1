@@ -1,7 +1,7 @@
 package hu.ismicro.commons.proximity.maven;
 
-import hu.ismicro.commons.proximity.base.ProxiedItemProperties;
-import hu.ismicro.commons.proximity.base.inspectors.AbstractItemInspector;
+import hu.ismicro.commons.proximity.impl.ItemPropertiesImpl;
+import hu.ismicro.commons.proximity.metadata.inspectors.AbstractItemInspector;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -36,7 +36,7 @@ public class MavenItemInspector extends AbstractItemInspector {
 
     public static final String POM_DESCRIPTION_KEY = "pom.prjDesc";
 
-    public boolean isHandled(ProxiedItemProperties ip) {
+    public boolean isHandled(ItemPropertiesImpl ip) {
         return MavenArtifactRecognizer.isPom(ip.getName()) || MavenArtifactRecognizer.isMetadata(ip.getName())
                 || MavenArtifactRecognizer.isSnapshot(ip.getAbsolutePath(), ip.getName());
     }
@@ -51,7 +51,7 @@ public class MavenItemInspector extends AbstractItemInspector {
         return result;
     }
 
-    public void processItem(ProxiedItemProperties ip, File file) {
+    public void processItem(ItemPropertiesImpl ip, File file) {
         if (MavenArtifactRecognizer.isPom(ip.getName())) {
 
             if (!MavenArtifactRecognizer.isChecksum(ip.getName())) {
