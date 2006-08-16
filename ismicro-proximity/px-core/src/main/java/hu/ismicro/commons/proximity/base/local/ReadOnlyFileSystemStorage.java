@@ -84,7 +84,7 @@ public class ReadOnlyFileSystemStorage extends AbstractLocalStorage {
     public File getStorageBaseDir() {
         return storageDirFile;
     }
-    
+
     // ===================================================================================================
     // Local Storage iface
 
@@ -101,15 +101,17 @@ public class ReadOnlyFileSystemStorage extends AbstractLocalStorage {
         return checkForExistence(getStorageBaseDir(), path);
     }
 
-    public ProxiedItem retrieveItem(String path) throws ItemNotFoundException, StorageException {
+    public ProxiedItem retrieveItem(String path, boolean propsOnly) throws ItemNotFoundException, StorageException {
         logger.debug("Retrieving {} from storage directory {}", path, getStorageBaseDir());
         try {
             ProxiedItemProperties properties = loadItemProperties(path);
             ProxiedItem result = new ProxiedItem();
             result.setProperties(properties);
-            File target = new File(getStorageBaseDir(), path);
-            if (result.getProperties().isFile()) {
-                result.setStream(new FileInputStream(target));
+            if (!propsOnly) {
+                File target = new File(getStorageBaseDir(), path);
+                if (result.getProperties().isFile()) {
+                    result.setStream(new FileInputStream(target));
+                }
             }
             return result;
         } catch (FileNotFoundException ex) {
@@ -126,8 +128,7 @@ public class ReadOnlyFileSystemStorage extends AbstractLocalStorage {
             if (target.isDirectory()) {
                 File[] files = target.listFiles();
                 for (int i = 0; i < files.length; i++) {
-                    ProxiedItemProperties item = loadItemProperties(PathHelper.concatPaths(path,
-                            files[i].getName()));
+                    ProxiedItemProperties item = loadItemProperties(PathHelper.concatPaths(path, files[i].getName()));
                     result.add(item);
                 }
             } else {
@@ -149,9 +150,10 @@ public class ReadOnlyFileSystemStorage extends AbstractLocalStorage {
                     + " directory, is storage on Network volume? Ignoring error...", ex);
         }
 
-        // the fact that we deleted all metadata will cause to be recreated by loadMD,
+        // the fact that we deleted all metadata will cause to be recreated by
+        // loadMD,
         // so we now just make a recursive listing?
-        
+
         int processed = 0;
         Stack stack = new Stack();
         List dir = listItems(PathHelper.PATH_SEPARATOR);

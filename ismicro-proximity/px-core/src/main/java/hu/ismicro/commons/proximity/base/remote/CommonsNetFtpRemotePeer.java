@@ -8,7 +8,6 @@ import hu.ismicro.commons.proximity.base.ProxiedItemProperties;
 import hu.ismicro.commons.proximity.base.StorageException;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -158,7 +157,7 @@ public class CommonsNetFtpRemotePeer extends AbstractRemoteStorage {
         }
     }
 
-    public ProxiedItem retrieveItem(String path) throws ItemNotFoundException, StorageException {
+    public ProxiedItem retrieveItem(String path, boolean propsOnly) throws ItemNotFoundException, StorageException {
         String originatingUrlString = getAbsoluteUrl(path);
         FTPClient client = null;
         try {
@@ -179,7 +178,7 @@ public class CommonsNetFtpRemotePeer extends AbstractRemoteStorage {
                             client.retrieveFile(PathHelper.getFileName(path), fos);
                             fos.flush();
                             fos.close();
-                            InputStream is = new FileInputStream(tmpFile);
+                            InputStream is = new DeleteOnCloseFileInputStream(tmpFile);
                             result.setStream(is);
                         } else {
                             result.setStream(null);

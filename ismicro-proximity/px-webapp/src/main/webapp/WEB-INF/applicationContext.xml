@@ -124,6 +124,10 @@
 			<list>
 				<bean
 					class="hu.ismicro.commons.proximity.maven.MavenItemInspector" />
+				<bean
+					class="hu.ismicro.commons.proximity.base.inspectors.ZipFileInspector" />
+				<bean
+					class="hu.ismicro.commons.proximity.base.inspectors.JarFileInspector" />
 			</list>
 		</property>
 	</bean>

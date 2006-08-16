@@ -35,6 +35,10 @@ public interface ItemProperties {
 
     public static final String METADATA_OWNING_REPOSITORY_GROUP = "repository.groupId";
 
+    public static final String METADATA_SCANNED = "item.scanned";
+    
+    public static final String METADATA_SCANNED_EXT = "item.scanned.ext";
+    
     /**
      * Returns the absolute path of the item. Using this path appended with
      * getName() will fetch the Item represented by this properties.
@@ -85,6 +89,21 @@ public interface ItemProperties {
      * @return the last modification date.
      */
     Date getLastModified();
+
+    /**
+     * The date when item was last scanned for default properties.
+     * 
+     * @return
+     */
+    Date getLastScanned();
+    
+    /**
+     * The date whan item was last checksummed and scanned for any extra
+     * properties.
+     * 
+     * @return
+     */
+    Date getLastScannedExt();
 
     /**
      * Returns the id of the source repository.

@@ -169,7 +169,7 @@ public class ProximityImpl implements Proximity {
             throw new NoSuchRepositoryException(repoId);
         }
     }
-    
+
     public Map getRepositoryGroups() {
         return repositoryGroups;
     }
@@ -358,9 +358,8 @@ public class ProximityImpl implements Proximity {
     public List searchItem(ItemProperties example) {
         logger.debug("Got searchItem with example " + example);
         if (getIndexer() != null) {
-            List result = getIndexer().searchByItemPropertiesExample(example);
-            mangleItemPathsForEmergeGroups(result);
-            return result;
+            List idxresult = getIndexer().searchByItemPropertiesExample(example);
+            return postprocessSearchResult(idxresult);
         } else {
             logger.info("No indexer defined, but search request came in. Returning empty results.");
             return new ArrayList();
@@ -370,9 +369,8 @@ public class ProximityImpl implements Proximity {
     public List searchItem(String query) throws IndexerException {
         logger.debug("Got searchItem with query " + query);
         if (getIndexer() != null) {
-            List result = getIndexer().searchByQuery(query);
-            mangleItemPathsForEmergeGroups(result);
-            return result;
+            List idxresult = getIndexer().searchByQuery(query);
+            return postprocessSearchResult(idxresult);
         } else {
             logger.info("No indexer defined, but search request came in. Returning empty results.");
             return new ArrayList();
@@ -442,6 +440,33 @@ public class ProximityImpl implements Proximity {
 
         return item;
 
+    }
+
+    protected List postprocessSearchResult(List idxresult) {
+        List result = new ArrayList(idxresult.size());
+        if (idxresult.size() > 0) {
+            ItemProperties ip = null;
+            ProximityRequest rq = new ProximityRequest();
+            for (Iterator i = idxresult.iterator(); i.hasNext();) {
+                ip = (ItemProperties) i.next();
+                rq.setPath(ip.getPath());
+                rq.setTargetedReposId(ip.getRepositoryId());
+                Repository repo = (Repository) repositories.get(ip.getRepositoryId());
+                try {
+                    result.add(repo.retrieveItemProperties(rq));
+                } catch (AccessDeniedException ex) {
+                    logger.debug("Access denied on repo {} for path [{}], ignoring it.", ip.getRepositoryId(), ip
+                            .getPath());
+                } catch (RepositoryNotAvailableException ex) {
+                    logger.debug("Repo {} not available, ignoring it.", ip.getRepositoryId());
+                } catch (ItemNotFoundException ex) {
+                    logger.debug("ItemNotFound on repo {} for path [{}], ignoring it. Maybe repo needs a reindex?", ip
+                            .getRepositoryId(), ip.getPath());
+                }
+            }
+            mangleItemPathsForEmergeGroups(result);
+        }
+        return result;
     }
 
     protected ProxiedItem retrieveItemByAbsoluteOrder(ProximityRequest request) throws ItemNotFoundException,
