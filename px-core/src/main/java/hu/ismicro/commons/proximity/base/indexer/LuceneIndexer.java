@@ -9,14 +9,11 @@ import hu.ismicro.commons.proximity.base.StorageException;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.analysis.KeywordAnalyzer;
+import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.index.IndexReader;
@@ -36,6 +33,12 @@ import org.apache.lucene.store.FSDirectory;
 
 public class LuceneIndexer extends AbstractIndexer {
 
+    public static String DOC_PATH = "_path";
+
+    public static String DOC_NAME = "_name";
+
+    public static String DOC_REPO = "_repo";
+
     private boolean recreateIndexes = true;
 
     private int dirtyItemTreshold = 100;
@@ -44,7 +47,7 @@ public class LuceneIndexer extends AbstractIndexer {
 
     private Directory indexDirectory;
 
-    private Analyzer analyzer = new KeywordAnalyzer();
+    private Analyzer analyzer = new StandardAnalyzer();
 
     public boolean isRecreateIndexes() {
         return recreateIndexes;
@@ -63,6 +66,10 @@ public class LuceneIndexer extends AbstractIndexer {
     }
 
     protected void doInitialize() {
+        List kws = getSearchableKeywords();
+        kws.add(DOC_PATH);
+        kws.add(DOC_NAME);
+        kws.add(DOC_REPO);
         try {
             if (recreateIndexes) {
                 logger.info("Recreating indexes as instructed by recreateIndexes parameter.");
@@ -96,40 +103,37 @@ public class LuceneIndexer extends AbstractIndexer {
         this.indexDirectory = FSDirectory.getDirectory(pathFile, false);
     }
 
-    public synchronized void addItemProperties(String UID, ItemProperties item) throws StorageException {
+    public synchronized void addItemProperties(ItemProperties item) throws StorageException {
         logger.debug("Adding item to index");
         try {
             // prevent duplication on idx
             IndexReader reader = IndexReader.open(indexDirectory);
-            int deleted = reader.deleteDocuments(new Term("UID", UID));
+            int deleted = reader.deleteDocuments(new Term("UID", getItemUid(item)));
             dirtyItems = dirtyItems + deleted;
             reader.close();
             IndexWriter writer = new IndexWriter(indexDirectory, analyzer, false);
-            addItemToIndex(writer, UID, item);
+            addItemToIndex(writer, getItemUid(item), item);
             writer.close();
         } catch (IOException ex) {
             throw new StorageException("Got IOException during addition.", ex);
         }
     }
 
-    public synchronized void addItemProperties(Map uidWithItems) throws StorageException {
+    public synchronized void addItemProperties(List items) throws StorageException {
         logger.debug("Adding batch items to index");
         try {
             IndexReader reader = IndexReader.open(indexDirectory);
-            String UID = null;
-            ItemProperties item = null;
-            for (Iterator i = uidWithItems.keySet().iterator(); i.hasNext();) {
-                UID = (String) i.next();
+            for (Iterator i = items.iterator(); i.hasNext();) {
+                ItemProperties ip = (ItemProperties) i.next();
                 // prevent duplication on idx
-                int deleted = reader.deleteDocuments(new Term("UID", UID));
+                int deleted = reader.deleteDocuments(new Term("UID", getItemUid(ip)));
                 dirtyItems = dirtyItems + deleted;
             }
             reader.close();
             IndexWriter writer = new IndexWriter(indexDirectory, analyzer, false);
-            for (Iterator i = uidWithItems.keySet().iterator(); i.hasNext();) {
-                UID = (String) i.next();
-                item = (ItemProperties) uidWithItems.get(UID);
-                addItemToIndex(writer, UID, item);
+            for (Iterator i = items.iterator(); i.hasNext();) {
+                ItemProperties ip = (ItemProperties) i.next();
+                addItemToIndex(writer, getItemUid(ip), ip);
             }
             // forcing optimize after a batch addition
             writer.optimize();
@@ -140,14 +144,13 @@ public class LuceneIndexer extends AbstractIndexer {
         }
     }
 
-    public synchronized void deleteItemProperties(String UID, ItemProperties ip) throws ItemNotFoundException,
-            StorageException {
+    public synchronized void deleteItemProperties(ItemProperties ip) throws ItemNotFoundException, StorageException {
         logger.debug("Deleting item from index");
         try {
             IndexReader reader = IndexReader.open(indexDirectory);
-            int deleted = reader.deleteDocuments(new Term("UID", UID));
+            int deleted = reader.deleteDocuments(new Term("UID", getItemUid(ip)));
             reader.close();
-            logger.info("Deleted {} items from index for UID={}", Integer.toString(deleted), UID);
+            logger.info("Deleted {} items from index for UID={}", Integer.toString(deleted), getItemUid(ip));
             dirtyItems = dirtyItems + deleted;
 
             if (dirtyItems > dirtyItemTreshold) {
@@ -188,15 +191,25 @@ public class LuceneIndexer extends AbstractIndexer {
         }
     }
 
+    protected String getItemUid(ItemProperties ip) {
+        return ip.getRepositoryId() + ":" + ip.getPath();
+    }
+
     protected Document itemProperties2Document(ItemProperties item) {
         Document result = new Document();
         String key;
         String md;
-        for (Iterator i = getSearchableKeywords().iterator(); i.hasNext(); ) {
+        result.add(new Field(DOC_PATH, item.getAbsolutePath(), Field.Store.YES,
+                Field.Index.UN_TOKENIZED));
+        result.add(new Field(DOC_NAME, item.getName(), Field.Store.YES, Field.Index.UN_TOKENIZED));
+        result.add(new Field(DOC_REPO, item.getRepositoryId(), Field.Store.YES,
+                Field.Index.UN_TOKENIZED));
+        // index all other stuff
+        for (Iterator i = getSearchableKeywords().iterator(); i.hasNext();) {
             key = (String) i.next();
             md = item.getMetadata(key);
             if (md != null) {
-                result.add(new Field(key, item.getMetadata(key), Field.Store.YES, Field.Index.UN_TOKENIZED));
+                result.add(new Field(key, item.getMetadata(key), Field.Store.NO, Field.Index.TOKENIZED));
             }
         }
         return postProcessDocument(item, result);
@@ -225,13 +238,10 @@ public class LuceneIndexer extends AbstractIndexer {
             List result = new ArrayList(hits.length());
             for (int i = 0; i < hits.length(); i++) {
                 ProxiedItemProperties rip = new ProxiedItemProperties();
-                Map props = new HashMap();
                 Document doc = hits.doc(i);
-                for (Enumeration fields = doc.fields(); fields.hasMoreElements();) {
-                    Field field = (Field) fields.nextElement();
-                    props.put(field.name(), field.stringValue());
-                }
-                rip.getAllMetadata().putAll(props);
+                rip.setAbsolutePath(doc.getField(DOC_PATH).stringValue());
+                rip.setName(doc.getField(DOC_NAME).stringValue());
+                rip.setRepositoryId(doc.getField(DOC_REPO).stringValue());
                 result.add(rip);
             }
             searcher.close();

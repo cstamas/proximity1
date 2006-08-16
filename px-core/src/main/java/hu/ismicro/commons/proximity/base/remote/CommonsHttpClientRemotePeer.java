@@ -8,7 +8,6 @@ import hu.ismicro.commons.proximity.base.ProxiedItemProperties;
 import hu.ismicro.commons.proximity.base.StorageException;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -163,7 +162,8 @@ public class CommonsHttpClientRemotePeer extends AbstractRemoteStorage {
         return response == HttpStatus.SC_OK;
     }
 
-    public ProxiedItem retrieveItem(String path) throws ItemNotFoundException, StorageException {
+    public ProxiedItem retrieveItem(String path, boolean propsOnly) throws ItemNotFoundException, StorageException {
+        // TODO: propsOnly is ignored, use HTTP HEAD?
         String originatingUrlString = getAbsoluteUrl(path);
         GetMethod get = new GetMethod(originatingUrlString);
         try {
@@ -187,7 +187,7 @@ public class CommonsHttpClientRemotePeer extends AbstractRemoteStorage {
                         fos.close();
                         tmpFile.setLastModified(makeDateFromHeader(get.getResponseHeader("last-modified")));
                         ip = getProxiedItemPropertiesFactory().expandItemProperties(path, tmpFile, true);
-                        InputStream is = new FileInputStream(tmpFile);
+                        InputStream is = new DeleteOnCloseFileInputStream(tmpFile);
                         result.setStream(is);
                     } else {
                         result.setStream(null);

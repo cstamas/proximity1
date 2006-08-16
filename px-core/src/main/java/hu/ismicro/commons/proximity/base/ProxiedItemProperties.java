@@ -2,6 +2,9 @@ package hu.ismicro.commons.proximity.base;
 
 import hu.ismicro.commons.proximity.ItemProperties;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -9,6 +12,8 @@ import java.util.Map;
 public class ProxiedItemProperties implements ItemProperties {
 
     private Map metadataMap;
+
+    private DateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss Z");
 
     public String getAbsolutePath() {
         return getMetadata(METADATA_ABSOLUTE_PATH);
@@ -66,13 +71,55 @@ public class ProxiedItemProperties implements ItemProperties {
         if (lmstr == null) {
             return null;
         } else {
-            return new Date(Long.parseLong(lmstr));
+            try {
+                return dateFormat.parse(lmstr);
+            } catch (ParseException ex) {
+                return null;
+            }
         }
     }
 
     public void setLastModified(Date lastModified) {
         if (lastModified != null) {
-            setMetadata(METADATA_LAST_MODIFIED, Long.toString(lastModified.getTime()));
+            setMetadata(METADATA_LAST_MODIFIED, dateFormat.format(lastModified));
+        }
+    }
+
+    public Date getLastScanned() {
+        String lmstr = getMetadata(METADATA_SCANNED);
+        if (lmstr == null) {
+            return null;
+        } else {
+            try {
+                return dateFormat.parse(lmstr);
+            } catch (ParseException ex) {
+                return null;
+            }
+        }
+    }
+
+    public void setLastScanned(Date lastScanned) {
+        if (lastScanned != null) {
+            setMetadata(METADATA_SCANNED, dateFormat.format(lastScanned));
+        }
+    }
+
+    public Date getLastScannedExt() {
+        String lmstr = getMetadata(METADATA_SCANNED_EXT);
+        if (lmstr == null) {
+            return null;
+        } else {
+            try {
+                return dateFormat.parse(lmstr);
+            } catch (ParseException ex) {
+                return null;
+            }
+        }
+    }
+
+    public void setLastScannedExt(Date lastScanned) {
+        if (lastScanned != null) {
+            setMetadata(METADATA_SCANNED_EXT, dateFormat.format(lastScanned));
         }
     }
 

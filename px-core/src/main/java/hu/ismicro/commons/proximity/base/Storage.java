@@ -12,7 +12,7 @@ public interface Storage {
 
     boolean containsItem(String path) throws StorageException;
 
-    ProxiedItem retrieveItem(String path) throws ItemNotFoundException, StorageException;
+    ProxiedItem retrieveItem(String path, boolean propsOnly) throws ItemNotFoundException, StorageException;
 
     ProxiedItemPropertiesFactory getProxiedItemPropertiesFactory();
 

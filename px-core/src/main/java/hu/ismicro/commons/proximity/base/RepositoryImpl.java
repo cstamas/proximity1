@@ -167,7 +167,16 @@ public class RepositoryImpl implements Repository {
             throw new RepositoryNotAvailableException("The repository " + getId() + " is NOT available!");
         }
         accessManager.decide(request, null);
-        return retrieveItemController(request);
+        return retrieveItemController(request, false);
+    }
+
+    public ProxiedItemProperties retrieveItemProperties(ProximityRequest request) throws RepositoryNotAvailableException,
+            ItemNotFoundException, StorageException, AccessDeniedException {
+        if (!isAvailable()) {
+            throw new RepositoryNotAvailableException("The repository " + getId() + " is NOT available!");
+        }
+        accessManager.decide(request, null);
+        return (ProxiedItemProperties) retrieveItemController(request, true).getProperties();
     }
 
     public void deleteItem(String path) throws RepositoryNotAvailableException, StorageException {
@@ -177,8 +186,10 @@ public class RepositoryImpl implements Repository {
         if (getLocalStorage() != null) {
             if (getIndexer() != null) {
                 try {
-                    ItemProperties itemProps = getLocalStorage().retrieveItem(path).getProperties();
-                    getIndexer().deleteItemProperties(getItemUid(itemProps), itemProps);
+                    ItemProperties itemProps = getLocalStorage().retrieveItem(path, true).getProperties();
+                    itemProps.setMetadata(ItemProperties.METADATA_OWNING_REPOSITORY, getId());
+                    itemProps.setMetadata(ItemProperties.METADATA_OWNING_REPOSITORY_GROUP, getGroupId());
+                    getIndexer().deleteItemProperties(itemProps);
                     getLocalStorage().deleteItem(path);
                 } catch (ItemNotFoundException ex) {
                     logger.info("Path [{}] not found but deletion requested.", path, ex);
@@ -194,9 +205,11 @@ public class RepositoryImpl implements Repository {
             throw new RepositoryNotAvailableException("The repository " + getId() + " is NOT available!");
         }
         if (getLocalStorage() != null && getLocalStorage().isWritable()) {
+            item.getProperties().setMetadata(ItemProperties.METADATA_OWNING_REPOSITORY, getId());
+            item.getProperties().setMetadata(ItemProperties.METADATA_OWNING_REPOSITORY_GROUP, getGroupId());
             getLocalStorage().storeItem(item);
             if (getIndexer() != null && getRepositoryLogic().shouldIndex(item.getProperties())) {
-                getIndexer().addItemProperties(getItemUid(item.getProperties()), item.getProperties());
+                getIndexer().addItemProperties(item.getProperties());
             }
         } else {
             throw new UnsupportedOperationException("The repository " + getId() + " have no local storage!");
@@ -242,7 +255,7 @@ public class RepositoryImpl implements Repository {
     // ---------------------------------------------------------------------------------
     // Protected
 
-    protected ProxiedItem retrieveItemController(ProximityRequest request) throws RepositoryNotAvailableException,
+    protected ProxiedItem retrieveItemController(ProximityRequest request, boolean propsOnly) throws RepositoryNotAvailableException,
             ItemNotFoundException, StorageException {
         ProxiedItem localResult = null;
         ProxiedItem remoteResult = null;
@@ -256,7 +269,7 @@ public class RepositoryImpl implements Repository {
                 if (getRepositoryLogic().shouldCheckForLocalCopy(request)) {
                     if (getLocalStorage().containsItem(request.getPath())) {
                         logger.debug("Found [{}] item in local storage of repository {}", request.getPath(), getId());
-                        localResult = getLocalStorage().retrieveItem(request.getPath());
+                        localResult = getLocalStorage().retrieveItem(request.getPath(), propsOnly);
                         localResult.getProperties().setMetadata(ItemProperties.METADATA_OWNING_REPOSITORY, getId());
                         localResult.getProperties().setMetadata(ItemProperties.METADATA_OWNING_REPOSITORY_GROUP,
                                 getGroupId());
@@ -273,7 +286,7 @@ public class RepositoryImpl implements Repository {
                     && getRemoteStorage() != null) {
                 if (getRemoteStorage().containsItem(request.getPath())) {
                     logger.debug("Found [{}] item in remote storage of repository {}", request.getPath(), getId());
-                    remoteResult = getRemoteStorage().retrieveItem(request.getPath());
+                    remoteResult = getRemoteStorage().retrieveItem(request.getPath(), propsOnly);
                     remoteResult.getProperties().setMetadata(ItemProperties.METADATA_OWNING_REPOSITORY, getId());
                     remoteResult.getProperties().setMetadata(ItemProperties.METADATA_OWNING_REPOSITORY_GROUP,
                             getGroupId());
@@ -284,10 +297,10 @@ public class RepositoryImpl implements Repository {
                     if (remoteResult != null && !remoteResult.getProperties().isDirectory()
                             && getLocalStorage().isWritable()) {
                         if (getRepositoryLogic().shouldStoreLocallyAfterRemoteRetrieval(localResult, remoteResult)) {
-                            logger.debug("Storing [{}] item in writable storage of repository {}",
-                                    request.getPath(), getId());
+                            logger.debug("Storing [{}] item in writable storage of repository {}", request.getPath(),
+                                    getId());
                             storeItem(remoteResult);
-                            remoteResult = getLocalStorage().retrieveItem(request.getPath());
+                            remoteResult = getLocalStorage().retrieveItem(request.getPath(), propsOnly);
                         }
                     }
                 } else {
@@ -308,10 +321,6 @@ public class RepositoryImpl implements Repository {
         } catch (ItemNotFoundException ex) {
             throw new ItemNotFoundException(request.getPath(), getId());
         }
-    }
-
-    protected String getItemUid(ItemProperties ip) {
-        return getId() + ":" + PathHelper.concatPaths(ip.getAbsolutePath(), ip.getName());
     }
 
     /**
@@ -338,7 +347,7 @@ public class RepositoryImpl implements Repository {
         int indexed = 0;
         Stack stack = new Stack();
         List dir = getLocalStorage().listItems(PathHelper.PATH_SEPARATOR);
-        Map batch = new HashMap();
+        List batch = new ArrayList();
         stack.push(dir);
         while (!stack.isEmpty()) {
             dir = (List) stack.pop();
@@ -346,9 +355,10 @@ public class RepositoryImpl implements Repository {
                 ItemProperties ip = (ItemProperties) i.next();
                 ip.setMetadata(ItemProperties.METADATA_OWNING_REPOSITORY, getId());
                 ip.setMetadata(ItemProperties.METADATA_OWNING_REPOSITORY_GROUP, getGroupId());
-                // Who is interested in origin from index? 
+                // Who is interested in origin from index?
                 // if (getRemoteStorage() != null) {
-                // ip.setMetadata(ItemProperties.METADATA_ORIGINATING_URL, getRemoteStorage().getAbsoluteUrl(
+                // ip.setMetadata(ItemProperties.METADATA_ORIGINATING_URL,
+                // getRemoteStorage().getAbsoluteUrl(
                 // ip.getPath()), false);
                 // }
                 if (ip.isDirectory()) {
@@ -358,7 +368,7 @@ public class RepositoryImpl implements Repository {
                 } else {
                     // TODO: possible memory problem here with large
                     // repositories!
-                    batch.put(getItemUid(ip), ip);
+                    batch.add(ip);
                     indexed++;
                 }
             }

@@ -31,7 +31,7 @@ public class InspectorListProcessingProxiedItemPropertiesConstructor extends Abs
                 try {
                     inspector.processItem(ip, file);
                 } catch (Exception ex) {
-                    logger.error("Inspector {} throw exception:", inspector, ex);
+                    logger.error("Inspector {} throw exception: {}", inspector, ex);
                 }
             }
         }

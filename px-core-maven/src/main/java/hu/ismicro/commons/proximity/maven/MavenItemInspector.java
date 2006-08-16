@@ -1,7 +1,7 @@
 package hu.ismicro.commons.proximity.maven;
 
-import hu.ismicro.commons.proximity.base.ItemInspector;
 import hu.ismicro.commons.proximity.base.ProxiedItemProperties;
+import hu.ismicro.commons.proximity.base.inspectors.AbstractItemInspector;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -13,12 +13,8 @@ import java.util.List;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-public class MavenItemInspector implements ItemInspector {
-
-    protected Logger logger = LoggerFactory.getLogger(this.getClass());
+public class MavenItemInspector extends AbstractItemInspector {
 
     public static final String M2KIND = "m2kind";
 

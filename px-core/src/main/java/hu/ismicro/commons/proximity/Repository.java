@@ -4,6 +4,7 @@ import hu.ismicro.commons.proximity.access.AccessManager;
 import hu.ismicro.commons.proximity.base.Indexer;
 import hu.ismicro.commons.proximity.base.LocalStorage;
 import hu.ismicro.commons.proximity.base.ProxiedItem;
+import hu.ismicro.commons.proximity.base.ProxiedItemProperties;
 import hu.ismicro.commons.proximity.base.RemoteStorage;
 import hu.ismicro.commons.proximity.base.RepositoryLogic;
 import hu.ismicro.commons.proximity.base.StatisticsGatherer;
@@ -194,12 +195,23 @@ public interface Repository {
     /**
      * Retrieves item with content from the path.
      * 
-     * @param path
+     * @param request
      * @return
      * @throws ItemNotFoundException
      * @throws StorageException
      */
     ProxiedItem retrieveItem(ProximityRequest request) throws RepositoryNotAvailableException, ItemNotFoundException,
+            StorageException, AccessDeniedException;
+
+    /**
+     * Retrieves item properties (without content) from the path.
+     * 
+     * @param request
+     * @return
+     * @throws ItemNotFoundException
+     * @throws StorageException
+     */
+    ProxiedItemProperties retrieveItemProperties(ProximityRequest request) throws RepositoryNotAvailableException, ItemNotFoundException,
             StorageException, AccessDeniedException;
 
     /**
