@@ -1,6 +1,6 @@
 package hu.ismicro.commons.proximity.storage.remote;
 
-import hu.ismicro.commons.proximity.impl.PathHelper;
+import hu.ismicro.commons.proximity.ItemProperties;
 import hu.ismicro.commons.proximity.storage.AbstractStorage;
 
 import java.net.MalformedURLException;
@@ -30,7 +30,12 @@ public abstract class AbstractRemoteStorage extends AbstractStorage implements R
     }
 
     public String getAbsoluteUrl(String path) {
-        return PathHelper.concatPaths(getRemoteUrlAsString(), path);
+        String urlstr = getRemoteUrlAsString();
+        if (urlstr.endsWith(ItemProperties.PATH_SEPARATOR)) {
+            return urlstr + path;
+        } else {
+            return urlstr + ItemProperties.PATH_SEPARATOR + path;
+        }
     }
 
     protected String getRemoteUrlAsString() {

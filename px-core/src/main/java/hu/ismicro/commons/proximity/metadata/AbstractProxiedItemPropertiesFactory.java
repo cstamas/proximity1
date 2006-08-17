@@ -2,7 +2,6 @@ package hu.ismicro.commons.proximity.metadata;
 
 import hu.ismicro.commons.proximity.ItemProperties;
 import hu.ismicro.commons.proximity.impl.ItemPropertiesImpl;
-import hu.ismicro.commons.proximity.impl.PathHelper;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -79,7 +78,7 @@ public abstract class AbstractProxiedItemPropertiesFactory implements ProxiedIte
     }
 
     protected final void expandDefaultItemProperties(String path, ItemPropertiesImpl ip, File file) {
-        ip.setAbsolutePath(PathHelper.getDirName(path));
+        ip.setAbsolutePath(FilenameUtils.getPath(path));
         ip.setName(file.getName());
         ip.setDirectory(file.isDirectory());
         ip.setFile(file.isFile());

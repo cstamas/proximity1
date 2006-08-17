@@ -25,6 +25,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -192,7 +193,7 @@ public class ProximityImpl implements Proximity {
 
             ItemImpl item = null;
             ItemPropertiesImpl itemProps = null;
-            List pathList = PathHelper.explodePathToList(request.getPath());
+            List pathList = explodePathToList(request.getPath());
 
             if (pathList.size() >= 1) {
 
@@ -202,7 +203,7 @@ public class ProximityImpl implements Proximity {
 
                 // remove prefix, set it as groupid and go
                 if (pathList.size() == 1) {
-                    mangledRequest.setPath(PathHelper.PATH_SEPARATOR);
+                    mangledRequest.setPath(ItemProperties.PATH_ROOT);
                 } else {
                     mangledRequest.setPath(request.getPath().substring(groupId.length() + 1));
                 }
@@ -218,7 +219,7 @@ public class ProximityImpl implements Proximity {
                 // Prepare as root is a dir
                 item = new ItemImpl();
                 itemProps = new ItemPropertiesImpl();
-                itemProps.setAbsolutePath(PathHelper.PATH_SEPARATOR);
+                itemProps.setAbsolutePath(ItemProperties.PATH_ROOT);
                 itemProps.setDirectory(true);
                 itemProps.setFile(false);
                 itemProps.setName("");
@@ -238,7 +239,7 @@ public class ProximityImpl implements Proximity {
         accessManager.decide(request, null);
 
         List response = new ArrayList();
-        List pathList = PathHelper.explodePathToList(request.getPath());
+        List pathList = explodePathToList(request.getPath());
         String groupId = null;
 
         if (isEmergeRepositoryGroups()) {
@@ -246,7 +247,7 @@ public class ProximityImpl implements Proximity {
                 groupId = (String) pathList.get(0);
 
                 if (pathList.size() == 1) {
-                    request.setPath(PathHelper.PATH_SEPARATOR);
+                    request.setPath(ItemProperties.PATH_ROOT);
                 } else {
                     request.setPath(request.getPath().substring(groupId.length() + 1));
                 }
@@ -259,7 +260,7 @@ public class ProximityImpl implements Proximity {
                     if (getRepositoryGroupIds().contains(request.getTargetedReposGroupId())) {
                         ItemPropertiesImpl itemProps = null;
                         itemProps = new ItemPropertiesImpl();
-                        itemProps.setAbsolutePath(PathHelper.PATH_SEPARATOR);
+                        itemProps.setAbsolutePath(ItemProperties.PATH_ROOT);
                         itemProps.setDirectory(true);
                         itemProps.setFile(false);
                         itemProps.setName(request.getTargetedReposGroupId());
@@ -280,7 +281,7 @@ public class ProximityImpl implements Proximity {
                         logger.debug("Adding response with " + groupId + " as directory.");
 
                         itemProps = new ItemPropertiesImpl();
-                        itemProps.setAbsolutePath(PathHelper.PATH_SEPARATOR);
+                        itemProps.setAbsolutePath(ItemProperties.PATH_ROOT);
                         itemProps.setDirectory(true);
                         itemProps.setFile(false);
                         itemProps.setName(groupId);
@@ -531,16 +532,28 @@ public class ProximityImpl implements Proximity {
         if (isEmergeRepositoryGroups()) {
             for (Iterator i = items.iterator(); i.hasNext();) {
                 ItemPropertiesImpl ip = (ItemPropertiesImpl) i.next();
-                if (ip.getAbsolutePath().equals(PathHelper.PATH_SEPARATOR)) {
+                if (ip.getAbsolutePath().equals(ItemProperties.PATH_ROOT)) {
                     // make /groupId as path
-                    ip.setAbsolutePath(PathHelper.PATH_SEPARATOR + ip.getRepositoryGroupId());
+                    ip.setAbsolutePath(ItemProperties.PATH_ROOT + ip.getRepositoryGroupId());
                 } else {
                     // make /groupId/... as path WITHOUT trailing /
-                    ip.setAbsolutePath(PathHelper.concatPaths(PathHelper.PATH_SEPARATOR + ip.getRepositoryGroupId(), ip
+                    ip.setAbsolutePath(FilenameUtils.concat(ItemProperties.PATH_ROOT + ip.getRepositoryGroupId(), ip
                             .getAbsolutePath()));
                 }
             }
         }
     }
+    
+    protected List explodePathToList(String path) {
+        List result = new ArrayList();
+        String[] explodedPath = path.split(ItemProperties.PATH_SEPARATOR);
+        for (int i = 0; i < explodedPath.length; i++) {
+            if (explodedPath[i].length() > 0) {
+                result.add(explodedPath[i]);
+            }
+        }
+        return result;
+    }
+
 
 }

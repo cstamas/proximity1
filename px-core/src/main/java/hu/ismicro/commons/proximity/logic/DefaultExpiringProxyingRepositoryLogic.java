@@ -3,7 +3,6 @@ package hu.ismicro.commons.proximity.logic;
 import hu.ismicro.commons.proximity.Repository;
 import hu.ismicro.commons.proximity.RepositoryNotAvailableException;
 import hu.ismicro.commons.proximity.impl.ItemImpl;
-import hu.ismicro.commons.proximity.impl.PathHelper;
 
 import java.util.Date;
 
@@ -43,8 +42,7 @@ public class DefaultExpiringProxyingRepositoryLogic extends DefaultProxyingRepos
             if (expires.before(new Date(System.currentTimeMillis()))) {
                 logger.info("Item has expired on " + expires + ", DELETING it.");
                 try {
-                    repository.deleteItem(PathHelper.walkThePath(item.getProperties().getAbsolutePath(), item
-                            .getProperties().getName()));
+                    repository.deleteItem(item.getProperties().getPath());
                 } catch (RepositoryNotAvailableException ex) {
                     logger.info("Repository unavailable, cannot delete expired item.", ex);
                 }

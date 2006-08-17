@@ -10,6 +10,10 @@ import java.util.Map;
  * 
  */
 public interface ItemProperties {
+    
+    public static final String PATH_SEPARATOR = "/";
+    
+    public static final String PATH_ROOT = PATH_SEPARATOR;
 
     public static final String METADATA_ABSOLUTE_PATH = "item.absolutePath";
 
