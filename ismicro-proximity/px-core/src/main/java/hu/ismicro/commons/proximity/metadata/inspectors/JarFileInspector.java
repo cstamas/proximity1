@@ -62,15 +62,12 @@ public class JarFileInspector extends AbstractItemInspector {
 
             Manifest mf = jFile.getManifest();
             if (mf != null) {
-                StringBuffer mfEntries = new StringBuffer(jFile.getManifest().getEntries().size());
-                for (Iterator i = mf.getEntries().keySet().iterator(); i.hasNext();) {
-                    String mfKey = (String) i.next();
-                    Attributes atr = (Attributes) mf.getEntries().get(mfKey);
-                    for (Iterator j = atr.keySet().iterator(); j.hasNext(); ) {
-                        Attributes.Name aKey = (Attributes.Name) j.next();
-                        mfEntries.append(atr.getValue(aKey));
-                        mfEntries.append("\n");
-                    }
+                StringBuffer mfEntries = new StringBuffer(jFile.getManifest().getMainAttributes().size());
+                Attributes mAttr = mf.getMainAttributes();
+                for (Iterator i = mAttr.keySet().iterator(); i.hasNext();) {
+                    Attributes.Name atrKey = (Attributes.Name) i.next();
+                    mfEntries.append(mAttr.getValue(atrKey));
+                    mfEntries.append("\n");
                 }
                 ip.setMetadata(JAR_MF, mfEntries.toString());
             }
