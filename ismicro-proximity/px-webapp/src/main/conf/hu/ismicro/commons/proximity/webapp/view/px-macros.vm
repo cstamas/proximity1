@@ -12,15 +12,23 @@
 		&nbsp;
     #end
 
-	<img src="#springUrl('/images/inspect.png')" width="16" height="16" alt="#springMessage('repositorylist.expand')" title="#springMessage('repositorylist.expand')" onclick="javascript:document.getElementById('${item.repositoryId}_${item.name}').style.height = '200px'" />
+	#if( ${item.repositoryId} )
+		<img src="#springUrl('/images/inspect.png')" width="16" height="16" alt="#springMessage('repositorylist.expand')" title="#springMessage('repositorylist.expand')" onclick="javascript:document.getElementById('${item.repositoryId}_${item.name}').style.height = '200px'" />
+	#else
+		<img src="#springUrl('/images/inspect.png')" width="16" height="16" alt="#springMessage('repositorylist.expand')" title="#springMessage('repositorylist.expand')" onclick="javascript:document.getElementById('_${item.name}').style.height = '200px'" />
+	#end
 	&nbsp;
 
 	<img src="#springUrl('/images/delete.png')" width="16" height="16" alt="#springMessage('repositorylist.delete')" title="#springMessage('repositorylist.delete')"/>
 	&nbsp;
 	
 	</div>
-	
-	<div id="${item.repositoryId}_${item.name}" style="visibility:visible;overflow: scroll;height:0px;">
+
+	#if( ${item.repositoryId} )
+		<div id="${item.repositoryId}_${item.name}" style="visibility:visible;overflow: scroll;height:0px;">
+	#else
+		<div id="_${item.name}" style="visibility:visible;overflow: scroll;height:0px;">
+	#end
     <b>Properties:</b>
     <ul>
 	#foreach( $key in $item.getAllMetadata().keySet() )
