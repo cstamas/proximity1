@@ -20,6 +20,8 @@ public abstract class AbstractRemoteStorage extends AbstractStorage implements R
     protected Logger logger = LoggerFactory.getLogger(this.getClass());
     
     private URL remoteUrl;
+    
+    private String remoteUrlAsString;
 
     public URL getRemoteUrl() {
         return this.remoteUrl;
@@ -27,19 +29,18 @@ public abstract class AbstractRemoteStorage extends AbstractStorage implements R
 
     public void setRemoteUrl(URL url) throws MalformedURLException {
         this.remoteUrl = url;
-    }
-
-    public String getAbsoluteUrl(String path) {
-        String urlstr = getRemoteUrlAsString();
-        if (urlstr.endsWith(ItemProperties.PATH_SEPARATOR)) {
-            return urlstr + path;
-        } else {
-            return urlstr + ItemProperties.PATH_SEPARATOR + path;
+        this.remoteUrlAsString = remoteUrl.toString();
+        if (remoteUrlAsString.endsWith(ItemProperties.PATH_SEPARATOR)) {
+            remoteUrlAsString = remoteUrlAsString.substring(0, remoteUrlAsString.length() - ItemProperties.PATH_SEPARATOR.length());
         }
     }
 
-    protected String getRemoteUrlAsString() {
-        return remoteUrl.toString();
+    public String getAbsoluteUrl(String path) {
+        if (path.startsWith(ItemProperties.PATH_SEPARATOR)) {
+            return remoteUrlAsString + path;
+        } else {
+            return remoteUrlAsString + ItemProperties.PATH_SEPARATOR + path;
+        }
     }
 
 }
