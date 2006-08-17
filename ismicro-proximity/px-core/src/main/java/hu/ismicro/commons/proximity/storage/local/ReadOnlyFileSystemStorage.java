@@ -4,7 +4,6 @@ import hu.ismicro.commons.proximity.ItemNotFoundException;
 import hu.ismicro.commons.proximity.ItemProperties;
 import hu.ismicro.commons.proximity.impl.ItemImpl;
 import hu.ismicro.commons.proximity.impl.ItemPropertiesImpl;
-import hu.ismicro.commons.proximity.impl.PathHelper;
 import hu.ismicro.commons.proximity.storage.StorageException;
 
 import java.io.File;
@@ -20,6 +19,7 @@ import java.util.Properties;
 import java.util.Stack;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 
 /**
  * Read-only storage implemented on plain file system.
@@ -128,7 +128,7 @@ public class ReadOnlyFileSystemStorage extends AbstractLocalStorage {
             if (target.isDirectory()) {
                 File[] files = target.listFiles();
                 for (int i = 0; i < files.length; i++) {
-                    ItemPropertiesImpl item = loadItemProperties(PathHelper.concatPaths(path, files[i].getName()));
+                    ItemPropertiesImpl item = loadItemProperties(FilenameUtils.concat(path, files[i].getName()));
                     result.add(item);
                 }
             } else {
@@ -156,7 +156,7 @@ public class ReadOnlyFileSystemStorage extends AbstractLocalStorage {
 
         int processed = 0;
         Stack stack = new Stack();
-        List dir = listItems(PathHelper.PATH_SEPARATOR);
+        List dir = listItems(ItemProperties.PATH_ROOT);
         stack.push(dir);
         while (!stack.isEmpty()) {
             dir = (List) stack.pop();
@@ -166,7 +166,7 @@ public class ReadOnlyFileSystemStorage extends AbstractLocalStorage {
                     ip.getAllMetadata().putAll(extraProps);
                 }
                 if (ip.isDirectory()) {
-                    List subdir = listItems(PathHelper.walkThePath(ip.getAbsolutePath(), ip.getName()));
+                    List subdir = listItems(ip.getPath());
                     stack.push(subdir);
                 } else {
                     processed++;

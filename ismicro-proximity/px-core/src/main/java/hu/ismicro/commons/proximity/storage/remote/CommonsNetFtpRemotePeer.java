@@ -4,7 +4,6 @@ import hu.ismicro.commons.proximity.ItemNotFoundException;
 import hu.ismicro.commons.proximity.ItemProperties;
 import hu.ismicro.commons.proximity.impl.ItemImpl;
 import hu.ismicro.commons.proximity.impl.ItemPropertiesImpl;
-import hu.ismicro.commons.proximity.impl.PathHelper;
 import hu.ismicro.commons.proximity.storage.StorageException;
 
 import java.io.File;
@@ -15,6 +14,7 @@ import java.net.MalformedURLException;
 import java.net.SocketException;
 import java.net.URL;
 
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPClientConfig;
 import org.apache.commons.net.ftp.FTPFile;
@@ -30,8 +30,8 @@ import org.apache.commons.net.ftp.FTPFile;
  * 
  */
 public class CommonsNetFtpRemotePeer extends AbstractRemoteStorage {
-    
-    //TODO: CommonsNetFtpRemotePeer is curently BROKEN!
+
+    // TODO: CommonsNetFtpRemotePeer is curently BROKEN!
 
     private FTPClientConfig ftpClientConfig = new FTPClientConfig(FTPClientConfig.SYST_UNIX);
 
@@ -132,9 +132,9 @@ public class CommonsNetFtpRemotePeer extends AbstractRemoteStorage {
         try {
             client = getFTPClient();
             try {
-                if (client.changeWorkingDirectory(PathHelper.concatPaths(getRemoteUrl().getPath(), PathHelper
-                        .getDirName(path)))) {
-                    FTPFile[] fileList = client.listFiles(PathHelper.getFileName(path));
+                if (client.changeWorkingDirectory(FilenameUtils.concat(getRemoteUrl().getPath(), FilenameUtils
+                        .getPath(path)))) {
+                    FTPFile[] fileList = client.listFiles(FilenameUtils.getName(path));
                     if (fileList.length == 1) {
                         return true;
                     } else {
@@ -163,9 +163,9 @@ public class CommonsNetFtpRemotePeer extends AbstractRemoteStorage {
         try {
             client = getFTPClient();
             try {
-                if (client.changeWorkingDirectory(PathHelper.concatPaths(getRemoteUrl().getPath(), PathHelper
-                        .getDirName(path)))) {
-                    FTPFile[] fileList = client.listFiles(PathHelper.getFileName(path));
+                if (client.changeWorkingDirectory(FilenameUtils.concat(getRemoteUrl().getPath(), FilenameUtils
+                        .getPath(path)))) {
+                    FTPFile[] fileList = client.listFiles(FilenameUtils.getName(path));
                     if (fileList.length == 1) {
                         FTPFile ftpFile = fileList[0];
                         ItemPropertiesImpl properties = constructItemPropertiesFromGetResponse(path,
@@ -173,9 +173,9 @@ public class CommonsNetFtpRemotePeer extends AbstractRemoteStorage {
                         ItemImpl result = new ItemImpl();
                         if (properties.isFile()) {
                             // TODO: Solve this in a better way
-                            File tmpFile = File.createTempFile(PathHelper.getFileName(path), null);
+                            File tmpFile = File.createTempFile(FilenameUtils.getName(path), null);
                             FileOutputStream fos = new FileOutputStream(tmpFile);
-                            client.retrieveFile(PathHelper.getFileName(path), fos);
+                            client.retrieveFile(FilenameUtils.getName(path), fos);
                             fos.flush();
                             fos.close();
                             InputStream is = new DeleteOnCloseFileInputStream(tmpFile);
@@ -186,14 +186,11 @@ public class CommonsNetFtpRemotePeer extends AbstractRemoteStorage {
                         result.setProperties(properties);
                         return result;
                     } else {
-                        logger.info("Item " + path + " not found in FTP remote peer of " + getRemoteUrl());
                         throw new ItemNotFoundException("Item " + path + " not found in FTP remote peer of "
                                 + getRemoteUrl());
                     }
                 } else {
-                    logger.info("Path " + PathHelper.getDirName(path) + " not found in FTP remote peer of "
-                            + getRemoteUrl());
-                    throw new ItemNotFoundException("Path " + PathHelper.getDirName(path)
+                    throw new ItemNotFoundException("Path " + FilenameUtils.getPath(path)
                             + " not found in FTP remote peer of " + getRemoteUrl());
                 }
             } catch (IOException ex) {
@@ -230,11 +227,11 @@ public class CommonsNetFtpRemotePeer extends AbstractRemoteStorage {
             FTPFile remoteFile) throws MalformedURLException {
         URL originatingUrl = new URL(originatingUrlString);
         ItemPropertiesImpl result = new ItemPropertiesImpl();
-        result.setAbsolutePath(PathHelper.changePathLevel(path, PathHelper.PATH_PARENT));
+        result.setAbsolutePath(FilenameUtils.getPath(FilenameUtils.getFullPath(path)));
         result.setDirectory(remoteFile.isDirectory());
         result.setFile(remoteFile.isFile());
         result.setLastModified(remoteFile.getTimestamp().getTime());
-        result.setName(PathHelper.getFileName(originatingUrl.getPath()));
+        result.setName(FilenameUtils.getName(originatingUrl.getPath()));
         if (result.isFile()) {
             result.setSize(remoteFile.getSize());
         } else {

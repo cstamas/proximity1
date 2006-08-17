@@ -352,7 +352,7 @@ public class RepositoryImpl implements Repository {
 
         int indexed = 0;
         Stack stack = new Stack();
-        List dir = getLocalStorage().listItems(PathHelper.PATH_SEPARATOR);
+        List dir = getLocalStorage().listItems(ItemProperties.PATH_ROOT);
         List batch = new ArrayList();
         stack.push(dir);
         while (!stack.isEmpty()) {
@@ -368,8 +368,7 @@ public class RepositoryImpl implements Repository {
                 // ip.getPath()), false);
                 // }
                 if (ip.isDirectory()) {
-                    List subdir = getLocalStorage().listItems(
-                            PathHelper.walkThePath(ip.getAbsolutePath(), ip.getName()));
+                    List subdir = getLocalStorage().listItems(ip.getPath());
                     stack.push(subdir);
                 } else {
                     // TODO: possible memory problem here with large

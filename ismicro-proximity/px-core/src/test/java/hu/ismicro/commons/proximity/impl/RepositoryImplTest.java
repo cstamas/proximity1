@@ -1,4 +1,4 @@
-package hu.ismicro.commons.proximity.base;
+package hu.ismicro.commons.proximity.impl;
 
 import hu.ismicro.commons.proximity.impl.RepositoryImpl;
 import junit.framework.Assert;

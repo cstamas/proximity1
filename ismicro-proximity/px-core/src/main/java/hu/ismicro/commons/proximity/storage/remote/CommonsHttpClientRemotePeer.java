@@ -4,7 +4,6 @@ import hu.ismicro.commons.proximity.ItemNotFoundException;
 import hu.ismicro.commons.proximity.ItemProperties;
 import hu.ismicro.commons.proximity.impl.ItemImpl;
 import hu.ismicro.commons.proximity.impl.ItemPropertiesImpl;
-import hu.ismicro.commons.proximity.impl.PathHelper;
 import hu.ismicro.commons.proximity.storage.StorageException;
 
 import java.io.File;
@@ -34,6 +33,7 @@ import org.apache.commons.httpclient.methods.HeadMethod;
 import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.apache.commons.httpclient.util.DateParseException;
 import org.apache.commons.httpclient.util.DateUtil;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 
 /**
@@ -180,7 +180,7 @@ public class CommonsHttpClientRemotePeer extends AbstractRemoteStorage {
 
                     // is it a file?
                     if (get.getResponseHeader("last-modified") != null) {
-                        File tmpFile = File.createTempFile(PathHelper.getFileName(path), null);
+                        File tmpFile = File.createTempFile(FilenameUtils.getName(path), null);
                         FileOutputStream fos = new FileOutputStream(tmpFile);
                         IOUtils.copy(get.getResponseBodyAsStream(), fos);
                         fos.flush();

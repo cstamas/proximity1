@@ -32,13 +32,13 @@ public class ItemPropertiesImpl implements ItemProperties {
     }
 
     public String getPath() {
-        if (getName().equals("/")) {
+        if (getName().equals(PATH_ROOT)) {
             return getName();
         }
-        if (getAbsolutePath().endsWith("/")) {
+        if (getAbsolutePath().endsWith(PATH_SEPARATOR)) {
             return getAbsolutePath() + getName();
         } else {
-            return getAbsolutePath() + "/" + getName();
+            return getAbsolutePath() + PATH_SEPARATOR + getName();
         }
     }
 
