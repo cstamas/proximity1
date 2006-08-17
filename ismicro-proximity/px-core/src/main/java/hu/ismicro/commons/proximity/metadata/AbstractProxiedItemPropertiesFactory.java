@@ -4,18 +4,11 @@ import hu.ismicro.commons.proximity.ItemProperties;
 import hu.ismicro.commons.proximity.impl.ItemPropertiesImpl;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.security.DigestInputStream;
-import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,18 +21,6 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class AbstractProxiedItemPropertiesFactory implements ProxiedItemPropertiesFactory {
     
-    /**
-     * As it's name says, output goes to /dev/null :)
-     * 
-     * @author cstamas
-     *
-     */
-    private class DevNullOutputStream extends OutputStream {
-        public void write(int b) throws IOException {
-            //nothing
-        }
-    }
-
     protected Logger logger = LoggerFactory.getLogger(this.getClass());
 
     public final List getSearchableKeywords() {
@@ -79,12 +60,12 @@ public abstract class AbstractProxiedItemPropertiesFactory implements ProxiedIte
 
     protected final void expandDefaultItemProperties(String path, ItemPropertiesImpl ip, File file) {
         ip.setAbsolutePath(FilenameUtils.getPath(path));
-        ip.setName(file.getName());
+        ip.setName(FilenameUtils.getName(path));
         ip.setDirectory(file.isDirectory());
         ip.setFile(file.isFile());
         ip.setLastModified(new Date(file.lastModified()));
         if (file.isFile()) {
-            String ext = FilenameUtils.getExtension(file.getName());
+            String ext = FilenameUtils.getExtension(path);
             if (ext != null) {
                 ip.setMetadata(ItemProperties.METADATA_EXT, ext);
             }
@@ -97,39 +78,14 @@ public abstract class AbstractProxiedItemPropertiesFactory implements ProxiedIte
     
     protected final void expandItemHashProperties(String path, ItemPropertiesImpl ip, File file) {
         if (file.isFile()) {
-            String digest = getFileDigest(file, "md5");
+            String digest = FileDigest.getFileDigestAsString(file, "md5");
             if (digest != null) {
                 ip.setMetadata(ItemProperties.METADATA_HASH_MD5, digest);
             }
-            digest = getFileDigest(file, "sha1");
+            digest = FileDigest.getFileDigestAsString(file, "sha1");
             if (digest != null) {
                 ip.setMetadata(ItemProperties.METADATA_HASH_SHA1, digest);
             }
-        }
-    }
-
-    protected String getFileDigest(File file, String alg) {
-        //TODO: cleanup this mess!
-        try {
-            String digestStr = null;
-            MessageDigest dalg = MessageDigest.getInstance(alg);
-            FileInputStream fis = null;
-            DigestInputStream dis = null;
-            try {
-                fis = new FileInputStream(file);
-                DevNullOutputStream fos = new DevNullOutputStream();
-                dis = new DigestInputStream(fis, dalg);
-                IOUtils.copy(dis, fos);
-                digestStr = new String(Hex.encodeHex(dalg.digest()));
-            } finally {
-                if (dis != null) {
-                    dis.close();
-                    fis.close();
-                }
-            }
-            return digestStr;
-        } catch (Exception ex) {
-            return null;
         }
     }
 

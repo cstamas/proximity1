@@ -23,8 +23,12 @@ public class DefaultProximityLogic implements ProximityLogic {
     public boolean isGroupSearchNeeded(ProximityRequest request) {
         return false;
     }
+    
+    public ProximityRequest getGroupRequest(ProximityRequest request) {
+        return request;
+    }
 
-    public ItemImpl postprocessItemList(ProximityRequest request, List listOfProxiedItems) throws IOException {
+    public ItemImpl postprocessItemList(ProximityRequest request, ProximityRequest groupRequest, List listOfProxiedItems) throws IOException {
         throw new UnsupportedOperationException("The DefaultProximityLogic does not implements postprocessing.");
     }
 

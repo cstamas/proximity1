@@ -419,6 +419,8 @@ public class ProximityImpl implements Proximity {
             // if not a targeted request that affects only one repos and
             // we need group search
             if (request.getTargetedReposId() == null && proximityLogic.isGroupSearchNeeded(request)) {
+                
+                ProximityRequest groupRequest = proximityLogic.getGroupRequest(request);
 
                 List repositoryGroupOrder = (List) repositoryGroups.get(item.getProperties().getRepositoryGroupId());
                 List itemList = new ArrayList();
@@ -426,20 +428,20 @@ public class ProximityImpl implements Proximity {
                 for (Iterator i = repositoryGroupOrder.iterator(); i.hasNext();) {
                     String reposId = (String) i.next();
                     try {
-                        itemList.add(retrieveItemByRepoId(reposId, request));
+                        itemList.add(retrieveItemByRepoId(reposId, groupRequest));
                     } catch (ItemNotFoundException ex) {
-                        logger.debug(request.getPath() + " not found in repository " + reposId);
+                        logger.debug("[{}] not found in repository {}", groupRequest.getPath(), reposId);
                     }
                 }
 
-                item = proximityLogic.postprocessItemList(request, itemList);
+                item = proximityLogic.postprocessItemList(request, groupRequest, itemList);
 
             }
 
         } catch (IOException ex) {
             logger.error("Got IOException during retrieveItem.", ex);
         } catch (ItemNotFoundException ex) {
-            logger.info("Item " + request.getPath() + " not found.");
+            logger.info("Item {} not found.", request.getPath());
             throw ex;
         }
 
