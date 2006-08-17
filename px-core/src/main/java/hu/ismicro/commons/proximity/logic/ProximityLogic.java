@@ -21,7 +21,9 @@ public interface ProximityLogic {
      *         absolute repository ordering.
      */
     boolean isGroupSearchNeeded(ProximityRequest request);
+    
+    ProximityRequest getGroupRequest(ProximityRequest request);
 
-    ItemImpl postprocessItemList(ProximityRequest request, List listOfProxiedItems) throws IOException;
+    ItemImpl postprocessItemList(ProximityRequest request, ProximityRequest groupRequest, List listOfProxiedItems) throws IOException;
 
 }
