@@ -40,6 +40,13 @@
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
+		<dependency>
+			<groupId>hu.ismicro.proximity</groupId>
+			<artifactId>px-core-xfire</artifactId>
+			<version>1.0.0-RC4</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
 
         <!-- For Spring 1.2.x et al. -->
 		<dependency>

@@ -9,5 +9,6 @@
 	<classpathentry kind="src" path="px-core-maven/src/main/java"/>
 	<classpathentry kind="src" path="px-core-maven/src/test/java"/>
 	<classpathentry kind="con" path="org.maven.ide.eclipse.MAVEN2_CLASSPATH_CONTAINER"/>
+	<classpathentry kind="src" path="px-core-xfire/src/main/java"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
