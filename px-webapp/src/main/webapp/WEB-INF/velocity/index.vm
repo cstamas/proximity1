@@ -16,6 +16,15 @@ though Proximity itself is very configurable.</p>
 <p>For documentation and reference visit <a href="http://proximity.abstracthorizon.org/">Proximity site</a>.
 Proximity project is hosted on <a href="http://www.abstracthorizon.org/">Abstract Horizon</a>.</p>
 
+<h3>Published Web Services</h3>
+
+<p>Proximity publishes it's partial functionality via SOAP. For WSDL's see:</p>
+<ul>
+<li>Searching service WSDL is here: <a href="ws/SearchService?wsdl">ws/SearchService?wsdl</a></li>
+<li>Maintenance service WSDL is here: <a href="ws/SearchService?wsdl">ws/SearchService?wsdl</a></li>
+</ul>
+
+
 <h3>How to use</h3>
 
 <p>Install it as it should with distribution you downloaded. J2EE WAR file should be
@@ -26,63 +35,9 @@ described in README files.</p>
 container that has access to outer world (for reaching central, codehaus, etc. 
 This is NOT mandatory since you can use Proximity to serve only your own artifacts!). </p>
 
-<p>The examples assumes that Proximity runs on a localhost and at HTTP port 8080
-with default configuration. Follows a few simple scenarios for using Proximity server:</p>
+<p>For Maven2 examples see page <a href="repositories.do">Repositories</a>.</p>
 
-<h4>With Maven 2</h4>
-
-<p>With installed Proximity You have to create settings.xml in 
-your M2 settings that defines mirror with id "central"
-and point it to Proximity instance. You can use the default file
-that comes with Maven2 as template at M2_HOME/conf/settings.xml. Example:
-</p>
-
-<div>
-<pre>
-  &lt;settings&gt;
-  &lt;mirrors&gt;
-    &lt;mirror&gt;
-      &lt;id&gt;myProximity&lt;/id&gt;
-      &lt;mirrorOf&gt;central&lt;/mirrorOf&gt;
-      &lt;name&gt;Proximity mirrored central repos.&lt;/name&gt;
-      &lt;url&gt;<a href="http://localhost:8080#springUrl('/repository')">http://localhost:8080#springUrl('/repository')</a>&lt;/url&gt;
-    &lt;/mirror&gt;
-  &lt;/mirrors&gt;
-  &lt;/settings&gt;
-</pre>
-</div>
-
-<p>The settings.xml should be placed in your $HOME/.m2 directory.</p>
-
-<h4>With Maven 1</h4>
-
-<p>If you have installed and working Proximity, you have to configure
-Maven1 to use Proximity as his repository instead the default at central:</p>
-
-<div>
-<pre>
-  maven -Dmaven.repo.remote=<a href="http://localhost:8080#springUrl('/repository')">http://localhost:8080#springUrl('/repository')</a> clean jar
-</pre>
-</div>
-
-<p>Alternatively, you can place the following line in <b>build.properties</b> of project, or better,
-in your home:</p>
-
-<div>
-<pre>
-  maven.repo.remote=<a href="http://localhost:8080#springUrl('/repository')">http://localhost:8080#springUrl('/repository')</a>
-</pre>
-</div>
-
-<h4>With anything other</h4>
-
-<p>Proximity is general proxy-like application, it is <b>NOT</b> just Maven proxy.
-Proximity have pluggable proxying logic, and the main reason for creating Proximity
-was to solve Maven proxying on our intranet. But Proximity became a little bit
-more, than "just" a Maven proxy.</p>
-
-<p>The Maven1/2 awareness comes from pluggable proxy logic, that is independently configurable
-on repository level. Proximity Core is Maven and Spring independent.</p>
+<p>For other examples visit <a href="http://proximity.abstracthorizon.org/">Proximity Site</a>.</p>
 
 <p>Have fun!</p>
 
