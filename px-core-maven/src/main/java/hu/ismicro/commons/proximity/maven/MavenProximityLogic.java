@@ -76,7 +76,7 @@ public class MavenProximityLogic extends DefaultProximityLogic {
                 File tmpFile = new File(System.getProperty("java.io.tmpdir"), request.getPath().replace(ItemProperties.PATH_SEPARATOR, "_"));
                 if (tmpFile.exists()) {
                     logger.info("Item for path " + request.getPath() + " SPOOFED with merged metadata checksum.");
-                    FileInputStream fis = new DeleteOnCloseFileInputStream(tmpFile);
+                    FileInputStream fis = new FileInputStream(tmpFile);
                     item.setStream(fis);
                     itemProps.setSize(tmpFile.length());
                 } else {
