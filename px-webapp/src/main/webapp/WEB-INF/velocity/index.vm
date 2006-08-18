@@ -21,7 +21,7 @@ Proximity project is hosted on <a href="http://www.abstracthorizon.org/">Abstrac
 <p>Proximity publishes it's partial functionality via SOAP. For WSDL's see:</p>
 <ul>
 <li>Searching service WSDL is here: <a href="ws/SearchService?wsdl">ws/SearchService?wsdl</a></li>
-<li>Maintenance service WSDL is here: <a href="ws/SearchService?wsdl">ws/SearchService?wsdl</a></li>
+<li>Maintenance service WSDL is here: <a href="ws/MaintenanceService?wsdl">ws/MaintenanceService?wsdl</a></li>
 </ul>
 
 
