@@ -5,7 +5,6 @@ import hu.ismicro.commons.proximity.ProximityRequest;
 import hu.ismicro.commons.proximity.impl.ItemImpl;
 import hu.ismicro.commons.proximity.impl.ItemPropertiesImpl;
 import hu.ismicro.commons.proximity.logic.DefaultProximityLogic;
-import hu.ismicro.commons.proximity.storage.remote.DeleteOnCloseFileInputStream;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
