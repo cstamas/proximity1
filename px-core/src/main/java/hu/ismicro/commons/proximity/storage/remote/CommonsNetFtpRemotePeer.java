@@ -174,6 +174,7 @@ public class CommonsNetFtpRemotePeer extends AbstractRemoteStorage {
                         if (properties.isFile()) {
                             // TODO: Solve this in a better way
                             File tmpFile = File.createTempFile(FilenameUtils.getName(path), null);
+                            tmpFile.deleteOnExit();
                             FileOutputStream fos = new FileOutputStream(tmpFile);
                             client.retrieveFile(FilenameUtils.getName(path), fos);
                             fos.flush();
