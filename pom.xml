@@ -106,10 +106,10 @@
 	<!-- SCM -->
 	<scm>
 		<connection>
-			scm:svn:http://svn.abstracthorizon.org/proximity/
+			scm:svn:http://svn.abstracthorizon.org/proximity/trunk/ismicro-proximity/
 		</connection>
 		<developerConnection>
-			scm:svn:https://svn.abstracthorizon.org/proximity/
+			scm:svn:https://svn.abstracthorizon.org/proximity/trunk/ismicro-proximity/
 		</developerConnection>
 		<url>
 			http://trac.abstracthorizon.org/proximity/browser/trunk/ismicro-proximity/
