@@ -181,6 +181,7 @@ public class CommonsHttpClientRemotePeer extends AbstractRemoteStorage {
                     // is it a file?
                     if (get.getResponseHeader("last-modified") != null) {
                         File tmpFile = File.createTempFile(FilenameUtils.getName(path), null);
+                        tmpFile.deleteOnExit();
                         FileOutputStream fos = new FileOutputStream(tmpFile);
                         IOUtils.copy(get.getResponseBodyAsStream(), fos);
                         fos.flush();
