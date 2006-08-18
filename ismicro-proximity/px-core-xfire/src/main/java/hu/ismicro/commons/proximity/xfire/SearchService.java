@@ -23,7 +23,7 @@ public interface SearchService {
      * 
      * @return the list of keywords usable in queries.
      */
-    ItemProperties[] getSearchableKeywords();
+    String[] getSearchableKeywords();
 
     /**
      * Searches for item.

@@ -1,6 +1,5 @@
 package hu.ismicro.commons.proximity.xfire;
 
-import java.util.Map;
 
 public interface MaintenanceService {
 
@@ -15,13 +14,5 @@ public interface MaintenanceService {
      * 
      */
     void reindex(String repoId);
-
-    /**
-     * Returns the statistics (if any).
-     * 
-     * @todo
-     * @return
-     */
-    public Map getStatistics();
 
 }

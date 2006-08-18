@@ -7,6 +7,8 @@ import hu.ismicro.commons.proximity.Proximity;
 import hu.ismicro.commons.proximity.ProximityException;
 import hu.ismicro.commons.proximity.ProximityRequest;
 
+import java.util.List;
+
 public class SearchServiceImpl implements SearchService {
     
     private Proximity proximity;
@@ -20,19 +22,23 @@ public class SearchServiceImpl implements SearchService {
     }
 
     public ItemProperties[] listItems(ProximityRequest request) throws AccessDeniedException, NoSuchRepositoryException {
-        return (ItemProperties[]) proximity.listItems(request).toArray();
+        List result = proximity.listItems(request);
+        return (ItemProperties[]) result.toArray(new ItemProperties[result.size()]);
     }
 
-    public ItemProperties[] getSearchableKeywords() {
-        return (ItemProperties[]) proximity.getSearchableKeywords().toArray();
+    public String[] getSearchableKeywords() {
+        List result = proximity.getSearchableKeywords();
+        return (String[]) result.toArray(new String[result.size()]);
     }
 
     public ItemProperties[] searchItem(ItemProperties example) throws ProximityException {
-        return (ItemProperties[]) proximity.searchItem(example).toArray();
+        List result = proximity.searchItem(example);
+        return (ItemProperties[]) result.toArray(new ItemProperties[result.size()]);
     }
 
     public ItemProperties[] searchItem(String query) throws ProximityException {
-        return (ItemProperties[]) proximity.searchItem(query).toArray();
+        List result = proximity.searchItem(query);
+        return (ItemProperties[]) result.toArray(new ItemProperties[result.size()]);
     }
 
 }
