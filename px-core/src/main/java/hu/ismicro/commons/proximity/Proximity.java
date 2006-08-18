@@ -172,7 +172,7 @@ public interface Proximity {
     /**
      * Lists the searchable keywords as returned by Indexer.
      * 
-     * @return the list of keywords usable in queries.
+     * @return the list of keywords (String) usable in queries.
      */
     List getSearchableKeywords();
 
