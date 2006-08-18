@@ -2,6 +2,7 @@ package hu.ismicro.commons.proximity.impl;
 
 import hu.ismicro.commons.proximity.ItemProperties;
 
+import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -9,7 +10,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ItemPropertiesImpl implements ItemProperties {
+public class ItemPropertiesImpl implements ItemProperties, Serializable {
+
+    private static final long serialVersionUID = 727307616865507746L;
 
     private Map metadataMap;
 
