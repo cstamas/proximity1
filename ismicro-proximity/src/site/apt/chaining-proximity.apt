@@ -8,11 +8,11 @@
 
 Chaining Proximity instances
 
-  One of the interesting "feature" of Proximity is "chaining". Somatimes, there is a need (or IT
+  One of the interesting "feature" of Proximity is "chaining". Sometimes, there is a need (or IT
 preference) to explicitly forbid direct internet access to developers within some network segment.
 This environment is sure death to Maven, since it heavily relies on network access. A possible
 solution would be some kind of "mangling" and sharing the localRepositories of users and running
-Maven2 offline, but novody would take it as a probable scenario.
+Maven2 offline, but nobody would take it as a probable scenario.
 
   Proximity is able to bring repository services to these "isolated" lands (with IT approval, of
 course :). Let's take a look on some example:
@@ -22,7 +22,7 @@ course :). Let's take a look on some example:
   As we see, we have a DMZ zone (demilitarized zone, usually where servers like HTTP server resides),
 that is linked to internal LAN, possibly through a set of firewalls/routers. Also, two example segment 
 exists: Segmenta A and B (it could be offices or branches). Let's suppose segment A and B have no
-direct or proxied access to Internet because of some IT policy and you need Maven.
+direct or proxied access to Internet because of restrictive IT policy and you need Maven.
 
   By "chaining" proximity instances, you can lay down a "pipe" from DMZ to segmens A and B, still,
 the access will be strictly controlled and beside this, you will have proxied Maven repositories.
@@ -72,7 +72,10 @@ will be proxied to segment B, since their slave will get it from Master in one h
 publish your organization-wide artifacts on Px Master, and in-development process artifacts on the given slave
 Proximity.
 
-Have fun!
+  The px-webapp-pmaster and px-webapp-pslave are two modules that produces a preconfigured pair of
+Proximity for such use. You can download them in downloads section.
+
+  Have fun!
 
   
   
