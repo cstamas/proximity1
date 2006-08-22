@@ -15,11 +15,11 @@ public class MaintenanceServiceImpl implements MaintenanceService {
         this.proximity = proximity;
     }
 
-    public void reindex() {
+    public void reindexAll() {
         proximity.reindex();
     }
 
-    public void reindex(String repoId) {
+    public void reindexRepository(String repoId) {
         proximity.reindex(repoId);
     }
 
