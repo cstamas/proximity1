@@ -31,12 +31,12 @@ public class SearchServiceImpl implements SearchService {
         return (String[]) result.toArray(new String[result.size()]);
     }
 
-    public ItemProperties[] searchItem(ItemProperties example) throws ProximityException {
+    public ItemProperties[] searchItemByExample(ItemProperties example) throws ProximityException {
         List result = proximity.searchItem(example);
         return (ItemProperties[]) result.toArray(new ItemProperties[result.size()]);
     }
 
-    public ItemProperties[] searchItem(String query) throws ProximityException {
+    public ItemProperties[] searchItemByQuery(String query) throws ProximityException {
         List result = proximity.searchItem(query);
         return (ItemProperties[]) result.toArray(new ItemProperties[result.size()]);
     }

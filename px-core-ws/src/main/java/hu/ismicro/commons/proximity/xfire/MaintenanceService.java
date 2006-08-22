@@ -7,12 +7,12 @@ public interface MaintenanceService {
      * Forces reindex of repositories.
      * 
      */
-    void reindex();
+    void reindexAll();
 
     /**
      * Forces reindex of repository.
      * 
      */
-    void reindex(String repoId);
+    void reindexRepository(String repoId);
 
 }

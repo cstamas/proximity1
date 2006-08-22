@@ -31,7 +31,7 @@ public interface SearchService {
      * @param example
      * @return List of ItemProperties, possibly 0 length.
      */
-    ItemProperties[] searchItem(ItemProperties example) throws ProximityException;
+    ItemProperties[] searchItemByExample(ItemProperties example) throws ProximityException;
 
     /**
      * Searches for item.
@@ -41,6 +41,6 @@ public interface SearchService {
      *            out
      * @return List of ItemProperties, possibly 0 length.
      */
-    ItemProperties[] searchItem(String query) throws ProximityException;
+    ItemProperties[] searchItemByQuery(String query) throws ProximityException;
 
 }
