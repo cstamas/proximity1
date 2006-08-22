@@ -7,6 +7,7 @@
 		<config>px-webapp/src/main/webapp/WEB-INF/applicationContext.xml</config>
 		<config>px-webapp/src/main/webapp/WEB-INF/px-artifacts-servlet.xml</config>
 		<config>px-core/src/test/resources/hu/ismicro/commons/proximity/applicationContext.xml</config>
+		<config>px-webapp/src/main/webapp/WEB-INF/xfire-servlet.xml</config>
 		<config>px-webapp/src/main/webapp/WEB-INF/px-support-servlet.xml</config>
 		<config>px-webapp/src/main/webapp/WEB-INF/px-repository-servlet.xml</config>
 	</configs>
@@ -28,6 +29,7 @@
 				<config>px-webapp/src/main/webapp/WEB-INF/px-artifacts-servlet.xml</config>
 				<config>px-webapp/src/main/webapp/WEB-INF/px-repository-servlet.xml</config>
 				<config>px-webapp/src/main/webapp/WEB-INF/px-support-servlet.xml</config>
+				<config>px-webapp/src/main/webapp/WEB-INF/xfire-servlet.xml</config>
 			</configs>
 		</configSet>
 	</configSets>
