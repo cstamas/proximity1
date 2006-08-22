@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="px-core/src/main/java"/>
-	<classpathentry kind="src" path="px-webapp/src/test/java"/>
-	<classpathentry kind="src" path="px-webapp/src/main/java"/>
 	<classpathentry kind="src" path="px-core/src/test/java"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="src" path="px-core/src/test/resources"/>
+	<classpathentry excluding="**" output="px-core/src/test/resources" kind="src" path="px-core/src/test/resources"/>
+	<classpathentry kind="src" path="px-core-ws/src/main/java"/>
+	<classpathentry excluding="**" output="px-core-ws/src/main/resources" kind="src" path="px-core-ws/src/main/resources"/>
 	<classpathentry kind="src" path="px-core-maven/src/main/java"/>
 	<classpathentry kind="src" path="px-core-maven/src/test/java"/>
+	<classpathentry excluding="**" output="px-core-maven/src/test/resources" kind="src" path="px-core-maven/src/test/resources"/>
+	<classpathentry kind="src" path="px-webapp/src/main/java"/>
+	<classpathentry kind="src" path="px-webapp/src/test/java"/>
+	<classpathentry excluding="**" output="px-webapp/src/main/conf" kind="src" path="px-webapp/src/main/conf"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.maven.ide.eclipse.MAVEN2_CLASSPATH_CONTAINER"/>
-	<classpathentry kind="src" path="px-core-xfire/src/main/java"/>
-	<classpathentry kind="src" path="px-core-xfire/src/main/resources"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
