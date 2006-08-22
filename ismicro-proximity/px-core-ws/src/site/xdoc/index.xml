@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<document>
+
+	<properties>
+		<author email="t.cservenak@gmail.com">CSERVENAK, Tamas</author>
+		<title>Proximity Core Web Services</title>
+	</properties>
+
+	<meta name="keyword" content="ismicro java" />
+
+	<body>
+
+		<section name="Proximity Core Web Services">
+
+			<p>
+				Proximity Core Web Services component contains only the
+				Web Service bindings for Proximity. Web Services are
+				implemented using XFire.
+			</p>
+
+		</section>
+
+	</body>
+</document>
