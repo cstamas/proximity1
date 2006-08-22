@@ -2,21 +2,25 @@
 
 <document>
 
-  <properties>
-    <author email="t.cservenak@gmail.com">CSERVENAK, Tamas</author>
-    <title>PX-Core-Maven</title>
-  </properties>
+	<properties>
+		<author email="t.cservenak@gmail.com">CSERVENAK, Tamas</author>
+		<title>Proximity Maven1/2 Bindings</title>
+	</properties>
 
-  <meta name="keyword" content="ismicro java"/>
+	<meta name="keyword" content="ismicro java" />
 
-<body>
+	<body>
 
-<section name="Proximity Maven1/2 Bindings">
+		<section name="Proximity Maven1/2 Bindings">
 
-<p>Proximity Core Maven component contains only the Maven1/2 bindings for Proximity, thus
-keeping PxCore pure as possible and extending it with various Maven specific behaviour.</p>
+			<p>
+				Proximity Core Maven component contains only the
+				Maven1/2 bindings for Proximity, thus keeping PxCore
+				pure as possible and extending it with various Maven
+				specific behaviour.
+			</p>
 
-</section>
+		</section>
 
-</body>
+	</body>
 </document>
