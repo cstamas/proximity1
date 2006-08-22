@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<document>
+
+  <properties>
+    <author email="t.cservenak@gmail.com">CSERVENAK, Tamas</author>
+    <title>Proximity Webapp Util</title>
+  </properties>
+
+  <meta name="keyword" content="ismicro java"/>
+
+<body>
+
+<section name="Proximity Webapp Util">
+
+<p>Proximity Webapp Util module contains all the helper classes and controllers to form
+a fully fledged J2EE Web Application front-end to Proximity. View-tech independent.</p>
+
+</section>
+
+</body>
+</document>

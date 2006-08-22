@@ -1,0 +1,244 @@
+<h2>#springMessage("repositories.title")</h2>
+
+<p>#springMessage('repositories.intro')</p>
+
+<table>
+
+        <tr class="tdb">
+                <td colspan="2"><img src="#springUrl('/images/logo.png')"/></td>
+        </tr>
+        <tr class="tda" onmouseover="return escape('#springMessage('repositories.proximity.emergeRepositoryGroups.help')')">
+                <td colspan="1">#springMessage("repositories.proximity.emergeRepositoryGroups")</td>
+                <td colspan="1">
+                #if(${context.get('emergeRepositoryGroups')})
+    	            #springMessage("repositories.proximity.emergeRepositoryGroups.true")
+                #else
+	                #springMessage("repositories.proximity.emergeRepositoryGroups.false")
+                #end
+                </td>
+        </tr>
+        <tr class="tda" onmouseover="return escape('#springMessage('repositories.proximity.repolist.help')')">
+                <td colspan="1">#springMessage("repositories.proximity.repolist")</td>
+                <td colspan="1">
+                  <ul>
+                  <li><b>Repositories</b>
+                  <ol>
+			        #foreach($repository in ${context.get('repositories')})
+		               <li><a href="#${repository.id}">${repository.id}</a></li>
+			        #end
+			      </ol>
+			      </li>
+                  <ul>
+                </td>
+        </tr>
+        <tr class="tda" onmouseover="return escape('#springMessage('repositories.proximity.repogrouplist.help')')">
+                <td colspan="1">#springMessage("repositories.proximity.repogrouplist")</td>
+                <td colspan="1">
+                  <ul>
+			        	#set( $groupMap = ${context.get('repositoryGroups')} )
+				        #foreach($groupKey in ${groupMap.keySet()})
+			            <li>
+			                <b>$groupKey</b>
+			                <ol>
+					        #foreach( $repo in ${groupMap.get( $groupKey )} )
+  				                <li><a href="#${repo}">${repo}</a></li>
+				            #end
+				            </ol>
+			            </li>
+			            #end
+			      </ul>
+                </td>
+        </tr>
+
+        #foreach($repository in ${context.get('repositories')})
+
+                <tr class="tdb">
+                        <td colspan="2"><a id="${repository.id}" name="${repository.id}">
+		                #if(${repository.getRemoteStorage()})
+	                        <img src="#springUrl('/images/folder-remote.png')" align="middle" alt="#springMessage('repositorylist.proxied')" title="#springMessage('repositorylist.proxied')"/>
+	                        &nbsp;
+	                        #springMessage("repositories.repoTitle.proxied")
+                        #else
+				  			<img src="#springUrl('/images/folder-home.png')" align="middle" alt="#springMessage('repositorylist.hosted')" title="#springMessage('repositorylist.hosted')"/>
+				  			&nbsp;
+	                        #springMessage("repositories.repoTitle.hosted")
+                        #end
+                        </a></td>
+                </tr>
+
+                <tr class="tda" onmouseover="return escape('#springMessage('repositories.id.help')')">
+                        <td colspan="1">#springMessage("repositories.id")</td>
+                        <td colspan="1">${repository.id}</td>
+                </tr>
+                <tr class="tda" onmouseover="return escape('#springMessage('repositories.groupId.help')')">
+                        <td colspan="1">#springMessage("repositories.groupId")</td>
+                        <td colspan="1">${repository.groupId}</td>
+                </tr>
+                <tr class="tda" onmouseover="return escape('#springMessage('repositories.isAvailable.help')')">
+                        <td colspan="1">#springMessage("repositories.isAvailable")</td>
+                        <td colspan="1">
+	                        #if( ${repository.isAvailable()} )
+    	                    	#springMessage("common.yes")
+    	                    #else
+    	                        #springMessage("common.no")
+        	                #end
+                        </td>
+                </tr>
+                <tr class="tda" onmouseover="return escape('#springMessage('repositories.isOffline.help')')">
+                        <td colspan="1">#springMessage("repositories.isOffline")</td>
+                        <td colspan="1">
+	                        #if( ${repository.isOffline()} )
+    	                    	#springMessage("common.yes")
+    	                    #else
+    	                        #springMessage("common.no")
+        	                #end
+                        </td>
+                </tr>
+                <tr class="tda" onmouseover="return escape('#springMessage('repositories.isListable.help')')">
+                        <td colspan="1">#springMessage("repositories.isListable")</td>
+                        <td colspan="1">
+	                        #if( ${repository.isListable()} )
+    	                    	#springMessage("common.yes"), <a href="#springUrl('/repository')?repositoryId=${repository.id}">${repository.id}</a>
+    	                    #else
+    	                        #springMessage("common.no")
+        	                #end
+                        </td>
+                </tr>
+
+                <tr class="tda" onmouseover="return escape('#springMessage('repositories.mavenLogic.help')')">
+                        <td colspan="1">#springMessage("repositories.mavenLogic")</td>
+                        <td colspan="1">
+
+                        <table>
+
+			                <tr class="tda" onmouseover="return escape('#springMessage('repositories.mavenLogic.shouldServeSnapshots.help')')">
+			                        <td colspan="1">#springMessage("repositories.mavenLogic.shouldServeSnapshots")</td>
+			                        <td colspan="1">${repository.getRepositoryLogic().isShouldServeSnapshots()}</td>
+			                </tr>
+			                <tr class="tda" onmouseover="return escape('#springMessage('repositories.mavenLogic.shouldServeReleases.help')')">
+			                        <td colspan="1">#springMessage("repositories.mavenLogic.shouldServeReleases")</td>
+			                        <td colspan="1">${repository.getRepositoryLogic().isShouldServeReleases()}</td>
+			                </tr>
+
+                        </table>
+                        
+                        </td>
+
+                </tr>
+
+                #if(${repository.getRemoteStorage()})
+                <tr class="tda">
+                        <td colspan="1">#springMessage("repositories.remoteStorage")</td>
+                        <td colspan="1">
+                        
+                        <table>
+
+			                <tr class="tda" onmouseover="return escape('#springMessage('repositories.remote.url.help')')">
+			                        <td colspan="1">#springMessage("repositories.remote.url")</td>
+			                        <td colspan="1"><a href="${repository.getRemoteStorage().getRemoteUrl()}">${repository.getRemoteStorage().getRemoteUrl()}</a></td>
+			                </tr>
+			                <tr class="tda" onmouseover="return escape('#springMessage('repositories.remote.timeout.help')')">
+			                        <td colspan="1">#springMessage("repositories.remote.timeout")</td>
+			                        <td colspan="1">${repository.getRemoteStorage().getConnectionTimeout()}</td>
+			                </tr>
+			                <tr class="tda" onmouseover="return escape('#springMessage('repositories.remote.retryCount.help')')">
+			                        <td colspan="1">#springMessage("repositories.remote.retryCount")</td>
+			                        <td colspan="1">${repository.getRemoteStorage().getRetrievalRetryCount()}</td>
+			                </tr>
+			                <tr class="tda" onmouseover="return escape('#springMessage('repositories.remote.proxyHost.help')')">
+			                        <td colspan="1">#springMessage("repositories.remote.proxyHost")</td>
+			                        <td colspan="1">$!{repository.getRemoteStorage().getProxyHost()}</td>
+			                </tr>
+
+                        </table>
+
+                        </td>
+                </tr>
+                #end
+
+                #if(${repository.getLocalStorage()})
+                <tr class="tda">
+                        <td colspan="1">#springMessage("repositories.localStorage")</td>
+                        <td colspan="1">
+                        
+                        <table>
+
+			                <tr class="tda" onmouseover="return escape('#springMessage('repositories.local.basedir.help')')">
+			                        <td colspan="1">#springMessage("repositories.local.basedir")</td>
+			                        <td colspan="1">${repository.getLocalStorage().getStorageBaseDir()}</td>
+			                </tr>
+			                <tr class="tda" onmouseover="return escape('#springMessage('repositories.local.metadataAware.help')')">
+			                        <td colspan="1">#springMessage("repositories.local.metadataAware")</td>
+			                        #if(${repository.getLocalStorage().isMetadataAware()})
+			                          <td colspan="1">#springMessage("common.yes")</td>
+			                        #else
+			                          <td colspan="1">#springMessage("common.no")</td>
+			                        #end
+			                </tr>
+
+                        </table>
+
+                        </td>
+                </tr>
+                #end
+
+                <tr class="tda" onmouseover="return escape('#springMessage('repositories.maven2settings.help')')">
+                        <td colspan="1">#springMessage("repositories.maven2settings")</td>
+                        <td colspan="1">
+			                #if(${repository.getRemoteStorage()})
+			                    #springMessage("repositories.maven2settings.proxied")<br/>
+								<pre>
+  &lt;settings&gt;
+  (...)
+  &lt;mirrors&gt;
+    &lt;mirror&gt;
+#if( ${context.get('emergeRepositoryGroups')} )
+      &lt;id&gt;${repository.groupId}GroupProxy&lt;/id&gt;
+      &lt;mirrorOf&gt;${repository.id}&lt;/mirrorOf&gt;
+      &lt;name&gt;Proximity mirrored ${repository.id} repository in group ${repository.groupId}&lt;/name&gt;
+      &lt;url&gt;<a href="http://localhost:8080#springUrl('/repository')/${repository.groupId}">http://localhost:8080#springUrl('/repository')/${repository.groupId}</a>&lt;/url&gt;
+#else
+      &lt;id&gt;${repository.id}Proxy&lt;/id&gt;
+      &lt;mirrorOf&gt;${repository.id}&lt;/mirrorOf&gt;
+      &lt;name&gt;Proximity mirrored ${repository.id} repository&lt;/name&gt;
+      &lt;url&gt;<a href="http://localhost:8080#springUrl('/repository')">http://localhost:8080#springUrl('/repository')</a>&lt;/url&gt;
+#end
+    &lt;/mirror&gt;
+  &lt;/mirrors&gt;
+  (...)
+  &lt;/settings&gt;
+								</pre>
+	                        #else
+			                    #springMessage("repositories.maven2settings.hosted")<br/>
+								<pre>
+  (...)
+  &lt;repositories&gt;
+    &lt;repository&gt;
+      &lt;id&gt;${repository.id}&lt;/id&gt;
+#if( ${context.get('emergeRepositoryGroups')} )
+      &lt;url&gt;<a href="http://localhost:8080#springUrl('/repository')/${repository.groupId}">http://localhost:8080#springUrl('/repository')/${repository.groupId}</a>&lt;/url&gt;
+#else
+      &lt;url&gt;<a href="http://localhost:8080#springUrl('/repository')">http://localhost:8080#springUrl('/repository')</a>&lt;/url&gt;
+#end
+    &lt;/repository&gt;
+  &lt;/repositories&gt;
+
+  &lt;pluginRepositories&gt;
+    &lt;pluginRepository&gt;
+      &lt;id&gt;${repository.id}&lt;/id&gt;
+#if( ${context.get('emergeRepositoryGroups')} )
+      &lt;url&gt;<a href="http://localhost:8080#springUrl('/repository')">http://localhost:8080#springUrl('/repository')/${repository.groupId}</a>&lt;/url&gt;
+#else
+      &lt;url&gt;<a href="http://localhost:8080#springUrl('/repository')">http://localhost:8080#springUrl('/repository')</a>&lt;/url&gt;
+#end
+    &lt;/pluginRepository&gt;
+  &lt;/pluginRepositories&gt;
+  (...)
+								</pre>
+		                    #end
+                        </td>
+                </tr>
+
+        #end
+
+</table>
