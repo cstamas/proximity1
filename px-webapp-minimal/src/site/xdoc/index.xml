@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<document>
+
+	<properties>
+		<author email="t.cservenak@gmail.com">CSERVENAK, Tamas</author>
+		<title>Proximity Webapp (Minimal)</title>
+	</properties>
+
+	<meta name="keyword" content="ismicro java" />
+
+	<body>
+
+		<section name="Proximity Webapp (Minimal)">
+
+			<p>
+				Proximity Webapp (Minimal) is minimal J2EE Web
+				Application that still have Maven Proxy functionality.
+				To reduce it's weight, view layer uses vanilla JSPs.
+				Indexing is also sacrificed, together with pages that
+				relies on them (Search, Artifact browse). Fast and
+				small.
+			</p>
+
+		</section>
+
+	</body>
+</document>

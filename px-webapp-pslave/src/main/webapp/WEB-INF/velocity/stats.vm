@@ -1,0 +1,90 @@
+<h2>#springMessage("stats.title")</h2>
+
+<p>#springMessage('stats.intro')</p>
+
+<table>
+<tr>
+<td>
+
+<table width="100%">
+	<tr class="tdb">
+		<td colspan="2">#springMessage('stats.last10Artifacts')</td>
+	</tr>
+	<tr class="tdb">
+		<td colspan="1" width="50%">#springMessage('stats.item.path')</td>
+		<td colspan="1" width="50%">#springMessage('stats.item.name')</td>
+	</tr>
+    #foreach($item in $stats.last10Artifacts)
+        <tr class="tda">
+             <td colspan="1"><a href="#springUrl('/repository')${item.absolutePath}?repositoryId=${item.repositoryId}">${item.absolutePath}</a></td>
+             <td colspan="1">#plainItemLink($item)</a></td>
+        </tr>
+    #end
+</table>
+<p/>
+
+</td>
+<td>
+
+<table width="100%">
+	<tr class="tdb">
+		<td colspan="2">#springMessage('stats.last10LocalHits')</td>
+	</tr>
+	<tr class="tdb">
+		<td colspan="1" width="50%">#springMessage('stats.item.path')</td>
+		<td colspan="1" width="50%">#springMessage('stats.item.name')</td>
+	</tr>
+    #foreach($item in $stats.last10LocalHits)
+        <tr class="tda">
+             <td colspan="1"><a href="#springUrl('/repository')${item.absolutePath}?repositoryId=${item.repositoryId}">${item.absolutePath}</a></td>
+             <td colspan="1">#plainItemLink($item)</a></td>
+        </tr>
+    #end
+</table>
+<p/>
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+<table width="100%">
+	<tr class="tdb">
+		<td colspan="2">#springMessage('stats.last10IpAddresses')</td>
+	</tr>
+	<tr class="tdb">
+		<td colspan="1" width="50%">#springMessage('stats.item.ipaddress')</td>
+	</tr>
+    #foreach($item in $stats.last10IpAddresses)
+        <tr class="tda">
+             <td colspan="1">$item</td>
+        </tr>
+    #end
+</table>
+<p/>
+
+</td>
+<td>
+
+<table width="100%">
+	<tr class="tdb">
+		<td colspan="2">#springMessage('stats.last10RemoteHits')</td>
+	</tr>
+	<tr class="tdb">
+		<td colspan="1" width="50%">#springMessage('stats.item.path')</td>
+		<td colspan="1" width="50%">#springMessage('stats.item.name')</td>
+	</tr>
+    #foreach($item in $stats.last10RemoteHits)
+        <tr class="tda">
+             <td colspan="1"><a href="#springUrl('/repository')${item.absolutePath}?repositoryId=${item.repositoryId}">${item.absolutePath}</a></td>
+             <td colspan="1">#plainItemLink($item)</a></td>
+        </tr>
+    #end
+</table>
+
+</td>
+</tr>
+</table>
+
+<p/>

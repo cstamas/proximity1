@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<document>
+
+	<properties>
+		<author email="t.cservenak@gmail.com">CSERVENAK, Tamas</author>
+		<title>Proximity Webapp (Demosite)</title>
+	</properties>
+
+	<meta name="keyword" content="ismicro java" />
+
+	<body>
+
+		<section name="Proximity Webapp (Demosite)">
+
+			<p>
+				Proximity Webapp (Demosite) is similar to "default": it
+				is J2EE Web Application with "default" configuration
+				that runs on Proximity site. Thus, it has few
+				restrictions, including JAR downloading from "public"
+				repositories.
+			</p>
+
+		</section>
+
+	</body>
+</document>
