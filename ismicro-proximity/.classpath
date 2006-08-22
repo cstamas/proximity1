@@ -8,9 +8,8 @@
 	<classpathentry kind="src" path="px-core-maven/src/main/java"/>
 	<classpathentry kind="src" path="px-core-maven/src/test/java"/>
 	<classpathentry excluding="**" output="px-core-maven/src/test/resources" kind="src" path="px-core-maven/src/test/resources"/>
-	<classpathentry kind="src" path="px-webapp/src/main/java"/>
-	<classpathentry kind="src" path="px-webapp/src/test/java"/>
-	<classpathentry excluding="**" output="px-webapp/src/main/conf" kind="src" path="px-webapp/src/main/conf"/>
+	<classpathentry kind="src" path="px-webapp-util/src/main/java"/>
+	<classpathentry kind="src" path="px-webapp-util/src/test/java"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.maven.ide.eclipse.MAVEN2_CLASSPATH_CONTAINER"/>
 	<classpathentry kind="output" path="target/classes"/>
