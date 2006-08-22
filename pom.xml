@@ -127,13 +127,6 @@
 
 	<!-- build information for the project -->
 	<build>
-		<extensions>
-			<extension>
-				<groupId>org.apache.maven.wagon</groupId>
-				<artifactId>wagon-ftp</artifactId>
-				<version>1.0-beta-1</version>
-			</extension>
-		</extensions>
 		<pluginManagement>
 			<plugins>
 				<plugin>
@@ -150,7 +143,7 @@
 
 	<modules>
 		<module>px-core</module>
-		<module>px-core-xfire</module>
+		<module>px-core-ws</module>
 		<module>px-core-maven</module>
 		<module>px-webapp</module>
 	</modules>

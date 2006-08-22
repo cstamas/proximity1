@@ -42,7 +42,7 @@
 		</dependency>
 		<dependency>
 			<groupId>hu.ismicro.proximity</groupId>
-			<artifactId>px-core-xfire</artifactId>
+			<artifactId>px-core-ws</artifactId>
 			<version>1.0.0-RC4</version>
 			<type>jar</type>
 			<scope>compile</scope>
