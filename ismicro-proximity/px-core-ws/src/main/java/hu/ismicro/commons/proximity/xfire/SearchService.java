@@ -37,8 +37,8 @@ public interface SearchService {
      * Searches for item.
      * 
      * @param query,
-     *            dependent on indexer backend since Proximity just "passes" it
-     *            out
+     *            dependent on indexer backend since Proximity just "passes" it.
+     * 
      * @return List of ItemProperties, possibly 0 length.
      */
     ItemProperties[] searchItemByQuery(String query) throws ProximityException;
