@@ -21,7 +21,7 @@
 	<!-- a short but descriptive name for the project -->
 	<name>Px Core</name>
 
-	<!-- The version of the project under development -->
+	<!-- The module version -->
 	<version>1.0.0-RC4</version>
 
 	<dependencies>
