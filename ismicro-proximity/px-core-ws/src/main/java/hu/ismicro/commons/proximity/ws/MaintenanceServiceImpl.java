@@ -1,4 +1,4 @@
-package hu.ismicro.commons.proximity.xfire;
+package hu.ismicro.commons.proximity.ws;
 
 import hu.ismicro.commons.proximity.Proximity;
 
