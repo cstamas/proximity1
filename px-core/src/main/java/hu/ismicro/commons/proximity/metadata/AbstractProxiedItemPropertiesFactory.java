@@ -59,7 +59,7 @@ public abstract class AbstractProxiedItemPropertiesFactory implements ProxiedIte
     }
 
     protected final void expandDefaultItemProperties(String path, ItemPropertiesImpl ip, File file) {
-        ip.setAbsolutePath(FilenameUtils.getPath(path));
+        ip.setAbsolutePath(FilenameUtils.getFullPathNoEndSeparator(path));
         ip.setName(FilenameUtils.getName(path));
         ip.setDirectory(file.isDirectory());
         ip.setFile(file.isFile());
