@@ -94,13 +94,11 @@ way. But remember, the {{{repository-configuration.html#RepositoryLogic}Reposito
     
   * <<reindex>> - should reindex the storage at startup (boolean), not mandatory.
   
-    <<If>> indexer is defined, and <<if>> reindex is true, reindexing will occur on Proximity startup.
-    If indexer is not specified, this parameter is neglected. If not specified, it defaults to <<true>>.
-    
-  * <<recreateMetadata>> - should recreate metadata on startup (boolean), not mandatory.
-  
     <<If>> repository have local storage, <<and if>> local storage is writable, <<and if>> local storage is set to be
     metadata aware, the metadata will be recreated at startup. Defaults to true.
+    Furthermore, <<if>> indexer is defined, and <<if>> reindex is true, reindexing will occur on Proximity startup.
+    If indexer is not specified, this parameter is neglected. If not specified, it defaults to <<true>>.
+    The lack of indexer does not affect the metadata recrate mentioned before.
     
   * <<listable>> - is repository listable on Proximity browsing UI (boolean), not mandatory.
   
