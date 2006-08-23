@@ -141,7 +141,6 @@
 		<property name="localStorage" ref="centralFSStorage" />
 		<property name="remoteStorage" ref="centralRemotePeer" />
 		<property name="reindex" value="true" />
-		<property name="recreateMetadata" value="true" />
 		<property name="statisticsGatherer" ref="stats" />
 		<property name="listable" value="true" />
 		<property name="accessManager" ref="openAccessManager" />
@@ -185,7 +184,6 @@
 		<property name="id" value="inhouse" />
 		<property name="localStorage" ref="inhouseFSStorage" />
 		<property name="reindex" value="true" />
-		<property name="recreateMetadata" value="true" />
 		<property name="listable" value="true" />
 		<property name="statisticsGatherer" ref="stats" />
 		<property name="accessManager" ref="openAccessManager" />
@@ -211,7 +209,6 @@
 		<property name="id" value="extNonFree" />
 		<property name="localStorage" ref="extNonFreeFSStorage" />
 		<property name="reindex" value="true" />
-		<property name="recreateMetadata" value="true" />
 		<property name="listable" value="true" />
 		<property name="statisticsGatherer" ref="stats" />
 		<property name="accessManager" ref="openAccessManager" />
@@ -237,7 +234,6 @@
 		<property name="id" value="extFree" />
 		<property name="localStorage" ref="extFreeFSStorage" />
 		<property name="reindex" value="true" />
-		<property name="recreateMetadata" value="true" />
 		<property name="listable" value="true" />
 		<property name="statisticsGatherer" ref="stats" />
 		<property name="accessManager" ref="openAccessManager" />
