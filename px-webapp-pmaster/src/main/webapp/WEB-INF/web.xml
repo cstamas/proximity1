@@ -18,7 +18,6 @@
 		<param-name>contextConfigLocation</param-name>
 		<param-value>
 			/WEB-INF/applicationContext.xml
-			classpath:org/codehaus/xfire/spring/xfire.xml
 		</param-value>
 	</context-param>
 
@@ -53,14 +52,6 @@
 	</servlet>
 
 	<servlet>
-		<servlet-name>px-artifacts</servlet-name>
-		<servlet-class>
-			org.springframework.web.servlet.DispatcherServlet
-		</servlet-class>
-		<load-on-startup>3</load-on-startup>
-	</servlet>
-
-	<servlet>
 		<servlet-name>px-support</servlet-name>
 		<servlet-class>
 			org.springframework.web.servlet.DispatcherServlet
@@ -68,41 +59,9 @@
 		<load-on-startup>4</load-on-startup>
 	</servlet>
 
-	<servlet>
-		<servlet-name>dwr-invoker</servlet-name>
-		<servlet-class>uk.ltd.getahead.dwr.DWRServlet</servlet-class>
-		<init-param>
-			<param-name>debug</param-name>
-			<param-value>false</param-value>
-		</init-param>
-		<load-on-startup>10</load-on-startup>
-	</servlet>
-
-	<servlet>
-		<servlet-name>xfire</servlet-name>
-		<servlet-class>
-			org.springframework.web.servlet.DispatcherServlet
-		</servlet-class>
-	</servlet>
-
 	<servlet-mapping>
 		<servlet-name>px-repository</servlet-name>
 		<url-pattern>/repository/*</url-pattern>
-	</servlet-mapping>
-
-	<servlet-mapping>
-		<servlet-name>px-artifacts</servlet-name>
-		<url-pattern>/artifacts/*</url-pattern>
-	</servlet-mapping>
-
-	<servlet-mapping>
-		<servlet-name>dwr-invoker</servlet-name>
-		<url-pattern>/dwr/*</url-pattern>
-	</servlet-mapping>
-
-	<servlet-mapping>
-		<servlet-name>xfire</servlet-name>
-		<url-pattern>/ws/*</url-pattern>
 	</servlet-mapping>
 
 	<servlet-mapping>
