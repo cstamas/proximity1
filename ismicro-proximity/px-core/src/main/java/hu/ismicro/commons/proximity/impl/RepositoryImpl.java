@@ -43,8 +43,6 @@ public class RepositoryImpl implements Repository {
 
     private boolean reindex = true;
 
-    private boolean recreateMetadata = true;
-
     private LocalStorage localStorage;
 
     private RemoteStorage remoteStorage;
@@ -131,14 +129,6 @@ public class RepositoryImpl implements Repository {
 
     public void setIndexer(Indexer indexer) {
         this.indexer = indexer;
-    }
-
-    public boolean isRecreateMetadata() {
-        return recreateMetadata;
-    }
-
-    public void setRecreateMetadata(boolean recreateMetadata) {
-        this.recreateMetadata = recreateMetadata;
     }
 
     public boolean isReindex() {
@@ -335,18 +325,18 @@ public class RepositoryImpl implements Repository {
      * 
      */
     public void reindex() {
-        if (getIndexer() == null) {
-            logger.info("Will NOT reindex repository {}, since it have no indexer defined.", getId());
-            return;
-        }
         if (getLocalStorage() == null) {
-            logger.info("Will NOT reindex repository {}, since it have no local storage defined.", getId());
+            logger.info("Will NOT reindex nor recreateMetadata on repository {}, since it have no local storage defined.", getId());
             return;
         }
         if (getLocalStorage().isMetadataAware()) {
             logger.info("Recreating metadata on repository {}", getId());
             Map initialData = new HashMap();
             getLocalStorage().recreateMetadata(initialData);
+        }
+        if (getIndexer() == null) {
+            logger.info("Will NOT reindex repository {}, since it have no indexer defined.", getId());
+            return;
         }
         logger.info("Reindexing repository {}", getId());
 
