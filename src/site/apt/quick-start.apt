@@ -10,8 +10,12 @@ Proximity Quick start
 
   This document will describe how to setup Proximity quickly. It does assume you have some
 basic knowledge about your OS and Java and you already have Java on your machine.
+
+  Since there is a Demo site with live instance of latest Proximity, these images
+shown here will not be updated so often as before, so the image and the "real" application
+may show some differences.
   
-  Also, the setup of Apache Tomcat 5 used in this example will not be show. This document
+  The setup of Apache Tomcat 5 used in this example will not be show. This document
 simply assumes that you have downloaded and installed Tomcat (this doc used Tomcat 5.5.17).
 If not, please go to {{{http://tomcat.apache.org/}Apache Tomcat}} site and download it.
 Anyway, since this WAR file is simple J2EE webapp and have no whatsoever dependency on
