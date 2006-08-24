@@ -22,7 +22,7 @@
 	<name>Px Core</name>
 
 	<!-- The module version -->
-	<version>1.0.0-RC4</version>
+	<version>1.0.0-RC4.1</version>
 
 	<dependencies>
 
