@@ -208,7 +208,8 @@ public class ProximityImpl implements Proximity {
                     mangledRequest.setPath(request.getPath().substring(groupId.length() + 1));
                 }
                 mangledRequest.setTargetedReposGroupId(groupId);
-                logger.debug("This is a request for reposGroupId {}. Mangled request and proceeding.", groupId);
+                logger.debug("This is a request for reposGroupId {}. Mangled request to {} and proceeding.", groupId,
+                        mangledRequest.getPath());
                 item = retrieveItemController(mangledRequest);
                 // on the returns we have to fool the absolutePath
                 itemProps = (ItemPropertiesImpl) item.getProperties();
@@ -245,6 +246,8 @@ public class ProximityImpl implements Proximity {
         if (isEmergeRepositoryGroups()) {
             if (pathList.size() >= 1) {
                 groupId = (String) pathList.get(0);
+
+                // remove groupId prefix from path
 
                 if (pathList.size() == 1) {
                     request.setPath(ItemProperties.PATH_ROOT);
@@ -343,7 +346,7 @@ public class ProximityImpl implements Proximity {
             }
         }
 
-        if (isEmergeRepositoryGroups() && groupId != null) {
+        if (isEmergeRepositoryGroups()) {
             mangleItemPathsForEmergeGroups(response);
         }
         return response;
@@ -419,7 +422,7 @@ public class ProximityImpl implements Proximity {
             // if not a targeted request that affects only one repos and
             // we need group search
             if (request.getTargetedReposId() == null && proximityLogic.isGroupSearchNeeded(request)) {
-                
+
                 ProximityRequest groupRequest = proximityLogic.getGroupRequest(request);
 
                 List repositoryGroupOrder = (List) repositoryGroups.get(item.getProperties().getRepositoryGroupId());
@@ -534,18 +537,22 @@ public class ProximityImpl implements Proximity {
         if (isEmergeRepositoryGroups()) {
             for (Iterator i = items.iterator(); i.hasNext();) {
                 ItemPropertiesImpl ip = (ItemPropertiesImpl) i.next();
+                logger.debug("Mangling item path {} with repositoryGroupId {}...", ip.getAbsolutePath(), ip
+                        .getRepositoryGroupId());
                 if (ip.getAbsolutePath().equals(ItemProperties.PATH_ROOT)) {
                     // make /groupId as path
                     ip.setAbsolutePath(ItemProperties.PATH_ROOT + ip.getRepositoryGroupId());
                 } else {
                     // make /groupId/... as path WITHOUT trailing /
-                    ip.setAbsolutePath(FilenameUtils.concat(ItemProperties.PATH_ROOT + ip.getRepositoryGroupId(), ip
-                            .getAbsolutePath()));
+                    ip.setAbsolutePath(FilenameUtils.normalizeNoEndSeparator(ItemProperties.PATH_ROOT + ip.getRepositoryGroupId()
+                            + ip.getAbsolutePath()));
                 }
+                logger.debug("Mangled item path {} with repositoryGroupId {}...", ip.getAbsolutePath(), ip
+                        .getRepositoryGroupId());
             }
         }
     }
-    
+
     protected List explodePathToList(String path) {
         List result = new ArrayList();
         String[] explodedPath = path.split(ItemProperties.PATH_SEPARATOR);
@@ -556,6 +563,5 @@ public class ProximityImpl implements Proximity {
         }
         return result;
     }
-
 
 }
