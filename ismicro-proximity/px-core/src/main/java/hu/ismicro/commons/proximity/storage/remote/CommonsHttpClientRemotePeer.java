@@ -191,6 +191,13 @@ public class CommonsHttpClientRemotePeer extends AbstractRemoteStorage {
                         InputStream is = new DeleteOnCloseFileInputStream(tmpFile);
                         result.setStream(is);
                     } else {
+                        // TODO: dirty hack, I am creating a dir named after the
+                        // directory retrieval just to get item properties!!!
+                        // Fix this!
+                        File tmpdir = new File(System.getProperty("java.io.tmpdir"), FilenameUtils.getName(path));
+                        tmpdir.mkdir();
+                        ip = getProxiedItemPropertiesFactory().expandItemProperties(path, tmpdir, true);
+                        tmpdir.delete();
                         result.setStream(null);
                     }
                     result.setProperties(ip);

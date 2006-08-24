@@ -297,6 +297,9 @@ public class RepositoryImpl implements Repository {
                                     getId());
                             storeItem(remoteResult);
                             remoteResult = getLocalStorage().retrieveItem(request.getPath(), propsOnly);
+                            remoteResult.getProperties().setMetadata(ItemProperties.METADATA_OWNING_REPOSITORY, getId());
+                            remoteResult.getProperties().setMetadata(ItemProperties.METADATA_OWNING_REPOSITORY_GROUP,
+                                    getGroupId());
                         }
                     }
                 } else {

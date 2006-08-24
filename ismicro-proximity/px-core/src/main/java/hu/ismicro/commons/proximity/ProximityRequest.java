@@ -99,6 +99,8 @@ public class ProximityRequest implements Serializable {
         str.append(getPath());
         str.append(", targetedReposId=");
         str.append(getTargetedReposId());
+        str.append(", targetedReposGroupId=");
+        str.append(getTargetedReposGroupId());
         str.append(", attributes=");
         str.append(getAttributes());
         str.append("]");
