@@ -241,8 +241,6 @@
 		<property name="repositoryLogic" ref="maven2ReleaseRepoLogic" />
 		<!-- Should i reindex my content on startup? -->
 		<property name="reindex" value="true" />
-		<!-- Should i recreate metadata on startup? -->
-		<property name="recreateMetadata" value="true" />
 		<!-- Am I listable? -->
 		<property name="listable" value="true" />
 		<!-- Am I available? If no, i will refuse all requests -->
@@ -264,7 +262,7 @@
 	<bean id="centralRemotePeer"
 		class="hu.ismicro.commons.proximity.storage.remote.CommonsHttpClientRemotePeer">
 		<property name="remoteUrl"
-			value="http://repo1.maven.org/maven2/" />
+			value="${pxmaster.url}" />
 		<!-- The timeout of HTTP connection -->
 		<property name="connectionTimeout" value="10000" />
 		<!-- The count of retries (used by DefaultRetryHandler) -->
@@ -272,7 +270,7 @@
 		<!-- Should HttpClient follow redirections? (preferred!) -->
 		<property name="followRedirection" value="true" />
 		<!-- Fix query string appended to URL, used for ProximityPiping "repositoryId=central" -->
-		<property name="queryString" value="" />
+		<property name="queryString" value="repositoryId=central" />
 		<!-- Proxy setup, uncomment if needed
 			<property name="proxyHost" value="myproxyhost.company.com" />
 			<property name="proxyPort" value="8080" />
@@ -319,8 +317,6 @@
 		<property name="repositoryLogic" ref="maven2ReleaseRepoLogic" />
 		<!-- Should i reindex my content on startup? -->
 		<property name="reindex" value="true" />
-		<!-- Should i recreate metadata on startup? -->
-		<property name="recreateMetadata" value="true" />
 		<!-- Am I listable? -->
 		<property name="listable" value="true" />
 		<!-- Am I available? If no, i will refuse all requests -->
@@ -342,7 +338,7 @@
 	<bean id="codehausRemotePeer"
 		class="hu.ismicro.commons.proximity.storage.remote.CommonsHttpClientRemotePeer">
 		<property name="remoteUrl"
-			value="http://repository.codehaus.org/" />
+			value="${pxmaster.url}" />
 		<!-- The timeout of HTTP connection -->
 		<property name="connectionTimeout" value="10000" />
 		<!-- The count of retries (used by DefaultRetryHandler) -->
@@ -350,7 +346,7 @@
 		<!-- Should HttpClient follow redirections? (preferred!) -->
 		<property name="followRedirection" value="true" />
 		<!-- Fix query string appended to URL, used for ProximityPiping "repositoryId=central" -->
-		<property name="queryString" value="" />
+		<property name="queryString" value="repositoryId=codehaus" />
 		<!-- Proxy setup, uncomment if needed
 			<property name="proxyHost" value="myproxyhost.company.com" />
 			<property name="proxyPort" value="8080" />
@@ -387,8 +383,6 @@
 		<property name="repositoryLogic" ref="maven2SnapshotRepoLogic" />
 		<!-- Should i reindex my content on startup? -->
 		<property name="reindex" value="true" />
-		<!-- Should i recreate metadata on startup? -->
-		<property name="recreateMetadata" value="true" />
 		<!-- Am I listable? -->
 		<property name="listable" value="true" />
 		<!-- Am I available? If no, i will refuse all requests -->
@@ -410,7 +404,7 @@
 	<bean id="apache.snapshotRemotePeer"
 		class="hu.ismicro.commons.proximity.storage.remote.CommonsHttpClientRemotePeer">
 		<property name="remoteUrl"
-			value="http://people.apache.org/maven-snapshot-repository/" />
+			value="${pxmaster.url}" />
 		<!-- The timeout of HTTP connection -->
 		<property name="connectionTimeout" value="10000" />
 		<!-- The count of retries (used by DefaultRetryHandler) -->
@@ -418,7 +412,7 @@
 		<!-- Should HttpClient follow redirections? (preferred!) -->
 		<property name="followRedirection" value="true" />
 		<!-- Fix query string appended to URL, used for ProximityPiping "repositoryId=central" -->
-		<property name="queryString" value="" />
+		<property name="queryString" value="repositoryId=apache.snapshot" />
 		<!-- Proxy setup, uncomment if needed
 			<property name="proxyHost" value="myproxyhost.company.com" />
 			<property name="proxyPort" value="8080" />
@@ -456,8 +450,6 @@
 		<property name="repositoryLogic" ref="maven2SnapshotRepoLogic" />
 		<!-- Should i reindex my content on startup? -->
 		<property name="reindex" value="true" />
-		<!-- Should i recreate metadata on startup? -->
-		<property name="recreateMetadata" value="true" />
 		<!-- Am I listable? -->
 		<property name="listable" value="true" />
 		<!-- Am I available? If no, i will refuse all requests -->
@@ -479,7 +471,7 @@
 	<bean id="codehaus.snapshotRemotePeer"
 		class="hu.ismicro.commons.proximity.storage.remote.CommonsHttpClientRemotePeer">
 		<property name="remoteUrl"
-			value="http://snapshots.repository.codehaus.org/" />
+			value="${pxmaster.url}" />
 		<!-- The timeout of HTTP connection -->
 		<property name="connectionTimeout" value="10000" />
 		<!-- The count of retries (used by DefaultRetryHandler) -->
@@ -487,7 +479,7 @@
 		<!-- Should HttpClient follow redirections? (preferred!) -->
 		<property name="followRedirection" value="true" />
 		<!-- Fix query string appended to URL, used for ProximityPiping "repositoryId=central" -->
-		<property name="queryString" value="" />
+		<property name="queryString" value="repositoryId=codehaus.snapshot" />
 		<!-- Proxy setup, uncomment if needed
 			<property name="proxyHost" value="myproxyhost.company.com" />
 			<property name="proxyPort" value="8080" />
@@ -514,6 +506,8 @@
 		<property name="id" value="inhouse" />
 		<property name="groupId" value="private" />
 		<property name="localStorage" ref="inhouseFSStorage" />
+		<property name="remoteStorage"
+			ref="inhouseRemotePeer" />
 		<property name="indexer" ref="indexer" />
 		<property name="statisticsGatherer" ref="stats" />
 		<property name="repositoryLogic" ref="maven2ReleaseRepoLogic" />
@@ -523,8 +517,6 @@
 		-->
 		<!-- Should i reindex my content on startup? -->
 		<property name="reindex" value="true" />
-		<!-- Should i recreate metadata on startup? -->
-		<property name="recreateMetadata" value="true" />
 		<!-- Am I listable? -->
 		<property name="listable" value="true" />
 		<!-- Am I available? If no, i will refuse all requests -->
@@ -543,11 +535,41 @@
 			ref="itemPropertiesFactory" />
 	</bean>
 
+	<bean id="inhouseRemotePeer"
+		class="hu.ismicro.commons.proximity.storage.remote.CommonsHttpClientRemotePeer">
+		<property name="remoteUrl"
+			value="${pxmaster.url}" />
+		<!-- The timeout of HTTP connection -->
+		<property name="connectionTimeout" value="10000" />
+		<!-- The count of retries (used by DefaultRetryHandler) -->
+		<property name="retrievalRetryCount" value="3" />
+		<!-- Should HttpClient follow redirections? (preferred!) -->
+		<property name="followRedirection" value="true" />
+		<!-- Fix query string appended to URL, used for ProximityPiping "repositoryId=central" -->
+		<property name="queryString" value="repositoryId=inhouse" />
+		<!-- Proxy setup, uncomment if needed
+			<property name="proxyHost" value="myproxyhost.company.com" />
+			<property name="proxyPort" value="8080" />
+		-->
+		<!-- Proxy authentication setup, uncomment if proxy needs this
+			<property name="proxyUsername" value="userOnProxy" />
+			<property name="proxyPassword" value="bigSecret" />
+		-->
+		<!-- Proxy NTLM authentication setup, uncomment if proxy needs this
+			<property name="proxyNtlmDomain" value="domain to authenticate within" />
+			<property name="proxyNtlmHost" value="originating hostname" />
+			<property name="proxyUsername" value="userOnProxyWithoutDomainPrefix" />
+			<property name="proxyPassword" value="bigSecret" />
+		-->
+	</bean>
+
 	<bean id="inhouse.snapshot"
 		class="hu.ismicro.commons.proximity.impl.RepositoryImpl">
 		<property name="id" value="inhouse.snapshot" />
 		<property name="groupId" value="private" />
 		<property name="localStorage" ref="inhouse.snapshotFSStorage" />
+		<property name="remoteStorage"
+			ref="inhouse.snapshotRemotePeer" />
 		<property name="indexer" ref="indexer" />
 		<property name="statisticsGatherer" ref="stats" />
 		<property name="repositoryLogic" ref="maven2SnapshotRepoLogic" />
@@ -557,8 +579,6 @@
 		-->
 		<!-- Should i reindex my content on startup? -->
 		<property name="reindex" value="true" />
-		<!-- Should i recreate metadata on startup? -->
-		<property name="recreateMetadata" value="true" />
 		<!-- Am I listable? -->
 		<property name="listable" value="true" />
 		<!-- Am I available? If no, i will refuse all requests -->
@@ -577,6 +597,34 @@
 			ref="itemPropertiesFactory" />
 	</bean>
 
+	<bean id="inhouse.snapshotRemotePeer"
+		class="hu.ismicro.commons.proximity.storage.remote.CommonsHttpClientRemotePeer">
+		<property name="remoteUrl"
+			value="${pxmaster.url}" />
+		<!-- The timeout of HTTP connection -->
+		<property name="connectionTimeout" value="10000" />
+		<!-- The count of retries (used by DefaultRetryHandler) -->
+		<property name="retrievalRetryCount" value="3" />
+		<!-- Should HttpClient follow redirections? (preferred!) -->
+		<property name="followRedirection" value="true" />
+		<!-- Fix query string appended to URL, used for ProximityPiping "repositoryId=central" -->
+		<property name="queryString" value="repositoryId=inhouse.snapshot" />
+		<!-- Proxy setup, uncomment if needed
+			<property name="proxyHost" value="myproxyhost.company.com" />
+			<property name="proxyPort" value="8080" />
+		-->
+		<!-- Proxy authentication setup, uncomment if proxy needs this
+			<property name="proxyUsername" value="userOnProxy" />
+			<property name="proxyPassword" value="bigSecret" />
+		-->
+		<!-- Proxy NTLM authentication setup, uncomment if proxy needs this
+			<property name="proxyNtlmDomain" value="domain to authenticate within" />
+			<property name="proxyNtlmHost" value="originating hostname" />
+			<property name="proxyUsername" value="userOnProxyWithoutDomainPrefix" />
+			<property name="proxyPassword" value="bigSecret" />
+		-->
+	</bean>
+
 	<!--
 		- EXT NonFree Repository (with read-only storage and without remote peer)
 		- A maven repository for in-house use for publishing released non-free artifacts 
@@ -587,6 +635,8 @@
 		<property name="id" value="extNonFree" />
 		<property name="groupId" value="ext" />
 		<property name="localStorage" ref="extNonFreeFSStorage" />
+		<property name="remoteStorage"
+			ref="extNonFreeRemotePeer" />
 		<property name="indexer" ref="indexer" />
 		<property name="statisticsGatherer" ref="stats" />
 		<property name="repositoryLogic" ref="maven2ReleaseRepoLogic" />
@@ -596,8 +646,6 @@
 		-->
 		<!-- Should i reindex my content on startup? -->
 		<property name="reindex" value="true" />
-		<!-- Should i recreate metadata on startup? -->
-		<property name="recreateMetadata" value="true" />
 		<!-- Am I listable? -->
 		<property name="listable" value="true" />
 		<!-- Am I available? If no, i will refuse all requests -->
@@ -616,6 +664,34 @@
 			ref="itemPropertiesFactory" />
 	</bean>
 
+	<bean id="extNonFreeRemotePeer"
+		class="hu.ismicro.commons.proximity.storage.remote.CommonsHttpClientRemotePeer">
+		<property name="remoteUrl"
+			value="${pxmaster.url}" />
+		<!-- The timeout of HTTP connection -->
+		<property name="connectionTimeout" value="10000" />
+		<!-- The count of retries (used by DefaultRetryHandler) -->
+		<property name="retrievalRetryCount" value="3" />
+		<!-- Should HttpClient follow redirections? (preferred!) -->
+		<property name="followRedirection" value="true" />
+		<!-- Fix query string appended to URL, used for ProximityPiping "repositoryId=central" -->
+		<property name="queryString" value="repositoryId=extNonFree" />
+		<!-- Proxy setup, uncomment if needed
+			<property name="proxyHost" value="myproxyhost.company.com" />
+			<property name="proxyPort" value="8080" />
+		-->
+		<!-- Proxy authentication setup, uncomment if proxy needs this
+			<property name="proxyUsername" value="userOnProxy" />
+			<property name="proxyPassword" value="bigSecret" />
+		-->
+		<!-- Proxy NTLM authentication setup, uncomment if proxy needs this
+			<property name="proxyNtlmDomain" value="domain to authenticate within" />
+			<property name="proxyNtlmHost" value="originating hostname" />
+			<property name="proxyUsername" value="userOnProxyWithoutDomainPrefix" />
+			<property name="proxyPassword" value="bigSecret" />
+		-->
+	</bean>
+
 	<!--
 		- EXT Free Repository (with read-only storage and without remote peer)
 		- A maven repository for in-house use for publishing released artifacts 
@@ -626,6 +702,8 @@
 		<property name="id" value="extFree" />
 		<property name="groupId" value="ext" />
 		<property name="localStorage" ref="extFreeFSStorage" />
+		<property name="remoteStorage"
+			ref="extFreeRemotePeer" />
 		<property name="indexer" ref="indexer" />
 		<property name="statisticsGatherer" ref="stats" />
 		<property name="repositoryLogic" ref="maven2ReleaseRepoLogic" />
@@ -635,8 +713,6 @@
 		-->
 		<!-- Should i reindex my content on startup? -->
 		<property name="reindex" value="true" />
-		<!-- Should i recreate metadata on startup? -->
-		<property name="recreateMetadata" value="true" />
 		<!-- Am I listable? -->
 		<property name="listable" value="true" />
 		<!-- Am I available? If no, i will refuse all requests -->
@@ -653,6 +729,34 @@
 			value="${extFreeFSStorage.baseDir}" />
 		<property name="proxiedItemPropertiesFactory"
 			ref="itemPropertiesFactory" />
+	</bean>
+
+	<bean id="extFreeRemotePeer"
+		class="hu.ismicro.commons.proximity.storage.remote.CommonsHttpClientRemotePeer">
+		<property name="remoteUrl"
+			value="${pxmaster.url}" />
+		<!-- The timeout of HTTP connection -->
+		<property name="connectionTimeout" value="10000" />
+		<!-- The count of retries (used by DefaultRetryHandler) -->
+		<property name="retrievalRetryCount" value="3" />
+		<!-- Should HttpClient follow redirections? (preferred!) -->
+		<property name="followRedirection" value="true" />
+		<!-- Fix query string appended to URL, used for ProximityPiping "repositoryId=central" -->
+		<property name="queryString" value="repositoryId=extFree" />
+		<!-- Proxy setup, uncomment if needed
+			<property name="proxyHost" value="myproxyhost.company.com" />
+			<property name="proxyPort" value="8080" />
+		-->
+		<!-- Proxy authentication setup, uncomment if proxy needs this
+			<property name="proxyUsername" value="userOnProxy" />
+			<property name="proxyPassword" value="bigSecret" />
+		-->
+		<!-- Proxy NTLM authentication setup, uncomment if proxy needs this
+			<property name="proxyNtlmDomain" value="domain to authenticate within" />
+			<property name="proxyNtlmHost" value="originating hostname" />
+			<property name="proxyUsername" value="userOnProxyWithoutDomainPrefix" />
+			<property name="proxyPassword" value="bigSecret" />
+		-->
 	</bean>
 
 </beans>

@@ -8,9 +8,17 @@ as one logical repository and for publishing in-house and other external maven
 artifacts which are not uploadable to ibiblio (like commercial projects, J2EE
 Jars, etc...).</p>
 
-<p>The Proximity "default" setup should be sufficient in almost every situation,
-though Proximity itself is very configurable. This "default" configuration of Proximity
-is a simple J2EE Web Application front-end to Proximity using Apache Velocity as templating
+<p>The Proximity "PxSlave" is set to serve as Proximity SLAVE  as described in
+Chaining Proximities on <a href="http://proximity.abstracthorizon.org/">Proximity site</a>.
+PxSlave "shows" as the "default" configuration, but on the remote end it simply "targets"
+the PxMaster with parametrized requests. The PxSlave does not have hosted repository
+by default, but it is easily reconfigurable to add a hosted repository.</p>
+
+<p>Warning, you have to set one more parameter in <tty>proximity.properties</tty> file, the
+<tty>pxmaster.url</tty> value that points to the repository URL of the PxMaster!</p>
+
+<p>This configuration resembles the "default" configuration of Proximity
+and is a simple J2EE Web Application front-end to Proximity using Apache Velocity as templating
 engine and publishing Web Services using XFire.</p>
 
 <p>For documentation and reference visit <a href="http://proximity.abstracthorizon.org/">Proximity site</a>.
