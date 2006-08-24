@@ -1,0 +1,43 @@
+<h2>#springMessage('proximity.product.name')</h2>
+
+<p>Proximity is in function somewhere between http-proxy and
+proactive-mirror. One of it's primary use is as Java web application to serve as maven proxy on our
+company's intranet. As for reducing outgoing traffic (caching central and other
+maven repos), aggregating more repositories (reducing project config) with acting
+as one logical repository and for publishing in-house and other external maven 
+artifacts which are not uploadable to ibiblio (like commercial projects, J2EE
+Jars, etc...).</p>
+
+<p>The Proximity "default" setup should be sufficient in almost every situation,
+though Proximity itself is very configurable. This "default" configuration of Proximity
+is a simple J2EE Web Application front-end to Proximity using Apache Velocity as templating
+engine and publishing Web Services using XFire.</p>
+
+<p>For documentation and reference visit <a href="http://proximity.abstracthorizon.org/">Proximity site</a>.
+Proximity project is hosted on <a href="http://www.abstracthorizon.org/">Abstract Horizon</a>.</p>
+
+<h3>Published Web Services</h3>
+
+<p>Proximity publishes it's partial functionality via SOAP. For WSDL's see:</p>
+<ul>
+<li>Searching service WSDL is here: <a href="ws/SearchService?wsdl">ws/SearchService?wsdl</a></li>
+<li>Maintenance service WSDL is here: <a href="ws/MaintenanceService?wsdl">ws/MaintenanceService?wsdl</a></li>
+</ul>
+
+
+<h3>How to use</h3>
+
+<p>Install it as it should with distribution you downloaded. J2EE WAR file should be
+deployed on a J2EE servlet container. Bundled releases should be installed as
+described in README files.</p>
+
+<p>For WAR distribution: All you have to do is install Proximity WAR on some Servlet 
+container that has access to outer world (for reaching central, codehaus, etc. 
+This is NOT mandatory since you can use Proximity to serve only your own artifacts!). </p>
+
+<p>For Maven2 examples see page <a href="repositories.do">Repositories</a>.</p>
+
+<p>For other examples visit <a href="http://proximity.abstracthorizon.org/">Proximity Site</a>.</p>
+
+<p>Have fun!</p>
+

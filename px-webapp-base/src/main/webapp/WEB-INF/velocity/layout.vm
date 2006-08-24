@@ -1,0 +1,17 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title>Proximity</title>
+        <script type="text/javascript" src="#springUrl('/dwr/engine.js')"></script>
+        <script type="text/javascript" src="#springUrl('/dwr/util.js')"></script>
+		<link rel="stylesheet" href="#springUrl('/css/default.css')" type="text/css" media="all"></link>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></meta>
+	</head>
+	<body>
+		<table>
+			<tr><td class="headerBand" colspan="2">#parse('header.vm')</td></tr>
+			<tr><td class="contentBox">$screen_content</td></tr>
+			<tr><td class="footerBand" colspan="2">#parse('footer.vm')</td></tr>
+		</table>
+	</body>
+</html>

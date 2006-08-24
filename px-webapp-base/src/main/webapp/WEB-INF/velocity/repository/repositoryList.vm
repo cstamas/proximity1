@@ -1,0 +1,69 @@
+<h2>#springMessage("repositorylist.name")</h2>
+
+<div class="left">
+	<b>#springMessage("repositorylist.pathLinks")</b>&nbsp;
+	<a href="#springUrl('/repository')">#springMessage("repositorylist.root")</a>
+
+#foreach($path in $requestPathList)
+    #set ( $currpath = "$!currpath/$path" )
+	&nbsp;#springMessage("repositorylist.pathSeparator")&nbsp;
+	<a href="#springUrl('/repository')$currpath">$path</a>
+#end
+
+</div>
+
+<p/>
+
+<table>
+	<thead>
+		<tr class="tdb">
+			<td width="40">#springMessage("item.kind")</td>
+			<td><a href="#springUrl('/repository')${requestUri}?orderBy=name"><b>#springMessage("item.path")</b></a></td>
+			<td width="100"><a href="#springUrl('/repository')${requestUri}?orderBy=size"><b>#springMessage("item.size")</b></a></td>
+			<td width="160"><a href="#springUrl('/repository')${requestUri}?orderBy=lastModified"><b>#springMessage("item.lastModified")</b></a></td>
+			<td width="80"><a href="#springUrl('/repository')${requestUri}?orderBy=repositoryGroupId"><b>#springMessage("item.repositoryGroupId")</b></a></td>
+			<td width="80"><a href="#springUrl('/repository')${requestUri}?orderBy=repositoryId"><b>#springMessage("item.repositoryId")</b></a></td>
+		</tr>
+	</thead>
+	
+	<tbody>
+  
+		#foreach($item in $items)
+			<tr class="tda">
+				<td>
+				    #itemImage($item)
+				</td>
+				<td>
+				    #itemLink($item)
+				</td>
+				<td>
+					#if(${item.isDirectory()})
+						&nbsp;
+					#else
+					    $formatFileSize.getFileSizeAsString($item.size)&nbsp;
+					#end
+				</td>
+				<td>
+					#if( ${item.lastModified} )
+						$vtldatetool.format('medium',${item.lastModified})
+					#end
+					&nbsp;
+				</td>
+				<td>
+					#if( ${item.repositoryGroupId} )
+						<a href="#springUrl('/repository')?repositoryGroupId=${item.repositoryGroupId}">${item.repositoryGroupId}</a>
+					#end
+					&nbsp;
+				</td>
+				<td>
+					#if( ${item.repositoryId} )
+						<a href="#springUrl('/repository')?repositoryId=${item.repositoryId}">${item.repositoryId}</a>
+					#end
+				&nbsp;
+				</td>
+			</tr>
+		#end
+  
+	</tbody>
+	
+</table>
