@@ -49,9 +49,9 @@
 		</dependency>
 		<dependency>
 			<groupId>hu.ismicro.proximity</groupId>
-			<artifactId>px-webapp-util</artifactId>
+			<artifactId>px-webapp-base</artifactId>
 			<version>1.0.0-RC4</version>
-			<type>jar</type>
+			<type>war</type>
 			<scope>compile</scope>
 		</dependency>
 
