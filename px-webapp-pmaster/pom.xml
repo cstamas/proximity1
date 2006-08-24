@@ -22,28 +22,28 @@
 	<name>Px Webapp (PxMASTER)</name>
 
 	<!-- The module version -->
-	<version>1.0.0-RC4</version>
+	<version>1.0.0-RC4.1</version>
 
 	<dependencies>
 
 		<dependency>
 			<groupId>hu.ismicro.proximity</groupId>
 			<artifactId>px-core</artifactId>
-			<version>1.0.0-RC4</version>
+			<version>1.0.0-RC4.1</version>
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>hu.ismicro.proximity</groupId>
 			<artifactId>px-core-maven</artifactId>
-			<version>1.0.0-RC4</version>
+			<version>1.0.0-RC4.1</version>
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>hu.ismicro.proximity</groupId>
 			<artifactId>px-webapp-base</artifactId>
-			<version>1.0.0-RC4</version>
+			<version>1.0.0-RC4.1</version>
 			<type>war</type>
 			<scope>compile</scope>
 		</dependency>
