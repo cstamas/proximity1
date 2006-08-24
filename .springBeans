@@ -4,10 +4,26 @@
 		<configExtension>xml</configExtension>
 	</configExtensions>
 	<configs>
+		<config>px-webapp-pmaster/src/main/webapp/WEB-INF/px-support-servlet.xml</config>
+		<config>px-webapp-pslave/src/main/webapp/WEB-INF/px-support-servlet.xml</config>
+		<config>px-webapp-pslave/src/main/webapp/WEB-INF/xfire-servlet.xml</config>
 		<config>px-webapp-default/src/main/webapp/WEB-INF/px-repository-servlet.xml</config>
+		<config>px-webapp-pslave/src/main/webapp/WEB-INF/applicationContext.xml</config>
+		<config>px-webapp-demosite/src/main/webapp/WEB-INF/px-support-servlet.xml</config>
+		<config>px-webapp-minimal/src/main/webapp/WEB-INF/px-support-servlet.xml</config>
+		<config>px-webapp-pslave/src/main/webapp/WEB-INF/px-artifacts-servlet.xml</config>
+		<config>px-webapp-demosite/src/main/webapp/WEB-INF/applicationContext.xml</config>
+		<config>px-webapp-minimal/src/main/webapp/WEB-INF/px-repository-servlet.xml</config>
+		<config>px-webapp-minimal/src/main/webapp/WEB-INF/applicationContext.xml</config>
+		<config>px-webapp-pslave/src/main/webapp/WEB-INF/px-repository-servlet.xml</config>
+		<config>px-webapp-pmaster/src/main/webapp/WEB-INF/applicationContext.xml</config>
+		<config>px-webapp-pmaster/src/main/webapp/WEB-INF/px-repository-servlet.xml</config>
 		<config>px-core/src/test/resources/hu/ismicro/commons/proximity/applicationContext.xml</config>
 		<config>px-webapp-default/src/main/webapp/WEB-INF/xfire-servlet.xml</config>
+		<config>px-webapp-demosite/src/main/webapp/WEB-INF/xfire-servlet.xml</config>
+		<config>px-webapp-demosite/src/main/webapp/WEB-INF/px-artifacts-servlet.xml</config>
 		<config>px-webapp-default/src/main/webapp/WEB-INF/applicationContext.xml</config>
+		<config>px-webapp-demosite/src/main/webapp/WEB-INF/px-repository-servlet.xml</config>
 		<config>px-webapp-default/src/main/webapp/WEB-INF/px-artifacts-servlet.xml</config>
 		<config>px-webapp-default/src/main/webapp/WEB-INF/px-support-servlet.xml</config>
 	</configs>
@@ -22,6 +38,50 @@
 				<config>px-webapp-default/src/main/webapp/WEB-INF/px-repository-servlet.xml</config>
 				<config>px-webapp-default/src/main/webapp/WEB-INF/px-support-servlet.xml</config>
 				<config>px-webapp-default/src/main/webapp/WEB-INF/xfire-servlet.xml</config>
+			</configs>
+		</configSet>
+		<configSet>
+			<name>webapp minimal</name>
+			<allowBeanDefinitionOverriding>true</allowBeanDefinitionOverriding>
+			<incomplete>false</incomplete>
+			<configs>
+				<config>px-webapp-minimal/src/main/webapp/WEB-INF/applicationContext.xml</config>
+				<config>px-webapp-minimal/src/main/webapp/WEB-INF/px-repository-servlet.xml</config>
+				<config>px-webapp-minimal/src/main/webapp/WEB-INF/px-support-servlet.xml</config>
+			</configs>
+		</configSet>
+		<configSet>
+			<name>webapp pslave</name>
+			<allowBeanDefinitionOverriding>true</allowBeanDefinitionOverriding>
+			<incomplete>false</incomplete>
+			<configs>
+				<config>px-webapp-pslave/src/main/webapp/WEB-INF/applicationContext.xml</config>
+				<config>px-webapp-pslave/src/main/webapp/WEB-INF/px-artifacts-servlet.xml</config>
+				<config>px-webapp-pslave/src/main/webapp/WEB-INF/px-repository-servlet.xml</config>
+				<config>px-webapp-pslave/src/main/webapp/WEB-INF/px-support-servlet.xml</config>
+				<config>px-webapp-pslave/src/main/webapp/WEB-INF/xfire-servlet.xml</config>
+			</configs>
+		</configSet>
+		<configSet>
+			<name>webapp demosite</name>
+			<allowBeanDefinitionOverriding>true</allowBeanDefinitionOverriding>
+			<incomplete>false</incomplete>
+			<configs>
+				<config>px-webapp-demosite/src/main/webapp/WEB-INF/applicationContext.xml</config>
+				<config>px-webapp-demosite/src/main/webapp/WEB-INF/px-artifacts-servlet.xml</config>
+				<config>px-webapp-demosite/src/main/webapp/WEB-INF/px-repository-servlet.xml</config>
+				<config>px-webapp-demosite/src/main/webapp/WEB-INF/px-support-servlet.xml</config>
+				<config>px-webapp-demosite/src/main/webapp/WEB-INF/xfire-servlet.xml</config>
+			</configs>
+		</configSet>
+		<configSet>
+			<name>webapp pmaster</name>
+			<allowBeanDefinitionOverriding>true</allowBeanDefinitionOverriding>
+			<incomplete>false</incomplete>
+			<configs>
+				<config>px-webapp-pmaster/src/main/webapp/WEB-INF/applicationContext.xml</config>
+				<config>px-webapp-pmaster/src/main/webapp/WEB-INF/px-repository-servlet.xml</config>
+				<config>px-webapp-pmaster/src/main/webapp/WEB-INF/px-support-servlet.xml</config>
 			</configs>
 		</configSet>
 		<configSet>
