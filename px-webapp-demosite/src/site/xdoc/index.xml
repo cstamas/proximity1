@@ -18,7 +18,7 @@
 				is J2EE Web Application with "default" configuration
 				that runs on Proximity site. Thus, it has few
 				restrictions, including JAR downloading from "public"
-				repositories.
+				repositories implemented using AccessManager.
 			</p>
 
 		</section>
