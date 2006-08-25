@@ -34,7 +34,7 @@
 
 	<ciManagement>
 		<system>Continuum</system>
-		<url>http://intranet.is-micro.hu/continuum/</url>
+		<url>http://ci.abstracthorizon.org/continuum</url>
 		<notifiers>
 			<notifier>
 				<configuration>
