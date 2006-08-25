@@ -216,7 +216,7 @@
 		<!-- Should repository driven by this logic serve snapshots? -->
 		<property name="shouldServeSnapshots" value="true" />
 		<!-- Should repository driven by this logic serve releases? -->
-		<property name="shouldServeReleases" value="false" />
+		<property name="shouldServeReleases" value="true" />
 	</bean>
 
 	<!--
