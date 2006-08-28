@@ -8,8 +8,10 @@
 	<classpathentry kind="src" path="px-core-maven/src/main/java"/>
 	<classpathentry kind="src" path="px-core-maven/src/test/java"/>
 	<classpathentry excluding="**" output="px-core-maven/src/test/resources" kind="src" path="px-core-maven/src/test/resources"/>
-	<classpathentry kind="src" path="px-webapp-util/src/main/java"/>
-	<classpathentry kind="src" path="px-webapp-util/src/test/java"/>
+	<classpathentry kind="src" path="px-webapp-base/src/main/java"/>
+	<classpathentry kind="src" path="px-webapp-base/src/test/java"/>
+	<classpathentry excluding="**" output="px-webapp-base/src/main/resources" kind="src" path="px-webapp-base/src/main/resources"/>
+	<classpathentry excluding="**" output="px-webapp-base/src/main/filtered-resources" kind="src" path="px-webapp-base/src/main/filtered-resources"/>
 	<classpathentry excluding="**" output="px-webapp-default/src/main/resources" kind="src" path="px-webapp-default/src/main/resources"/>
 	<classpathentry excluding="**" output="px-webapp-default/src/main/filtered-resources" kind="src" path="px-webapp-default/src/main/filtered-resources"/>
 	<classpathentry excluding="**" output="px-webapp-minimal/src/main/resources" kind="src" path="px-webapp-minimal/src/main/resources"/>
