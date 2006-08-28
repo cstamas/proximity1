@@ -369,7 +369,7 @@
 	<bean id="apache.snapshot"
 		class="hu.ismicro.commons.proximity.impl.RepositoryImpl">
 		<property name="id" value="apache.snapshot" />
-		<property name="groupId" value="public" />
+		<property name="groupId" value="apache.snapshot" />
 		<property name="localStorage" ref="apache.snapshotFSStorage" />
 		<property name="remoteStorage" ref="apache.snapshotRemotePeer" />
 		<property name="indexer" ref="indexer" />
@@ -435,7 +435,7 @@
 	<bean id="codehaus.snapshot"
 		class="hu.ismicro.commons.proximity.impl.RepositoryImpl">
 		<property name="id" value="codehaus.snapshot" />
-		<property name="groupId" value="public" />
+		<property name="groupId" value="codehaus.snapshot" />
 		<property name="localStorage" ref="codehaus.snapshotFSStorage" />
 		<property name="remoteStorage"
 			ref="codehaus.snapshotRemotePeer" />
