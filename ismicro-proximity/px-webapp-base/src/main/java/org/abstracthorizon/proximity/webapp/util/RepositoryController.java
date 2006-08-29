@@ -9,6 +9,7 @@ import hu.ismicro.commons.proximity.ProximityRequest;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -52,6 +53,14 @@ public class RepositoryController extends MultiActionController {
         pRequest.setTargetedReposGroupId(targetGroup);
         pRequest.setGrantee(null);
         pRequest.getAttributes().put(ProximityRequest.REQUEST_REMOTE_ADDRESS, request.getRemoteAddr());
+        
+        // issue #42, collect header information
+        Enumeration headerNames = request.getHeaderNames();
+        while(headerNames.hasMoreElements()) {
+            String headerName = (String) headerNames.nextElement();
+            pRequest.getAttributes().put("http." + headerName.toLowerCase(), request.getHeader(headerName));
+        }
+        
         try {
             logger.debug("Got request for " + targetRepository + " repository on URI: " + requestURI);
             item = proximity.retrieveItem(pRequest);
@@ -68,6 +77,7 @@ public class RepositoryController extends MultiActionController {
                 result.put("requestPathList", explodeUriToList(requestURI));
                 return new ModelAndView("repository/repositoryList", result);
             } else {
+                // TODO: check for If-Modified-Since?
                 response.setContentType("application/octet-stream");
                 response.setContentLength((int) item.getProperties().getSize());
                 response.setDateHeader("Last-Modified", item.getProperties().getLastModified().getTime());
