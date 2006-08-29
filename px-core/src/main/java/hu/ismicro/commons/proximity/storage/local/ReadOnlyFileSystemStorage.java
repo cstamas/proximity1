@@ -18,7 +18,6 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Stack;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 
 /**
@@ -141,18 +140,9 @@ public class ReadOnlyFileSystemStorage extends AbstractLocalStorage {
 
     public void recreateMetadata(Map extraProps) throws StorageException {
 
-        try {
-            FileUtils.deleteDirectory(getMetadataBaseDir());
-        } catch (IllegalArgumentException ex) {
-            logger.debug("Could not delete the " + getMetadataBaseDir() + " directory, is this new instance?");
-        } catch (IOException ex) {
-            logger.warn("Could not delete the " + getMetadataBaseDir()
-                    + " directory, is storage on Network volume? Ignoring error...", ex);
-        }
-
-        // the fact that we deleted all metadata will cause to be recreated by
-        // loadMD,
-        // so we now just make a recursive listing?
+        // issue #44, we will not delete existing metadata,
+        // instead, we will force to "recreate" those the properties factory
+        // eventually appending it with new ones.
 
         int processed = 0;
         Stack stack = new Stack();
@@ -162,13 +152,18 @@ public class ReadOnlyFileSystemStorage extends AbstractLocalStorage {
             dir = (List) stack.pop();
             for (Iterator i = dir.iterator(); i.hasNext();) {
                 ItemProperties ip = (ItemProperties) i.next();
-                if (extraProps != null) {
-                    ip.getAllMetadata().putAll(extraProps);
-                }
+
                 if (ip.isDirectory()) {
                     List subdir = listItems(ip.getPath());
                     stack.push(subdir);
                 } else {
+                    logger.debug("**** {}", ip.getPath());
+                    File target = new File(getStorageBaseDir(), ip.getPath());
+                    ItemProperties nip = getProxiedItemPropertiesFactory().expandItemProperties(ip.getPath(), target, false);
+                    if (extraProps != null) {
+                        nip.getAllMetadata().putAll(extraProps);
+                    }
+                    storeItemProperties(nip);
                     processed++;
                 }
             }
@@ -194,9 +189,9 @@ public class ReadOnlyFileSystemStorage extends AbstractLocalStorage {
                     fis.close();
                     ip.getAllMetadata().putAll(metadata);
                 } else {
-                    logger.debug("No metadata exists for [{}] on path [{}] -- RECREATING", ip.getName(), ip
+                    logger.info("No metadata exists for [{}] on path [{}] -- recreating the default ones. Reindex operation may be needed to recreate/reindex them completely.", ip.getName(), ip
                             .getAbsolutePath());
-                    ip = getProxiedItemPropertiesFactory().expandItemProperties(path, target, false);
+                    ip = getProxiedItemPropertiesFactory().expandItemProperties(path, target, true);
                     storeItemProperties(ip);
                 }
             } catch (IOException ex) {
