@@ -8,8 +8,10 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
+import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
@@ -36,6 +38,10 @@ public class MavenItemInspector extends AbstractItemInspector {
 
     public static final String POM_DESCRIPTION_KEY = "pom.prjDesc";
 
+    public static final String POM_DEPENDENCIES_KEY = "pom.deps";
+
+    public static final String POM_PARENT_KEY = "pom.parent";
+
     public boolean isHandled(ItemPropertiesImpl ip) {
         return MavenArtifactRecognizer.isPom(ip.getName()) || MavenArtifactRecognizer.isMetadata(ip.getName())
                 || MavenArtifactRecognizer.isSnapshot(ip.getAbsolutePath(), ip.getName());
@@ -48,6 +54,8 @@ public class MavenItemInspector extends AbstractItemInspector {
         result.add(POM_AID_KEY);
         result.add(POM_PCK_KEY);
         result.add(POM_VERSION_KEY);
+        result.add(POM_DEPENDENCIES_KEY);
+        result.add(POM_PARENT_KEY);
         return result;
     }
 
@@ -85,6 +93,36 @@ public class MavenItemInspector extends AbstractItemInspector {
                     }
                     if (pom.getDescription() != null) {
                         ip.setMetadata(POM_DESCRIPTION_KEY, pom.getDescription());
+                    }
+
+                    if (pom.getParent() != null) {
+                        StringBuffer parent = new StringBuffer();
+                        parent.append(pom.getParent().getGroupId());
+                        parent.append(":");
+                        parent.append(pom.getParent().getArtifactId());
+                        if (pom.getParent().getVersion() != null) {
+                            parent.append(":");
+                            parent.append(pom.getParent().getVersion());
+                        }
+                        ip.setMetadata(POM_PARENT_KEY, parent.toString());
+                    }
+
+                    if (pom.getDependencies() != null) {
+                        StringBuffer deps = new StringBuffer();
+                        for (Iterator i = pom.getDependencies().iterator(); i.hasNext();) {
+                            Dependency dep = (Dependency) i.next();
+                            deps.append(dep.getGroupId());
+                            deps.append(":");
+                            deps.append(dep.getArtifactId());
+                            // TODO: version ranges?
+                            if (dep.getVersion() != null && !dep.getVersion().contains("[")
+                                    && !dep.getVersion().contains("(")) {
+                                deps.append(":");
+                                deps.append(dep.getVersion());
+                            }
+                            deps.append("\n");
+                        }
+                        ip.setMetadata(POM_DEPENDENCIES_KEY, deps.toString());
                     }
 
                 } catch (XmlPullParserException ex) {
