@@ -120,15 +120,15 @@ way. But remember, the {{{repository-configuration.html#RepositoryLogic}Reposito
 
   Proximity offers three Repository Logic implementations:
   
-  * {{{px-core/xref/hu/ismicro/commons/proximity/base/logic/DefaultProxyingRepositoryLogic.html}DefaultProxyingRepositoryLogic}} - that behaves like a "simple" proxying logic.
+  * {{{px-core/xref/org/abstracthorizon/proximity/base/logic/DefaultProxyingRepositoryLogic.html}DefaultProxyingRepositoryLogic}} - that behaves like a "simple" proxying logic.
   
-  * {{{px-core/xref/hu/ismicro/commons/proximity/base/logic/DefaultExpiringProxyingRepositoryLogic.html}DefaultExpiringProxyingRepositoryLogic}} - extends the former one with timeouts.
+  * {{{px-core/xref/org/abstracthorizon/proximity/base/logic/DefaultExpiringProxyingRepositoryLogic.html}DefaultExpiringProxyingRepositoryLogic}} - extends the former one with timeouts.
 
   []
   
   and finally, the Maven "specialized" one, that "recognizes" Maven internals:
 
-  * {{{px-core-maven/xref/hu/ismicro/commons/proximity/maven/MavenProxyRepositoryLogic.html}MavenProxyRepositoryLogic}} - Maven logic.
+  * {{{px-core-maven/xref/org/abstracthorizon/proximity/maven/MavenProxyRepositoryLogic.html}MavenProxyRepositoryLogic}} - Maven logic.
 
   []
   
