@@ -1,12 +1,12 @@
 package org.abstracthorizon.proximity.webapp.access;
 
-import hu.ismicro.commons.proximity.ProximityRequest;
-import hu.ismicro.commons.proximity.access.AccessDecisionVoter;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.abstracthorizon.proximity.ProximityRequest;
+import org.abstracthorizon.proximity.access.AccessDecisionVoter;
 import org.apache.commons.io.FilenameUtils;
 
 /**

@@ -5,8 +5,8 @@
 
 	<!-- Parent POM -->
 	<parent>
-		<groupId>hu.ismicro.proximity</groupId>
-		<artifactId>ismicro-proximity</artifactId>
+		<groupId>org.abstracthorizon.proximity</groupId>
+		<artifactId>proximity-parent</artifactId>
 		<version>1.0.0</version>
 	</parent>
 
@@ -23,14 +23,14 @@
 	<name>Px Core exposed WS</name>
 
 	<!-- The module version -->
-	<version>1.0.0-RC4.1</version>
+	<version>1.0.0-RC5</version>
 
 	<dependencies>
 
 		<dependency>
-			<groupId>hu.ismicro.proximity</groupId>
+			<groupId>org.abstracthorizon.proximity</groupId>
 			<artifactId>px-core</artifactId>
-			<version>1.0.0-RC4.1</version>
+			<version>1.0.0-RC5</version>
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>

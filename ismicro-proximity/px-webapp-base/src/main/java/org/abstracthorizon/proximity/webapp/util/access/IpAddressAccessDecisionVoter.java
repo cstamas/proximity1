@@ -1,11 +1,12 @@
 package org.abstracthorizon.proximity.webapp.util.access;
 
-import hu.ismicro.commons.proximity.ProximityRequest;
-import hu.ismicro.commons.proximity.access.AccessDecisionVoter;
 
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import org.abstracthorizon.proximity.ProximityRequest;
+import org.abstracthorizon.proximity.access.AccessDecisionVoter;
 
 public class IpAddressAccessDecisionVoter implements AccessDecisionVoter {
 

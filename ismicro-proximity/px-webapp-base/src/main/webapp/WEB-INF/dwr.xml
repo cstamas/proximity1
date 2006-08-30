@@ -7,7 +7,7 @@
   <allow>
     <convert
       converter="bean"
-      match="hu.ismicro.commons.proximity.*"/>
+      match="org.abstracthorizon.proximity.*"/>
  
     <create
       creator="spring"

@@ -7,10 +7,10 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<!-- a unique name for this group of project -->
-	<groupId>hu.ismicro.proximity</groupId>
+	<groupId>org.abstracthorizon.proximity</groupId>
 
 	<!-- a unique name for this project -->
-	<artifactId>ismicro-proximity</artifactId>
+	<artifactId>proximity-parent</artifactId>
 
 	<!-- POM packaging -->
 	<packaging>pom</packaging>
