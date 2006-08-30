@@ -6,7 +6,6 @@ import java.util.Map;
 import org.abstracthorizon.proximity.access.AccessManager;
 import org.abstracthorizon.proximity.indexer.Indexer;
 import org.abstracthorizon.proximity.logic.ProximityLogic;
-import org.abstracthorizon.proximity.stats.StatisticsGatherer;
 
 /**
  * The Proximity interface.
@@ -38,20 +37,6 @@ public interface Proximity {
     void setProximityLogic(ProximityLogic logic);
 
     /**
-     * Returns the current statistic Gatherer. May be null.
-     * 
-     * @return current statGatherer
-     */
-    StatisticsGatherer getStatisticsGatherer();
-
-    /**
-     * Sets the current statistic Gatherer.
-     * 
-     * @param statisticsGatherer
-     */
-    void setStatisticsGatherer(StatisticsGatherer statisticsGatherer);
-
-    /**
      * Retrieve indexer.
      * 
      * @return
@@ -78,15 +63,6 @@ public interface Proximity {
      * @param accessManager
      */
     void setAccessManager(AccessManager accessManager);
-
-    /**
-     * Sets the repositories that serves Proximity.
-     * 
-     * @param reposList
-     *            list of Repositories.
-     * 
-     */
-    void setRepositories(List reposList);
 
     /**
      * Returns the list of Repositories that serves Proximity.
@@ -258,13 +234,5 @@ public interface Proximity {
      * 
      */
     void reindex(String repoId);
-
-    /**
-     * Returns the statistics (if any).
-     * 
-     * @todo
-     * @return
-     */
-    public Map getStatistics();
 
 }

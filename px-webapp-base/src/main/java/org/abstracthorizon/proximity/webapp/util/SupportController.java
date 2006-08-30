@@ -98,7 +98,8 @@ public class SupportController extends MultiActionController {
 
     public ModelAndView stats(HttpServletRequest request, HttpServletResponse response) throws Exception {
         logger.debug("Got request for stats");
-        Map stats = proximity.getStatistics();
+        // TODO: refactor this
+        Map stats = new HashMap(); //proximity.getStatistics();
         Map context = new HashMap();
         context.put("stats", stats);
         return new ModelAndView("stats", context);

@@ -24,6 +24,9 @@ public class ProximityRequest implements Serializable {
 
     /** The Path of the request */
     private String path;
+    
+    /** If true, will not try to fetch from remote */
+    private boolean localOnly = false;
 
     /** The ID of the targeted repos if any or null */
     private String targetedReposId = null;
@@ -67,6 +70,14 @@ public class ProximityRequest implements Serializable {
         this.path = path;
     }
 
+    public boolean isLocalOnly() {
+        return localOnly;
+    }
+
+    public void setLocalOnly(boolean localOnly) {
+        this.localOnly = localOnly;
+    }
+    
     public Map getAttributes() {
         return attributes;
     }
@@ -106,5 +117,5 @@ public class ProximityRequest implements Serializable {
         str.append("]");
         return str.toString();
     }
-    
+
 }

@@ -70,13 +70,6 @@ public class LuceneIndexer extends AbstractIndexer {
         kws.add(DOC_NAME);
         kws.add(DOC_REPO);
         try {
-            if (recreateIndexes) {
-                logger.info("Recreating indexes as instructed by recreateIndexes parameter.");
-                String[] files = indexDirectory.list();
-                for (int i = 0; i < files.length; i++) {
-                    indexDirectory.deleteFile(files[i]);
-                }
-            }
             IndexWriter writer = new IndexWriter(indexDirectory, analyzer, recreateIndexes
                     || !IndexReader.indexExists(indexDirectory));
             writer.optimize();
@@ -211,11 +204,7 @@ public class LuceneIndexer extends AbstractIndexer {
                 result.add(new Field(key, item.getMetadata(key), Field.Store.NO, Field.Index.TOKENIZED));
             }
         }
-        return postProcessDocument(item, result);
-    }
-
-    protected Document postProcessDocument(ItemProperties item, Document doc) {
-        return doc;
+        return result;
     }
 
     protected void addItemToIndex(IndexWriter writer, String UID, ItemProperties item) throws IOException {

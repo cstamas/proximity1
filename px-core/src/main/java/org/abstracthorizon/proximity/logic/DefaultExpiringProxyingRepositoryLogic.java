@@ -3,6 +3,7 @@ package org.abstracthorizon.proximity.logic;
 
 import java.util.Date;
 
+import org.abstracthorizon.proximity.ProximityRequest;
 import org.abstracthorizon.proximity.Repository;
 import org.abstracthorizon.proximity.RepositoryNotAvailableException;
 import org.abstracthorizon.proximity.impl.ItemImpl;
@@ -35,7 +36,7 @@ public class DefaultExpiringProxyingRepositoryLogic extends DefaultProxyingRepos
      * If item has defined EXPIRES metadata, will use it and remove item from
      * repository if needed.
      */
-    public ItemImpl afterLocalCopyFound(ItemImpl item, Repository repository) {
+    public ItemImpl afterLocalCopyFound(ProximityRequest request, ItemImpl item, Repository repository) {
         if (item.getProperties().getMetadata(DefaultExpiringProxyingRepositoryLogic.METADATA_EXPIRES) != null) {
             logger.debug("Item has expiration, checking it.");
             Date expires = new Date(Long.parseLong(item.getProperties().getMetadata(
@@ -43,7 +44,7 @@ public class DefaultExpiringProxyingRepositoryLogic extends DefaultProxyingRepos
             if (expires.before(new Date(System.currentTimeMillis()))) {
                 logger.info("Item has expired on " + expires + ", DELETING it.");
                 try {
-                    repository.deleteItem(item.getProperties().getPath());
+                    repository.deleteItem(request);
                 } catch (RepositoryNotAvailableException ex) {
                     logger.info("Repository unavailable, cannot delete expired item.", ex);
                 }
@@ -56,7 +57,7 @@ public class DefaultExpiringProxyingRepositoryLogic extends DefaultProxyingRepos
     /**
      * If expiration period is not NO_EXPIRATION, it will apply it on all items.
      */
-    public ItemImpl afterRemoteCopyFound(ItemImpl localItem, ItemImpl remoteItem, Repository repository) {
+    public ItemImpl afterRemoteCopyFound(ProximityRequest request, ItemImpl localItem, ItemImpl remoteItem, Repository repository) {
         if (itemExpirationPeriod != NO_EXPIRATION) {
             Date expires = new Date(System.currentTimeMillis() + itemExpirationPeriod);
             logger.info("Setting expires on item  to " + expires.toString());

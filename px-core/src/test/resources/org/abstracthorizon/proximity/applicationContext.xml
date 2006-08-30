@@ -53,7 +53,6 @@
 		class="org.abstracthorizon.proximity.impl.ProximityImpl"
 		init-method="initialize">
 		<property name="indexer" ref="indexer" />
-		<property name="statisticsGatherer" ref="stats" />
 		<property name="accessManager" ref="openAccessManager" />
 		<property name="emergeRepositoryGroups" value="false" />
 
@@ -140,7 +139,6 @@
 		<property name="id" value="central" />
 		<property name="localStorage" ref="centralFSStorage" />
 		<property name="remoteStorage" ref="centralRemotePeer" />
-		<property name="reindex" value="true" />
 		<property name="statisticsGatherer" ref="stats" />
 		<property name="listable" value="true" />
 		<property name="accessManager" ref="openAccessManager" />
@@ -183,7 +181,6 @@
 		class="org.abstracthorizon.proximity.impl.RepositoryImpl">
 		<property name="id" value="inhouse" />
 		<property name="localStorage" ref="inhouseFSStorage" />
-		<property name="reindex" value="true" />
 		<property name="listable" value="true" />
 		<property name="statisticsGatherer" ref="stats" />
 		<property name="accessManager" ref="openAccessManager" />
@@ -208,7 +205,6 @@
 		class="org.abstracthorizon.proximity.impl.RepositoryImpl">
 		<property name="id" value="extNonFree" />
 		<property name="localStorage" ref="extNonFreeFSStorage" />
-		<property name="reindex" value="true" />
 		<property name="listable" value="true" />
 		<property name="statisticsGatherer" ref="stats" />
 		<property name="accessManager" ref="openAccessManager" />
@@ -233,7 +229,6 @@
 		class="org.abstracthorizon.proximity.impl.RepositoryImpl">
 		<property name="id" value="extFree" />
 		<property name="localStorage" ref="extFreeFSStorage" />
-		<property name="reindex" value="true" />
 		<property name="listable" value="true" />
 		<property name="statisticsGatherer" ref="stats" />
 		<property name="accessManager" ref="openAccessManager" />

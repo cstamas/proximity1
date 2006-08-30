@@ -1,13 +1,7 @@
 package org.abstracthorizon.proximity;
 
-
 import java.util.List;
-import java.util.Map;
 
-import org.abstracthorizon.proximity.Item;
-import org.abstracthorizon.proximity.Proximity;
-import org.abstracthorizon.proximity.ProximityException;
-import org.abstracthorizon.proximity.ProximityRequest;
 import org.abstracthorizon.proximity.impl.ItemPropertiesImpl;
 
 public class ProximityIntegrationTest extends AbstractProximityIntegrationTest {
@@ -104,11 +98,6 @@ public class ProximityIntegrationTest extends AbstractProximityIntegrationTest {
             logger.error("Got ex but i should not have it!", ex);
             fail();
         }
-    }
-
-    public void testStats() {
-        Map stats = proximity.getStatistics();
-        logger.info("Got stats " + stats);
     }
 
 }

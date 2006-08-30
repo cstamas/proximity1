@@ -1,6 +1,5 @@
 package org.abstracthorizon.proximity;
 
-
 import java.util.List;
 
 import org.abstracthorizon.proximity.access.AccessManager;
@@ -22,6 +21,13 @@ import org.abstracthorizon.proximity.storage.remote.RemoteStorage;
 public interface Repository {
 
     /**
+     * Registers itself with Proximity.
+     * 
+     * @param proximity
+     */
+    void setProximity(Proximity proximity);
+
+    /**
      * Returns the ID of the repository.
      * 
      * @return
@@ -31,7 +37,8 @@ public interface Repository {
     /**
      * Sets the ID of the repository. It should be unique Proximity-wide.
      * 
-     * @param id the ID of the repo.
+     * @param id
+     *            the ID of the repo.
      */
     void setId(String id);
 
@@ -57,7 +64,8 @@ public interface Repository {
     boolean isAvailable();
 
     /**
-     * Sets the repos availability. If repo is unavailable, all requests will be rejected.
+     * Sets the repos availability. If repo is unavailable, all requests will be
+     * rejected.
      * 
      * @param val
      */
@@ -86,16 +94,17 @@ public interface Repository {
     boolean isListable();
 
     /**
-     * Sets the listable property of repository. If true, its content will be returned
-     * by listItems method, otherwise not. The retrieveItem will still function and
-     * return the requested item.
+     * Sets the listable property of repository. If true, its content will be
+     * returned by listItems method, otherwise not. The retrieveItem will still
+     * function and return the requested item.
      * 
      * @param val
      */
     void setListable(boolean val);
 
     /**
-     * Returns the local storage of the repository.
+     * Returns the local storage of the repository. Per repository instance may
+     * exists.
      * 
      * @return localStorage or null.
      */
@@ -103,29 +112,32 @@ public interface Repository {
 
     /**
      * Sets the local storage of the repository. May be null if this is an
-     * aggregating repos without caching function.
+     * aggregating repos without caching function. Per repository instance may
+     * exists.
      * 
      * @param storage
      */
     void setLocalStorage(LocalStorage storage);
 
     /**
-     * Returns the remoteStorage of the reposity.
+     * Returns the remoteStorage of the repository. Per repository instance may
+     * exists.
      * 
-     * @return remoteStorage or null. 
+     * @return remoteStorage or null.
      */
     RemoteStorage getRemoteStorage();
 
     /**
      * Sets the remote storage of the repository. May be null if this is a Local
-     * repository only.
+     * repository only. Per repository instance may exists.
      * 
      * @param storage
      */
     void setRemoteStorage(RemoteStorage storage);
 
     /**
-     * Sets the repository logic to drive this repository.
+     * Sets the repository logic to drive this repository. Per repository
+     * instance may exists.
      * 
      * @return
      */
@@ -133,14 +145,16 @@ public interface Repository {
 
     /**
      * Sets the logic to drive this repository. The repository by default uses
-     * DefaultProxyingLogic class unless overridden. May not be null.
+     * DefaultProxyingLogic class unless overridden. May not be null. Per
+     * repository instance may exists.
      * 
      * @param logic
      */
     void setRepositoryLogic(RepositoryLogic logic);
 
     /**
-     * Returns the indexer used by this repository.
+     * Returns the indexer used by this repository. Only one indexer may be used
+     * Proximity wide.
      * 
      * @return
      */
@@ -154,44 +168,42 @@ public interface Repository {
     void setIndexer(Indexer indexer);
 
     /**
-     * Returns the repository level AccessManager.
+     * Returns the repository level AccessManager. Per repository instance may
+     * exists.
      * 
      * @return
      */
     AccessManager getAccessManager();
 
     /**
-     * Sets the repository level AccessManager.
+     * Sets the repository level AccessManager. Per repository instance may
+     * exists.
      * 
      * @param accessManager
      */
     void setAccessManager(AccessManager accessManager);
 
     /**
-     * Initializes repository. Reindexing, recreating metadata, etc...
+     * Gets the stats gatherer of repository. Per repository instance may
+     * exists.
      * 
+     * @return
      */
-    void initialize();
+    StatisticsGatherer getStatisticsGatherer();
+
+    /**
+     * Sets the statistics gatherer. May be null, to switch stats gathering off.
+     * Per repository instance may exists.
+     * 
+     * @param stats
+     */
+    void setStatisticsGatherer(StatisticsGatherer stats);
 
     /**
      * Forces reindex of repository.
      * 
      */
     void reindex();
-
-    /**
-     * Gets the stats gatherer of repository.
-     * 
-     * @return
-     */
-    StatisticsGatherer getStatisticsGatherer();
-    
-    /**
-     * Sets the statistics gatherer. May be null, to switch stats gathering off.
-     * 
-     * @param stats
-     */
-    void setStatisticsGatherer(StatisticsGatherer stats);
 
     /**
      * Retrieves item with content from the path.
@@ -212,16 +224,16 @@ public interface Repository {
      * @throws ItemNotFoundException
      * @throws StorageException
      */
-    ItemPropertiesImpl retrieveItemProperties(ProximityRequest request) throws RepositoryNotAvailableException, ItemNotFoundException,
-            StorageException, AccessDeniedException;
+    ItemPropertiesImpl retrieveItemProperties(ProximityRequest request) throws RepositoryNotAvailableException,
+            ItemNotFoundException, StorageException, AccessDeniedException;
 
     /**
      * Deletes item from the path.
      * 
-     * @param path
+     * @param request
      * @throws StorageException
      */
-    void deleteItem(String path) throws RepositoryNotAvailableException, StorageException;
+    void deleteItem(ProximityRequest request) throws RepositoryNotAvailableException, StorageException;
 
     /**
      * Stores item.
@@ -229,7 +241,7 @@ public interface Repository {
      * @param item
      * @throws StorageException
      */
-    void storeItem(Item item) throws RepositoryNotAvailableException, StorageException;
+    void storeItem(ProximityRequest request, Item item) throws RepositoryNotAvailableException, StorageException;
 
     /**
      * List items on path. If not listable, an empty list.

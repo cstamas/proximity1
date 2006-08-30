@@ -5,8 +5,8 @@ import java.util.List;
 
 import org.abstracthorizon.proximity.ItemNotFoundException;
 import org.abstracthorizon.proximity.ItemProperties;
+import org.abstracthorizon.proximity.Repository;
 import org.abstracthorizon.proximity.storage.StorageException;
-import org.abstracthorizon.proximity.storage.local.LocalStorage;
 
 /**
  * Indexer, that keeps info and indexes items.
@@ -18,7 +18,7 @@ public interface Indexer {
 
     void initialize();
 
-    void registerLocalStorage(LocalStorage storage);
+    void registerRepository(Repository repository);
 
     /**
      * Returns the list that this indexer thinks is searchable.

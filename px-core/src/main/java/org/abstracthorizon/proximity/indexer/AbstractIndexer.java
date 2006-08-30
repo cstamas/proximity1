@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.abstracthorizon.proximity.storage.local.LocalStorage;
+import org.abstracthorizon.proximity.Repository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,8 +13,6 @@ public abstract class AbstractIndexer implements Indexer {
 
     protected Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    protected List storages = new ArrayList();
-    
     protected List searchableKeywords = new ArrayList();
 
     public void initialize() {
@@ -24,9 +22,9 @@ public abstract class AbstractIndexer implements Indexer {
 
     protected abstract void doInitialize();
 
-    public void registerLocalStorage(LocalStorage storage) {
-        storages.add(storage);
-        addSearchableKeywords(storage.getProxiedItemPropertiesFactory().getSearchableKeywords());
+    public void registerRepository(Repository repository) {
+        repository.setIndexer(this);
+        addSearchableKeywords(repository.getLocalStorage().getProxiedItemPropertiesFactory().getSearchableKeywords());
     }
 
     public List getSearchableKeywords() {

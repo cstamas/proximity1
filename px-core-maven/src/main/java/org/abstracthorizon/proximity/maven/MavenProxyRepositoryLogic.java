@@ -130,7 +130,7 @@ public class MavenProxyRepositoryLogic extends DefaultExpiringProxyingRepository
 
     }
 
-    public ItemImpl afterRemoteCopyFound(ItemImpl localItem, ItemImpl remoteItem, Repository repository) {
+    public ItemImpl afterRemoteCopyFound(ProximityRequest request, ItemImpl localItem, ItemImpl remoteItem, Repository repository) {
 
         if (MavenArtifactRecognizer.isSnapshot(remoteItem.getProperties().getAbsolutePath(), remoteItem.getProperties().getName())) {
             if (snapshotExpirationPeriod != NO_EXPIRATION) {
@@ -161,7 +161,7 @@ public class MavenProxyRepositoryLogic extends DefaultExpiringProxyingRepository
 
         } else {
 
-            remoteItem = super.afterRemoteCopyFound(localItem, remoteItem, repository);
+            remoteItem = super.afterRemoteCopyFound(request, localItem, remoteItem, repository);
         }
 
 
