@@ -15,11 +15,6 @@
 
   <body>
 
-    <links>
-      <item name="Abstract Horizon" href="http://www.abstracthorizon.org/" />
-      <item name="Proximity WIKI" href="https://is-micro.myip.hu/trac/ismicro-proximity/" />
-    </links>
-
     <menu ref="parent" />
 
     <menu ref="modules" />
