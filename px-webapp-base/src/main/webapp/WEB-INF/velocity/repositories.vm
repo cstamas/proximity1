@@ -182,59 +182,25 @@
                 </tr>
                 #end
 
-                <tr class="tda" onmouseover="return escape('#springMessage('repositories.maven2settings.help')')">
-                        <td colspan="1">#springMessage("repositories.maven2settings")</td>
+                <tr class="tda" onmouseover="return escape('#springMessage('repositories.repoUrl.help')')">
+                        <td colspan="1">#springMessage("repositories.repoUrl")</td>
                         <td colspan="1">
 			                #if(${repository.getRemoteStorage()})
-			                    #springMessage("repositories.maven2settings.proxied")<br/>
-								<pre>
-  &lt;settings&gt;
-  (...)
-  &lt;mirrors&gt;
-    &lt;mirror&gt;
+			                    #springMessage("repositories.repoUrl.proxied")
 #if( ${context.get('emergeRepositoryGroups')} )
-      &lt;id&gt;${repository.groupId}GroupProxy&lt;/id&gt;
-      &lt;mirrorOf&gt;${repository.id}&lt;/mirrorOf&gt;
-      &lt;name&gt;Proximity mirrored ${repository.id} repository in group ${repository.groupId}&lt;/name&gt;
-      &lt;url&gt;<a href="http://localhost:8080#springUrl('/repository')/${repository.groupId}">http://localhost:8080#springUrl('/repository')/${repository.groupId}</a>&lt;/url&gt;
+#springMessage("repositories.repoUrl.grouped")<br/><br/>
+<a href="#springUrl('/repository')/${repository.groupId}">http://localhost:8080#springUrl('/repository')/${repository.groupId}</a>
 #else
-      &lt;id&gt;${repository.id}Proxy&lt;/id&gt;
-      &lt;mirrorOf&gt;${repository.id}&lt;/mirrorOf&gt;
-      &lt;name&gt;Proximity mirrored ${repository.id} repository&lt;/name&gt;
-      &lt;url&gt;<a href="http://localhost:8080#springUrl('/repository')">http://localhost:8080#springUrl('/repository')</a>&lt;/url&gt;
+<a href="#springUrl('/repository')">http://localhost:8080#springUrl('/repository')</a>
 #end
-    &lt;/mirror&gt;
-  &lt;/mirrors&gt;
-  (...)
-  &lt;/settings&gt;
-								</pre>
 	                        #else
-			                    #springMessage("repositories.maven2settings.hosted")<br/>
-								<pre>
-  (...)
-  &lt;repositories&gt;
-    &lt;repository&gt;
-      &lt;id&gt;${repository.id}&lt;/id&gt;
+			                    #springMessage("repositories.repoUrl.hosted")
 #if( ${context.get('emergeRepositoryGroups')} )
-      &lt;url&gt;<a href="http://localhost:8080#springUrl('/repository')/${repository.groupId}">http://localhost:8080#springUrl('/repository')/${repository.groupId}</a>&lt;/url&gt;
+#springMessage("repositories.repoUrl.grouped")<br/><br/>
+<a href="#springUrl('/repository')/${repository.groupId}">http://localhost:8080#springUrl('/repository')/${repository.groupId}</a>
 #else
-      &lt;url&gt;<a href="http://localhost:8080#springUrl('/repository')">http://localhost:8080#springUrl('/repository')</a>&lt;/url&gt;
+<a href="#springUrl('/repository')">http://localhost:8080#springUrl('/repository')</a>
 #end
-    &lt;/repository&gt;
-  &lt;/repositories&gt;
-
-  &lt;pluginRepositories&gt;
-    &lt;pluginRepository&gt;
-      &lt;id&gt;${repository.id}&lt;/id&gt;
-#if( ${context.get('emergeRepositoryGroups')} )
-      &lt;url&gt;<a href="http://localhost:8080#springUrl('/repository')">http://localhost:8080#springUrl('/repository')/${repository.groupId}</a>&lt;/url&gt;
-#else
-      &lt;url&gt;<a href="http://localhost:8080#springUrl('/repository')">http://localhost:8080#springUrl('/repository')</a>&lt;/url&gt;
-#end
-    &lt;/pluginRepository&gt;
-  &lt;/pluginRepositories&gt;
-  (...)
-								</pre>
 		                    #end
                         </td>
                 </tr>
