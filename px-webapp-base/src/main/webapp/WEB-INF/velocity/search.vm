@@ -28,7 +28,7 @@
 					<input id="searchRepositoryRegexp" type="text" name="searchRepositoryRegexp" value="" size="20"/>
 					<select id="searchRepositoryId" name="searchRepositoryId">
 						#foreach($repository in $repositories)
-							<option value="${repository.id}">${repository.id}</option>
+							<option value="${repository}">${repository}</option>
 						#end
 					</select>
 					<input type="submit" name="searchSelectedRepos" value="#springMessage('search.button')"/>
@@ -52,26 +52,20 @@
 		</tr>
 		<tr class="tda">
 			<td colspan="3">
+				<div class="center">
+				<p>#springMessage('search.lql.intro')</p>
 				<form action="#springUrl('/search.do')">
-					<p>#springMessage('search.lql.intro')</p>
-
-					<p><i>
-					#foreach($kw in $searchableKeywords)
-						$kw&nbsp;
-					#end
-					</i></p>
-
-					<p>#springMessage('search.lql.example')</p>
 					<input id="searchLQLQuery" type="text" name="searchLQLQuery" value="" size="50"/>
 					<input type="submit" name="searchLQL" value="#springMessage('search.button')"/>
 				</form>
+				</div>
 				<p/>
 			</td>
 		</tr>
 	</tbody>
 </table>
 
-<p/>
+<hr/>
 
 #if($results)
 <table>
@@ -111,4 +105,38 @@
   
 	</tbody>
 </table>
+#else
+<div class="center"><b>No results.</b></div>
 #end
+
+<hr/>
+
+<table>
+	<tr class="tdb">
+		<td colspan="3">#springMessage('search.lql')</td>
+	</tr>
+	<tr class="tda">
+		<td colspan="3">
+			<p>#springMessage('search.lql.kw')
+			<ul>
+			
+		    #set ($prefix = "search.lql.kw.")
+			#foreach($kw in $searchableKeywords)
+				<li><i>$kw&nbsp;</i> - #springMessage( "$prefix$kw" )</li>
+			#end
+
+			</ul></p>
+
+			<p>#springMessage('search.lql.example')</p>
+
+			<div class="center">
+			<p>#springMessage('search.lql.intro')</p>
+			<form action="#springUrl('/search.do')">
+				<input id="searchLQLQuery" type="text" name="searchLQLQuery" value="" size="50"/>
+				<input type="submit" name="searchLQL" value="#springMessage('search.button')"/>
+			</form>
+			</div>
+			<p/>
+		</td>
+	</tr>
+</table>

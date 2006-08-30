@@ -94,6 +94,13 @@ public interface Proximity {
     Map getRepositoryGroups();
 
     /**
+     * Returns the list of Repositor ID's known by Proximity.
+     * 
+     * @return List(<String>)
+     */
+    List getRepositoryIds();
+
+    /**
      * Returns the list of known groupIds configured within Proximity.
      * 
      * @return List of Strings, the known groupIds.
