@@ -23,7 +23,6 @@ import org.abstracthorizon.proximity.indexer.Indexer;
 import org.abstracthorizon.proximity.indexer.IndexerException;
 import org.abstracthorizon.proximity.logic.DefaultProximityLogic;
 import org.abstracthorizon.proximity.logic.ProximityLogic;
-import org.abstracthorizon.proximity.stats.StatisticsGatherer;
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +30,8 @@ import org.slf4j.LoggerFactory;
 public class ProximityImpl implements Proximity {
 
     protected Logger logger = LoggerFactory.getLogger(this.getClass());
+
+    private boolean initialized = false;
 
     /** The repo groups, [repo.getGroupId, List&lt;Repositories&gt;] */
     private Map repositoryGroups = new HashMap();
@@ -46,11 +47,9 @@ public class ProximityImpl implements Proximity {
 
     private ProximityLogic proximityLogic = new DefaultProximityLogic();
 
-    private Indexer indexer;
+    private Indexer indexer = null;
 
     private AccessManager accessManager = new OpenAccessManager();
-
-    private StatisticsGatherer statisticsGatherer;
 
     public boolean isEmergeRepositoryGroups() {
         return this.emergeGroups;
@@ -66,14 +65,6 @@ public class ProximityImpl implements Proximity {
 
     public void setProximityLogic(ProximityLogic proximityLogic) {
         this.proximityLogic = proximityLogic;
-    }
-
-    public StatisticsGatherer getStatisticsGatherer() {
-        return statisticsGatherer;
-    }
-
-    public void setStatisticsGatherer(StatisticsGatherer statisticsGatherer) {
-        this.statisticsGatherer = statisticsGatherer;
     }
 
     public Indexer getIndexer() {
@@ -94,20 +85,24 @@ public class ProximityImpl implements Proximity {
 
     public void initialize() {
         logger.info("Starting Initialization...");
-        if (getStatisticsGatherer() != null) {
-            getStatisticsGatherer().initialize();
-        }
         if (getIndexer() != null) {
             getIndexer().initialize();
         }
+
+        initialized = true;
+
         logger.info("Initializing all defined repositories");
         for (Iterator i = repositories.keySet().iterator(); i.hasNext();) {
             String repoId = (String) i.next();
-            Repository repo = (Repository) repositories.get(repoId);
-            repo.setIndexer(getIndexer());
-            logger.info("Initializing " + repoId);
-            repo.initialize();
+            Repository repository = (Repository) repositories.get(repoId);
+            initializeRepository(repository);
         }
+    }
+
+    protected void initializeRepository(Repository repository) {
+        logger.info("Initializing {}", repository.getId());
+        getIndexer().registerRepository(repository);
+        repository.reindex();
     }
 
     public void reindex() {
@@ -120,7 +115,7 @@ public class ProximityImpl implements Proximity {
     }
 
     public void reindex(String repoId) {
-        logger.info("Forced reindexing of " + repoId + " repository.");
+        logger.info("Forced reindexing of {} repository", repoId);
         Repository repo = (Repository) repositories.get(repoId);
         repo.reindex();
     }
@@ -154,7 +149,13 @@ public class ProximityImpl implements Proximity {
         }
         List repositoryGroupOrder = (List) repositoryGroups.get(repository.getGroupId());
         repositoryGroupOrder.add(repository.getId());
-        logger.info("Added repository id=[" + repository.getId() + "], groupId=[" + repository.getGroupId() + "]");
+
+        logger.info("Added repository id=[{}], groupId=[{}].", repository.getId(), repository.getGroupId());
+
+        if (initialized) {
+            initializeRepository(repository);
+        }
+
     }
 
     public void removeRepository(String repoId) throws NoSuchRepositoryException {
@@ -166,9 +167,7 @@ public class ProximityImpl implements Proximity {
             if (repositoryOrder.isEmpty()) {
                 repositoryGroups.remove(repository.getGroupId());
             }
-            logger
-                    .info("Removed repository id=[" + repository.getId() + "], groupId=[" + repository.getGroupId()
-                            + "]");
+            logger.info("Removed repository id=[{}], groupId=[{}]", repository.getId(), repository.getGroupId());
         } else {
             throw new NoSuchRepositoryException(repoId);
         }
@@ -185,7 +184,7 @@ public class ProximityImpl implements Proximity {
     public Item retrieveItem(ProximityRequest request) throws ItemNotFoundException, AccessDeniedException,
             NoSuchRepositoryException {
 
-        logger.debug("Got retrieveItem with " + request);
+        logger.debug("Got retrieveItem with {}", request);
         accessManager.decide(request, null);
 
         if (isEmergeRepositoryGroups()) {
@@ -254,7 +253,7 @@ public class ProximityImpl implements Proximity {
         accessManager.decide(request, null);
         Item item = retrieveItem(request);
         Repository repo = (Repository) repositories.get(item.getProperties().getRepositoryId());
-        repo.deleteItem(request.getPath());
+        repo.deleteItem(request);
     }
 
     public void moveItem(ProximityRequest source, ProximityRequest target) throws ItemNotFoundException,
@@ -299,14 +298,14 @@ public class ProximityImpl implements Proximity {
 
         if (repositories.containsKey(targetRepoId)) {
             Repository repo = (Repository) repositories.get(targetRepoId);
-            repo.storeItem(item);
+            repo.storeItem(request, item);
         } else {
             throw new NoSuchRepositoryException(targetRepoId);
         }
     }
 
     public List listItems(ProximityRequest request) throws AccessDeniedException, NoSuchRepositoryException {
-        logger.debug("Got listItems with " + request);
+        logger.debug("Got listItems with {}", request);
         accessManager.decide(request, null);
 
         List response = new ArrayList();
@@ -351,7 +350,7 @@ public class ProximityImpl implements Proximity {
                     for (Iterator i = getRepositoryGroupIds().iterator(); i.hasNext();) {
 
                         groupId = (String) i.next();
-                        logger.debug("Adding response with " + groupId + " as directory.");
+                        logger.debug("Adding response with {} as directory.", groupId);
 
                         itemProps = new ItemPropertiesImpl();
                         itemProps.setAbsolutePath(ItemProperties.PATH_ROOT);
@@ -362,16 +361,13 @@ public class ProximityImpl implements Proximity {
                         itemProps.setLastModified(null);
                         itemProps.setSize(0);
                         response.add(itemProps);
-
                     }
-
                 }
                 return response;
             }
-
         }
 
-        logger.debug("Group id is " + groupId);
+        logger.debug("Group id is {}", groupId);
 
         if (request.getTargetedReposId() != null) {
 
@@ -380,7 +376,7 @@ public class ProximityImpl implements Proximity {
                 try {
                     response.addAll(repo.listItems(request));
                 } catch (RepositoryNotAvailableException ex) {
-                    logger.info("Repository " + repo.getId() + " unavailable", ex);
+                    logger.info("Repository {} unavailable!", repo.getId(), ex);
                 }
             } else {
                 throw new NoSuchRepositoryException(request.getTargetedReposId());
@@ -397,7 +393,7 @@ public class ProximityImpl implements Proximity {
                     try {
                         response.addAll(repo.listItems(request));
                     } catch (RepositoryNotAvailableException ex) {
-                        logger.info("Repository " + repo.getId() + " unavailable", ex);
+                        logger.info("Repository {} unavailable!", repo.getId(), ex);
                     }
                 }
             } else {
@@ -411,7 +407,7 @@ public class ProximityImpl implements Proximity {
                 try {
                     response.addAll(repo.listItems(request));
                 } catch (RepositoryNotAvailableException ex) {
-                    logger.info("Repository " + repo.getId() + " unavailable", ex);
+                    logger.info("Repository {} unavailable!", repo.getId(), ex);
                 }
             }
         }
@@ -434,7 +430,7 @@ public class ProximityImpl implements Proximity {
     }
 
     public List searchItem(ItemProperties example) {
-        logger.debug("Got searchItem with example " + example);
+        logger.debug("Got searchItem with example {}", example);
         if (getIndexer() != null) {
             List idxresult = getIndexer().searchByItemPropertiesExample(example);
             return postprocessSearchResult(idxresult);
@@ -445,23 +441,13 @@ public class ProximityImpl implements Proximity {
     }
 
     public List searchItem(String query) throws IndexerException {
-        logger.debug("Got searchItem with query " + query);
+        logger.debug("Got searchItem with query {}", query);
         if (getIndexer() != null) {
             List idxresult = getIndexer().searchByQuery(query);
             return postprocessSearchResult(idxresult);
         } else {
             logger.info("No indexer defined, but search request came in. Returning empty results.");
             return new ArrayList();
-        }
-    }
-
-    public Map getStatistics() {
-        logger.debug("Got getStatistics");
-        if (getStatisticsGatherer() != null) {
-            return getStatisticsGatherer().getStatistics();
-        } else {
-            logger.info("No statistics gatherer defined, but stats request came in. Returning empty results.");
-            return new HashMap();
         }
     }
 
@@ -527,6 +513,7 @@ public class ProximityImpl implements Proximity {
         if (idxresult.size() > 0) {
             ItemProperties ip = null;
             ProximityRequest rq = new ProximityRequest();
+            rq.setLocalOnly(true);
             for (Iterator i = idxresult.iterator(); i.hasNext();) {
                 ip = (ItemProperties) i.next();
                 rq.setPath(ip.getPath());
@@ -540,7 +527,7 @@ public class ProximityImpl implements Proximity {
                 } catch (RepositoryNotAvailableException ex) {
                     logger.debug("Repo {} not available, ignoring it.", ip.getRepositoryId());
                 } catch (ItemNotFoundException ex) {
-                    logger.debug("ItemNotFound on repo {} for path [{}], ignoring it. Maybe repo needs a reindex?", ip
+                    logger.info("ItemNotFound on repo {} for path [{}] but index contains it, ignoring. Maybe repo needs a reindex?", ip
                             .getRepositoryId(), ip.getPath());
                 }
             }

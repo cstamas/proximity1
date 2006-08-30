@@ -63,7 +63,6 @@
 		class="org.abstracthorizon.proximity.impl.ProximityImpl"
 		init-method="initialize">
 		<property name="indexer" ref="indexer" />
-		<property name="statisticsGatherer" ref="stats" />
 		<property name="accessManager" ref="openAccessManager" />
 		<property name="proximityLogic" ref="proximityLogic" />
 		<property name="emergeRepositoryGroups" value="true" />
@@ -240,8 +239,6 @@
 			<property name="accessManager" ref="internalLanOnlyAccessManager" />
 		-->
 		<property name="repositoryLogic" ref="maven2ReleaseRepoLogic" />
-		<!-- Should i reindex my content on startup? -->
-		<property name="reindex" value="true" />
 		<!-- Am I listable? -->
 		<property name="listable" value="true" />
 		<!-- Am I available? If no, i will refuse all requests -->
@@ -316,8 +313,6 @@
 			<property name="accessManager" ref="internalLanOnlyAccessManager" />
 		-->
 		<property name="repositoryLogic" ref="maven2ReleaseRepoLogic" />
-		<!-- Should i reindex my content on startup? -->
-		<property name="reindex" value="true" />
 		<!-- Am I listable? -->
 		<property name="listable" value="true" />
 		<!-- Am I available? If no, i will refuse all requests -->
@@ -382,8 +377,6 @@
 			<property name="accessManager" ref="internalLanOnlyAccessManager" />
 		-->
 		<property name="repositoryLogic" ref="maven2SnapshotRepoLogic" />
-		<!-- Should i reindex my content on startup? -->
-		<property name="reindex" value="true" />
 		<!-- Am I listable? -->
 		<property name="listable" value="true" />
 		<!-- Am I available? If no, i will refuse all requests -->
@@ -449,8 +442,6 @@
 			<property name="accessManager" ref="internalLanOnlyAccessManager" />
 		-->
 		<property name="repositoryLogic" ref="maven2SnapshotRepoLogic" />
-		<!-- Should i reindex my content on startup? -->
-		<property name="reindex" value="true" />
 		<!-- Am I listable? -->
 		<property name="listable" value="true" />
 		<!-- Am I available? If no, i will refuse all requests -->
@@ -514,8 +505,6 @@
 		<!-- Uncomment this and delete previous row to restrict access to this repo
 			<property name="accessManager" ref="internalLanOnlyAccessManager" />
 		-->
-		<!-- Should i reindex my content on startup? -->
-		<property name="reindex" value="true" />
 		<!-- Am I listable? -->
 		<property name="listable" value="true" />
 		<!-- Am I available? If no, i will refuse all requests -->
@@ -546,8 +535,6 @@
 		<!-- Uncomment this and delete previous row to restrict access to this repo
 			<property name="accessManager" ref="internalLanOnlyAccessManager" />
 		-->
-		<!-- Should i reindex my content on startup? -->
-		<property name="reindex" value="true" />
 		<!-- Am I listable? -->
 		<property name="listable" value="true" />
 		<!-- Am I available? If no, i will refuse all requests -->
@@ -583,8 +570,6 @@
 		<!-- Uncomment this and delete previous row to restrict access to this repo
 			<property name="accessManager" ref="internalLanOnlyAccessManager" />
 		-->
-		<!-- Should i reindex my content on startup? -->
-		<property name="reindex" value="true" />
 		<!-- Am I listable? -->
 		<property name="listable" value="true" />
 		<!-- Am I available? If no, i will refuse all requests -->
@@ -620,8 +605,6 @@
 		<!-- Uncomment this and delete previous row to restrict access to this repo
 			<property name="accessManager" ref="internalLanOnlyAccessManager" />
 		-->
-		<!-- Should i reindex my content on startup? -->
-		<property name="reindex" value="true" />
 		<!-- Am I listable? -->
 		<property name="listable" value="true" />
 		<!-- Am I available? If no, i will refuse all requests -->

@@ -31,7 +31,7 @@ public class DefaultProxyingRepositoryLogic implements RepositoryLogic {
     /**
      * Does nothing and returns item unmodified.
      */
-    public ItemImpl afterLocalCopyFound(ItemImpl item, Repository repository) {
+    public ItemImpl afterLocalCopyFound(ProximityRequest request, ItemImpl item, Repository repository) {
         return item;
     }
 
@@ -45,21 +45,21 @@ public class DefaultProxyingRepositoryLogic implements RepositoryLogic {
     /**
      * Does nothing and returns item unmodified.
      */
-    public ItemImpl afterRemoteCopyFound(ItemImpl localItem, ItemImpl remoteItem, Repository repository) {
+    public ItemImpl afterRemoteCopyFound(ProximityRequest request, ItemImpl localItem, ItemImpl remoteItem, Repository repository) {
         return remoteItem;
     }
 
     /**
      * Always returns true.
      */
-    public boolean shouldStoreLocallyAfterRemoteRetrieval(ItemImpl localItem, ItemImpl remoteItem) {
+    public boolean shouldStoreLocallyAfterRemoteRetrieval(ProximityRequest request, ItemImpl localItem, ItemImpl remoteItem) {
         return true;
     }
 
     /**
      * Always give the best what we have.
      */
-    public ItemImpl afterRetrieval(ItemImpl localItem, ItemImpl remoteItem) {
+    public ItemImpl afterRetrieval(ProximityRequest request, ItemImpl localItem, ItemImpl remoteItem) {
         if (remoteItem != null) {
             if (localItem != null) {
                 localItem.close();

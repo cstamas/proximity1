@@ -33,7 +33,7 @@ public interface RepositoryLogic {
      * @param repository
      * @return
      */
-    ItemImpl afterLocalCopyFound(ItemImpl item, Repository repository);
+    ItemImpl afterLocalCopyFound(ProximityRequest request, ItemImpl item, Repository repository);
 
     /**
      * Return true if repository should initiate remote lookup.
@@ -54,7 +54,7 @@ public interface RepositoryLogic {
      *            the artifact found remotely
      * @return
      */
-    ItemImpl afterRemoteCopyFound(ItemImpl localItem, ItemImpl remoteItem, Repository repository);
+    ItemImpl afterRemoteCopyFound(ProximityRequest request, ItemImpl localItem, ItemImpl remoteItem, Repository repository);
 
     /**
      * Return true if reposotiry should store the remote retrieved item in a
@@ -64,12 +64,12 @@ public interface RepositoryLogic {
      * @param remoteItem
      * @return
      */
-    boolean shouldStoreLocallyAfterRemoteRetrieval(ItemImpl localItem, ItemImpl remoteItem);
+    boolean shouldStoreLocallyAfterRemoteRetrieval(ProximityRequest request, ItemImpl localItem, ItemImpl remoteItem);
 
     /**
      * Choose tha artifact to serve.
      */
-    public ItemImpl afterRetrieval(ItemImpl localItem, ItemImpl remoteItem);
+    public ItemImpl afterRetrieval(ProximityRequest request, ItemImpl localItem, ItemImpl remoteItem);
 
     /**
      * Return true to index the given item.
