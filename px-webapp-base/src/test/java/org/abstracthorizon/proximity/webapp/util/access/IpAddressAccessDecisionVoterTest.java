@@ -1,7 +1,8 @@
 package org.abstracthorizon.proximity.webapp.util.access;
 
-import hu.ismicro.commons.proximity.ProximityRequest;
-import hu.ismicro.commons.proximity.access.AccessDecisionVoter;
+import org.abstracthorizon.proximity.ProximityRequest;
+import org.abstracthorizon.proximity.access.AccessDecisionVoter;
+
 import junit.framework.Assert;
 import junit.framework.TestCase;
 

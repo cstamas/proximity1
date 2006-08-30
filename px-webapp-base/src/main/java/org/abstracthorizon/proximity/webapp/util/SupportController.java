@@ -1,7 +1,5 @@
 package org.abstracthorizon.proximity.webapp.util;
 
-import hu.ismicro.commons.proximity.Proximity;
-import hu.ismicro.commons.proximity.impl.ItemPropertiesImpl;
 
 import java.util.HashMap;
 import java.util.List;
@@ -10,6 +8,8 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.abstracthorizon.proximity.Proximity;
+import org.abstracthorizon.proximity.impl.ItemPropertiesImpl;
 import org.springframework.web.bind.RequestUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.multiaction.MultiActionController;

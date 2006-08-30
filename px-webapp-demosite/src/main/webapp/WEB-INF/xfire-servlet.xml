@@ -23,12 +23,12 @@
 		<property name="xfire" ref="xfire" />
 		<property name="serviceBean" ref="searchService" />
 		<property name="serviceClass">
-			<value>hu.ismicro.commons.proximity.ws.SearchService</value>
+			<value>org.abstracthorizon.proximity.ws.SearchService</value>
 		</property>
 	</bean>
 
 	<bean id="searchService"
-		class="hu.ismicro.commons.proximity.ws.SearchServiceImpl">
+		class="org.abstracthorizon.proximity.ws.SearchServiceImpl">
 		<property name="proximity" ref="proximity" />
 	</bean>
 
@@ -38,12 +38,12 @@
 		<property name="xfire" ref="xfire" />
 		<property name="serviceBean" ref="maintenanceService" />
 		<property name="serviceClass">
-			<value>hu.ismicro.commons.proximity.ws.MaintenanceService</value>
+			<value>org.abstracthorizon.proximity.ws.MaintenanceService</value>
 		</property>
 	</bean>
 
 	<bean id="maintenanceService"
-		class="hu.ismicro.commons.proximity.ws.MaintenanceServiceImpl">
+		class="org.abstracthorizon.proximity.ws.MaintenanceServiceImpl">
 		<property name="proximity" ref="proximity" />
 	</bean>
 

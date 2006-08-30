@@ -58,35 +58,35 @@ way. But remember, the {{{repository-configuration.html#RepositoryLogic}Reposito
     will be merged>>. Usable for Maven plugin developers, who needs snapshots from snapshot repositories.
     If not specified, the "default" string will be used.
     
-  * <<localStorage>> - the local storage (hu.ismicro.commons.proximity.base.Storage), not mandatory.
+  * <<localStorage>> - the local storage (org.abstracthorizon.proximity.base.Storage), not mandatory.
   
     Local storage implementation. Currently two implementation exists: ReadOnlyFileSystemStorage usable
     for hosted repositories and WritableFileSystemStorage usable for proxied repositories.
     If not specified, the repository will have no local storage (see upper table).
     
-  * <<remoteStorage>> - the remote storage (hu.ismicro.commons.proximity.base.Storage), not mandatory.
+  * <<remoteStorage>> - the remote storage (org.abstracthorizon.proximity.base.Storage), not mandatory.
   
     Remote storage implementation. Currently two implementation exists: CommonsHttpClientRemotePeer and
     CommonsNetFtpRemotePeer. Obviously, Jakarta Commons HttpClient and Net components are used in their
     implementations. If not specified, the repository will have no remote storage (see upper table).
     
-  * <<indexer>> - the indexer to use (hu.ismicro.commons.proximity.base.Indexer), not mandatory.
+  * <<indexer>> - the indexer to use (org.abstracthorizon.proximity.base.Indexer), not mandatory.
   
     Indexer to use within repository. Indexer is <<used in searching only>>, Proximity is happy to
     operate even without it. If not specified, no indexer will be used, no indexing services (search) will be available.
     
-  * <<statisticsGatherer>> - the statistics gatherer to use (hu.ismicro.commons.proximity.base.StatisticsGatherer), not mandatory.
+  * <<statisticsGatherer>> - the statistics gatherer to use (org.abstracthorizon.proximity.base.StatisticsGatherer), not mandatory.
   
     The statistics gatherer is simply a type of "listener" for local and remote hits. Currently the least
     worked out component of Proximity. Will see to expand it. If not specified, no stats will be available.
     
-  * <<accessManager>> - access manager for repository (hu.ismicro.commons.proximity.access.AccessManager), not mandatory.
+  * <<accessManager>> - access manager for repository (org.abstracthorizon.proximity.access.AccessManager), not mandatory.
   
     The access manager is an extensible manager to allow or forbid access even at artifact level (using various implementations).
     It is recommended to use IP or certificate based AccessManagers at Proximity level, and ACL-like AccessManagers on repository
     level. If not specified, it defaults to OpenAccessManager, which simply accepts all requests.
     
-  * <<repositoryLogic>> - repository logic that orchestrates the retrieval (hu.ismicro.commons.proximity.base.RepositoryLogic), not mandatory.
+  * <<repositoryLogic>> - repository logic that orchestrates the retrieval (org.abstracthorizon.proximity.base.RepositoryLogic), not mandatory.
   
     The most trickiest part of Repository. The logic "drives" the retrieval of the current request. This is the 
     part where Proximity-M offers "Mavenized" logic to drive retrieval. If not specified, repository 

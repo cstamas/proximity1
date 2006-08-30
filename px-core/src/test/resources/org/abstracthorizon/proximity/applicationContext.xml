@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<!--
+	Default Proximity webapp configuration with provided all possible settings (most of
+	them have default values!).
+	
+	Have fun,
+	cservenak@is-micro.hu
+-->
+
+<beans>
+
+	<!--
+		=================================================================================
+		Infrastructure, Spring convenience stuff, not Proximity beans.
+	-->
+
+	<!-- 
+		- Message source
+	-->
+	<bean id="messageSource"
+		class="org.springframework.context.support.ResourceBundleMessageSource">
+		<property name="basenames">
+			<list>
+				<value>messages</value>
+			</list>
+		</property>
+	</bean>
+
+	<!-- 
+		- Property configurer, see proximity.properties
+	-->
+	<bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>
+					classpath:/org/abstracthorizon/proximity/proximity.properties
+				</value>
+			</list>
+		</property>
+	</bean>
+
+	<!--
+		=================================================================================
+		Proximity
+	-->
+	<!--
+		- Central proximity bean with list of repos and it's helpers.
+	-->
+	<bean id="proximity"
+		class="org.abstracthorizon.proximity.impl.ProximityImpl"
+		init-method="initialize">
+		<property name="indexer" ref="indexer" />
+		<property name="statisticsGatherer" ref="stats" />
+		<property name="accessManager" ref="openAccessManager" />
+		<property name="emergeRepositoryGroups" value="false" />
+
+		<property name="repositories">
+			<list>
+				<!-- Repos'es will be processed in THIS ORDER! -->
+				<ref local="inhouse" />
+				<ref local="extFree" />
+				<ref local="extNonFree" />
+				<!-- for Maven2 -->
+				<ref local="central" />
+			</list>
+		</property>
+
+	</bean>
+
+	<!--
+		- Indexer, used to speed up searches.
+	-->
+	<bean id="indexer"
+		class="org.abstracthorizon.proximity.indexer.LuceneIndexer">
+		<property name="indexDirectory" value="${indexer.dir}" />
+		<property name="recreateIndexes" value="true" />
+	</bean>
+
+	<!--
+		- StatisticsGatherer, gathers statistics. Simple in-memory implementation.
+	-->
+	<bean id="stats"
+		class="org.abstracthorizon.proximity.stats.SimpleStatisticsGathererImpl" />
+
+	<!--
+		- AccessManager. With OpenAccessManager Proximity is wide open.
+	-->
+	<bean id="openAccessManager"
+		class="org.abstracthorizon.proximity.access.OpenAccessManager" />
+
+	<!--
+		=================================================================================
+	-->
+	<!--
+		- Logic used for Maven1 repositories.
+	-->
+	<bean id="maven1logic"
+		class="org.abstracthorizon.proximity.logic.DefaultExpiringProxyingRepositoryLogic">
+		<property name="itemExpirationPeriodInSeconds" value="-1" />
+	</bean>
+
+	<!--
+		- Logic used for Maven2 repositories.
+	-->
+	<bean id="maven2logic"
+		class="org.abstracthorizon.proximity.logic.DefaultExpiringProxyingRepositoryLogic">
+		<property name="itemExpirationPeriodInSeconds" value="-1" />
+	</bean>
+
+	<!--
+		=================================================================================
+	-->
+
+	<bean id="itemPropertiesFactory"
+		class="org.abstracthorizon.proximity.metadata.InspectorListProcessingProxiedItemPropertiesFactory">
+<!-- 
+		<property name="itemInspectorList">
+			<list>
+				<bean
+					class="org.abstracthorizon.proximity.maven.MavenItemInspector" />
+			</list>
+		</property>
+-->
+	</bean>
+
+	<!--
+		=================================================================================
+	-->
+
+	<!--
+		- MAVEN2 repository!
+		- repo1.maven.org Central Repository (with writable cache storage and remote peer)
+		- A standard maven2 repository.
+	-->
+	<bean id="central"
+		class="org.abstracthorizon.proximity.impl.RepositoryImpl">
+		<property name="id" value="central" />
+		<property name="localStorage" ref="centralFSStorage" />
+		<property name="remoteStorage" ref="centralRemotePeer" />
+		<property name="reindex" value="true" />
+		<property name="statisticsGatherer" ref="stats" />
+		<property name="listable" value="true" />
+		<property name="accessManager" ref="openAccessManager" />
+		<property name="repositoryLogic" ref="maven2logic" />
+	</bean>
+
+	<bean id="centralFSStorage"
+		class="org.abstracthorizon.proximity.storage.local.WritableFileSystemStorage">
+		<property name="metadataAware" value="true" />
+		<property name="metadataDirFile" value="${centralFSStorage.metadataDir}" />
+		<property name="storageDirFile"
+			value="${centralFSStorage.baseDir}" />
+		<property name="proxiedItemPropertiesFactory"
+			ref="itemPropertiesFactory" />
+	</bean>
+
+	<bean id="centralRemotePeer"
+		class="org.abstracthorizon.proximity.storage.remote.CommonsHttpClientRemotePeer">
+		<property name="remoteUrl"
+			value="http://repo1.maven.org/maven2/" />
+		<property name="connectionTimeout" value="10000" />
+		<property name="queryString" value="" />
+		<property name="followRedirection" value="true" />
+	</bean>
+	<!--
+		<bean id="centralRemotePeer"
+		class="org.abstracthorizon.proximity.base.remote.CommonsNetFtpRemotePeer">
+		<property name="remoteUrl"
+		value="ftp://repo1.maven.org/pub/packages/maven2/" />
+		<property name="ftpUsername" value="anonymous" />
+		<property name="ftpPassword" value="someemail@somedomain.com" />
+		</bean>
+	-->
+
+	<!--
+		- In-House Repository (with read-only storage and without remote peer)
+		- A maven repository for publishing in-house artifacts.
+	-->
+	<bean id="inhouse"
+		class="org.abstracthorizon.proximity.impl.RepositoryImpl">
+		<property name="id" value="inhouse" />
+		<property name="localStorage" ref="inhouseFSStorage" />
+		<property name="reindex" value="true" />
+		<property name="listable" value="true" />
+		<property name="statisticsGatherer" ref="stats" />
+		<property name="accessManager" ref="openAccessManager" />
+	</bean>
+
+	<bean id="inhouseFSStorage"
+		class="org.abstracthorizon.proximity.storage.local.ReadOnlyFileSystemStorage">
+		<property name="metadataAware" value="true" />
+		<property name="metadataDirFile" value="${inhouseFSStorage.metadataDir}" />
+		<property name="storageDirFile"
+			value="${inhouseFSStorage.baseDir}" />
+		<property name="proxiedItemPropertiesFactory"
+			ref="itemPropertiesFactory" />
+	</bean>
+
+	<!--
+		- EXT NonFree Repository (with read-only storage and without remote peer)
+		- A maven repository for in-house use for publishing non-free artifacts 
+		- not deployed on standard maven repositories (oracle JDBC, J2EE, etc...).
+	-->
+	<bean id="extNonFree"
+		class="org.abstracthorizon.proximity.impl.RepositoryImpl">
+		<property name="id" value="extNonFree" />
+		<property name="localStorage" ref="extNonFreeFSStorage" />
+		<property name="reindex" value="true" />
+		<property name="listable" value="true" />
+		<property name="statisticsGatherer" ref="stats" />
+		<property name="accessManager" ref="openAccessManager" />
+	</bean>
+
+	<bean id="extNonFreeFSStorage"
+		class="org.abstracthorizon.proximity.storage.local.ReadOnlyFileSystemStorage">
+		<property name="metadataAware" value="true" />
+		<property name="metadataDirFile" value="${extNonFreeFSStorage.metadataDir}" />
+		<property name="storageDirFile"
+			value="${extNonFreeFSStorage.baseDir}" />
+		<property name="proxiedItemPropertiesFactory"
+			ref="itemPropertiesFactory" />
+	</bean>
+
+	<!--
+		- EXT Free Repository (with read-only storage and without remote peer)
+		- A maven repository for in-house use for publishing artifacts 
+		- not deployed on standard maven repositories (dwr, etc...).
+	-->
+	<bean id="extFree"
+		class="org.abstracthorizon.proximity.impl.RepositoryImpl">
+		<property name="id" value="extFree" />
+		<property name="localStorage" ref="extFreeFSStorage" />
+		<property name="reindex" value="true" />
+		<property name="listable" value="true" />
+		<property name="statisticsGatherer" ref="stats" />
+		<property name="accessManager" ref="openAccessManager" />
+	</bean>
+
+	<bean id="extFreeFSStorage"
+		class="org.abstracthorizon.proximity.storage.local.ReadOnlyFileSystemStorage">
+		<property name="metadataAware" value="true" />
+		<property name="metadataDirFile" value="${extFreeFSStorage.metadataDir}" />
+		<property name="storageDirFile"
+			value="${extFreeFSStorage.baseDir}" />
+		<property name="proxiedItemPropertiesFactory"
+			ref="itemPropertiesFactory" />
+	</bean>
+
+</beans>

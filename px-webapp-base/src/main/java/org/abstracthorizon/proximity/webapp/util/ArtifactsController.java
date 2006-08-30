@@ -1,9 +1,5 @@
 package org.abstracthorizon.proximity.webapp.util;
 
-import hu.ismicro.commons.proximity.AccessDeniedException;
-import hu.ismicro.commons.proximity.ItemNotFoundException;
-import hu.ismicro.commons.proximity.Proximity;
-import hu.ismicro.commons.proximity.impl.ItemPropertiesImpl;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,6 +10,10 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.abstracthorizon.proximity.AccessDeniedException;
+import org.abstracthorizon.proximity.ItemNotFoundException;
+import org.abstracthorizon.proximity.Proximity;
+import org.abstracthorizon.proximity.impl.ItemPropertiesImpl;
 import org.springframework.beans.support.MutableSortDefinition;
 import org.springframework.beans.support.PropertyComparator;
 import org.springframework.web.servlet.ModelAndView;
