@@ -3,6 +3,7 @@ package org.abstracthorizon.proximity.impl;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -177,8 +178,17 @@ public class ProximityImpl implements Proximity {
         return repositoryGroups;
     }
 
+    public List getRepositoryIds() {
+        List ids = new ArrayList(repositoryOrder.size());
+        ids.addAll(repositoryOrder);
+        Collections.sort(ids);
+        return ids;
+    }
+    
     public List getRepositoryGroupIds() {
-        return Arrays.asList(repositoryGroups.keySet().toArray());
+        Object[] groupIds = repositoryGroups.keySet().toArray();
+        Arrays.sort(groupIds);
+        return Arrays.asList(groupIds);
     }
 
     public Item retrieveItem(ProximityRequest request) throws ItemNotFoundException, AccessDeniedException,

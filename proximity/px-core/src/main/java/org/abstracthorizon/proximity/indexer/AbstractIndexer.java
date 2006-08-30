@@ -2,6 +2,7 @@ package org.abstracthorizon.proximity.indexer;
 
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -25,6 +26,7 @@ public abstract class AbstractIndexer implements Indexer {
     public void registerRepository(Repository repository) {
         repository.setIndexer(this);
         addSearchableKeywords(repository.getLocalStorage().getProxiedItemPropertiesFactory().getSearchableKeywords());
+        Collections.sort(searchableKeywords);
     }
 
     public List getSearchableKeywords() {

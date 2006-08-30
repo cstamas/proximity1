@@ -76,7 +76,7 @@ public class SupportController extends MultiActionController {
             context.put("results", results);
         }
         context.put("searchableKeywords", getProximity().getSearchableKeywords());
-        context.put("repositories", getProximity().getRepositories());
+        context.put("repositories", getProximity().getRepositoryIds());
         context.put("groups", getProximity().getRepositoryGroupIds());
         return new ModelAndView("search", context);
     }
