@@ -1,6 +1,5 @@
 package org.abstracthorizon.proximity;
 
-
 import java.util.List;
 import java.util.Map;
 
@@ -13,7 +12,7 @@ import org.abstracthorizon.proximity.stats.StatisticsGatherer;
  * The Proximity interface.
  * 
  * @author cstamas
- *
+ * 
  */
 public interface Proximity {
 
@@ -22,7 +21,7 @@ public interface Proximity {
      * 
      */
     void initialize();
-    
+
     /**
      * Returns the current logic that drives Proximity.
      * 
@@ -83,7 +82,8 @@ public interface Proximity {
     /**
      * Sets the repositories that serves Proximity.
      * 
-     * @param reposList list of Repositories.
+     * @param reposList
+     *            list of Repositories.
      * 
      */
     void setRepositories(List reposList);
@@ -94,14 +94,14 @@ public interface Proximity {
      * @return
      */
     List getRepositories();
-    
+
     /**
      * Adds single repository to Proximity.
      * 
      * @param repository
      */
     void addRepository(Repository repository);
-    
+
     /**
      * Removes single repository from Proximity.
      * 
@@ -109,7 +109,7 @@ public interface Proximity {
      * @throws NoSuchRepositoryException
      */
     void removeRepository(String repoId) throws NoSuchRepositoryException;
-    
+
     /**
      * Returns existing Repository groups.
      * 
@@ -117,14 +117,13 @@ public interface Proximity {
      */
     Map getRepositoryGroups();
 
-
     /**
      * Returns the list of known groupIds configured within Proximity.
      * 
      * @return List of Strings, the known groupIds.
      */
     List getRepositoryGroupIds();
-    
+
     /**
      * Is emerge active?
      * 
@@ -133,30 +132,80 @@ public interface Proximity {
     boolean isEmergeRepositoryGroups();
 
     /**
-     * Changes the way how Proximity functions. If emergingGroups, then the repository
-     * groups will appear as root of offered items. If not, all defined repositories are
-     * "flattened".
+     * Changes the way how Proximity functions. If emergingGroups, then the
+     * repository groups will appear as root of offered items. If not, all
+     * defined repositories are "flattened".
      * 
-     * @param emergeGroups set to true if you want group emerge.
+     * @param emergeGroups
+     *            set to true if you want group emerge.
      */
     void setEmergeRepositoryGroups(boolean emergeGroups);
-    
-    
+
     // ============================================================================================
     // Proxy stuff
 
     /**
-     * Fetches a given item on the supplied path.
+     * Retrieves an item from Proximity according to request.
      * 
-     * @param path
-     * @return the wanted Item
+     * @param request
+     * @return item
      * @throws ItemNotFoundException
-     *             if Proximity has not found item on the path
+     * @throws AccessDeniedException
+     * @throws NoSuchRepositoryException
      */
     Item retrieveItem(ProximityRequest request) throws ItemNotFoundException, AccessDeniedException,
             NoSuchRepositoryException;
 
-    
+    /**
+     * Stores item on it's supplied path. Proximity does not handle directories
+     * separatly, if you store item on path /a/b/c/some.jar, the dir structure
+     * /a/b/c will be created if not exists. Only files can be stored,
+     * directories not.
+     * 
+     * @param request
+     * @param item
+     * @throws AccessDeniedException
+     * @throws NoSuchRepositoryException
+     */
+    void storeItem(ProximityRequest request, Item item) throws AccessDeniedException, NoSuchRepositoryException,
+            RepositoryNotAvailableException;
+
+    /**
+     * Copies item from source to target location. Source should be retrievable
+     * by retrieveItem(downloadable or cached).
+     * 
+     * @param source
+     * @param target
+     * @throws ItemNotFoundException
+     * @throws AccessDeniedException
+     * @throws NoSuchRepositoryException
+     */
+    void copyItem(ProximityRequest source, ProximityRequest target) throws ItemNotFoundException,
+            AccessDeniedException, NoSuchRepositoryException, RepositoryNotAvailableException;
+
+    /**
+     * Like copyItem, except it removes source if local.
+     * 
+     * @param source
+     * @param target
+     * @throws ItemNotFoundException
+     * @throws AccessDeniedException
+     * @throws NoSuchRepositoryException
+     */
+    void moveItem(ProximityRequest source, ProximityRequest target) throws ItemNotFoundException,
+            AccessDeniedException, NoSuchRepositoryException, RepositoryNotAvailableException;
+
+    /**
+     * Deletes item according to request if local.
+     * 
+     * @param request
+     * @throws ItemNotFoundException
+     * @throws AccessDeniedException
+     * @throws NoSuchRepositoryException
+     */
+    void deleteItem(ProximityRequest request) throws ItemNotFoundException, AccessDeniedException,
+            NoSuchRepositoryException, RepositoryNotAvailableException;
+
     // ============================================================================================
     // Search and list
 
@@ -195,7 +244,6 @@ public interface Proximity {
      */
     public List searchItem(String query) throws ProximityException;
 
-    
     // ============================================================================================
     // Maintenance
 

@@ -1,6 +1,5 @@
 package org.abstracthorizon.proximity.impl;
 
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -232,6 +231,77 @@ public class ProximityImpl implements Proximity {
             return item;
         } else {
             return retrieveItemController(request);
+        }
+    }
+
+    public void copyItem(ProximityRequest source, ProximityRequest target) throws ItemNotFoundException,
+            AccessDeniedException, NoSuchRepositoryException, RepositoryNotAvailableException {
+        logger.debug("Got copyItem with {} -> {}", source, target);
+        accessManager.decide(source, null);
+        accessManager.decide(target, null);
+        Item item = retrieveItem(source);
+        ItemPropertiesImpl itemProps = (ItemPropertiesImpl) item.getProperties();
+        itemProps.setAbsolutePath(FilenameUtils.getFullPathNoEndSeparator(target.getPath()));
+        itemProps.setName(FilenameUtils.getName(target.getPath()));
+        itemProps.setRepositoryId(target.getTargetedReposId());
+        itemProps.setRepositoryGroupId(target.getTargetedReposGroupId());
+        storeItem(target, item);
+    }
+
+    public void deleteItem(ProximityRequest request) throws ItemNotFoundException, AccessDeniedException,
+            NoSuchRepositoryException, RepositoryNotAvailableException {
+        logger.debug("Got deleteItem with {}", request);
+        accessManager.decide(request, null);
+        Item item = retrieveItem(request);
+        Repository repo = (Repository) repositories.get(item.getProperties().getRepositoryId());
+        repo.deleteItem(request.getPath());
+    }
+
+    public void moveItem(ProximityRequest source, ProximityRequest target) throws ItemNotFoundException,
+            AccessDeniedException, NoSuchRepositoryException, RepositoryNotAvailableException {
+        logger.debug("Got moveItem with {} -> {}", source, target);
+        accessManager.decide(source, null);
+        accessManager.decide(target, null);
+        copyItem(source, target);
+        deleteItem(source);
+    }
+
+    public void storeItem(ProximityRequest request, Item item) throws AccessDeniedException, NoSuchRepositoryException,
+            RepositoryNotAvailableException {
+        logger.debug("Got storeItem for {}", request);
+        accessManager.decide(request, null);
+
+        String targetRepoId = request.getTargetedReposId();
+        List pathList = explodePathToList(request.getPath());
+
+        if (targetRepoId == null) {
+
+            // first repo if not targeted and store
+            if (isEmergeRepositoryGroups()) {
+                if (pathList.size() == 0) {
+                    // cannot store on root if emergeGroups, error
+                    throw new AccessDeniedException(request,
+                            "Cannot store item on the root when emergeRepositoryGroups are enabled!");
+                }
+                // get group, get first repo of the group and store
+                String groupId = (String) pathList.get(0);
+                if (repositoryGroups.containsKey(groupId)) {
+                    List repositoryGroupOrder = (List) repositoryGroups.get(groupId);
+                    targetRepoId = (String) repositoryGroupOrder.get(0);
+                } else {
+                    throw new NoSuchRepositoryException("group " + request.getTargetedReposGroupId());
+                }
+            } else {
+                // get first repo and store
+                targetRepoId = (String) repositoryOrder.get(0);
+            }
+        }
+
+        if (repositories.containsKey(targetRepoId)) {
+            Repository repo = (Repository) repositories.get(targetRepoId);
+            repo.storeItem(item);
+        } else {
+            throw new NoSuchRepositoryException(targetRepoId);
         }
     }
 
@@ -544,8 +614,8 @@ public class ProximityImpl implements Proximity {
                     ip.setAbsolutePath(ItemProperties.PATH_ROOT + ip.getRepositoryGroupId());
                 } else {
                     // make /groupId/... as path WITHOUT trailing /
-                    ip.setAbsolutePath(FilenameUtils.normalizeNoEndSeparator(ItemProperties.PATH_ROOT + ip.getRepositoryGroupId()
-                            + ip.getAbsolutePath()));
+                    ip.setAbsolutePath(FilenameUtils.normalizeNoEndSeparator(ItemProperties.PATH_ROOT
+                            + ip.getRepositoryGroupId() + ip.getAbsolutePath()));
                 }
                 logger.debug("Mangled item path {} with repositoryGroupId {}...", ip.getAbsolutePath(), ip
                         .getRepositoryGroupId());
