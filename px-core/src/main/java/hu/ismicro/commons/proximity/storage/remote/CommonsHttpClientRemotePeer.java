@@ -223,7 +223,7 @@ public class CommonsHttpClientRemotePeer extends AbstractRemoteStorage {
     public HttpClient getHttpClient() {
         if (httpClient == null) {
             logger.info("Creating CommonsHttpClient instance");
-            httpRetryHandler = new DefaultHttpMethodRetryHandler(retrievalRetryCount, false);
+            httpRetryHandler = new DefaultHttpMethodRetryHandler(retrievalRetryCount, true);
             httpClient = new HttpClient(new MultiThreadedHttpConnectionManager());
             httpClient.getParams().setConnectionManagerTimeout(getConnectionTimeout());
             httpConfiguration = httpClient.getHostConfiguration();
