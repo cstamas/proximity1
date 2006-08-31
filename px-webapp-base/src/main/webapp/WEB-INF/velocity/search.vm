@@ -106,7 +106,7 @@
 	</tbody>
 </table>
 #else
-<div class="center"><b>No results.</b></div>
+<div class="center">&nbsp;</div>
 #end
 
 <hr/>
