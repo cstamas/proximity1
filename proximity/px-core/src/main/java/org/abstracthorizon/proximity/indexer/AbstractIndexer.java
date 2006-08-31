@@ -25,8 +25,10 @@ public abstract class AbstractIndexer implements Indexer {
 
     public void registerRepository(Repository repository) {
         repository.setIndexer(this);
-        addSearchableKeywords(repository.getLocalStorage().getProxiedItemPropertiesFactory().getSearchableKeywords());
-        Collections.sort(searchableKeywords);
+        if (repository.getLocalStorage() != null) {
+            addSearchableKeywords(repository.getLocalStorage().getProxiedItemPropertiesFactory().getSearchableKeywords());
+            Collections.sort(searchableKeywords);
+        }
     }
 
     public List getSearchableKeywords() {

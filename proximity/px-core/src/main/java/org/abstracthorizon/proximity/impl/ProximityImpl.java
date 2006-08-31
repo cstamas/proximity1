@@ -32,8 +32,6 @@ public class ProximityImpl implements Proximity {
 
     protected Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    private boolean initialized = false;
-
     /** The repo groups, [repo.getGroupId, List&lt;Repositories&gt;] */
     private Map repositoryGroups = new HashMap();
 
@@ -85,25 +83,10 @@ public class ProximityImpl implements Proximity {
     }
 
     public void initialize() {
-        logger.info("Starting Initialization...");
+        logger.info("Proximity initialization...");
         if (getIndexer() != null) {
             getIndexer().initialize();
         }
-
-        initialized = true;
-
-        logger.info("Initializing all defined repositories");
-        for (Iterator i = repositories.keySet().iterator(); i.hasNext();) {
-            String repoId = (String) i.next();
-            Repository repository = (Repository) repositories.get(repoId);
-            initializeRepository(repository);
-        }
-    }
-
-    protected void initializeRepository(Repository repository) {
-        logger.info("Initializing {}", repository.getId());
-        getIndexer().registerRepository(repository);
-        repository.reindex();
     }
 
     public void reindex() {
@@ -121,17 +104,6 @@ public class ProximityImpl implements Proximity {
         repo.reindex();
     }
 
-    public void setRepositories(List reposList) {
-        logger.info("Received " + reposList.size() + " repositories in a List.");
-        repositories.clear();
-        repositoryOrder.clear();
-        repositoryGroups.clear();
-        for (Iterator i = reposList.iterator(); i.hasNext();) {
-            Repository repo = (Repository) i.next();
-            addRepository(repo);
-        }
-    }
-
     public List getRepositories() {
         List result = new ArrayList();
         for (Iterator i = repositoryOrder.iterator(); i.hasNext();) {
@@ -143,31 +115,30 @@ public class ProximityImpl implements Proximity {
 
     public void addRepository(Repository repository) {
         repositories.put(repository.getId(), repository);
-        repositoryOrder.add(repository.getId());
+        addToRepositoryIdToRankedList(repositoryOrder, repository);
+        // repositoryOrder.add(repository.getId());
 
         if (!repositoryGroups.containsKey(repository.getGroupId())) {
             repositoryGroups.put(repository.getGroupId(), new ArrayList());
         }
         List repositoryGroupOrder = (List) repositoryGroups.get(repository.getGroupId());
-        repositoryGroupOrder.add(repository.getId());
+        addToRepositoryIdToRankedList(repositoryGroupOrder, repository);
+        // repositoryGroupOrder.add(repository.getId());
 
         logger.info("Added repository id=[{}], groupId=[{}].", repository.getId(), repository.getGroupId());
-
-        if (initialized) {
-            initializeRepository(repository);
-        }
-
+        logger.debug("  current order of reposes is {}.", repositoryOrder);
     }
 
     public void removeRepository(String repoId) throws NoSuchRepositoryException {
         if (repositories.containsKey(repoId)) {
             Repository repository = (Repository) repositories.get(repoId);
-            List repositoryOrder = (List) repositoryGroups.get(repository.getGroupId());
-            repositories.remove(repository.getId());
-            repositoryOrder.remove(repository);
-            if (repositoryOrder.isEmpty()) {
+            List repositoryGroupOrder = (List) repositoryGroups.get(repository.getGroupId());
+            repositoryGroupOrder.remove(repository.getId());
+            if (repositoryGroupOrder.isEmpty()) {
                 repositoryGroups.remove(repository.getGroupId());
             }
+            repositoryOrder.remove(repository.getId());
+            repositories.remove(repository.getId());
             logger.info("Removed repository id=[{}], groupId=[{}]", repository.getId(), repository.getGroupId());
         } else {
             throw new NoSuchRepositoryException(repoId);
@@ -184,7 +155,7 @@ public class ProximityImpl implements Proximity {
         Collections.sort(ids);
         return ids;
     }
-    
+
     public List getRepositoryGroupIds() {
         Object[] groupIds = repositoryGroups.keySet().toArray();
         Arrays.sort(groupIds);
@@ -537,8 +508,10 @@ public class ProximityImpl implements Proximity {
                 } catch (RepositoryNotAvailableException ex) {
                     logger.debug("Repo {} not available, ignoring it.", ip.getRepositoryId());
                 } catch (ItemNotFoundException ex) {
-                    logger.info("ItemNotFound on repo {} for path [{}] but index contains it, ignoring. Maybe repo needs a reindex?", ip
-                            .getRepositoryId(), ip.getPath());
+                    logger
+                            .info(
+                                    "ItemNotFound on repo {} for path [{}] but index contains it, ignoring. Maybe repo needs a reindex?",
+                                    ip.getRepositoryId(), ip.getPath());
                 }
             }
             mangleItemPathsForEmergeGroups(result);
@@ -629,6 +602,23 @@ public class ProximityImpl implements Proximity {
             }
         }
         return result;
+    }
+
+    protected void addToRepositoryIdToRankedList(List listOfReposes, Repository repo) {
+        if (listOfReposes.size() > 0) {
+            Repository current = (Repository) repositories.get((String) listOfReposes.get(0));
+            Iterator i = listOfReposes.iterator();
+            while (i.hasNext() && current.getRank() < repo.getRank()) {
+                current = (Repository) repositories.get((String) i.next());
+            }
+            if (current.getRank() < repo.getRank()) {
+                listOfReposes.add(repo.getId());
+            } else {
+                listOfReposes.add(listOfReposes.indexOf(current.getId()), repo.getId());
+            }
+        } else {
+            listOfReposes.add(repo.getId());
+        }
     }
 
 }

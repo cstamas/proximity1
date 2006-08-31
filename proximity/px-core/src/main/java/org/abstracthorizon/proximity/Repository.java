@@ -19,6 +19,12 @@ import org.abstracthorizon.proximity.storage.remote.RemoteStorage;
  * 
  */
 public interface Repository {
+    
+    /**
+     * Call once to initialize repository.
+     *
+     */
+    void initialize();
 
     /**
      * Registers itself with Proximity.
@@ -55,6 +61,22 @@ public interface Repository {
      * @param groupId
      */
     void setGroupId(String groupId);
+
+    /**
+     * The rank or repository. 1 goes for 1st position and so on. A linear
+     * ordering actually. Smaller the rank, it gets closer to 1st place. Equal
+     * ranks produces undefined order.
+     * 
+     * @return
+     */
+    int getRank();
+
+    /**
+     * Sets the rank of repository.
+     * 
+     * @param rank
+     */
+    void setRank(int rank);
 
     /**
      * Is Repository available? If no, it will reject all incoming requests.

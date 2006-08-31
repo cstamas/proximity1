@@ -74,6 +74,10 @@
                         <td colspan="1">#springMessage("repositories.groupId")</td>
                         <td colspan="1">${repository.groupId}</td>
                 </tr>
+                <tr class="tda" onmouseover="return escape('#springMessage('repositories.rank.help')')">
+                        <td colspan="1">#springMessage("repositories.rank")</td>
+                        <td colspan="1">${repository.rank}</td>
+                </tr>
                 <tr class="tda" onmouseover="return escape('#springMessage('repositories.isAvailable.help')')">
                         <td colspan="1">#springMessage("repositories.isAvailable")</td>
                         <td colspan="1">
@@ -98,7 +102,12 @@
                         <td colspan="1">#springMessage("repositories.isListable")</td>
                         <td colspan="1">
 	                        #if( ${repository.isListable()} )
-    	                    	#springMessage("common.yes"), <a href="#springUrl('/repository')?repositoryId=${repository.id}">${repository.id}</a>
+								#if( ${context.get('emergeRepositoryGroups')} )
+	    	                    	#springMessage("common.yes"), #springMessage("repositories.isListable.grouped"), <a href="#springUrl('/repository')?repositoryGroupId=${repository.groupId}">${repository.groupId}</a>
+								#else
+	    	                    	#springMessage("common.yes"), <a href="#springUrl('/repository')?repositoryId=${repository.id}">${repository.id}</a>
+								#end
+
     	                    #else
     	                        #springMessage("common.no")
         	                #end
