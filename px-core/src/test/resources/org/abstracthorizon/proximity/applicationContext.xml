@@ -55,18 +55,6 @@
 		<property name="indexer" ref="indexer" />
 		<property name="accessManager" ref="openAccessManager" />
 		<property name="emergeRepositoryGroups" value="false" />
-
-		<property name="repositories">
-			<list>
-				<!-- Repos'es will be processed in THIS ORDER! -->
-				<ref local="inhouse" />
-				<ref local="extFree" />
-				<ref local="extNonFree" />
-				<!-- for Maven2 -->
-				<ref local="central" />
-			</list>
-		</property>
-
 	</bean>
 
 	<!--
@@ -135,8 +123,12 @@
 		- A standard maven2 repository.
 	-->
 	<bean id="central"
-		class="org.abstracthorizon.proximity.impl.RepositoryImpl">
+		class="org.abstracthorizon.proximity.impl.RepositoryImpl"
+		init-method="initialize">
+		<property name="proximity" ref="proximity"/>
 		<property name="id" value="central" />
+		<property name="groupId" value="public" />
+		<property name="rank" value="50"/>
 		<property name="localStorage" ref="centralFSStorage" />
 		<property name="remoteStorage" ref="centralRemotePeer" />
 		<property name="statisticsGatherer" ref="stats" />
@@ -178,8 +170,13 @@
 		- A maven repository for publishing in-house artifacts.
 	-->
 	<bean id="inhouse"
-		class="org.abstracthorizon.proximity.impl.RepositoryImpl">
+		class="org.abstracthorizon.proximity.impl.RepositoryImpl"
+		init-method="initialize">
+		<property name="proximity" ref="proximity"/>
 		<property name="id" value="inhouse" />
+		<property name="groupId" value="private" />
+		<property name="rank" value="50"/>
+
 		<property name="localStorage" ref="inhouseFSStorage" />
 		<property name="listable" value="true" />
 		<property name="statisticsGatherer" ref="stats" />
@@ -202,8 +199,13 @@
 		- not deployed on standard maven repositories (oracle JDBC, J2EE, etc...).
 	-->
 	<bean id="extNonFree"
-		class="org.abstracthorizon.proximity.impl.RepositoryImpl">
+		class="org.abstracthorizon.proximity.impl.RepositoryImpl"
+		init-method="initialize">
+		<property name="proximity" ref="proximity"/>
 		<property name="id" value="extNonFree" />
+		<property name="groupId" value="ext" />
+		<property name="rank" value="50"/>
+
 		<property name="localStorage" ref="extNonFreeFSStorage" />
 		<property name="listable" value="true" />
 		<property name="statisticsGatherer" ref="stats" />
@@ -226,8 +228,13 @@
 		- not deployed on standard maven repositories (dwr, etc...).
 	-->
 	<bean id="extFree"
-		class="org.abstracthorizon.proximity.impl.RepositoryImpl">
+		class="org.abstracthorizon.proximity.impl.RepositoryImpl"
+		init-method="initialize">
+		<property name="proximity" ref="proximity"/>
 		<property name="id" value="extFree" />
+		<property name="groupId" value="ext" />
+		<property name="rank" value="40"/>
+
 		<property name="localStorage" ref="extFreeFSStorage" />
 		<property name="listable" value="true" />
 		<property name="statisticsGatherer" ref="stats" />

@@ -66,27 +66,6 @@
 		<property name="accessManager" ref="openAccessManager" />
 		<property name="proximityLogic" ref="proximityLogic" />
 		<property name="emergeRepositoryGroups" value="true" />
-
-		<property name="repositories">
-			<list>
-				<!-- Repos'es will be processed in THIS ORDER! -->
-
-				<!-- Maven2 local reposes, the PRIVATE group -->
-				<ref local="inhouse" />
-				<ref local="inhouse.snapshot" />
-
-				<!-- Maven2 local reposes, the EXT group -->
-				<ref local="extFree" />
-				<ref local="extNonFree" />
-
-				<!-- Maven2 remote reposes, the PUBLIC group -->
-				<ref local="central" />
-				<ref local="codehaus" />
-				<ref local="apache.snapshot" />
-				<ref local="codehaus.snapshot" />
-			</list>
-		</property>
-
 	</bean>
 
 	<!--
@@ -227,12 +206,15 @@
 		- A standard maven2 repository.
 	-->
 	<bean id="central"
-		class="org.abstracthorizon.proximity.impl.RepositoryImpl">
+		class="org.abstracthorizon.proximity.impl.RepositoryImpl"
+		init-method="initialize">
+		<property name="proximity" ref="proximity" />
 		<property name="id" value="central" />
 		<property name="groupId" value="public" />
+		<property name="rank" value="50" />
+
 		<property name="localStorage" ref="centralFSStorage" />
 		<property name="remoteStorage" ref="centralRemotePeer" />
-		<property name="indexer" ref="indexer" />
 		<property name="statisticsGatherer" ref="stats" />
 		<property name="accessManager" ref="openAccessManager" />
 		<!-- Uncomment this and delete previous accessManager declaration to restrict access to this repo
@@ -301,12 +283,15 @@
 		- A standard maven2 repository.
 	-->
 	<bean id="codehaus"
-		class="org.abstracthorizon.proximity.impl.RepositoryImpl">
+		class="org.abstracthorizon.proximity.impl.RepositoryImpl"
+		init-method="initialize">
+		<property name="proximity" ref="proximity" />
 		<property name="id" value="codehaus" />
 		<property name="groupId" value="public" />
+		<property name="rank" value="60" />
+
 		<property name="localStorage" ref="codehausFSStorage" />
 		<property name="remoteStorage" ref="codehausRemotePeer" />
-		<property name="indexer" ref="indexer" />
 		<property name="statisticsGatherer" ref="stats" />
 		<property name="accessManager" ref="openAccessManager" />
 		<!-- Uncomment this and delete previous accessManager declaration to restrict access to this repo
@@ -365,12 +350,15 @@
 		- A standard maven2 repository.
 	-->
 	<bean id="apache.snapshot"
-		class="org.abstracthorizon.proximity.impl.RepositoryImpl">
+		class="org.abstracthorizon.proximity.impl.RepositoryImpl"
+		init-method="initialize">
+		<property name="proximity" ref="proximity" />
 		<property name="id" value="apache.snapshot" />
 		<property name="groupId" value="apache.snapshot" />
+		<property name="rank" value="80" />
+
 		<property name="localStorage" ref="apache.snapshotFSStorage" />
 		<property name="remoteStorage" ref="apache.snapshotRemotePeer" />
-		<property name="indexer" ref="indexer" />
 		<property name="statisticsGatherer" ref="stats" />
 		<property name="accessManager" ref="openAccessManager" />
 		<!-- Uncomment this and delete previous accessManager declaration to restrict access to this repo
@@ -429,13 +417,16 @@
 		- A standard maven2 repository.
 	-->
 	<bean id="codehaus.snapshot"
-		class="org.abstracthorizon.proximity.impl.RepositoryImpl">
+		class="org.abstracthorizon.proximity.impl.RepositoryImpl"
+		init-method="initialize">
+		<property name="proximity" ref="proximity" />
 		<property name="id" value="codehaus.snapshot" />
 		<property name="groupId" value="codehaus.snapshot" />
+		<property name="rank" value="90" />
+
 		<property name="localStorage" ref="codehaus.snapshotFSStorage" />
 		<property name="remoteStorage"
 			ref="codehaus.snapshotRemotePeer" />
-		<property name="indexer" ref="indexer" />
 		<property name="statisticsGatherer" ref="stats" />
 		<property name="accessManager" ref="openAccessManager" />
 		<!-- Uncomment this and delete previous accessManager declaration to restrict access to this repo
@@ -494,11 +485,14 @@
 		- A maven repository for publishing in-house artifacts.
 	-->
 	<bean id="inhouse"
-		class="org.abstracthorizon.proximity.impl.RepositoryImpl">
+		class="org.abstracthorizon.proximity.impl.RepositoryImpl"
+		init-method="initialize">
+		<property name="proximity" ref="proximity" />
 		<property name="id" value="inhouse" />
 		<property name="groupId" value="private" />
+		<property name="rank" value="10" />
+
 		<property name="localStorage" ref="inhouseFSStorage" />
-		<property name="indexer" ref="indexer" />
 		<property name="statisticsGatherer" ref="stats" />
 		<property name="repositoryLogic" ref="maven2ReleaseRepoLogic" />
 		<property name="accessManager" ref="openAccessManager" />
@@ -524,11 +518,14 @@
 	</bean>
 
 	<bean id="inhouse.snapshot"
-		class="org.abstracthorizon.proximity.impl.RepositoryImpl">
+		class="org.abstracthorizon.proximity.impl.RepositoryImpl"
+		init-method="initialize">
+		<property name="proximity" ref="proximity" />
 		<property name="id" value="inhouse.snapshot" />
 		<property name="groupId" value="private" />
+		<property name="rank" value="15" />
+
 		<property name="localStorage" ref="inhouse.snapshotFSStorage" />
-		<property name="indexer" ref="indexer" />
 		<property name="statisticsGatherer" ref="stats" />
 		<property name="repositoryLogic" ref="maven2SnapshotRepoLogic" />
 		<property name="accessManager" ref="openAccessManager" />
@@ -559,11 +556,14 @@
 		- not deployed on standard maven repositories (oracle JDBC, J2EE, etc...).
 	-->
 	<bean id="extNonFree"
-		class="org.abstracthorizon.proximity.impl.RepositoryImpl">
+		class="org.abstracthorizon.proximity.impl.RepositoryImpl"
+		init-method="initialize">
+		<property name="proximity" ref="proximity" />
 		<property name="id" value="extNonFree" />
 		<property name="groupId" value="ext" />
+		<property name="rank" value="35" />
+
 		<property name="localStorage" ref="extNonFreeFSStorage" />
-		<property name="indexer" ref="indexer" />
 		<property name="statisticsGatherer" ref="stats" />
 		<property name="repositoryLogic" ref="maven2ReleaseRepoLogic" />
 		<property name="accessManager" ref="openAccessManager" />
@@ -594,11 +594,14 @@
 		- not deployed on standard maven repositories (dwr, etc...).
 	-->
 	<bean id="extFree"
-		class="org.abstracthorizon.proximity.impl.RepositoryImpl">
+		class="org.abstracthorizon.proximity.impl.RepositoryImpl"
+		init-method="initialize">
+		<property name="proximity" ref="proximity" />
 		<property name="id" value="extFree" />
 		<property name="groupId" value="ext" />
+		<property name="rank" value="25" />
+
 		<property name="localStorage" ref="extFreeFSStorage" />
-		<property name="indexer" ref="indexer" />
 		<property name="statisticsGatherer" ref="stats" />
 		<property name="repositoryLogic" ref="maven2ReleaseRepoLogic" />
 		<property name="accessManager" ref="openAccessManager" />

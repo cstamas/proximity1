@@ -31,16 +31,22 @@ import org.slf4j.LoggerFactory;
 public class RepositoryImpl implements Repository {
 
     protected Logger logger = LoggerFactory.getLogger(this.getClass());
+    
+    private Proximity proximity;
 
     private String id;
 
     private String groupId = "default";
+    
+    private int rank = 999;
 
     private boolean available = true;
 
     private boolean offline = false;
 
     private boolean listable = true;
+    
+    private boolean reindexAtInitialize = true; 
 
     private LocalStorage localStorage;
 
@@ -55,15 +61,7 @@ public class RepositoryImpl implements Repository {
     private RepositoryLogic repositoryLogic = new DefaultProxyingRepositoryLogic();
     
     public void setProximity(Proximity proximity) {
-        proximity.addRepository(this);
-    }
-
-    public StatisticsGatherer getStatisticsGatherer() {
-        return statisticsGatherer;
-    }
-
-    public void setStatisticsGatherer(StatisticsGatherer statisticsGatherer) {
-        this.statisticsGatherer = statisticsGatherer;
+        this.proximity = proximity;
     }
 
     public String getId() {
@@ -72,6 +70,22 @@ public class RepositoryImpl implements Repository {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(String groupId) {
+        this.groupId = groupId;
+    }
+
+    public int getRank() {
+        return rank;
+    }
+
+    public void setRank(int rank) {
+        this.rank = rank;
     }
 
     public boolean isListable() {
@@ -94,16 +108,16 @@ public class RepositoryImpl implements Repository {
         return offline;
     }
 
+    public boolean isReindexAtInitialize() {
+        return reindexAtInitialize;
+    }
+
+    public void setReindexAtInitialize(boolean reindexAtInitialize) {
+        this.reindexAtInitialize = reindexAtInitialize;
+    }
+
     public void setOffline(boolean offline) {
         this.offline = offline;
-    }
-
-    public String getGroupId() {
-        return groupId;
-    }
-
-    public void setGroupId(String groupId) {
-        this.groupId = groupId;
     }
 
     public LocalStorage getLocalStorage() {
@@ -134,6 +148,14 @@ public class RepositoryImpl implements Repository {
         this.indexer = indexer;
     }
 
+    public StatisticsGatherer getStatisticsGatherer() {
+        return statisticsGatherer;
+    }
+
+    public void setStatisticsGatherer(StatisticsGatherer statisticsGatherer) {
+        this.statisticsGatherer = statisticsGatherer;
+    }
+
     public AccessManager getAccessManager() {
         return accessManager;
     }
@@ -151,6 +173,16 @@ public class RepositoryImpl implements Repository {
 
     // ---------------------------------------------------------------------------------
     // Entry methods
+    
+    public void initialize() {
+        proximity.addRepository(this);
+        setIndexer(proximity.getIndexer());
+
+        getIndexer().registerRepository(this);
+        if (isReindexAtInitialize()) {
+            reindex();
+        }
+    }
 
     public ItemImpl retrieveItem(ProximityRequest request) throws RepositoryNotAvailableException,
             ItemNotFoundException, StorageException, AccessDeniedException {
