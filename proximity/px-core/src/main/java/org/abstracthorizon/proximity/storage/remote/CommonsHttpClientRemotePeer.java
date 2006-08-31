@@ -1,6 +1,5 @@
 package org.abstracthorizon.proximity.storage.remote;
 
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -55,6 +54,8 @@ public class CommonsHttpClientRemotePeer extends AbstractRemoteStorage {
     private boolean followRedirection = true;
 
     private String queryString = null;
+    
+    private String userAgentString = null;
 
     private int connectionTimeout = 5000;
 
@@ -71,6 +72,14 @@ public class CommonsHttpClientRemotePeer extends AbstractRemoteStorage {
     private String proxyNtlmDomain = null;
 
     private String proxyNtlmHost = null;
+
+    public String getUserAgentString() {
+        return userAgentString;
+    }
+
+    public void setUserAgentString(String userAgentString) {
+        this.userAgentString = userAgentString;
+    }
 
     public String getProxyHost() {
         return proxyHost;
@@ -226,6 +235,7 @@ public class CommonsHttpClientRemotePeer extends AbstractRemoteStorage {
             httpRetryHandler = new DefaultHttpMethodRetryHandler(retrievalRetryCount, true);
             httpClient = new HttpClient(new MultiThreadedHttpConnectionManager());
             httpClient.getParams().setConnectionManagerTimeout(getConnectionTimeout());
+
             httpConfiguration = httpClient.getHostConfiguration();
 
             if (getProxyHost() != null) {
@@ -270,6 +280,14 @@ public class CommonsHttpClientRemotePeer extends AbstractRemoteStorage {
     }
 
     protected int executeMethod(HttpMethod method) {
+        if (getUserAgentString() != null) {
+            method.setRequestHeader(new Header("user-agent", getUserAgentString()));
+        }
+        method.setRequestHeader(new Header("accept", "*/*"));
+        method.setRequestHeader(new Header("accept-language", "en-us"));
+        method.setRequestHeader(new Header("accept-encoding", "gzip, deflate"));
+        method.setRequestHeader(new Header("connection", "Keep-Alive"));
+        method.setRequestHeader(new Header("cache-control", "no-cache"));
         method.setFollowRedirects(isFollowRedirection());
         method.getParams().setParameter(HttpMethodParams.RETRY_HANDLER, httpRetryHandler);
         method.setQueryString(getQueryString());
