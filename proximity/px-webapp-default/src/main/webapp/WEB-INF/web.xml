@@ -18,6 +18,7 @@
 		<param-name>contextConfigLocation</param-name>
 		<param-value>
 			/WEB-INF/applicationContext.xml
+			/WEB-INF/proximityHelpers.xml
 			classpath:org/codehaus/xfire/spring/xfire.xml
 		</param-value>
 	</context-param>
