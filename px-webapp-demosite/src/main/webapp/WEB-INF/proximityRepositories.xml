@@ -1,200 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
 
-<!--
-	Default Proximity webapp configuration with provided all possible settings (most of
-	them have default values!).
-	
-	Have fun,
-	t.cservenak@gmail.com
--->
-
-<!-- 
-	List of known Maven2 mirrors, choose one that suit you!
-	
-	For Maven2:
-	http://maven.sateh.com/repository/ (recommended for EU)
-	http://repo1.maven.org/maven2/ (USA)
-	http://www.ibiblio.org/maven2/ (USA)
--->
-
 <beans>
 
-	<!--
-		=================================================================================
-		Infrastructure, Spring convenience stuff, not Proximity beans.
-	-->
-
 	<!-- 
-		- Message source
+		- DemoSite AccessManager, that prevents JAR download from reposes.
+		- Applied to all Proxied repositories and extNonFree repositories.
+		- abstracthorizon Proximity DEMO as remote repo is usable :)
 	-->
-	<bean id="messageSource"
-		class="org.springframework.context.support.ResourceBundleMessageSource">
-		<property name="basenames">
-			<list>
-				<value>flavour-messages</value>
-				<value>messages</value>
-			</list>
-		</property>
-	</bean>
-
-	<!-- 
-		- Property configurer, see proximity.properties
-	-->
-	<bean id="propertyConfigurer"
-		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-		<property name="systemPropertiesModeName"
-			value="SYSTEM_PROPERTIES_MODE_FALLBACK" />
-		<property name="locations">
-			<list>
-				<value>/WEB-INF/proximity.properties</value>
-			</list>
-		</property>
-	</bean>
-
-	<!--
-		=================================================================================
-		Proximity
-	-->
-	<!--
-		- Central proximity bean with list of repos and it's helpers.
-	-->
-	<bean id="proximity"
-		class="org.abstracthorizon.proximity.impl.ProximityImpl"
-		init-method="initialize">
-		<property name="indexer" ref="indexer" />
-		<property name="accessManager" ref="openAccessManager" />
-		<property name="proximityLogic" ref="proximityLogic" />
-		<property name="emergeRepositoryGroups" value="true" />
-	</bean>
-
-	<!--
-		- "Mavenized" logic for Proximity.
-		- It does inter-repository merging of M2 metadatas.
-	-->
-	<bean id="proximityLogic"
-		class="org.abstracthorizon.proximity.maven.MavenProximityLogic" />
-
-	<!--
-		- Indexer, used to speed up searches ONLY.
-	-->
-	<bean id="indexer"
-		class="org.abstracthorizon.proximity.indexer.LuceneIndexer">
-		<!-- Where to store indexes? -->
-		<property name="indexDirectory" value="${indexer.dir}" />
-		<!-- On webapp start should i recreate Lucene indexes? -->
-		<property name="recreateIndexes" value="true" />
-		<!-- After how much of item insertion should i optimize indexes? -->
-		<property name="dirtyItemTreshold" value="100" />
-	</bean>
-
-	<!--
-		- StatisticsGatherer, gathers statistics. Simple in-memory implementation.
-	-->
-	<bean id="stats"
-		class="org.abstracthorizon.proximity.stats.SimpleStatisticsGathererImpl" />
-
-	<!--
-		- ItemPropertiesFactory, creates "extra" metadata about files.
-	-->
-	<bean id="itemPropertiesFactory"
-		class="org.abstracthorizon.proximity.metadata.InspectorListProcessingProxiedItemPropertiesFactory">
-		<property name="itemInspectorList">
-			<list>
-				<bean
-					class="org.abstracthorizon.proximity.maven.MavenItemInspector" />
-				<bean
-					class="org.abstracthorizon.proximity.metadata.inspectors.ZipFileInspector" />
-				<bean
-					class="org.abstracthorizon.proximity.metadata.inspectors.JarFileInspector" />
-			</list>
-		</property>
-	</bean>
-
-	<!--
-		- AccessManagers. With OpenAccessManager Proximity is wide open.
-	-->
-	<bean id="openAccessManager"
-		class="org.abstracthorizon.proximity.access.OpenAccessManager" />
-
-	<!--
-		- AccessManagers. With AffirmativeAccessManager, we will have access if all defined
-		- voters vote AFFIRMATIVE.
-		
-		- We have currently ONE voter, that tries to resemble Apache HTTPD2 Basic Access Control.
-		- We should suppply the allowFrom and denyFrom Java REGEX patterns and a boolean
-		- TRUE for "Order allow,deny" or FALSE for "Order deny,allow" (a la Apache httpd)
-		
-		- Using these settings below, we have AccessManager that allows access for our
-		- 192.168.0.x LAN only. Requests from outer network will be REJECTED, thus
-		- Px is safe to sit on DMZ machine.
-		- Please note, that this settings will REJECT LOCALHOST TOO! 127.0.0.1
-		
-		- If configured on Proximity bean level: the browse link will be inaccessible
-		- If configured on Repository level: the browse will show top-level items but the
-		- restricted repos will not allow download.
-		- Play with differenct combinations!
-		
-		- And don't forget: you may have as much voter and accessManager beans as you love!
-	-->
-	<bean id="demositeAccessVoter"
-		class="org.abstracthorizon.proximity.webapp.access.DemoSiteAccessDecisionVoter">
-	</bean>
 	<bean id="demositeAccessManager"
 		class="org.abstracthorizon.proximity.access.AffirmativeAccessManager">
 		<property name="voters">
 			<list>
-				<ref local="demositeAccessVoter" />
+				<bean
+					class="org.abstracthorizon.proximity.webapp.access.DemoSiteAccessDecisionVoter">
+				</bean>
 			</list>
 		</property>
-	</bean>
-
-	<!--
-		=================================================================================
-	-->
-
-	<!--
-		- Logic used for Maven2 repositories.
-		- Use seconds for setting timeout.
-		- x > 0 - the expiration in seconds
-		- x = 0 - the expiration flag is set to now, thus it will expire initially and be refetched always
-		- x = -1 - turn off for the group expiration handling.
-	-->
-
-	<!-- A release (stable) repository logic, never expires nothing -->
-	<bean id="maven2ReleaseRepoLogic"
-		class="org.abstracthorizon.proximity.maven.MavenProxyRepositoryLogic">
-		<!-- SNAPSHOTSs expires after NEVER -->
-		<property name="snapshotExpirationPeriodInSeconds" value="-1" />
-		<!-- Maven2 POMs expires after NEVER -->
-		<property name="pomExpirationPeriodInSeconds" value="-1" />
-		<!-- Maven2 metadatas (maven-metadata.xml and *.sha1 and *.md5) expires after NEVER -->
-		<property name="metadataExpirationPeriodInSeconds" value="-1" />
-		<!-- everything else will never expire once downloaded -->
-		<property name="itemExpirationPeriodInSeconds" value="-1" />
-		<!-- Should repository driven by this logic serve snapshots? -->
-		<property name="shouldServeSnapshots" value="false" />
-		<!-- Should repository driven by this logic serve releases? -->
-		<property name="shouldServeReleases" value="true" />
-	</bean>
-
-	<!-- A snapshot (unstable) repository logic, generally 24h is expiration -->
-	<bean id="maven2SnapshotRepoLogic"
-		class="org.abstracthorizon.proximity.maven.MavenProxyRepositoryLogic">
-		<!-- SNAPSHOTSs expires after 12h -->
-		<property name="snapshotExpirationPeriodInSeconds"
-			value="43200" />
-		<!-- Maven2 POMs expires after 12h -->
-		<property name="pomExpirationPeriodInSeconds" value="43200" />
-		<!-- Maven2 metadatas (maven-metadata.xml and *.sha1 and *.md5) expires after 12h -->
-		<property name="metadataExpirationPeriodInSeconds"
-			value="43200" />
-		<!-- everything else will expire once downloaded after 12h -->
-		<property name="itemExpirationPeriodInSeconds" value="43200" />
-		<!-- Should repository driven by this logic serve snapshots? -->
-		<property name="shouldServeSnapshots" value="true" />
-		<!-- Should repository driven by this logic serve releases? -->
-		<property name="shouldServeReleases" value="true" />
 	</bean>
 
 	<!--
@@ -212,13 +34,12 @@
 
 		<property name="localStorage" ref="centralFSStorage" />
 		<property name="remoteStorage" ref="centralRemotePeer" />
-		<property name="indexer" ref="indexer" />
-		<property name="statisticsGatherer" ref="stats" />
+		<property name="statisticsGatherer" ref="proximity.statisticsGatherer" />
 		<property name="accessManager" ref="demositeAccessManager" />
 		<!-- Uncomment this and delete previous accessManager declaration to restrict access to this repo
 			<property name="accessManager" ref="internalLanOnlyAccessManager" />
 		-->
-		<property name="repositoryLogic" ref="maven2ReleaseRepoLogic" />
+		<property name="repositoryLogic" ref="proximity.maven2ReleaseRepoLogic" />
 		<!-- Am I listable? -->
 		<property name="listable" value="true" />
 		<!-- Am I available? If no, i will refuse all requests -->
@@ -230,11 +51,12 @@
 	<bean id="centralFSStorage"
 		class="org.abstracthorizon.proximity.storage.local.WritableFileSystemStorage">
 		<property name="metadataAware" value="true" />
-		<property name="metadataDirFile" value="${centralFSStorage.metadataDir}" />
+		<property name="metadataDirFile"
+			value="${centralFSStorage.metadataDir}" />
 		<property name="storageDirFile"
 			value="${centralFSStorage.baseDir}" />
 		<property name="proxiedItemPropertiesFactory"
-			ref="itemPropertiesFactory" />
+			ref="proximity.itemPropertiesFactory" />
 	</bean>
 
 	<bean id="centralRemotePeer"
@@ -285,18 +107,17 @@
 		init-method="initialize">
 		<property name="proximity" ref="proximity" />
 		<property name="id" value="codehaus" />
-		<property name="groupId" value="public" />
+		<property name="groupId" value="codehaus" />
 		<property name="rank" value="60" />
 
 		<property name="localStorage" ref="codehausFSStorage" />
 		<property name="remoteStorage" ref="codehausRemotePeer" />
-		<property name="indexer" ref="indexer" />
-		<property name="statisticsGatherer" ref="stats" />
+		<property name="statisticsGatherer" ref="proximity.statisticsGatherer" />
 		<property name="accessManager" ref="demositeAccessManager" />
 		<!-- Uncomment this and delete previous accessManager declaration to restrict access to this repo
 			<property name="accessManager" ref="internalLanOnlyAccessManager" />
 		-->
-		<property name="repositoryLogic" ref="maven2ReleaseRepoLogic" />
+		<property name="repositoryLogic" ref="proximity.maven2ReleaseRepoLogic" />
 		<!-- Am I listable? -->
 		<property name="listable" value="true" />
 		<!-- Am I available? If no, i will refuse all requests -->
@@ -308,11 +129,12 @@
 	<bean id="codehausFSStorage"
 		class="org.abstracthorizon.proximity.storage.local.WritableFileSystemStorage">
 		<property name="metadataAware" value="true" />
-		<property name="metadataDirFile" value="${codehausFSStorage.metadataDir}" />
+		<property name="metadataDirFile"
+			value="${codehausFSStorage.metadataDir}" />
 		<property name="storageDirFile"
 			value="${codehausFSStorage.baseDir}" />
 		<property name="proxiedItemPropertiesFactory"
-			ref="itemPropertiesFactory" />
+			ref="proximity.itemPropertiesFactory" />
 	</bean>
 
 	<bean id="codehausRemotePeer"
@@ -358,13 +180,12 @@
 
 		<property name="localStorage" ref="apache.snapshotFSStorage" />
 		<property name="remoteStorage" ref="apache.snapshotRemotePeer" />
-		<property name="indexer" ref="indexer" />
-		<property name="statisticsGatherer" ref="stats" />
+		<property name="statisticsGatherer" ref="proximity.statisticsGatherer" />
 		<property name="accessManager" ref="demositeAccessManager" />
 		<!-- Uncomment this and delete previous accessManager declaration to restrict access to this repo
 			<property name="accessManager" ref="internalLanOnlyAccessManager" />
 		-->
-		<property name="repositoryLogic" ref="maven2SnapshotRepoLogic" />
+		<property name="repositoryLogic" ref="proximity.maven2SnapshotRepoLogic" />
 		<!-- Am I listable? -->
 		<property name="listable" value="true" />
 		<!-- Am I available? If no, i will refuse all requests -->
@@ -376,11 +197,12 @@
 	<bean id="apache.snapshotFSStorage"
 		class="org.abstracthorizon.proximity.storage.local.WritableFileSystemStorage">
 		<property name="metadataAware" value="true" />
-		<property name="metadataDirFile" value="${apache.snapshotFSStorage.metadataDir}" />
+		<property name="metadataDirFile"
+			value="${apache.snapshotFSStorage.metadataDir}" />
 		<property name="storageDirFile"
 			value="${apache.snapshotFSStorage.baseDir}" />
 		<property name="proxiedItemPropertiesFactory"
-			ref="itemPropertiesFactory" />
+			ref="proximity.itemPropertiesFactory" />
 	</bean>
 
 	<bean id="apache.snapshotRemotePeer"
@@ -427,13 +249,12 @@
 		<property name="localStorage" ref="codehaus.snapshotFSStorage" />
 		<property name="remoteStorage"
 			ref="codehaus.snapshotRemotePeer" />
-		<property name="indexer" ref="indexer" />
-		<property name="statisticsGatherer" ref="stats" />
+		<property name="statisticsGatherer" ref="proximity.statisticsGatherer" />
 		<property name="accessManager" ref="demositeAccessManager" />
 		<!-- Uncomment this and delete previous accessManager declaration to restrict access to this repo
 			<property name="accessManager" ref="internalLanOnlyAccessManager" />
 		-->
-		<property name="repositoryLogic" ref="maven2SnapshotRepoLogic" />
+		<property name="repositoryLogic" ref="proximity.maven2SnapshotRepoLogic" />
 		<!-- Am I listable? -->
 		<property name="listable" value="true" />
 		<!-- Am I available? If no, i will refuse all requests -->
@@ -445,11 +266,12 @@
 	<bean id="codehaus.snapshotFSStorage"
 		class="org.abstracthorizon.proximity.storage.local.WritableFileSystemStorage">
 		<property name="metadataAware" value="true" />
-		<property name="metadataDirFile" value="${codehaus.snapshotFSStorage.metadataDir}" />
+		<property name="metadataDirFile"
+			value="${codehaus.snapshotFSStorage.metadataDir}" />
 		<property name="storageDirFile"
 			value="${codehaus.snapshotFSStorage.baseDir}" />
 		<property name="proxiedItemPropertiesFactory"
-			ref="itemPropertiesFactory" />
+			ref="proximity.itemPropertiesFactory" />
 	</bean>
 
 	<bean id="codehaus.snapshotRemotePeer"
@@ -490,14 +312,13 @@
 		init-method="initialize">
 		<property name="proximity" ref="proximity" />
 		<property name="id" value="inhouse" />
-		<property name="groupId" value="private" />
+		<property name="groupId" value="inhouse" />
 		<property name="rank" value="10" />
 
 		<property name="localStorage" ref="inhouseFSStorage" />
-		<property name="indexer" ref="indexer" />
-		<property name="statisticsGatherer" ref="stats" />
-		<property name="repositoryLogic" ref="maven2ReleaseRepoLogic" />
-		<property name="accessManager" ref="openAccessManager" />
+		<property name="statisticsGatherer" ref="proximity.statisticsGatherer" />
+		<property name="repositoryLogic" ref="proximity.maven2ReleaseRepoLogic" />
+		<property name="accessManager" ref="proximity.openAccessManager" />
 		<!-- Uncomment this and delete previous row to restrict access to this repo
 			<property name="accessManager" ref="internalLanOnlyAccessManager" />
 		-->
@@ -512,11 +333,12 @@
 	<bean id="inhouseFSStorage"
 		class="org.abstracthorizon.proximity.storage.local.ReadOnlyFileSystemStorage">
 		<property name="metadataAware" value="true" />
-		<property name="metadataDirFile" value="${inhouseFSStorage.metadataDir}" />
+		<property name="metadataDirFile"
+			value="${inhouseFSStorage.metadataDir}" />
 		<property name="storageDirFile"
 			value="${inhouseFSStorage.baseDir}" />
 		<property name="proxiedItemPropertiesFactory"
-			ref="itemPropertiesFactory" />
+			ref="proximity.itemPropertiesFactory" />
 	</bean>
 
 	<bean id="inhouse.snapshot"
@@ -524,14 +346,13 @@
 		init-method="initialize">
 		<property name="proximity" ref="proximity" />
 		<property name="id" value="inhouse.snapshot" />
-		<property name="groupId" value="private" />
+		<property name="groupId" value="inhouse.snapshot" />
 		<property name="rank" value="15" />
 
 		<property name="localStorage" ref="inhouse.snapshotFSStorage" />
-		<property name="indexer" ref="indexer" />
-		<property name="statisticsGatherer" ref="stats" />
-		<property name="repositoryLogic" ref="maven2SnapshotRepoLogic" />
-		<property name="accessManager" ref="openAccessManager" />
+		<property name="statisticsGatherer" ref="proximity.statisticsGatherer" />
+		<property name="repositoryLogic" ref="proximity.maven2SnapshotRepoLogic" />
+		<property name="accessManager" ref="proximity.openAccessManager" />
 		<!-- Uncomment this and delete previous row to restrict access to this repo
 			<property name="accessManager" ref="internalLanOnlyAccessManager" />
 		-->
@@ -546,11 +367,12 @@
 	<bean id="inhouse.snapshotFSStorage"
 		class="org.abstracthorizon.proximity.storage.local.ReadOnlyFileSystemStorage">
 		<property name="metadataAware" value="true" />
-		<property name="metadataDirFile" value="${inhouse.snapshotFSStorage.metadataDir}" />
+		<property name="metadataDirFile"
+			value="${inhouse.snapshotFSStorage.metadataDir}" />
 		<property name="storageDirFile"
 			value="${inhouse.snapshotFSStorage.baseDir}" />
 		<property name="proxiedItemPropertiesFactory"
-			ref="itemPropertiesFactory" />
+			ref="proximity.itemPropertiesFactory" />
 	</bean>
 
 	<!--
@@ -563,13 +385,12 @@
 		init-method="initialize">
 		<property name="proximity" ref="proximity" />
 		<property name="id" value="extNonFree" />
-		<property name="groupId" value="ext" />
+		<property name="groupId" value="public" />
 		<property name="rank" value="35" />
 
 		<property name="localStorage" ref="extNonFreeFSStorage" />
-		<property name="indexer" ref="indexer" />
-		<property name="statisticsGatherer" ref="stats" />
-		<property name="repositoryLogic" ref="maven2ReleaseRepoLogic" />
+		<property name="statisticsGatherer" ref="proximity.statisticsGatherer" />
+		<property name="repositoryLogic" ref="proximity.maven2ReleaseRepoLogic" />
 		<property name="accessManager" ref="demositeAccessManager" />
 		<!-- Uncomment this and delete previous row to restrict access to this repo
 			<property name="accessManager" ref="internalLanOnlyAccessManager" />
@@ -585,11 +406,12 @@
 	<bean id="extNonFreeFSStorage"
 		class="org.abstracthorizon.proximity.storage.local.ReadOnlyFileSystemStorage">
 		<property name="metadataAware" value="true" />
-		<property name="metadataDirFile" value="${extNonFreeFSStorage.metadataDir}" />
+		<property name="metadataDirFile"
+			value="${extNonFreeFSStorage.metadataDir}" />
 		<property name="storageDirFile"
 			value="${extNonFreeFSStorage.baseDir}" />
 		<property name="proxiedItemPropertiesFactory"
-			ref="itemPropertiesFactory" />
+			ref="proximity.itemPropertiesFactory" />
 	</bean>
 
 	<!--
@@ -602,14 +424,13 @@
 		init-method="initialize">
 		<property name="proximity" ref="proximity" />
 		<property name="id" value="extFree" />
-		<property name="groupId" value="ext" />
+		<property name="groupId" value="public" />
 		<property name="rank" value="25" />
 
 		<property name="localStorage" ref="extFreeFSStorage" />
-		<property name="indexer" ref="indexer" />
-		<property name="statisticsGatherer" ref="stats" />
-		<property name="repositoryLogic" ref="maven2ReleaseRepoLogic" />
-		<property name="accessManager" ref="demositeAccessManager" />
+		<property name="statisticsGatherer" ref="proximity.statisticsGatherer" />
+		<property name="repositoryLogic" ref="proximity.maven2ReleaseRepoLogic" />
+		<property name="accessManager" ref="proximity.openAccessManager" />
 		<!-- Uncomment this and delete previous row to restrict access to this repo
 			<property name="accessManager" ref="internalLanOnlyAccessManager" />
 		-->
@@ -624,11 +445,12 @@
 	<bean id="extFreeFSStorage"
 		class="org.abstracthorizon.proximity.storage.local.ReadOnlyFileSystemStorage">
 		<property name="metadataAware" value="true" />
-		<property name="metadataDirFile" value="${extFreeFSStorage.metadataDir}" />
+		<property name="metadataDirFile"
+			value="${extFreeFSStorage.metadataDir}" />
 		<property name="storageDirFile"
 			value="${extFreeFSStorage.baseDir}" />
 		<property name="proxiedItemPropertiesFactory"
-			ref="itemPropertiesFactory" />
+			ref="proximity.itemPropertiesFactory" />
 	</bean>
 
 </beans>
