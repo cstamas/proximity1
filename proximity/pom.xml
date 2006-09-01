@@ -107,13 +107,13 @@
 	<!-- SCM -->
 	<scm>
 		<connection>
-			scm:svn:http://svn.abstracthorizon.org/proximity/trunk/ismicro-proximity/
+			scm:svn:http://svn.abstracthorizon.org/proximity/trunk/proximity/
 		</connection>
 		<developerConnection>
-			scm:svn:https://svn.abstracthorizon.org/proximity/trunk/ismicro-proximity/
+			scm:svn:https://svn.abstracthorizon.org/proximity/trunk/proximity/
 		</developerConnection>
 		<url>
-			http://trac.abstracthorizon.org/proximity/browser/trunk/ismicro-proximity/
+			http://trac.abstracthorizon.org/proximity/browser/trunk/proximity/
 		</url>
 	</scm>
 
@@ -154,23 +154,56 @@
 		<module>px-webapp-pslave</module>
 	</modules>
 
+	<repositories>
+		<repository>
+			<id>abstracthorizon</id>
+			<layout>default</layout>
+			<name>Abstracthorizon.org Repository</name>
+			<releases>
+				<enabled>true</enabled>
+				<checksumPolicy>fail</checksumPolicy>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+			<url>
+				http://repository.abstracthorizon.org/maven2/abstracthorizon
+			</url>
+		</repository>
+		<repository>
+			<id>abstracthorizon.snapshot</id>
+			<layout>default</layout>
+			<name>Abstracthorizon.org Snapshot Repository</name>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+				<checksumPolicy>fail</checksumPolicy>
+			</snapshots>
+			<url>
+				http://repository.abstracthorizon.org/maven2/abstracthorizon.snapshot
+			</url>
+		</repository>
+	</repositories>
+
 	<distributionManagement>
 		<repository>
 			<id>abstracthorizon</id>
 			<name>Abstract Horizon Central Repository</name>
 			<url>
-				scp://213.232.95.19/srv/abstracthorizon.org/html/repository
+				scp://213.232.95.19/srv/213.232.95.142/html/repository/maven2/abstracthorizon
 			</url>
 		</repository>
 		<snapshotRepository>
-			<id>abstracthorizon-snapshot</id>
+			<id>abstracthorizon.snapshot</id>
 			<name>Abstract Horizon Central Development Repository</name>
 			<url>
-				scp://213.232.95.19/srv/abstracthorizon.org/html/repository
+				scp://213.232.95.19/srv/213.232.95.142/html/repository/maven2/abstracthorizon.snapshot
 			</url>
 		</snapshotRepository>
 		<site>
-			<id>abstracthorizon.org</id>
+			<id>abstracthorizon.site</id>
 			<url>
 				scp://213.232.95.19/srv/abstracthorizon.org/html/proximity
 			</url>
