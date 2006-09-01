@@ -4,28 +4,32 @@
 		<configExtension>xml</configExtension>
 	</configExtensions>
 	<configs>
-		<config>px-webapp-pslave/src/main/webapp/WEB-INF/px-support-servlet.xml</config>
 		<config>px-webapp-pmaster/src/main/webapp/WEB-INF/px-support-servlet.xml</config>
 		<config>px-webapp-pslave/src/main/webapp/WEB-INF/xfire-servlet.xml</config>
-		<config>px-webapp-default/src/main/webapp/WEB-INF/px-repository-servlet.xml</config>
 		<config>px-webapp-pslave/src/main/webapp/WEB-INF/applicationContext.xml</config>
-		<config>px-webapp-minimal/src/main/webapp/WEB-INF/px-support-servlet.xml</config>
-		<config>px-webapp-demosite/src/main/webapp/WEB-INF/px-support-servlet.xml</config>
+		<config>px-webapp-base/src/main/webapp/WEB-INF/px-support-servlet.xml</config>
 		<config>px-webapp-pslave/src/main/webapp/WEB-INF/px-artifacts-servlet.xml</config>
-		<config>px-webapp-demosite/src/main/webapp/WEB-INF/applicationContext.xml</config>
 		<config>px-webapp-minimal/src/main/webapp/WEB-INF/applicationContext.xml</config>
-		<config>px-webapp-minimal/src/main/webapp/WEB-INF/px-repository-servlet.xml</config>
+		<config>px-webapp-base/src/main/webapp/WEB-INF/px-repository-servlet.xml</config>
 		<config>px-webapp-pslave/src/main/webapp/WEB-INF/px-repository-servlet.xml</config>
 		<config>px-webapp-pmaster/src/main/webapp/WEB-INF/applicationContext.xml</config>
 		<config>px-core/src/test/resources/org/abstracthorizon/proximity/applicationContext.xml</config>
+		<config>px-webapp-demosite/src/main/webapp/WEB-INF/xfire-servlet.xml</config>
+		<config>px-webapp-demosite/src/main/webapp/WEB-INF/px-repository-servlet.xml</config>
+		<config>px-webapp-base/src/main/webapp/WEB-INF/proximityHelpers.xml</config>
+		<config>px-webapp-default/src/main/webapp/WEB-INF/px-support-servlet.xml</config>
+		<config>px-webapp-pslave/src/main/webapp/WEB-INF/px-support-servlet.xml</config>
+		<config>px-webapp-base/src/main/webapp/WEB-INF/proximityRepositories.xml</config>
+		<config>px-webapp-default/src/main/webapp/WEB-INF/px-repository-servlet.xml</config>
+		<config>px-webapp-minimal/src/main/webapp/WEB-INF/px-support-servlet.xml</config>
+		<config>px-webapp-demosite/src/main/webapp/WEB-INF/px-support-servlet.xml</config>
+		<config>px-webapp-minimal/src/main/webapp/WEB-INF/px-repository-servlet.xml</config>
+		<config>px-webapp-base/src/main/webapp/WEB-INF/px-artifacts-servlet.xml</config>
 		<config>px-webapp-pmaster/src/main/webapp/WEB-INF/px-repository-servlet.xml</config>
 		<config>px-webapp-default/src/main/webapp/WEB-INF/xfire-servlet.xml</config>
-		<config>px-webapp-demosite/src/main/webapp/WEB-INF/xfire-servlet.xml</config>
+		<config>px-webapp-base/src/main/webapp/WEB-INF/applicationContext.xml</config>
 		<config>px-webapp-demosite/src/main/webapp/WEB-INF/px-artifacts-servlet.xml</config>
-		<config>px-webapp-default/src/main/webapp/WEB-INF/applicationContext.xml</config>
-		<config>px-webapp-demosite/src/main/webapp/WEB-INF/px-repository-servlet.xml</config>
 		<config>px-webapp-default/src/main/webapp/WEB-INF/px-artifacts-servlet.xml</config>
-		<config>px-webapp-default/src/main/webapp/WEB-INF/px-support-servlet.xml</config>
 	</configs>
 	<configSets>
 		<configSet>
@@ -33,11 +37,23 @@
 			<allowBeanDefinitionOverriding>true</allowBeanDefinitionOverriding>
 			<incomplete>true</incomplete>
 			<configs>
-				<config>px-webapp-default/src/main/webapp/WEB-INF/applicationContext.xml</config>
 				<config>px-webapp-default/src/main/webapp/WEB-INF/px-artifacts-servlet.xml</config>
 				<config>px-webapp-default/src/main/webapp/WEB-INF/px-repository-servlet.xml</config>
 				<config>px-webapp-default/src/main/webapp/WEB-INF/px-support-servlet.xml</config>
 				<config>px-webapp-default/src/main/webapp/WEB-INF/xfire-servlet.xml</config>
+			</configs>
+		</configSet>
+		<configSet>
+			<name>webapp base</name>
+			<allowBeanDefinitionOverriding>false</allowBeanDefinitionOverriding>
+			<incomplete>false</incomplete>
+			<configs>
+				<config>px-webapp-base/src/main/webapp/WEB-INF/applicationContext.xml</config>
+				<config>px-webapp-base/src/main/webapp/WEB-INF/proximityHelpers.xml</config>
+				<config>px-webapp-base/src/main/webapp/WEB-INF/proximityRepositories.xml</config>
+				<config>px-webapp-base/src/main/webapp/WEB-INF/px-artifacts-servlet.xml</config>
+				<config>px-webapp-base/src/main/webapp/WEB-INF/px-repository-servlet.xml</config>
+				<config>px-webapp-base/src/main/webapp/WEB-INF/px-support-servlet.xml</config>
 			</configs>
 		</configSet>
 		<configSet>
@@ -48,6 +64,17 @@
 				<config>px-webapp-minimal/src/main/webapp/WEB-INF/applicationContext.xml</config>
 				<config>px-webapp-minimal/src/main/webapp/WEB-INF/px-repository-servlet.xml</config>
 				<config>px-webapp-minimal/src/main/webapp/WEB-INF/px-support-servlet.xml</config>
+			</configs>
+		</configSet>
+		<configSet>
+			<name>webapp demosite</name>
+			<allowBeanDefinitionOverriding>true</allowBeanDefinitionOverriding>
+			<incomplete>true</incomplete>
+			<configs>
+				<config>px-webapp-demosite/src/main/webapp/WEB-INF/px-artifacts-servlet.xml</config>
+				<config>px-webapp-demosite/src/main/webapp/WEB-INF/px-repository-servlet.xml</config>
+				<config>px-webapp-demosite/src/main/webapp/WEB-INF/px-support-servlet.xml</config>
+				<config>px-webapp-demosite/src/main/webapp/WEB-INF/xfire-servlet.xml</config>
 			</configs>
 		</configSet>
 		<configSet>
@@ -63,15 +90,11 @@
 			</configs>
 		</configSet>
 		<configSet>
-			<name>webapp demosite</name>
-			<allowBeanDefinitionOverriding>true</allowBeanDefinitionOverriding>
-			<incomplete>true</incomplete>
+			<name>test</name>
+			<allowBeanDefinitionOverriding>false</allowBeanDefinitionOverriding>
+			<incomplete>false</incomplete>
 			<configs>
-				<config>px-webapp-demosite/src/main/webapp/WEB-INF/applicationContext.xml</config>
-				<config>px-webapp-demosite/src/main/webapp/WEB-INF/px-artifacts-servlet.xml</config>
-				<config>px-webapp-demosite/src/main/webapp/WEB-INF/px-repository-servlet.xml</config>
-				<config>px-webapp-demosite/src/main/webapp/WEB-INF/px-support-servlet.xml</config>
-				<config>px-webapp-demosite/src/main/webapp/WEB-INF/xfire-servlet.xml</config>
+				<config>px-core/src/test/resources/org/abstracthorizon/proximity/applicationContext.xml</config>
 			</configs>
 		</configSet>
 		<configSet>
@@ -82,14 +105,6 @@
 				<config>px-webapp-pmaster/src/main/webapp/WEB-INF/applicationContext.xml</config>
 				<config>px-webapp-pmaster/src/main/webapp/WEB-INF/px-repository-servlet.xml</config>
 				<config>px-webapp-pmaster/src/main/webapp/WEB-INF/px-support-servlet.xml</config>
-			</configs>
-		</configSet>
-		<configSet>
-			<name>test</name>
-			<allowBeanDefinitionOverriding>false</allowBeanDefinitionOverriding>
-			<incomplete>false</incomplete>
-			<configs>
-				<config>px-core/src/test/resources/org/abstracthorizon/proximity/applicationContext.xml</config>
 			</configs>
 		</configSet>
 	</configSets>
