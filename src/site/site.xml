@@ -15,6 +15,11 @@
 
   <body>
 
+	<head>
+	  <meta name="keywords" content="abstracthorizon, abstract horizon, proximity, proxy, maven proxy, build management systems, build systems, build tools, enterprise build software, enterprise build tools, build automation, maven, mvn, maven2, continuous integration, java"/>
+	  <meta name="description" content="Proximity - the proactive mirror hosted at Abstracthorizon.org"/>
+	</head>
+
     <links>
       <item name="Abstract Horizon" href="http://www.abstracthorizon.org/" />
       <item name="Proximity Wiki" href="http://trac.abstracthorizon.org/proximity/" />
