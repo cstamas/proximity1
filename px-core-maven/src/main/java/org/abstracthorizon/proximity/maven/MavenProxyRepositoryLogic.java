@@ -1,6 +1,5 @@
 package org.abstracthorizon.proximity.maven;
 
-
 import java.util.Date;
 
 import org.abstracthorizon.proximity.ItemProperties;
@@ -89,11 +88,7 @@ public class MavenProxyRepositoryLogic extends DefaultExpiringProxyingRepository
     // =========================================================================
     // Logic iface
 
-    public boolean shouldCheckForLocalCopy(ProximityRequest request) {
-        return true;
-    }
-
-    public ItemImpl afterLocalCopyFound(ItemImpl item, Repository repository) {
+    public ItemImpl afterLocalCopyFound(ProximityRequest request, ItemImpl item, Repository repository) {
         // override super, should not delete even if expired!
         if (shouldServeByPolicies(item.getProperties())) {
             return item;
@@ -103,7 +98,6 @@ public class MavenProxyRepositoryLogic extends DefaultExpiringProxyingRepository
     }
 
     public boolean shouldCheckForRemoteCopy(ProximityRequest request, ItemImpl localItem) {
-
         if (localItem != null) {
             if (localItem.getProperties().getMetadata(DefaultExpiringProxyingRepositoryLogic.METADATA_EXPIRES) != null) {
                 logger.debug("Item has expiration, checking it.");
@@ -127,12 +121,13 @@ public class MavenProxyRepositoryLogic extends DefaultExpiringProxyingRepository
             // we have no local item
             return super.shouldCheckForRemoteCopy(request, localItem);
         }
-
     }
 
-    public ItemImpl afterRemoteCopyFound(ProximityRequest request, ItemImpl localItem, ItemImpl remoteItem, Repository repository) {
+    public ItemImpl afterRemoteCopyFound(ProximityRequest request, ItemImpl localItem, ItemImpl remoteItem,
+            Repository repository) {
 
-        if (MavenArtifactRecognizer.isSnapshot(remoteItem.getProperties().getAbsolutePath(), remoteItem.getProperties().getName())) {
+        if (MavenArtifactRecognizer.isSnapshot(remoteItem.getProperties().getAbsolutePath(), remoteItem.getProperties()
+                .getName())) {
             if (snapshotExpirationPeriod != NO_EXPIRATION) {
                 logger.info("Item is Maven 1/2 Snapshot, setting expires on it to " + snapshotExpirationPeriod / 1000
                         + " seconds.");
@@ -164,14 +159,11 @@ public class MavenProxyRepositoryLogic extends DefaultExpiringProxyingRepository
             remoteItem = super.afterRemoteCopyFound(request, localItem, remoteItem, repository);
         }
 
-
         if (shouldServeByPolicies(remoteItem.getProperties())) {
             return remoteItem;
         } else {
             return null;
         }
-
-
     }
 
     // =========================================================================
@@ -182,7 +174,6 @@ public class MavenProxyRepositoryLogic extends DefaultExpiringProxyingRepository
      * 
      */
     protected boolean shouldServeByPolicies(ItemProperties item) {
-
         if (MavenArtifactRecognizer.isMetadata(item.getName())) {
             // metadatas goes always
             return true;
@@ -195,7 +186,6 @@ public class MavenProxyRepositoryLogic extends DefaultExpiringProxyingRepository
         // in any other case take it as release
         // TODO: review this, WHAT is a "release"?
         return item.isDirectory() || isShouldServeReleases();
-
     }
 
 }
