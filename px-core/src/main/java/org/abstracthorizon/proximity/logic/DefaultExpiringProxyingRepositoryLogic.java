@@ -1,7 +1,10 @@
 package org.abstracthorizon.proximity.logic;
 
 
+import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.abstracthorizon.proximity.ProximityRequest;
 import org.abstracthorizon.proximity.Repository;
@@ -23,6 +26,18 @@ public class DefaultExpiringProxyingRepositoryLogic extends DefaultProxyingRepos
     public static final String METADATA_EXPIRES = "item.expires";
 
     private long itemExpirationPeriod = 86400 * 1000; // 24 hours
+    
+    private long notFoundCachePeriod = 86400 * 1000; // 24 hours
+    
+    private Map notFoundCache = Collections.synchronizedMap(new HashMap());
+
+    public long getNotFoundCachePeriodInSeconds() {
+        return notFoundCachePeriod / 1000;
+    }
+
+    public void setNotFoundCachePeriodInSeconds(long notFoundCachePeriod) {
+        this.notFoundCachePeriod = notFoundCachePeriod * 1000;
+    }
 
     public long getItemExpirationPeriodInSeconds() {
         return itemExpirationPeriod / 1000;
@@ -54,6 +69,10 @@ public class DefaultExpiringProxyingRepositoryLogic extends DefaultProxyingRepos
         return item;
     }
 
+    public boolean shouldCheckForRemoteCopy(ProximityRequest request, ItemImpl localItem) {
+        return shouldCheckByNotFoundCache(request) && localItem == null;
+    }
+
     /**
      * If expiration period is not NO_EXPIRATION, it will apply it on all items.
      */
@@ -65,6 +84,34 @@ public class DefaultExpiringProxyingRepositoryLogic extends DefaultProxyingRepos
                     Long.toString(expires.getTime()));
         }
         return remoteItem;
+    }
+
+    public ItemImpl afterRetrieval(ProximityRequest request, ItemImpl localItem, ItemImpl remoteItem) {
+        ItemImpl item = super.afterRetrieval(request, localItem, remoteItem);
+        if (item == null) {
+            // we have not found it
+            // put the path into not found cache
+            notFoundCache.put(request.getPath(), new Date());
+        }
+        return item;
+    }
+
+    protected boolean shouldCheckByNotFoundCache(ProximityRequest request) {
+        if (notFoundCache.containsKey(request.getPath())) {
+            // it is in cache, check when it got in
+            Date lastRequest = (Date) notFoundCache.get(request.getPath());
+            if (lastRequest.before(new Date(System.currentTimeMillis() - notFoundCachePeriod))) {
+                // the notFoundCache record expired, remove it and check its existence
+                notFoundCache.remove(request.getPath());
+                return true;
+            } else {
+                // the notFoundCache record is still valid, do not check its existence
+                return false;
+            }
+        } else {
+            // it is not in notFoundCache, check its existence
+            return true;
+        }
     }
 
 }
