@@ -1,6 +1,5 @@
 package org.abstracthorizon.proximity.maven;
 
-
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -72,7 +71,8 @@ public class MavenProximityLogic extends DefaultProximityLogic {
 
             if (MavenArtifactRecognizer.isChecksum(request.getPath())) {
 
-                File tmpFile = new File(System.getProperty("java.io.tmpdir"), request.getPath().replace(ItemProperties.PATH_SEPARATOR, "_"));
+                File tmpFile = new File(System.getProperty("java.io.tmpdir"), request.getPath().replace(
+                        ItemProperties.PATH_SEPARATOR, "_"));
                 if (tmpFile.exists()) {
                     logger.info("Item for path " + request.getPath() + " SPOOFED with merged metadata checksum.");
                     FileInputStream fis = new FileInputStream(tmpFile);
@@ -121,7 +121,7 @@ public class MavenProximityLogic extends DefaultProximityLogic {
                     metadataWriter.write(osw, mergedMetadata);
                     osw.flush();
                     osw.close();
-                    
+
                     storeDigest(request, md5alg);
                     storeDigest(request, sha1alg);
 
@@ -139,8 +139,9 @@ public class MavenProximityLogic extends DefaultProximityLogic {
     }
 
     protected void storeDigest(ProximityRequest req, MessageDigest dig) throws IOException {
-        File tmpFile = new File(System.getProperty("java.io.tmpdir"), req.getPath().replace(ItemProperties.PATH_SEPARATOR, "_") + "."
-                + dig.getAlgorithm().toLowerCase());
+        File tmpFile = new File(System.getProperty("java.io.tmpdir"), req.getPath().replace(
+                ItemProperties.PATH_SEPARATOR, "_")
+                + "." + dig.getAlgorithm().toLowerCase());
         tmpFile.deleteOnExit();
         FileWriter fw = new FileWriter(tmpFile);
         fw.write(new String(Hex.encodeHex(dig.digest())) + "\n");

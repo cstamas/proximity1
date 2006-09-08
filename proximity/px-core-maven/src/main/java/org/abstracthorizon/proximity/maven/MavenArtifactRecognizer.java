@@ -48,7 +48,8 @@ public class MavenArtifactRecognizer {
      */
     public static boolean isSnapshot(String dir, String name) {
         // TODO: review SNAPSHOT recognition, in M2 thins changed!
-        // the file is in form: appassembler-maven-plugin-1.0-20060714.142547-1.pom
+        // the file is in form:
+        // appassembler-maven-plugin-1.0-20060714.142547-1.pom
         return dir.indexOf("SNAPSHOT") != -1 || name.indexOf("SNAPSHOT") != -1;
     }
 
