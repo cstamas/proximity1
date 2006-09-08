@@ -1,6 +1,5 @@
 package org.abstracthorizon.proximity.storage.remote;
 
-
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -18,9 +17,9 @@ import org.slf4j.LoggerFactory;
 public abstract class AbstractRemoteStorage extends AbstractStorage implements RemoteStorage {
 
     protected Logger logger = LoggerFactory.getLogger(this.getClass());
-    
+
     private URL remoteUrl;
-    
+
     private String remoteUrlAsString;
 
     public URL getRemoteUrl() {
@@ -31,7 +30,8 @@ public abstract class AbstractRemoteStorage extends AbstractStorage implements R
         this.remoteUrl = url;
         this.remoteUrlAsString = remoteUrl.toString();
         if (remoteUrlAsString.endsWith(ItemProperties.PATH_SEPARATOR)) {
-            remoteUrlAsString = remoteUrlAsString.substring(0, remoteUrlAsString.length() - ItemProperties.PATH_SEPARATOR.length());
+            remoteUrlAsString = remoteUrlAsString.substring(0, remoteUrlAsString.length()
+                    - ItemProperties.PATH_SEPARATOR.length());
         }
     }
 

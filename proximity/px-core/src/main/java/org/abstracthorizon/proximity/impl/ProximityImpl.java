@@ -124,6 +124,10 @@ public class ProximityImpl implements Proximity {
         List repositoryGroupOrder = (List) repositoryGroups.get(repository.getGroupId());
         addToRepositoryIdToRankedList(repositoryGroupOrder, repository);
         // repositoryGroupOrder.add(repository.getId());
+        
+        if (getIndexer() != null) {
+            getIndexer().registerRepository(repository);
+        }
 
         logger.info("Added repository id=[{}], groupId=[{}].", repository.getId(), repository.getGroupId());
         logger.debug("  current order of reposes is {}.", repositoryOrder);

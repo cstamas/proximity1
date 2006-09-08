@@ -34,6 +34,13 @@ public interface Repository {
     void setProximity(Proximity proximity);
 
     /**
+     * Returns proximity instance known by this repo.
+     * 
+     * @return
+     */
+    Proximity getProximity();
+
+    /**
      * Returns the ID of the repository.
      * 
      * @return
@@ -77,6 +84,20 @@ public interface Repository {
      * @param rank
      */
     void setRank(int rank);
+
+    /**
+     * Is reindexing at startup/initialize on?
+     * 
+     * @return
+     */
+    boolean isReindexAtInitialize();
+
+    /**
+     * Sets reindexing and startup/initialize.
+     * 
+     * @param reindexAtInitialize
+     */
+    void setReindexAtInitialize(boolean reindexAtInitialize);
 
     /**
      * Is Repository available? If no, it will reject all incoming requests.
