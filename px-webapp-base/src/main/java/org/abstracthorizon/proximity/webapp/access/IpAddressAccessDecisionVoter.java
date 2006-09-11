@@ -1,4 +1,4 @@
-package org.abstracthorizon.proximity.webapp.util.access;
+package org.abstracthorizon.proximity.webapp.access;
 
 
 import java.util.Map;

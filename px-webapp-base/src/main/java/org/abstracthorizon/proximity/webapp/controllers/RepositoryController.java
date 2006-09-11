@@ -1,4 +1,4 @@
-package org.abstracthorizon.proximity.webapp.util;
+package org.abstracthorizon.proximity.webapp.controllers;
 
 
 import java.io.InputStream;

@@ -6,7 +6,7 @@
 	<!-- Configurer that sets up a shared VelocityEngine for Velocity views -->
 	<bean id="velocityConfigurer"
 		class="org.springframework.web.servlet.view.velocity.VelocityConfigurer">
-		<property name="resourceLoaderPath" value="WEB-INF/velocity/" />
+		<property name="resourceLoaderPath" value="/WEB-INF/velocity/" />
 		<property name="velocityProperties">
 			<props>
 				<prop key="velocimacro.library">
@@ -42,7 +42,7 @@
 
 	<!-- MultiActionController that defines user interface actions as separate methods -->
 	<bean id="repositoryController"
-		class="org.abstracthorizon.proximity.webapp.util.ArtifactsController">
+		class="org.abstracthorizon.proximity.webapp.controllers.ArtifactsController">
 		<property name="proximity">
 			<ref bean="proximity" />
 		</property>

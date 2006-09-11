@@ -42,7 +42,7 @@
 
 	<!-- MultiActionController that defines user interface actions as separate methods -->
 	<bean id="supportController"
-		class="org.abstracthorizon.proximity.webapp.util.SupportController">
+		class="org.abstracthorizon.proximity.webapp.controllers.SupportController">
 		<property name="proximity">
 			<ref bean="proximity" />
 		</property>
