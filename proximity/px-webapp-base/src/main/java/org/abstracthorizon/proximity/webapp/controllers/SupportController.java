@@ -1,5 +1,4 @@
-package org.abstracthorizon.proximity.webapp.util;
-
+package org.abstracthorizon.proximity.webapp.controllers;
 
 import java.util.HashMap;
 import java.util.List;
@@ -10,7 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.abstracthorizon.proximity.Proximity;
 import org.abstracthorizon.proximity.impl.ItemPropertiesImpl;
-import org.springframework.web.bind.RequestUtils;
+import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
 
@@ -36,31 +35,31 @@ public class SupportController extends MultiActionController {
         ItemPropertiesImpl example = null;
         String query = null;
 
-        if (RequestUtils.getStringParameter(request, "searchAllRegexp") != null) {
-            
-            example = new ItemPropertiesImpl();
-            example.setName(RequestUtils.getRequiredStringParameter(request, "searchAllRegexp") + "*");
-
-        } else if (RequestUtils.getStringParameter(request, "searchRepositoryRegexp") != null
-                && RequestUtils.getRequiredStringParameter(request, "searchRepositoryId") != null) {
+        if (ServletRequestUtils.getStringParameter(request, "searchAllRegexp") != null) {
 
             example = new ItemPropertiesImpl();
-            example.setName(RequestUtils.getRequiredStringParameter(request, "searchRepositoryRegexp") + "*");
-            example.setMetadata(ItemPropertiesImpl.METADATA_OWNING_REPOSITORY, RequestUtils
+            example.setName(ServletRequestUtils.getRequiredStringParameter(request, "searchAllRegexp") + "*");
+
+        } else if (ServletRequestUtils.getStringParameter(request, "searchRepositoryRegexp") != null
+                && ServletRequestUtils.getRequiredStringParameter(request, "searchRepositoryId") != null) {
+
+            example = new ItemPropertiesImpl();
+            example.setName(ServletRequestUtils.getRequiredStringParameter(request, "searchRepositoryRegexp") + "*");
+            example.setMetadata(ItemPropertiesImpl.METADATA_OWNING_REPOSITORY, ServletRequestUtils
                     .getRequiredStringParameter(request, "searchRepositoryId"));
 
-        } else if (RequestUtils.getStringParameter(request, "searchGroupRegexp") != null
-                && RequestUtils.getRequiredStringParameter(request, "searchGroupId") != null) {
+        } else if (ServletRequestUtils.getStringParameter(request, "searchGroupRegexp") != null
+                && ServletRequestUtils.getRequiredStringParameter(request, "searchGroupId") != null) {
 
             example = new ItemPropertiesImpl();
-            example.setName(RequestUtils.getRequiredStringParameter(request, "searchGroupRegexp") + "*");
-            example.setMetadata(ItemPropertiesImpl.METADATA_OWNING_REPOSITORY_GROUP, RequestUtils
+            example.setName(ServletRequestUtils.getRequiredStringParameter(request, "searchGroupRegexp") + "*");
+            example.setMetadata(ItemPropertiesImpl.METADATA_OWNING_REPOSITORY_GROUP, ServletRequestUtils
                     .getRequiredStringParameter(request, "searchGroupId"));
 
-        } else if (RequestUtils.getStringParameter(request, "searchLQL") != null
-                && RequestUtils.getRequiredStringParameter(request, "searchLQLQuery") != null) {
+        } else if (ServletRequestUtils.getStringParameter(request, "searchLQL") != null
+                && ServletRequestUtils.getRequiredStringParameter(request, "searchLQLQuery") != null) {
 
-            query = RequestUtils.getRequiredStringParameter(request, "searchLQLQuery");
+            query = ServletRequestUtils.getRequiredStringParameter(request, "searchLQLQuery");
 
         }
 
@@ -83,11 +82,11 @@ public class SupportController extends MultiActionController {
 
     public ModelAndView maintenance(HttpServletRequest request, HttpServletResponse response) throws Exception {
         logger.debug("Got request for maintenance");
-        if (RequestUtils.getStringParameter(request, "reindexAll") != null) {
+        if (ServletRequestUtils.getStringParameter(request, "reindexAll") != null) {
             proximity.reindex();
-        } else if (RequestUtils.getStringParameter(request, "reindexSelected") != null
-                && RequestUtils.getRequiredStringParameter(request, "reindexSelectedRepos") != null) {
-            proximity.reindex(RequestUtils.getRequiredStringParameter(request, "reindexSelectedRepos"));
+        } else if (ServletRequestUtils.getStringParameter(request, "reindexSelected") != null
+                && ServletRequestUtils.getRequiredStringParameter(request, "reindexSelectedRepos") != null) {
+            proximity.reindex(ServletRequestUtils.getRequiredStringParameter(request, "reindexSelectedRepos"));
         }
 
         Map context = new HashMap();
@@ -99,7 +98,7 @@ public class SupportController extends MultiActionController {
     public ModelAndView stats(HttpServletRequest request, HttpServletResponse response) throws Exception {
         logger.debug("Got request for stats");
         // TODO: refactor this
-        Map stats = new HashMap(); //proximity.getStatistics();
+        Map stats = new HashMap(); // proximity.getStatistics();
         Map context = new HashMap();
         context.put("stats", stats);
         return new ModelAndView("stats", context);

@@ -42,7 +42,7 @@
 
 	<!-- MultiActionController that defines user interface actions as separate methods -->
 	<bean id="repositoryController"
-		class="org.abstracthorizon.proximity.webapp.util.RepositoryController">
+		class="org.abstracthorizon.proximity.webapp.controllers.RepositoryController">
 		<property name="proximity">
 			<ref bean="proximity" />
 		</property>

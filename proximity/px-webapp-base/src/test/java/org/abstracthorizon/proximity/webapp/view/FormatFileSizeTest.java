@@ -1,4 +1,6 @@
-package org.abstracthorizon.proximity.webapp.util.view;
+package org.abstracthorizon.proximity.webapp.view;
+
+import org.abstracthorizon.proximity.webapp.view.FormatFileSize;
 
 import junit.framework.TestCase;
 

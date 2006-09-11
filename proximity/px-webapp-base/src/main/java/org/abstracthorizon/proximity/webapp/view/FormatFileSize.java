@@ -1,4 +1,4 @@
-package org.abstracthorizon.proximity.webapp.util.view;
+package org.abstracthorizon.proximity.webapp.view;
 
 import java.text.DecimalFormat;
 
@@ -34,7 +34,7 @@ public class FormatFileSize {
     public String getFileSizeAsString(Object sizeInBytesObj) {
         double sizeLong = 0;
         double base = getBase();
-        String suffix = "";
+        String suffix = null;
         try {
             sizeLong = Double.parseDouble(sizeInBytesObj.toString());
         } catch (NullPointerException e) {

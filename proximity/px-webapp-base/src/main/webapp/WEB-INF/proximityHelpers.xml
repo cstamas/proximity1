@@ -57,7 +57,7 @@
 		<property name="voters">
 			<list>
 				<bean
-					class="org.abstracthorizon.proximity.webapp.util.access.IpAddressAccessDecisionVoter">
+					class="org.abstracthorizon.proximity.webapp.access.IpAddressAccessDecisionVoter">
 					<property name="allowDeny" value="true" />
 					<property name="allowFromPattern"
 						value="192\.168\.0\..*" />

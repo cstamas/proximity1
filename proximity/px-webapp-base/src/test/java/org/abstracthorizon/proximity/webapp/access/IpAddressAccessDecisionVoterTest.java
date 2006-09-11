@@ -1,7 +1,8 @@
-package org.abstracthorizon.proximity.webapp.util.access;
+package org.abstracthorizon.proximity.webapp.access;
 
 import org.abstracthorizon.proximity.ProximityRequest;
 import org.abstracthorizon.proximity.access.AccessDecisionVoter;
+import org.abstracthorizon.proximity.webapp.access.IpAddressAccessDecisionVoter;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
