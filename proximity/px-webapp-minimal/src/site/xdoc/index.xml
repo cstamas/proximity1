@@ -16,8 +16,7 @@
 			<p>
 				Proximity Webapp (Minimal) is minimal J2EE Web
 				Application that still have Maven Proxy functionality.
-				To reduce it's weight, view layer uses vanilla JSPs.
-				Indexing is also sacrificed, together with pages that
+				To reduce it's weight, Indexing is sacrificed, together with pages that
 				relies on them (Search, Artifact browse). Fast and
 				small.
 			</p>
