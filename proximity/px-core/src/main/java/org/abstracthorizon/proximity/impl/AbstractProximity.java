@@ -375,13 +375,14 @@ public abstract class AbstractProximity implements Proximity {
             ItemProperties ip = null;
             ProximityRequest rq = new ProximityRequest();
             rq.setLocalOnly(true);
+            rq.setPropertiesOnly(true);
             for (Iterator i = idxresult.iterator(); i.hasNext();) {
                 ip = (ItemProperties) i.next();
                 rq.setPath(ip.getPath());
                 rq.setTargetedReposId(ip.getRepositoryId());
                 Repository repo = (Repository) repositories.get(ip.getRepositoryId());
                 try {
-                    result.add(repo.retrieveItemProperties(rq));
+                    result.add(repo.retrieveItem(rq));
                 } catch (AccessDeniedException ex) {
                     logger.debug("Access denied on repo {} for path [{}], ignoring it.", ip.getRepositoryId(), ip
                             .getPath());

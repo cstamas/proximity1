@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.abstracthorizon.proximity.access.AccessManager;
 import org.abstracthorizon.proximity.impl.ItemImpl;
-import org.abstracthorizon.proximity.impl.ItemPropertiesImpl;
 import org.abstracthorizon.proximity.indexer.Indexer;
 import org.abstracthorizon.proximity.stats.StatisticsGatherer;
 import org.abstracthorizon.proximity.storage.StorageException;
@@ -240,17 +239,6 @@ public interface Repository {
      */
     ItemImpl retrieveItem(ProximityRequest request) throws RepositoryNotAvailableException, ItemNotFoundException,
             StorageException, AccessDeniedException;
-
-    /**
-     * Retrieves item properties (without content) from the path.
-     * 
-     * @param request
-     * @return
-     * @throws ItemNotFoundException
-     * @throws StorageException
-     */
-    ItemPropertiesImpl retrieveItemProperties(ProximityRequest request) throws RepositoryNotAvailableException,
-            ItemNotFoundException, StorageException, AccessDeniedException;
 
     /**
      * Deletes item from the path.
