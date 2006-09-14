@@ -27,6 +27,9 @@ public class ProximityRequest implements Serializable {
     
     /** If true, will not try to fetch from remote */
     private boolean localOnly = false;
+    
+    /** If true, no content will be supplied just ItemProperties */
+    private boolean propertiesOnly = false;
 
     /** The ID of the targeted repos if any or null */
     private String targetedReposId = null;
@@ -77,7 +80,15 @@ public class ProximityRequest implements Serializable {
     public void setLocalOnly(boolean localOnly) {
         this.localOnly = localOnly;
     }
-    
+
+    public boolean isPropertiesOnly() {
+        return propertiesOnly;
+    }
+
+    public void setPropertiesOnly(boolean propertiesOnly) {
+        this.propertiesOnly = propertiesOnly;
+    }
+
     public Map getAttributes() {
         return attributes;
     }

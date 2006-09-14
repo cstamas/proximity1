@@ -182,16 +182,7 @@ public abstract class AbstractRepository implements Repository {
             throw new RepositoryNotAvailableException("The repository " + getId() + " is NOT available!");
         }
         getAccessManager().decide(request, null);
-        return doRetrieveItem(request, false);
-    }
-
-    public ItemPropertiesImpl retrieveItemProperties(ProximityRequest request) throws RepositoryNotAvailableException,
-            ItemNotFoundException, StorageException, AccessDeniedException {
-        if (!isAvailable()) {
-            throw new RepositoryNotAvailableException("The repository " + getId() + " is NOT available!");
-        }
-        getAccessManager().decide(request, null);
-        return (ItemPropertiesImpl) doRetrieveItem(request, true).getProperties();
+        return doRetrieveItem(request);
     }
 
     public void deleteItem(ProximityRequest request) throws RepositoryNotAvailableException, StorageException {
@@ -254,7 +245,7 @@ public abstract class AbstractRepository implements Repository {
         return result;
     }
 
-    protected abstract ItemImpl doRetrieveItem(ProximityRequest request, boolean propsOnly)
+    protected abstract ItemImpl doRetrieveItem(ProximityRequest request)
             throws RepositoryNotAvailableException, ItemNotFoundException, StorageException;
 
     /**

@@ -23,7 +23,7 @@ public class LogicDrivenRepositoryImpl extends AbstractRepository {
         this.repositoryLogic = repositoryLogic;
     }
 
-    protected ItemImpl doRetrieveItem(ProximityRequest request, boolean propsOnly)
+    protected ItemImpl doRetrieveItem(ProximityRequest request)
             throws RepositoryNotAvailableException, ItemNotFoundException, StorageException {
         ItemImpl localResult = null;
         ItemImpl remoteResult = null;
@@ -37,7 +37,7 @@ public class LogicDrivenRepositoryImpl extends AbstractRepository {
                 if (getRepositoryLogic().shouldCheckForLocalCopy(request)) {
                     if (getLocalStorage().containsItem(request.getPath())) {
                         logger.debug("Found [{}] item in local storage of repository {}", request.getPath(), getId());
-                        localResult = getLocalStorage().retrieveItem(request.getPath(), propsOnly);
+                        localResult = getLocalStorage().retrieveItem(request.getPath(), request.isPropertiesOnly());
                         localResult.getProperties().setMetadata(ItemProperties.METADATA_OWNING_REPOSITORY, getId());
                         localResult.getProperties().setMetadata(ItemProperties.METADATA_OWNING_REPOSITORY_GROUP,
                                 getGroupId());
@@ -55,7 +55,7 @@ public class LogicDrivenRepositoryImpl extends AbstractRepository {
                     && getRemoteStorage() != null) {
                 if (getRemoteStorage().containsItem(request.getPath())) {
                     logger.debug("Found [{}] item in remote storage of repository {}", request.getPath(), getId());
-                    remoteResult = getRemoteStorage().retrieveItem(request.getPath(), propsOnly);
+                    remoteResult = getRemoteStorage().retrieveItem(request.getPath(), request.isPropertiesOnly());
                     remoteResult.getProperties().setMetadata(ItemProperties.METADATA_OWNING_REPOSITORY, getId());
                     remoteResult.getProperties().setMetadata(ItemProperties.METADATA_OWNING_REPOSITORY_GROUP,
                             getGroupId());
@@ -70,7 +70,7 @@ public class LogicDrivenRepositoryImpl extends AbstractRepository {
                             logger.debug("Storing [{}] item in writable storage of repository {}", request.getPath(),
                                     getId());
                             storeItem(request, remoteResult);
-                            remoteResult = getLocalStorage().retrieveItem(request.getPath(), propsOnly);
+                            remoteResult = getLocalStorage().retrieveItem(request.getPath(), request.isPropertiesOnly());
                             remoteResult.getProperties()
                                     .setMetadata(ItemProperties.METADATA_OWNING_REPOSITORY, getId());
                             remoteResult.getProperties().setMetadata(ItemProperties.METADATA_OWNING_REPOSITORY_GROUP,
