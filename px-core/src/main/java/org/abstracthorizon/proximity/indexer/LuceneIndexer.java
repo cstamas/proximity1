@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.abstracthorizon.proximity.ItemNotFoundException;
 import org.abstracthorizon.proximity.ItemProperties;
@@ -221,10 +222,13 @@ public class LuceneIndexer extends AbstractIndexer {
         }
     }
 
+    protected void getIndexerSpecificSearchableKeywords(Set kwSet) {
+        kwSet.add(DOC_PATH);
+        kwSet.add(DOC_NAME);
+        kwSet.add(DOC_REPO);
+    }
+
     protected void doInitialize() {
-        addSearchableKeyword(DOC_PATH);
-        addSearchableKeyword(DOC_NAME);
-        addSearchableKeyword(DOC_REPO);
         try {
             IndexWriter writer = new IndexWriter(indexDirectory, analyzer, recreateIndexes
                     || !IndexReader.indexExists(indexDirectory));

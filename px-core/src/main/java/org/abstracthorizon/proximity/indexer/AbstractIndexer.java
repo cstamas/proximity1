@@ -1,8 +1,10 @@
 package org.abstracthorizon.proximity.indexer;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -14,7 +16,7 @@ public abstract class AbstractIndexer implements Indexer {
 
     protected Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    protected Set searchableKeywords = Collections.synchronizedSortedSet(new TreeSet());
+    protected Map repositories = new HashMap();
 
     public void initialize() {
         logger.info("Initializing indexer {}...", this.getClass().getName());
@@ -23,27 +25,34 @@ public abstract class AbstractIndexer implements Indexer {
 
     public void registerRepository(Repository repository) {
         logger.info("Registering repository {} into indexer {}...", repository.getId(), this.getClass().getName());
+        repositories.put(repository.getId(), repository);
         repository.setIndexer(this);
-        if (repository.getLocalStorage() != null) {
-            searchableKeywords.addAll(repository.getLocalStorage().getProxiedItemPropertiesFactory()
-                    .getSearchableKeywords());
-        }
     }
 
     public void unregisterRepository(Repository repository) {
-        logger.info("Unregistering repository {} from indexer {}...", repository.getId(), this.getClass().getName());
-        // TODO: what happens whit searchable kw's unique to the just removed
-        // repo?
-        // The index will still contain the removed repo until next full reindex
+        if (repositories.containsKey(repository.getId())) {
+            logger.info("Unregistering repository {} from indexer {}...", 
+                    repository.getId(), this.getClass().getName());
+            repositories.remove(repository.getId());
+            repository.setIndexer(null);
+        }
     }
 
     public List getSearchableKeywords() {
+        Set searchableKeywords = new TreeSet();
+        getIndexerSpecificSearchableKeywords(searchableKeywords);
+        for (Iterator i = repositories.keySet().iterator(); i.hasNext();) {
+            String repoId = (String) i.next();
+            Repository repository = (Repository) repositories.get(repoId);
+            if (repository.getLocalStorage() != null) {
+                searchableKeywords.addAll(repository.getLocalStorage().getProxiedItemPropertiesFactory()
+                        .getSearchableKeywords());
+            }
+        }
         return new ArrayList(searchableKeywords);
     }
 
-    protected void addSearchableKeyword(String kw) {
-        searchableKeywords.add(kw);
-    }
+    protected abstract void getIndexerSpecificSearchableKeywords(Set kwSet);
 
     protected abstract void doInitialize();
 
