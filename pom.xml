@@ -123,6 +123,21 @@
 		<url>http://www.abstracthorizon.org/</url>
 	</organization>
 
+	<modules>
+		<module>px-core</module>
+		<module>px-core-it</module>
+		<module>px-core-ws</module>
+		<module>px-core-maven</module>
+		<module>px-webapp-base</module>
+		<!-- <module>px-webapp-base-it</module>  -->
+		<module>px-webapp-webdav</module>
+		<module>px-webapp-default</module>
+		<module>px-webapp-minimal</module>
+		<module>px-webapp-demosite</module>
+		<module>px-webapp-pmaster</module>
+		<module>px-webapp-pslave</module>
+	</modules>
+
 	<!-- jar files the project is dependent on -->
 	<dependencies />
 
@@ -294,6 +309,12 @@
 			</dependency>
 			<dependency>
 				<groupId>org.abstracthorizon.proximity</groupId>
+				<artifactId>px-webapp-webdav</artifactId>
+				<type>jar</type>
+				<version>${pom.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.abstracthorizon.proximity</groupId>
 				<artifactId>px-webapp-default</artifactId>
 				<type>war</type>
 				<version>${pom.version}</version>
@@ -370,21 +391,6 @@
 			</plugins>
 		</pluginManagement>
 	</build>
-
-	<modules>
-		<module>px-core</module>
-		<module>px-core-it</module>
-		<module>px-core-ws</module>
-		<module>px-core-maven</module>
-		<module>px-webapp-base</module>
-		<!-- <module>px-webapp-base-it</module>  -->
-		<module>px-webapp-webdav</module>
-		<module>px-webapp-default</module>
-		<module>px-webapp-minimal</module>
-		<module>px-webapp-demosite</module>
-		<module>px-webapp-pmaster</module>
-		<module>px-webapp-pslave</module>
-	</modules>
 
 	<repositories>
 		<repository>
