@@ -1,13 +1,13 @@
 package org.abstracthorizon.proximity.impl;
 
-import org.abstracthorizon.proximity.impl.RepositoryImpl;
+import org.abstracthorizon.proximity.impl.LogicDrivenRepositoryImpl;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
 
-public class RepositoryImplTest extends TestCase {
+public class LogicDrivenRepositoryImplTest extends TestCase {
 
-    private RepositoryImpl repo = new RepositoryImpl();
+    private LogicDrivenRepositoryImpl repo = new LogicDrivenRepositoryImpl();
 
     /** Dummy method */
     public void testDummy() {

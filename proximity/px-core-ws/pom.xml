@@ -7,7 +7,7 @@
 	<parent>
 		<groupId>org.abstracthorizon.proximity</groupId>
 		<artifactId>proximity-parent</artifactId>
-		<version>1.0.0</version>
+		<version>1.0.0-SNAPSHOT</version>
 	</parent>
 
 	<!-- the version of maven's project object model -->
@@ -22,17 +22,11 @@
 	<!-- a short but descriptive name for the project -->
 	<name>Px Core exposed WS</name>
 
-	<!-- The module version -->
-	<version>1.0.0-RC5</version>
-
 	<dependencies>
 
 		<dependency>
 			<groupId>org.abstracthorizon.proximity</groupId>
 			<artifactId>px-core</artifactId>
-			<version>1.0.0-RC5</version>
-			<type>jar</type>
-			<scope>compile</scope>
 		</dependency>
 
 		<dependency>
@@ -62,8 +56,6 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>3.8.1</version>
-			<type>jar</type>
 			<scope>test</scope>
 		</dependency>
 

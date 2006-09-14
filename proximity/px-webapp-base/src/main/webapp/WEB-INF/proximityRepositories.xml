@@ -9,7 +9,7 @@
 		- A standard maven2 repository.
 	-->
 	<bean id="central"
-		class="org.abstracthorizon.proximity.impl.RepositoryImpl"
+		class="org.abstracthorizon.proximity.impl.LogicDrivenRepositoryImpl"
 		init-method="initialize">
 		<property name="proximity" ref="proximity" />
 		<property name="id" value="central" />
@@ -18,6 +18,7 @@
 
 		<property name="localStorage" ref="centralFSStorage" />
 		<property name="remoteStorage" ref="centralRemotePeer" />
+		<property name="indexer" ref="proximity.indexer"/>
 		<property name="statisticsGatherer" ref="proximity.statisticsGatherer" />
 		<property name="accessManager" ref="proximity.openAccessManager" />
 		<!-- Uncomment this and delete previous accessManager declaration to restrict access to this repo
@@ -87,7 +88,7 @@
 		- A standard maven2 repository.
 	-->
 	<bean id="codehaus"
-		class="org.abstracthorizon.proximity.impl.RepositoryImpl"
+		class="org.abstracthorizon.proximity.impl.LogicDrivenRepositoryImpl"
 		init-method="initialize">
 		<property name="proximity" ref="proximity" />
 		<property name="id" value="codehaus" />
@@ -96,6 +97,7 @@
 
 		<property name="localStorage" ref="codehausFSStorage" />
 		<property name="remoteStorage" ref="codehausRemotePeer" />
+		<property name="indexer" ref="proximity.indexer"/>
 		<property name="statisticsGatherer" ref="proximity.statisticsGatherer" />
 		<property name="accessManager" ref="proximity.openAccessManager" />
 		<!-- Uncomment this and delete previous accessManager declaration to restrict access to this repo
@@ -155,7 +157,7 @@
 		- A standard maven2 repository.
 	-->
 	<bean id="apache.snapshot"
-		class="org.abstracthorizon.proximity.impl.RepositoryImpl"
+		class="org.abstracthorizon.proximity.impl.LogicDrivenRepositoryImpl"
 		init-method="initialize">
 		<property name="proximity" ref="proximity" />
 		<property name="id" value="apache.snapshot" />
@@ -164,6 +166,7 @@
 
 		<property name="localStorage" ref="apache.snapshotFSStorage" />
 		<property name="remoteStorage" ref="apache.snapshotRemotePeer" />
+		<property name="indexer" ref="proximity.indexer"/>
 		<property name="statisticsGatherer" ref="proximity.statisticsGatherer" />
 		<property name="accessManager" ref="proximity.openAccessManager" />
 		<!-- Uncomment this and delete previous accessManager declaration to restrict access to this repo
@@ -223,7 +226,7 @@
 		- A standard maven2 repository.
 	-->
 	<bean id="codehaus.snapshot"
-		class="org.abstracthorizon.proximity.impl.RepositoryImpl"
+		class="org.abstracthorizon.proximity.impl.LogicDrivenRepositoryImpl"
 		init-method="initialize">
 		<property name="proximity" ref="proximity" />
 		<property name="id" value="codehaus.snapshot" />
@@ -233,6 +236,7 @@
 		<property name="localStorage" ref="codehaus.snapshotFSStorage" />
 		<property name="remoteStorage"
 			ref="codehaus.snapshotRemotePeer" />
+		<property name="indexer" ref="proximity.indexer"/>
 		<property name="statisticsGatherer" ref="proximity.statisticsGatherer" />
 		<property name="accessManager" ref="proximity.openAccessManager" />
 		<!-- Uncomment this and delete previous accessManager declaration to restrict access to this repo
@@ -292,7 +296,7 @@
 		- A maven repository for publishing in-house artifacts.
 	-->
 	<bean id="inhouse"
-		class="org.abstracthorizon.proximity.impl.RepositoryImpl"
+		class="org.abstracthorizon.proximity.impl.LogicDrivenRepositoryImpl"
 		init-method="initialize">
 		<property name="proximity" ref="proximity" />
 		<property name="id" value="inhouse" />
@@ -301,6 +305,7 @@
 
 		<property name="localStorage" ref="inhouseFSStorage" />
 		<property name="statisticsGatherer" ref="proximity.statisticsGatherer" />
+		<property name="indexer" ref="proximity.indexer"/>
 		<property name="repositoryLogic" ref="proximity.maven2ReleaseRepoLogic" />
 		<property name="accessManager" ref="proximity.openAccessManager" />
 		<!-- Uncomment this and delete previous row to restrict access to this repo
@@ -326,7 +331,7 @@
 	</bean>
 
 	<bean id="inhouse.snapshot"
-		class="org.abstracthorizon.proximity.impl.RepositoryImpl"
+		class="org.abstracthorizon.proximity.impl.LogicDrivenRepositoryImpl"
 		init-method="initialize">
 		<property name="proximity" ref="proximity" />
 		<property name="id" value="inhouse.snapshot" />
@@ -335,6 +340,7 @@
 
 		<property name="localStorage" ref="inhouse.snapshotFSStorage" />
 		<property name="statisticsGatherer" ref="proximity.statisticsGatherer" />
+		<property name="indexer" ref="proximity.indexer"/>
 		<property name="repositoryLogic" ref="proximity.maven2SnapshotRepoLogic" />
 		<property name="accessManager" ref="proximity.openAccessManager" />
 		<!-- Uncomment this and delete previous row to restrict access to this repo
@@ -365,7 +371,7 @@
 		- not deployed on standard maven repositories (oracle JDBC, J2EE, etc...).
 	-->
 	<bean id="extNonFree"
-		class="org.abstracthorizon.proximity.impl.RepositoryImpl"
+		class="org.abstracthorizon.proximity.impl.LogicDrivenRepositoryImpl"
 		init-method="initialize">
 		<property name="proximity" ref="proximity" />
 		<property name="id" value="extNonFree" />
@@ -374,6 +380,7 @@
 
 		<property name="localStorage" ref="extNonFreeFSStorage" />
 		<property name="statisticsGatherer" ref="proximity.statisticsGatherer" />
+		<property name="indexer" ref="proximity.indexer"/>
 		<property name="repositoryLogic" ref="proximity.maven2ReleaseRepoLogic" />
 		<property name="accessManager" ref="proximity.openAccessManager" />
 		<!-- Uncomment this and delete previous row to restrict access to this repo
@@ -404,7 +411,7 @@
 		- not deployed on standard maven repositories (dwr, etc...).
 	-->
 	<bean id="extFree"
-		class="org.abstracthorizon.proximity.impl.RepositoryImpl"
+		class="org.abstracthorizon.proximity.impl.LogicDrivenRepositoryImpl"
 		init-method="initialize">
 		<property name="proximity" ref="proximity" />
 		<property name="id" value="extFree" />
@@ -413,6 +420,7 @@
 
 		<property name="localStorage" ref="extFreeFSStorage" />
 		<property name="statisticsGatherer" ref="proximity.statisticsGatherer" />
+		<property name="indexer" ref="proximity.indexer"/>
 		<property name="repositoryLogic" ref="proximity.maven2ReleaseRepoLogic" />
 		<property name="accessManager" ref="proximity.openAccessManager" />
 		<!-- Uncomment this and delete previous row to restrict access to this repo

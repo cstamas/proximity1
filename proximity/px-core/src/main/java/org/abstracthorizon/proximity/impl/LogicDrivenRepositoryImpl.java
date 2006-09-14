@@ -8,7 +8,7 @@ import org.abstracthorizon.proximity.logic.DefaultProxyingRepositoryLogic;
 import org.abstracthorizon.proximity.logic.RepositoryLogic;
 import org.abstracthorizon.proximity.storage.StorageException;
 
-public class RepositoryImpl extends AbstractRepository {
+public class LogicDrivenRepositoryImpl extends AbstractRepository {
 
     private RepositoryLogic repositoryLogic = new DefaultProxyingRepositoryLogic();
 

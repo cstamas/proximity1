@@ -1,6 +1,5 @@
 package org.abstracthorizon.proximity.logic;
 
-import org.abstracthorizon.proximity.ItemProperties;
 import org.abstracthorizon.proximity.ProximityRequest;
 import org.abstracthorizon.proximity.Repository;
 import org.abstracthorizon.proximity.impl.ItemImpl;
@@ -54,7 +53,8 @@ public interface RepositoryLogic {
      *            the artifact found remotely
      * @return
      */
-    ItemImpl afterRemoteCopyFound(ProximityRequest request, ItemImpl localItem, ItemImpl remoteItem, Repository repository);
+    ItemImpl afterRemoteCopyFound(ProximityRequest request, ItemImpl localItem, ItemImpl remoteItem,
+            Repository repository);
 
     /**
      * Return true if reposotiry should store the remote retrieved item in a
@@ -70,13 +70,5 @@ public interface RepositoryLogic {
      * Choose tha artifact to serve.
      */
     public ItemImpl afterRetrieval(ProximityRequest request, ItemImpl localItem, ItemImpl remoteItem);
-
-    /**
-     * Return true to index the given item.
-     * 
-     * @param item
-     * @return
-     */
-    boolean shouldIndex(ItemProperties item);
 
 }

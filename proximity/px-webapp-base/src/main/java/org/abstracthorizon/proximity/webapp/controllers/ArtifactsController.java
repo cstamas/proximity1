@@ -1,6 +1,5 @@
 package org.abstracthorizon.proximity.webapp.controllers;
 
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -10,10 +9,9 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.abstracthorizon.proximity.AccessDeniedException;
-import org.abstracthorizon.proximity.ItemNotFoundException;
 import org.abstracthorizon.proximity.Proximity;
 import org.abstracthorizon.proximity.impl.ItemPropertiesImpl;
+import org.abstracthorizon.proximity.indexer.Indexer;
 import org.springframework.beans.support.MutableSortDefinition;
 import org.springframework.beans.support.PropertyComparator;
 import org.springframework.web.servlet.ModelAndView;
@@ -23,12 +21,22 @@ public class ArtifactsController extends MultiActionController {
 
     private Proximity proximity;
 
+    private Indexer indexer;
+
     public void setProximity(Proximity proximity) {
         this.proximity = proximity;
     }
 
     public Proximity getProximity() {
         return proximity;
+    }
+
+    public Indexer getIndexer() {
+        return indexer;
+    }
+
+    public void setIndexer(Indexer indexer) {
+        this.indexer = indexer;
     }
 
     public ModelAndView artifactsList(HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -70,58 +78,48 @@ public class ArtifactsController extends MultiActionController {
 
         // URI: /pom.gid/pom.aid/pom.version
 
-        try {
-            logger.debug("Got request for artifactList on URI=" + requestURI);
+        logger.debug("Got request for artifactList on URI=" + requestURI);
 
-            String searchExpr = "m2kind:pom";
-            if (targetRepository != null) {
-                searchExpr += " AND repository.id:" + targetRepository;
-            }
-            if (targetGroup != null) {
-                searchExpr += " AND repository.groupId:" + targetGroup;
-            }
-            if (gid != null) {
-                searchExpr += " AND pom.gid:" + gid;
-            }
-            if (aid != null) {
-                searchExpr += " AND pom.aid:" + aid;
-            }
-            if (version != null) {
-                searchExpr += " AND pom.version:" + version;
-            }
-
-            // make list unique and ordered on smthn
-            List artifactList = null;
-            if (version != null) {
-                artifactList = sortAndMakeUnique(proximity.searchItem(searchExpr), "pom.version");
-            } else if (aid != null) {
-                artifactList = sortAndMakeUnique(proximity.searchItem(searchExpr), "pom.version");
-            } else if (gid != null) {
-                artifactList = sortAndMakeUnique(proximity.searchItem(searchExpr), "pom.aid");
-            } else {
-                artifactList = sortAndMakeUnique(proximity.searchItem(searchExpr), "pom.gid");
-            }
-
-            Map result = new HashMap();
-            result.put("gid", gid);
-            result.put("aid", aid);
-            result.put("version", version);
-            result.put("items", artifactList);
-            result.put("orderBy", orderBy);
-            result.put("requestUri", requestURI);
-            result.put("requestPathList", requestPathList);
-
-            return new ModelAndView("repository/artifactList", result);
-
-        } catch (ItemNotFoundException ex) {
-            logger.info("Item not found on URI " + requestURI);
-            response.sendError(HttpServletResponse.SC_NOT_FOUND);
-            return null;
-        } catch (AccessDeniedException ex) {
-            logger.info("Access forbidden to " + requestURI + " for " + request.getRemoteAddr(), ex);
-            response.sendError(HttpServletResponse.SC_FORBIDDEN);
-            return null;
+        String searchExpr = "m2kind:pom";
+        if (targetRepository != null) {
+            searchExpr += " AND repository.id:" + targetRepository;
         }
+        if (targetGroup != null) {
+            searchExpr += " AND repository.groupId:" + targetGroup;
+        }
+        if (gid != null) {
+            searchExpr += " AND pom.gid:" + gid;
+        }
+        if (aid != null) {
+            searchExpr += " AND pom.aid:" + aid;
+        }
+        if (version != null) {
+            searchExpr += " AND pom.version:" + version;
+        }
+
+        // make list unique and ordered on smthn
+        List artifactList = null;
+        if (version != null) {
+            artifactList = sortAndMakeUnique(indexer.searchByQuery(searchExpr), "pom.version");
+        } else if (aid != null) {
+            artifactList = sortAndMakeUnique(indexer.searchByQuery(searchExpr), "pom.version");
+        } else if (gid != null) {
+            artifactList = sortAndMakeUnique(indexer.searchByQuery(searchExpr), "pom.aid");
+        } else {
+            artifactList = sortAndMakeUnique(indexer.searchByQuery(searchExpr), "pom.gid");
+        }
+
+        Map result = new HashMap();
+        result.put("gid", gid);
+        result.put("aid", aid);
+        result.put("version", version);
+        result.put("items", artifactList);
+        result.put("orderBy", orderBy);
+        result.put("requestUri", requestURI);
+        result.put("requestPathList", requestPathList);
+
+        return new ModelAndView("repository/artifactList", result);
+
     }
 
     protected List explodeUriToList(String uri) {

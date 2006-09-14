@@ -13,56 +13,18 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<!-- a unique name for this project -->
-	<artifactId>px-core</artifactId>
-
-	<!-- POM packaging -->
-	<packaging>jar</packaging>
+	<artifactId>px-core-it</artifactId>
 
 	<!-- a short but descriptive name for the project -->
-	<name>Px Core</name>
+	<name>Px Core IT</name>
 
 	<dependencies>
 
 		<!--  Dear god! Who had foreseen that logging will become such an issue? -->
 		<!-- For App -->
 		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>nlog4j</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>commons-io</groupId>
-			<artifactId>commons-io</artifactId>
-			<version>1.2</version>
-			<type>jar</type>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>commons-httpclient</groupId>
-			<artifactId>commons-httpclient</artifactId>
-			<version>3.0.1</version>
-			<type>jar</type>
-			<scope>compile</scope>
-			<exclusions>
-				<exclusion>
-					<artifactId>commons-logging</artifactId>
-					<groupId>commons-logging</groupId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>commons-net</groupId>
-			<artifactId>commons-net</artifactId>
-			<version>1.4.1</version>
-			<type>jar</type>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.lucene</groupId>
-			<artifactId>lucene-core</artifactId>
-			<version>2.0.0</version>
-			<type>jar</type>
-			<scope>compile</scope>
+			<groupId>org.abstracthorizon.proximity</groupId>
+			<artifactId>px-core</artifactId>
 		</dependency>
 
 		<!-- Testing -->
@@ -71,7 +33,7 @@
 			<artifactId>junit</artifactId>
 			<scope>test</scope>
 		</dependency>
-		<!-- For Spring et al. -->
+		<!-- For Spring 2.0 et al. -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>jcl104-over-slf4j</artifactId>
@@ -105,4 +67,43 @@
 
 	</dependencies>
 
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<childDelegation>true</childDelegation>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>
+					maven-project-info-reports-plugin
+				</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-pmd-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jxr-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-report-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</reporting>
+	
 </project>

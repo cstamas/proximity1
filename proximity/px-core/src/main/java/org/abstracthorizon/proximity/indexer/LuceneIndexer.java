@@ -1,6 +1,5 @@
 package org.abstracthorizon.proximity.indexer;
 
-
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -62,21 +61,6 @@ public class LuceneIndexer extends AbstractIndexer {
 
     public void setDirtyItemTreshold(int dirtyItemTreshold) {
         this.dirtyItemTreshold = dirtyItemTreshold;
-    }
-
-    protected void doInitialize() {
-        List kws = getSearchableKeywords();
-        kws.add(DOC_PATH);
-        kws.add(DOC_NAME);
-        kws.add(DOC_REPO);
-        try {
-            IndexWriter writer = new IndexWriter(indexDirectory, analyzer, recreateIndexes
-                    || !IndexReader.indexExists(indexDirectory));
-            writer.optimize();
-            writer.close();
-        } catch (IOException ex) {
-            throw new StorageException("Got IOException during index creation.", ex);
-        }
     }
 
     public void setIndexDirectory(String path) throws IOException {
@@ -191,11 +175,9 @@ public class LuceneIndexer extends AbstractIndexer {
         Document result = new Document();
         String key;
         String md;
-        result.add(new Field(DOC_PATH, item.getAbsolutePath(), Field.Store.YES,
-                Field.Index.UN_TOKENIZED));
+        result.add(new Field(DOC_PATH, item.getDirectory(), Field.Store.YES, Field.Index.UN_TOKENIZED));
         result.add(new Field(DOC_NAME, item.getName(), Field.Store.YES, Field.Index.UN_TOKENIZED));
-        result.add(new Field(DOC_REPO, item.getRepositoryId(), Field.Store.YES,
-                Field.Index.UN_TOKENIZED));
+        result.add(new Field(DOC_REPO, item.getRepositoryId(), Field.Store.YES, Field.Index.UN_TOKENIZED));
         // index all other stuff
         for (Iterator i = getSearchableKeywords().iterator(); i.hasNext();) {
             key = (String) i.next();
@@ -236,6 +218,20 @@ public class LuceneIndexer extends AbstractIndexer {
             return result;
         } catch (IOException ex) {
             throw new StorageException("Got IOException during search by query.", ex);
+        }
+    }
+
+    protected void doInitialize() {
+        addSearchableKeyword(DOC_PATH);
+        addSearchableKeyword(DOC_NAME);
+        addSearchableKeyword(DOC_REPO);
+        try {
+            IndexWriter writer = new IndexWriter(indexDirectory, analyzer, recreateIndexes
+                    || !IndexReader.indexExists(indexDirectory));
+            writer.optimize();
+            writer.close();
+        } catch (IOException ex) {
+            throw new StorageException("Got IOException during index creation.", ex);
         }
     }
 

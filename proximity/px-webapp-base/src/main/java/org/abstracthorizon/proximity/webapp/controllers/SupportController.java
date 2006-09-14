@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.abstracthorizon.proximity.Proximity;
 import org.abstracthorizon.proximity.impl.ItemPropertiesImpl;
+import org.abstracthorizon.proximity.indexer.Indexer;
 import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
@@ -16,6 +17,8 @@ import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
 public class SupportController extends MultiActionController {
 
     private Proximity proximity;
+    
+    private Indexer indexer;
 
     public void setProximity(Proximity proximity) {
         this.proximity = proximity;
@@ -23,6 +26,14 @@ public class SupportController extends MultiActionController {
 
     public Proximity getProximity() {
         return proximity;
+    }
+
+    public Indexer getIndexer() {
+        return indexer;
+    }
+
+    public void setIndexer(Indexer indexer) {
+        this.indexer = indexer;
     }
 
     public ModelAndView index(HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -68,13 +79,13 @@ public class SupportController extends MultiActionController {
         Map context = new HashMap();
 
         if (example != null) {
-            List results = getProximity().searchItem(example);
+            List results = getIndexer().searchByItemPropertiesExample(example);
             context.put("results", results);
         } else if (query != null) {
-            List results = getProximity().searchItem(query);
+            List results = getIndexer().searchByQuery(query);
             context.put("results", results);
         }
-        context.put("searchableKeywords", getProximity().getSearchableKeywords());
+        context.put("searchableKeywords", getIndexer().getSearchableKeywords());
         context.put("repositories", getProximity().getRepositoryIds());
         context.put("groups", getProximity().getRepositoryGroupIds());
         return new ModelAndView("search", context);

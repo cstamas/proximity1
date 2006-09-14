@@ -44,12 +44,12 @@ public interface ItemProperties {
     public static final String METADATA_SCANNED_EXT = "item.scanned.ext";
     
     /**
-     * Returns the absolute path of the item. Using this path appended with
+     * Returns the directory path of the item. Using this path appended with
      * getName() will fetch the Item represented by this properties.
      * 
      * @return absolute path of the item.
      */
-    String getAbsolutePath();
+    String getDirectory();
 
     /**
      * Returns the name of the item (pathelements striped off).
@@ -81,7 +81,7 @@ public interface ItemProperties {
     boolean isFile();
 
     /**
-     * Returns the filesize of the item. If it is a dir, the size equals to 0.
+     * Returns the filesize of the item in bytes. If it is a dir, the size equals to 0.
      * 
      * @return the file size or 0 in case of directory.
      */

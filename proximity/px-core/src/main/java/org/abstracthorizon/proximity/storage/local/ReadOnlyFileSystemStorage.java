@@ -190,7 +190,7 @@ public class ReadOnlyFileSystemStorage extends AbstractLocalStorage {
                     ip.getAllMetadata().putAll(metadata);
                 } else {
                     logger.info("No metadata exists for [{}] on path [{}] -- recreating the default ones. Reindex operation may be needed to recreate/reindex them completely.", ip.getName(), ip
-                            .getAbsolutePath());
+                            .getDirectory());
                     ip = getProxiedItemPropertiesFactory().expandItemProperties(path, target, true);
                     storeItemProperties(ip);
                 }

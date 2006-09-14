@@ -1,7 +1,5 @@
 package org.abstracthorizon.proximity.logic;
 
-
-import org.abstracthorizon.proximity.ItemProperties;
 import org.abstracthorizon.proximity.ProximityRequest;
 import org.abstracthorizon.proximity.Repository;
 import org.abstracthorizon.proximity.impl.ItemImpl;
@@ -45,14 +43,16 @@ public class DefaultProxyingRepositoryLogic implements RepositoryLogic {
     /**
      * Does nothing and returns item unmodified.
      */
-    public ItemImpl afterRemoteCopyFound(ProximityRequest request, ItemImpl localItem, ItemImpl remoteItem, Repository repository) {
+    public ItemImpl afterRemoteCopyFound(ProximityRequest request, ItemImpl localItem, ItemImpl remoteItem,
+            Repository repository) {
         return remoteItem;
     }
 
     /**
      * Always returns true.
      */
-    public boolean shouldStoreLocallyAfterRemoteRetrieval(ProximityRequest request, ItemImpl localItem, ItemImpl remoteItem) {
+    public boolean shouldStoreLocallyAfterRemoteRetrieval(ProximityRequest request, ItemImpl localItem,
+            ItemImpl remoteItem) {
         return true;
     }
 
@@ -70,13 +70,6 @@ public class DefaultProxyingRepositoryLogic implements RepositoryLogic {
             return localItem;
         }
         return null;
-    }
-
-    /**
-     * Always returns !item.isDirectory().
-     */
-    public boolean shouldIndex(ItemProperties item) {
-        return !item.isDirectory();
     }
 
 }

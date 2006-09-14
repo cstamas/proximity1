@@ -163,7 +163,14 @@ public abstract class AbstractRepository implements Repository {
     // Repository Iface
 
     public void initialize() {
-        getProximity().addRepository(this);
+        if (getProximity() == null) {
+            throw new IllegalStateException("Repository cannot initialize without Proximity reference!");
+        } else {
+            getProximity().addRepository(this);
+        }
+        if (getIndexer() != null) {
+            getIndexer().registerRepository(this);
+        }
         if (isReindexAtInitialize()) {
             reindex();
         }
@@ -216,7 +223,7 @@ public abstract class AbstractRepository implements Repository {
             item.getProperties().setMetadata(ItemProperties.METADATA_OWNING_REPOSITORY, getId());
             item.getProperties().setMetadata(ItemProperties.METADATA_OWNING_REPOSITORY_GROUP, getGroupId());
             getLocalStorage().storeItem(item);
-            if (getIndexer() != null && getRepositoryLogic().shouldIndex(item.getProperties())) {
+            if (getIndexer() != null && !item.getProperties().isDirectory()) {
                 getIndexer().addItemProperties(item.getProperties());
             }
         } else {

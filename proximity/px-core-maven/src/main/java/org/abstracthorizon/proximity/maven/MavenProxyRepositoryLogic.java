@@ -126,7 +126,7 @@ public class MavenProxyRepositoryLogic extends DefaultExpiringProxyingRepository
     public ItemImpl afterRemoteCopyFound(ProximityRequest request, ItemImpl localItem, ItemImpl remoteItem,
             Repository repository) {
 
-        if (MavenArtifactRecognizer.isSnapshot(remoteItem.getProperties().getAbsolutePath(), remoteItem.getProperties()
+        if (MavenArtifactRecognizer.isSnapshot(remoteItem.getProperties().getDirectory(), remoteItem.getProperties()
                 .getName())) {
             if (snapshotExpirationPeriod != NO_EXPIRATION) {
                 logger.info("Item is Maven 1/2 Snapshot, setting expires on it to " + snapshotExpirationPeriod / 1000
@@ -178,7 +178,7 @@ public class MavenProxyRepositoryLogic extends DefaultExpiringProxyingRepository
             // metadatas goes always
             return true;
         }
-        if (MavenArtifactRecognizer.isSnapshot(item.getAbsolutePath(), item.getName())) {
+        if (MavenArtifactRecognizer.isSnapshot(item.getDirectory(), item.getName())) {
             // snapshots goes if enabled
             return isShouldServeSnapshots();
         }
