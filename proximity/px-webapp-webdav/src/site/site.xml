@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Proximity">
+
+  <bannerLeft>
+    <name>ABSTRACT HORIZON</name>
+    <src>../images/ah.png</src>
+    <href>http://www.abstracthorizon.org/</href>
+  </bannerLeft>
+
+  <bannerRight>
+    <name>Proximity</name>
+    <src>../images/logo.png</src>
+    <href>http://proximity.abstracthorizon.org/</href>
+  </bannerRight>
+
+  <body>
+
+    <menu ref="parent" />
+
+    <menu ref="modules" />
+    <menu ref="reports" />
+
+  </body>
+</project>
