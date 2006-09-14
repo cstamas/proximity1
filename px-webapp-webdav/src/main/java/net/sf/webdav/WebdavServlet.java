@@ -165,8 +165,6 @@ public class WebdavServlet extends HttpServlet {
 
 	private static int fdebug = -1;
 
-	private WebdavStoreFactory fFactory;
-
 	private Hashtable fParameter;
 
 	/**
@@ -184,10 +182,19 @@ public class WebdavServlet extends HttpServlet {
 		String clazz = getServletConfig().getInitParameter(
 				"ResourceHandlerImplementation");
 		try {
-            //TODO: changed factory
-			fFactory = new SpringAwareWebdavStoreFactory(WebdavServlet.class
-					.getClassLoader().loadClass(clazz));
-			// parameter
+            //TODO: Modified by cstamas
+            if (clazz.startsWith("spring:")) {
+                SpringAwareWebdavStoreFactory fFactory = new SpringAwareWebdavStoreFactory(getServletContext());
+                fStore = fFactory.getStore(clazz.substring(7, clazz.length()));
+            } else {
+                // goes with default way
+                WebdavStoreFactory fFactory = new WebdavStoreFactory(WebdavServlet.class
+                        .getClassLoader().loadClass(clazz));
+                fStore = fFactory.getStore();
+            }
+            //TODO: Modified by cstamas
+
+            // parameter
 			fParameter = new Hashtable();
 			Enumeration initParameterNames = getServletConfig()
 					.getInitParameterNames();
@@ -196,8 +203,6 @@ public class WebdavServlet extends HttpServlet {
 				fParameter.put(key, getServletConfig().getInitParameter(key));
 			}
 			
-            //TODO: changed signature
-			fStore = fFactory.getStore(getServletContext());
 			fResLocks = new ResourceLocks();
 			String debugString = (String) fParameter.get(DEBUG_PARAMETER);
 			if (debugString == null) {
