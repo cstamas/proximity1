@@ -17,8 +17,8 @@
 package net.sf.webdav;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.Writer;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -38,6 +38,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.abstracthorizon.proximity.webapp.webdav.SpringAwareWebdavStoreFactory;
 import org.apache.catalina.util.MD5Encoder;
 import org.apache.catalina.util.RequestUtil;
 import org.apache.catalina.util.URLEncoder;
@@ -183,7 +184,8 @@ public class WebdavServlet extends HttpServlet {
 		String clazz = getServletConfig().getInitParameter(
 				"ResourceHandlerImplementation");
 		try {
-			fFactory = new WebdavStoreFactory(WebdavServlet.class
+            //TODO: changed factory
+			fFactory = new SpringAwareWebdavStoreFactory(WebdavServlet.class
 					.getClassLoader().loadClass(clazz));
 			// parameter
 			fParameter = new Hashtable();
@@ -194,15 +196,15 @@ public class WebdavServlet extends HttpServlet {
 				fParameter.put(key, getServletConfig().getInitParameter(key));
 			}
 			
-
-				fStore = fFactory.getStore();
-				fResLocks = new ResourceLocks();
-				String debugString = (String) fParameter.get(DEBUG_PARAMETER);
-				if (debugString == null) {
-					fdebug = 0;
-				} else {
-					fdebug = Integer.parseInt(debugString);
-				}
+            //TODO: changed signature
+			fStore = fFactory.getStore(getServletContext());
+			fResLocks = new ResourceLocks();
+			String debugString = (String) fParameter.get(DEBUG_PARAMETER);
+			if (debugString == null) {
+				fdebug = 0;
+			} else {
+				fdebug = Integer.parseInt(debugString);
+			}
 			
 		} catch (Exception e) {
 			e.printStackTrace();

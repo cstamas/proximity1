@@ -1,5 +1,7 @@
 package net.sf.webdav;
 
+import javax.servlet.ServletContext;
+
 public class WebdavStoreFactory {
 
 	private Class fImplementation;
@@ -8,7 +10,7 @@ public class WebdavStoreFactory {
 		fImplementation = class1;
 	}
 
-	public IWebdavStorage getStore() throws InstantiationException, IllegalAccessException {
+	public IWebdavStorage getStore(ServletContext ctx) throws InstantiationException, IllegalAccessException {
 		return (IWebdavStorage) fImplementation.newInstance();
 	}
 
