@@ -1,6 +1,5 @@
 package org.abstracthorizon.proximity.logic;
 
-
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -26,9 +25,9 @@ public class DefaultExpiringProxyingRepositoryLogic extends DefaultProxyingRepos
     public static final String METADATA_EXPIRES = "item.expires";
 
     private long itemExpirationPeriod = 86400 * 1000; // 24 hours
-    
+
     private long notFoundCachePeriod = 86400 * 1000; // 24 hours
-    
+
     private Map notFoundCache = Collections.synchronizedMap(new HashMap());
 
     public long getNotFoundCachePeriodInSeconds() {
@@ -76,7 +75,8 @@ public class DefaultExpiringProxyingRepositoryLogic extends DefaultProxyingRepos
     /**
      * If expiration period is not NO_EXPIRATION, it will apply it on all items.
      */
-    public ItemImpl afterRemoteCopyFound(ProximityRequest request, ItemImpl localItem, ItemImpl remoteItem, Repository repository) {
+    public ItemImpl afterRemoteCopyFound(ProximityRequest request, ItemImpl localItem, ItemImpl remoteItem,
+            Repository repository) {
         if (itemExpirationPeriod != NO_EXPIRATION) {
             Date expires = new Date(System.currentTimeMillis() + itemExpirationPeriod);
             logger.info("Setting expires on item  to " + expires.toString());
@@ -101,11 +101,13 @@ public class DefaultExpiringProxyingRepositoryLogic extends DefaultProxyingRepos
             // it is in cache, check when it got in
             Date lastRequest = (Date) notFoundCache.get(request.getPath());
             if (lastRequest.before(new Date(System.currentTimeMillis() - notFoundCachePeriod))) {
-                // the notFoundCache record expired, remove it and check its existence
+                // the notFoundCache record expired, remove it and check its
+                // existence
                 notFoundCache.remove(request.getPath());
                 return true;
             } else {
-                // the notFoundCache record is still valid, do not check its existence
+                // the notFoundCache record is still valid, do not check its
+                // existence
                 return false;
             }
         } else {

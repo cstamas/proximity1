@@ -43,7 +43,7 @@ public class MavenItemInspector extends AbstractItemInspector {
 
     public boolean isHandled(ItemPropertiesImpl ip) {
         return MavenArtifactRecognizer.isPom(ip.getName()) || MavenArtifactRecognizer.isMetadata(ip.getName())
-                || MavenArtifactRecognizer.isSnapshot(ip.getAbsolutePath(), ip.getName());
+                || MavenArtifactRecognizer.isSnapshot(ip.getDirectory(), ip.getName());
     }
 
     public List getIndexableKeywords() {
@@ -136,7 +136,7 @@ public class MavenItemInspector extends AbstractItemInspector {
 
         } else if (MavenArtifactRecognizer.isMetadata(ip.getName())) {
             ip.setMetadata(M2KIND, KIND_METADATA);
-        } else if (MavenArtifactRecognizer.isSnapshot(ip.getAbsolutePath(), ip.getName())) {
+        } else if (MavenArtifactRecognizer.isSnapshot(ip.getDirectory(), ip.getName())) {
             ip.setMetadata(M2KIND, KIND_SNAPSHOT);
         }
     }

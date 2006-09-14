@@ -6,7 +6,6 @@ import org.abstracthorizon.proximity.access.AccessManager;
 import org.abstracthorizon.proximity.impl.ItemImpl;
 import org.abstracthorizon.proximity.impl.ItemPropertiesImpl;
 import org.abstracthorizon.proximity.indexer.Indexer;
-import org.abstracthorizon.proximity.logic.RepositoryLogic;
 import org.abstracthorizon.proximity.stats.StatisticsGatherer;
 import org.abstracthorizon.proximity.storage.StorageException;
 import org.abstracthorizon.proximity.storage.local.LocalStorage;
@@ -27,18 +26,18 @@ public interface Repository {
     void initialize();
 
     /**
-     * Registers itself with Proximity.
-     * 
-     * @param proximity
-     */
-    void setProximity(Proximity proximity);
-
-    /**
      * Returns proximity instance known by this repo.
      * 
      * @return
      */
     Proximity getProximity();
+
+    /**
+     * Registers itself with Proximity.
+     * 
+     * @param proximity
+     */
+    void setProximity(Proximity proximity);
 
     /**
      * Returns the ID of the repository.
@@ -177,23 +176,6 @@ public interface Repository {
      * @param storage
      */
     void setRemoteStorage(RemoteStorage storage);
-
-    /**
-     * Sets the repository logic to drive this repository. Per repository
-     * instance may exists.
-     * 
-     * @return
-     */
-    RepositoryLogic getRepositoryLogic();
-
-    /**
-     * Sets the logic to drive this repository. The repository by default uses
-     * DefaultProxyingLogic class unless overridden. May not be null. Per
-     * repository instance may exists.
-     * 
-     * @param logic
-     */
-    void setRepositoryLogic(RepositoryLogic logic);
 
     /**
      * Returns the indexer used by this repository. Only one indexer may be used

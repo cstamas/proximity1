@@ -3,6 +3,9 @@
 	<classpathentry kind="src" path="px-core/src/main/java"/>
 	<classpathentry kind="src" path="px-core/src/test/java"/>
 	<classpathentry excluding="**" output="px-core/src/test/resources" kind="src" path="px-core/src/test/resources"/>
+	<classpathentry kind="src" path="px-core-it/src/main/java"/>
+	<classpathentry kind="src" path="px-core-it/src/test/java"/>
+	<classpathentry excluding="**" output="px-core-it/src/test/resources" kind="src" path="px-core-it/src/test/resources"/>
 	<classpathentry kind="src" path="px-core-ws/src/main/java"/>
 	<classpathentry excluding="**" output="px-core-ws/src/main/resources" kind="src" path="px-core-ws/src/main/resources"/>
 	<classpathentry kind="src" path="px-core-maven/src/main/java"/>

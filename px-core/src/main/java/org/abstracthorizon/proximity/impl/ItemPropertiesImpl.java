@@ -19,7 +19,7 @@ public class ItemPropertiesImpl implements ItemProperties, Serializable {
 
     private DateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss Z");
 
-    public String getAbsolutePath() {
+    public String getDirectory() {
         return getMetadata(METADATA_ABSOLUTE_PATH);
     }
 
@@ -39,10 +39,10 @@ public class ItemPropertiesImpl implements ItemProperties, Serializable {
         if (getName().equals(PATH_ROOT)) {
             return getName();
         }
-        if (getAbsolutePath().endsWith(PATH_SEPARATOR)) {
-            return getAbsolutePath() + getName();
+        if (getDirectory().endsWith(PATH_SEPARATOR)) {
+            return getDirectory() + getName();
         } else {
-            return getAbsolutePath() + PATH_SEPARATOR + getName();
+            return getDirectory() + PATH_SEPARATOR + getName();
         }
     }
 
@@ -176,7 +176,7 @@ public class ItemPropertiesImpl implements ItemProperties, Serializable {
 
     public int hashCode() {
         int hash = 7;
-        hash = 31 * hash + (null == getAbsolutePath() ? 0 : getAbsolutePath().hashCode());
+        hash = 31 * hash + (null == getDirectory() ? 0 : getDirectory().hashCode());
         hash = 31 * hash + (null == getName() ? 0 : getName().hashCode());
         return hash;
     }
@@ -189,9 +189,9 @@ public class ItemPropertiesImpl implements ItemProperties, Serializable {
             return false;
         }
         ItemPropertiesImpl test = (ItemPropertiesImpl) obj;
-        if (this.getAbsolutePath() == test.getAbsolutePath() && this.getName() == test.getName())
+        if (this.getDirectory() == test.getDirectory() && this.getName() == test.getName())
             return true;
-        if ((this.getAbsolutePath() != null && this.getAbsolutePath().equals(test.getAbsolutePath()))
+        if ((this.getDirectory() != null && this.getDirectory().equals(test.getDirectory()))
                 && (this.getName() != null && this.getName().equals(test.getName())))
             return true;
         return false;

@@ -2,15 +2,9 @@ package org.abstracthorizon.proximity;
 
 import java.util.List;
 
-import org.abstracthorizon.proximity.impl.ItemPropertiesImpl;
-
 public class ProximityIntegrationTest extends AbstractProximityIntegrationTest {
 
     private Proximity proximity;
-
-    protected String[] getConfigLocations() {
-        return new String[] { "/org/abstracthorizon/proximity/applicationContext.xml" };
-    }
 
     public void setProximity(Proximity proximity) {
         this.proximity = proximity;
@@ -69,21 +63,6 @@ public class ProximityIntegrationTest extends AbstractProximityIntegrationTest {
             logger.error("Got exception", ex);
             fail();
         }
-    }
-
-    public void testSearchByExample1() throws ProximityException {
-        ItemPropertiesImpl example = new ItemPropertiesImpl();
-        example.setName("antlr-2.7.5.jar");
-        List result = proximity.searchItem(example);
-        logger.info("Got search result:" + result);
-        example = new ItemPropertiesImpl();
-        example.setName("antlr*");
-        result = proximity.searchItem(example);
-        logger.info("Got search result:" + result);
-        example = new ItemPropertiesImpl();
-        example.setAbsolutePath("/ismicro/jars");
-        result = proximity.searchItem(example);
-        logger.info("Got search result:" + result);
     }
 
     public void testSimpleDir() {

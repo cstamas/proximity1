@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>org.abstracthorizon.proximity</groupId>
 		<artifactId>proximity-parent</artifactId>
-		<version>1.0.0</version>
+		<version>1.0.0-SNAPSHOT</version>
 	</parent>
 
 	<!-- the version of maven's project object model -->
@@ -21,119 +21,55 @@
 	<!-- a short but descriptive name for the project -->
 	<name>Px Webapp Base</name>
 
-	<!-- The module version -->
-	<version>1.0.0-RC5</version>
-
 	<dependencies>
 
 		<dependency>
 			<groupId>org.abstracthorizon.proximity</groupId>
 			<artifactId>px-core</artifactId>
-			<version>1.0.0-RC5</version>
-			<type>jar</type>
-			<scope>compile</scope>
 		</dependency>
 
-		<!-- For Spring 1.2.x et al. -->
+		<!-- For Spring et al. -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>jcl104-over-slf4j</artifactId>
-			<version>1.0.1</version>
-			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-web</artifactId>
-			<version>2.0-rc2</version>
-			<type>jar</type>
 			<scope>compile</scope>
-			<exclusions>
-				<exclusion>
-					<artifactId>commons-logging</artifactId>
-					<groupId>commons-logging</groupId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc</artifactId>
-			<version>2.0-rc2</version>
-			<type>jar</type>
 			<scope>compile</scope>
-			<exclusions>
-				<exclusion>
-					<artifactId>commons-logging</artifactId>
-					<groupId>commons-logging</groupId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-support</artifactId>
-			<version>2.0-rc2</version>
-			<type>jar</type>
 			<scope>compile</scope>
-			<exclusions>
-				<exclusion>
-					<artifactId>commons-logging</artifactId>
-					<groupId>commons-logging</groupId>
-				</exclusion>
-			</exclusions>
 		</dependency>
-
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-core</artifactId>
-			<version>2.0-rc2</version>
-			<type>jar</type>
 			<scope>compile</scope>
-			<exclusions>
-				<exclusion>
-					<artifactId>commons-logging</artifactId>
-					<groupId>commons-logging</groupId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-beans</artifactId>
-			<version>2.0-rc2</version>
-			<type>jar</type>
 			<scope>compile</scope>
-			<exclusions>
-				<exclusion>
-					<artifactId>commons-logging</artifactId>
-					<groupId>commons-logging</groupId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
-			<version>2.0-rc2</version>
-			<type>jar</type>
 			<scope>compile</scope>
-			<exclusions>
-				<exclusion>
-					<artifactId>commons-logging</artifactId>
-					<groupId>commons-logging</groupId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-aop</artifactId>
-			<version>2.0-rc2</version>
-			<type>jar</type>
 			<scope>compile</scope>
-			<exclusions>
-				<exclusion>
-					<artifactId>commons-logging</artifactId>
-					<groupId>commons-logging</groupId>
-				</exclusion>
-			</exclusions>
 		</dependency>
+
 		<!-- Needed by org.springframework::spring-webmvc -->
 		<dependency>
 			<groupId>commons-digester</groupId>
@@ -180,21 +116,11 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-mock</artifactId>
-			<version>2.0-rc2</version>
-			<type>jar</type>
 			<scope>test</scope>
-			<exclusions>
-				<exclusion>
-					<artifactId>commons-logging</artifactId>
-					<groupId>commons-logging</groupId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>3.8.1</version>
-			<type>jar</type>
 			<scope>test</scope>
 		</dependency>
 
@@ -211,13 +137,6 @@
 				<filtering>true</filtering>
 			</resource>
 		</resources>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-war-plugin</artifactId>
-				<version>2.0</version>
-			</plugin>
-		</plugins>
 	</build>
 
 </project>

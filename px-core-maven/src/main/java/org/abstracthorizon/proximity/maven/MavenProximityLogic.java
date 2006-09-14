@@ -99,11 +99,11 @@ public class MavenProximityLogic extends DefaultProximityLogic {
                         mergedMetadata.merge(metadataReader.read(isr));
                         isr.close();
                     } catch (XmlPullParserException ex) {
-                        logger.warn("Could not merge M2 metadata: " + currentItem.getProperties().getAbsolutePath()
+                        logger.warn("Could not merge M2 metadata: " + currentItem.getProperties().getDirectory()
                                 + " from repository " + currentItem.getProperties().getRepositoryId(), ex);
                     } catch (IOException ex) {
                         logger.warn("Got IOException during merge of M2 metadata: "
-                                + currentItem.getProperties().getAbsolutePath() + " from repository "
+                                + currentItem.getProperties().getDirectory() + " from repository "
                                 + currentItem.getProperties().getRepositoryId(), ex);
                     }
 

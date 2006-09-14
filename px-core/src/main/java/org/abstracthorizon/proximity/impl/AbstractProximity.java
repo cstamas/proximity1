@@ -1,6 +1,5 @@
 package org.abstracthorizon.proximity.impl;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -20,33 +19,25 @@ import org.abstracthorizon.proximity.Repository;
 import org.abstracthorizon.proximity.RepositoryNotAvailableException;
 import org.abstracthorizon.proximity.access.AccessManager;
 import org.abstracthorizon.proximity.access.OpenAccessManager;
-import org.abstracthorizon.proximity.indexer.Indexer;
-import org.abstracthorizon.proximity.indexer.IndexerException;
-import org.abstracthorizon.proximity.logic.DefaultProximityLogic;
-import org.abstracthorizon.proximity.logic.ProximityLogic;
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ProximityImpl implements Proximity {
+public abstract class AbstractProximity implements Proximity {
 
     protected Logger logger = LoggerFactory.getLogger(this.getClass());
 
     /** The repo groups, [repo.getGroupId, List&lt;Repositories&gt;] */
-    private Map repositoryGroups = new HashMap();
+    protected Map repositoryGroups = new HashMap();
 
     /** The repo register, [repo.getId, repo] */
-    private Map repositories = new HashMap();
+    protected Map repositories = new HashMap();
 
     /** The overall order of repositories, List&lt;Repositories&gt;] */
-    private List repositoryOrder = new ArrayList();
+    protected List repositoryOrder = new ArrayList();
 
     /** Should Proximity emerge groupId's in front of real repos paths? */
-    boolean emergeGroups = true;
-
-    private ProximityLogic proximityLogic = new DefaultProximityLogic();
-
-    private Indexer indexer = null;
+    protected boolean emergeGroups = true;
 
     private AccessManager accessManager = new OpenAccessManager();
 
@@ -58,35 +49,12 @@ public class ProximityImpl implements Proximity {
         this.emergeGroups = emergeGroups;
     }
 
-    public ProximityLogic getProximityLogic() {
-        return proximityLogic;
-    }
-
-    public void setProximityLogic(ProximityLogic proximityLogic) {
-        this.proximityLogic = proximityLogic;
-    }
-
-    public Indexer getIndexer() {
-        return indexer;
-    }
-
-    public void setIndexer(Indexer indexer) {
-        this.indexer = indexer;
-    }
-
     public AccessManager getAccessManager() {
         return accessManager;
     }
 
     public void setAccessManager(AccessManager accessManager) {
         this.accessManager = accessManager;
-    }
-
-    public void initialize() {
-        logger.info("Proximity initialization...");
-        if (getIndexer() != null) {
-            getIndexer().initialize();
-        }
     }
 
     public void reindex() {
@@ -116,21 +84,14 @@ public class ProximityImpl implements Proximity {
     public void addRepository(Repository repository) {
         repositories.put(repository.getId(), repository);
         addToRepositoryIdToRankedList(repositoryOrder, repository);
-        // repositoryOrder.add(repository.getId());
 
         if (!repositoryGroups.containsKey(repository.getGroupId())) {
             repositoryGroups.put(repository.getGroupId(), new ArrayList());
         }
         List repositoryGroupOrder = (List) repositoryGroups.get(repository.getGroupId());
         addToRepositoryIdToRankedList(repositoryGroupOrder, repository);
-        // repositoryGroupOrder.add(repository.getId());
-        
-        if (getIndexer() != null) {
-            getIndexer().registerRepository(repository);
-        }
 
         logger.info("Added repository id=[{}], groupId=[{}].", repository.getId(), repository.getGroupId());
-        logger.debug("  current order of reposes is {}.", repositoryOrder);
     }
 
     public void removeRepository(String repoId) throws NoSuchRepositoryException {
@@ -143,6 +104,7 @@ public class ProximityImpl implements Proximity {
             }
             repositoryOrder.remove(repository.getId());
             repositories.remove(repository.getId());
+
             logger.info("Removed repository id=[{}], groupId=[{}]", repository.getId(), repository.getGroupId());
         } else {
             throw new NoSuchRepositoryException(repoId);
@@ -404,94 +366,8 @@ public class ProximityImpl implements Proximity {
 
     }
 
-    public List getSearchableKeywords() {
-        logger.debug("Got getSearchableKeywords");
-        if (getIndexer() != null) {
-            return getIndexer().getSearchableKeywords();
-        } else {
-            logger.info("No indexer defined, but getSearchableKeywords request came in. Returning empty results.");
-            return new ArrayList();
-        }
-    }
-
-    public List searchItem(ItemProperties example) {
-        logger.debug("Got searchItem with example {}", example);
-        if (getIndexer() != null) {
-            List idxresult = getIndexer().searchByItemPropertiesExample(example);
-            return postprocessSearchResult(idxresult);
-        } else {
-            logger.info("No indexer defined, but search request came in. Returning empty results.");
-            return new ArrayList();
-        }
-    }
-
-    public List searchItem(String query) throws IndexerException {
-        logger.debug("Got searchItem with query {}", query);
-        if (getIndexer() != null) {
-            List idxresult = getIndexer().searchByQuery(query);
-            return postprocessSearchResult(idxresult);
-        } else {
-            logger.info("No indexer defined, but search request came in. Returning empty results.");
-            return new ArrayList();
-        }
-    }
-
-    protected ItemImpl retrieveItemController(ProximityRequest request) throws ItemNotFoundException,
-            AccessDeniedException, NoSuchRepositoryException {
-
-        ItemImpl item = null;
-
-        try {
-
-            if (request.getTargetedReposId() != null) {
-
-                logger.debug("Going for targeted reposId {}", request.getTargetedReposId());
-                item = retrieveItemByRepoId(request.getTargetedReposId(), request);
-
-            } else if (request.getTargetedReposGroupId() != null) {
-
-                logger.debug("Going for targeted reposGroupId {}", request.getTargetedReposGroupId());
-                item = retrieveItemByRepoGroupId(request.getTargetedReposGroupId(), request);
-
-            } else {
-
-                logger.debug("Going for by absolute order, no target");
-                item = retrieveItemByAbsoluteOrder(request);
-
-            }
-
-            // if not a targeted request that affects only one repos and
-            // we need group search
-            if (request.getTargetedReposId() == null && proximityLogic.isGroupSearchNeeded(request)) {
-
-                ProximityRequest groupRequest = proximityLogic.getGroupRequest(request);
-
-                List repositoryGroupOrder = (List) repositoryGroups.get(item.getProperties().getRepositoryGroupId());
-                List itemList = new ArrayList();
-
-                for (Iterator i = repositoryGroupOrder.iterator(); i.hasNext();) {
-                    String reposId = (String) i.next();
-                    try {
-                        itemList.add(retrieveItemByRepoId(reposId, groupRequest));
-                    } catch (ItemNotFoundException ex) {
-                        logger.debug("[{}] not found in repository {}", groupRequest.getPath(), reposId);
-                    }
-                }
-
-                item = proximityLogic.postprocessItemList(request, groupRequest, itemList);
-
-            }
-
-        } catch (IOException ex) {
-            logger.error("Got IOException during retrieveItem.", ex);
-        } catch (ItemNotFoundException ex) {
-            logger.info("Item {} not found.", request.getPath());
-            throw ex;
-        }
-
-        return item;
-
-    }
+    protected abstract ItemImpl retrieveItemController(ProximityRequest request) throws ItemNotFoundException,
+            AccessDeniedException, NoSuchRepositoryException;
 
     protected List postprocessSearchResult(List idxresult) {
         List result = new ArrayList(idxresult.size());
@@ -523,75 +399,21 @@ public class ProximityImpl implements Proximity {
         return result;
     }
 
-    protected ItemImpl retrieveItemByAbsoluteOrder(ProximityRequest request) throws ItemNotFoundException,
-            AccessDeniedException, NoSuchRepositoryException {
-        for (Iterator i = repositoryOrder.iterator(); i.hasNext();) {
-            String reposId = (String) i.next();
-            try {
-                Repository repo = (Repository) repositories.get(reposId);
-                ItemImpl item = repo.retrieveItem(request);
-                return item;
-            } catch (RepositoryNotAvailableException ex) {
-                logger.info("Repository unavailable", ex);
-            } catch (ItemNotFoundException ex) {
-                logger.debug(request.getPath() + " not found in repository " + reposId);
-            }
-        }
-        throw new ItemNotFoundException(request.getPath());
-    }
-
-    protected ItemImpl retrieveItemByRepoGroupId(String groupId, ProximityRequest request)
-            throws ItemNotFoundException, AccessDeniedException, NoSuchRepositoryException {
-        if (repositoryGroups.containsKey(groupId)) {
-            List repositoryGroupOrder = (List) repositoryGroups.get(groupId);
-            for (Iterator i = repositoryGroupOrder.iterator(); i.hasNext();) {
-                String reposId = (String) i.next();
-                try {
-                    Repository repo = (Repository) repositories.get(reposId);
-                    ItemImpl item = repo.retrieveItem(request);
-                    return item;
-                } catch (RepositoryNotAvailableException ex) {
-                    logger.info("Repository unavailable", ex);
-                } catch (ItemNotFoundException ex) {
-                    logger.debug(request.getPath() + " not found in repository " + reposId);
-                }
-            }
-        }
-        throw new ItemNotFoundException(request.getPath());
-    }
-
-    protected ItemImpl retrieveItemByRepoId(String repoId, ProximityRequest request) throws ItemNotFoundException,
-            AccessDeniedException, NoSuchRepositoryException {
-        if (repositories.containsKey(repoId)) {
-            Repository repo = (Repository) repositories.get(repoId);
-            try {
-                ItemImpl item = repo.retrieveItem(request);
-                return item;
-            } catch (RepositoryNotAvailableException ex) {
-                logger.info("Repository unavailable", ex);
-            } catch (ItemNotFoundException ex) {
-                logger.debug(request.getPath() + " not found in targeted repository " + repo.getId());
-                throw ex;
-            }
-        }
-        throw new NoSuchRepositoryException(request.getTargetedReposId());
-    }
-
     protected void mangleItemPathsForEmergeGroups(List items) {
         if (isEmergeRepositoryGroups()) {
             for (Iterator i = items.iterator(); i.hasNext();) {
                 ItemPropertiesImpl ip = (ItemPropertiesImpl) i.next();
-                logger.debug("Mangling item path {} with repositoryGroupId {}...", ip.getAbsolutePath(), ip
+                logger.debug("Mangling item path {} with repositoryGroupId {}...", ip.getDirectory(), ip
                         .getRepositoryGroupId());
-                if (ip.getAbsolutePath().equals(ItemProperties.PATH_ROOT)) {
+                if (ip.getDirectory().equals(ItemProperties.PATH_ROOT)) {
                     // make /groupId as path
                     ip.setAbsolutePath(ItemProperties.PATH_ROOT + ip.getRepositoryGroupId());
                 } else {
                     // make /groupId/... as path WITHOUT trailing /
                     ip.setAbsolutePath(FilenameUtils.normalizeNoEndSeparator(ItemProperties.PATH_ROOT
-                            + ip.getRepositoryGroupId() + ip.getAbsolutePath()));
+                            + ip.getRepositoryGroupId() + ip.getDirectory()));
                 }
-                logger.debug("Mangled item path {} with repositoryGroupId {}...", ip.getAbsolutePath(), ip
+                logger.debug("Mangled item path {} with repositoryGroupId {}...", ip.getDirectory(), ip
                         .getRepositoryGroupId());
             }
         }

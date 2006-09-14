@@ -42,11 +42,9 @@
 		- Central proximity bean with list of repos and it's helpers.
 	-->
 	<bean id="proximity"
-		class="org.abstracthorizon.proximity.impl.ProximityImpl"
-		init-method="initialize">
+		class="org.abstracthorizon.proximity.impl.LogicDrivenProximityImpl">
 		<property name="accessManager" ref="proximity.accessManager" />
 		<property name="proximityLogic" ref="proximity.logic" />
-		<property name="indexer" ref="proximity.indexer" />
 		<property name="emergeRepositoryGroups" value="true" />
 	</bean>
 

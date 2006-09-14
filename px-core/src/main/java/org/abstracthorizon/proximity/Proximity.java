@@ -4,8 +4,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.abstracthorizon.proximity.access.AccessManager;
-import org.abstracthorizon.proximity.indexer.Indexer;
-import org.abstracthorizon.proximity.logic.ProximityLogic;
 
 /**
  * The Proximity interface.
@@ -14,41 +12,6 @@ import org.abstracthorizon.proximity.logic.ProximityLogic;
  * 
  */
 public interface Proximity {
-
-    /**
-     * Initializes Proximity. Call once, first.
-     * 
-     */
-    void initialize();
-
-    /**
-     * Returns the current logic that drives Proximity.
-     * 
-     * @return logic
-     */
-    ProximityLogic getProximityLogic();
-
-    /**
-     * Sets the logic to drive proximity. The repository by default uses
-     * DefaultProximityLogic class unless overridden. May not be null.
-     * 
-     * @param logic
-     */
-    void setProximityLogic(ProximityLogic logic);
-
-    /**
-     * Retrieve indexer.
-     * 
-     * @return
-     */
-    Indexer getIndexer();
-
-    /**
-     * Sets indexer.
-     * 
-     * @param indexer
-     */
-    void setIndexer(Indexer indexer);
 
     /**
      * Retrieve Proximity-level AccessManager.
@@ -190,7 +153,7 @@ public interface Proximity {
             NoSuchRepositoryException, RepositoryNotAvailableException;
 
     // ============================================================================================
-    // Search and list
+    // List
 
     /**
      * Returns an aggregated List of all item properties in all configured
@@ -201,31 +164,6 @@ public interface Proximity {
      * @return list of ItemProperties, possibly 0 length.
      */
     List listItems(ProximityRequest request) throws AccessDeniedException, NoSuchRepositoryException;
-
-    /**
-     * Lists the searchable keywords as returned by Indexer.
-     * 
-     * @return the list of keywords (String) usable in queries.
-     */
-    List getSearchableKeywords();
-
-    /**
-     * Searches for item.
-     * 
-     * @param example
-     * @return List of ItemProperties, possibly 0 length.
-     */
-    public List searchItem(ItemProperties example) throws ProximityException;
-
-    /**
-     * Searches for item.
-     * 
-     * @param query,
-     *            dependent on indexer backend since Proximity just "passes" it
-     *            out
-     * @return List of ItemProperties, possibly 0 length.
-     */
-    public List searchItem(String query) throws ProximityException;
 
     // ============================================================================================
     // Maintenance
