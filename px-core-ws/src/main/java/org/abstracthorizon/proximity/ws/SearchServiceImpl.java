@@ -1,6 +1,5 @@
 package org.abstracthorizon.proximity.ws;
 
-
 import java.util.List;
 
 import org.abstracthorizon.proximity.AccessDeniedException;
@@ -12,9 +11,9 @@ import org.abstracthorizon.proximity.ProximityRequest;
 import org.abstracthorizon.proximity.indexer.Indexer;
 
 public class SearchServiceImpl implements SearchService {
-    
+
     private Proximity proximity;
-    
+
     private Indexer indexer;
 
     public Proximity getProximity() {
