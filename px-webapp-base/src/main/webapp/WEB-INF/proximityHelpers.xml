@@ -4,6 +4,14 @@
 <beans>
 
 	<!--
+		- WebDav storage adapter, using proximity itself as storage.
+	-->
+	<bean id="proximity.webdavstorage"
+		class="org.abstracthorizon.proximity.webapp.webdav.ProximityWebdavStorageAdapter">
+		<property name="proximity" ref="proximity" />
+	</bean>
+
+	<!--
 		- StatisticsGatherer, gathers statistics. Simple in-memory implementation.
 	-->
 	<bean id="proximity.statisticsGatherer"

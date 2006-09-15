@@ -84,6 +84,17 @@
 		<servlet-class>
 			org.springframework.web.servlet.DispatcherServlet
 		</servlet-class>
+		<load-on-startup>15</load-on-startup>
+	</servlet>
+	
+	<servlet>
+		<servlet-name>px-webdav</servlet-name>
+		<servlet-class>net.sf.webdav.WebdavServlet</servlet-class>
+		<init-param>
+			<param-name>ResourceHandlerImplementation</param-name>
+			<param-value>spring:proximity.webdavstorage</param-value>
+		</init-param>
+		<load-on-startup>20</load-on-startup>
 	</servlet>
 
 	<servlet-mapping>
@@ -104,6 +115,11 @@
 	<servlet-mapping>
 		<servlet-name>xfire</servlet-name>
 		<url-pattern>/ws/*</url-pattern>
+	</servlet-mapping>
+
+	<servlet-mapping>
+		<servlet-name>px-webdav</servlet-name>
+		<url-pattern>/dav/*</url-pattern>
 	</servlet-mapping>
 
 	<servlet-mapping>

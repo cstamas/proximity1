@@ -14,7 +14,7 @@
 		<key>formatFileSize</key>
 		<scope>application</scope>
 		<class>
-			org.abstracthorizon.proximity.webapp.util.view.FormatFileSize
+			org.abstracthorizon.proximity.webapp.view.FormatFileSize
 		</class>
 	</tool>
 </toolbox>
