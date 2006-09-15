@@ -15,5 +15,11 @@
       <param name="beanName" value="proximity"/>
     </create>
 
+    <create
+      creator="spring"
+      javascript="indexer">
+      <param name="beanName" value="proximity.indexer"/>
+    </create>
+
   </allow>
 </dwr>
