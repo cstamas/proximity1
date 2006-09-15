@@ -7,8 +7,9 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.abstracthorizon.proximity.HashMapItemPropertiesImpl;
+import org.abstracthorizon.proximity.ItemProperties;
 import org.abstracthorizon.proximity.Proximity;
-import org.abstracthorizon.proximity.impl.ItemPropertiesImpl;
 import org.abstracthorizon.proximity.indexer.Indexer;
 import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
@@ -17,7 +18,7 @@ import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
 public class SupportController extends MultiActionController {
 
     private Proximity proximity;
-    
+
     private Indexer indexer;
 
     public void setProximity(Proximity proximity) {
@@ -43,28 +44,28 @@ public class SupportController extends MultiActionController {
 
     public ModelAndView search(HttpServletRequest request, HttpServletResponse response) throws Exception {
         logger.debug("Got request for search");
-        ItemPropertiesImpl example = null;
+        ItemProperties example = null;
         String query = null;
 
         if (ServletRequestUtils.getStringParameter(request, "searchAllRegexp") != null) {
 
-            example = new ItemPropertiesImpl();
+            example = new HashMapItemPropertiesImpl();
             example.setName(ServletRequestUtils.getRequiredStringParameter(request, "searchAllRegexp") + "*");
 
         } else if (ServletRequestUtils.getStringParameter(request, "searchRepositoryRegexp") != null
                 && ServletRequestUtils.getRequiredStringParameter(request, "searchRepositoryId") != null) {
 
-            example = new ItemPropertiesImpl();
+            example = new HashMapItemPropertiesImpl();
             example.setName(ServletRequestUtils.getRequiredStringParameter(request, "searchRepositoryRegexp") + "*");
-            example.setMetadata(ItemPropertiesImpl.METADATA_OWNING_REPOSITORY, ServletRequestUtils
+            example.setRepositoryId(ServletRequestUtils
                     .getRequiredStringParameter(request, "searchRepositoryId"));
 
         } else if (ServletRequestUtils.getStringParameter(request, "searchGroupRegexp") != null
                 && ServletRequestUtils.getRequiredStringParameter(request, "searchGroupId") != null) {
 
-            example = new ItemPropertiesImpl();
+            example = new HashMapItemPropertiesImpl();
             example.setName(ServletRequestUtils.getRequiredStringParameter(request, "searchGroupRegexp") + "*");
-            example.setMetadata(ItemPropertiesImpl.METADATA_OWNING_REPOSITORY_GROUP, ServletRequestUtils
+            example.setRepositoryGroupId(ServletRequestUtils
                     .getRequiredStringParameter(request, "searchGroupId"));
 
         } else if (ServletRequestUtils.getStringParameter(request, "searchLQL") != null
