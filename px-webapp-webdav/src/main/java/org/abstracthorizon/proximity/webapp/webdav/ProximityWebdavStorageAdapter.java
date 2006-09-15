@@ -14,21 +14,20 @@ import org.abstracthorizon.proximity.AccessDeniedException;
 import org.abstracthorizon.proximity.Item;
 import org.abstracthorizon.proximity.ItemNotFoundException;
 import org.abstracthorizon.proximity.ItemProperties;
+import org.abstracthorizon.proximity.HashMapItemPropertiesImpl;
 import org.abstracthorizon.proximity.Proximity;
 import org.abstracthorizon.proximity.ProximityException;
 import org.abstracthorizon.proximity.ProximityRequest;
-import org.abstracthorizon.proximity.impl.ItemImpl;
-import org.abstracthorizon.proximity.impl.ItemPropertiesImpl;
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class ProximityWebdavStorageAdapter implements IWebdavStorage {
-    
+
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private Proximity proximity;
-    
+
     public Proximity getProximity() {
         return proximity;
     }
@@ -61,15 +60,12 @@ public class ProximityWebdavStorageAdapter implements IWebdavStorage {
         // we have to store something.... it will be zero byte
         try {
             ProximityRequest request = createRequest(resourceUri, false);
-            ItemImpl item = new ItemImpl();
-            ItemPropertiesImpl itemProperties = new ItemPropertiesImpl();
-            itemProperties.setAbsolutePath(FilenameUtils.getFullPathNoEndSeparator(resourceUri));
+            Item item = new Item();
+            ItemProperties itemProperties = new HashMapItemPropertiesImpl();
+            itemProperties.setDirectoryPath(FilenameUtils.getFullPathNoEndSeparator(resourceUri));
             itemProperties.setName(FilenameUtils.getName(resourceUri));
-            itemProperties.setDirectory(false);
-            itemProperties.setFile(true);
             itemProperties.setLastModified(new Date());
-            itemProperties.setSize(1);
-            item.setStream(new ByteArrayInputStream(new byte[]{0}));
+            item.setStream(new ByteArrayInputStream(new byte[0]));
             item.setProperties(itemProperties);
             proximity.storeItem(request, item);
         } catch (ProximityException ex) {
@@ -163,12 +159,10 @@ public class ProximityWebdavStorageAdapter implements IWebdavStorage {
             throws IOException {
         try {
             ProximityRequest request = createRequest(resourceUri, false);
-            ItemImpl item = new ItemImpl();
-            ItemPropertiesImpl itemProperties = new ItemPropertiesImpl();
-            itemProperties.setAbsolutePath(FilenameUtils.getFullPathNoEndSeparator(resourceUri));
+            Item item = new Item();
+            ItemProperties itemProperties = new HashMapItemPropertiesImpl();
+            itemProperties.setDirectoryPath(FilenameUtils.getFullPathNoEndSeparator(resourceUri));
             itemProperties.setName(FilenameUtils.getName(resourceUri));
-            itemProperties.setDirectory(false);
-            itemProperties.setFile(true);
             itemProperties.setLastModified(new Date());
             item.setStream(content);
             item.setProperties(itemProperties);
