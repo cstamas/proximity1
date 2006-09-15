@@ -1,5 +1,6 @@
 package org.abstracthorizon.proximity.webapp.webdav;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.Principal;
@@ -23,11 +24,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class ProximityWebdavStorageAdapter implements IWebdavStorage {
-
+    
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private Proximity proximity;
-
+    
     public Proximity getProximity() {
         return proximity;
     }
@@ -48,12 +49,33 @@ public class ProximityWebdavStorageAdapter implements IWebdavStorage {
         // nothing
     }
 
+    public void rollback() throws IOException {
+        // nothing
+    }
+
     public void createFolder(String folderUri) throws IOException {
         // nothing
     }
 
     public void createResource(String resourceUri) throws IOException {
-        // nothing
+        // we have to store something.... it will be zero byte
+        try {
+            ProximityRequest request = createRequest(resourceUri, false);
+            ItemImpl item = new ItemImpl();
+            ItemPropertiesImpl itemProperties = new ItemPropertiesImpl();
+            itemProperties.setAbsolutePath(FilenameUtils.getFullPathNoEndSeparator(resourceUri));
+            itemProperties.setName(FilenameUtils.getName(resourceUri));
+            itemProperties.setDirectory(false);
+            itemProperties.setFile(true);
+            itemProperties.setLastModified(new Date());
+            itemProperties.setSize(1);
+            item.setStream(new ByteArrayInputStream(new byte[]{0}));
+            item.setProperties(itemProperties);
+            proximity.storeItem(request, item);
+        } catch (ProximityException ex) {
+            logger.error("Proximity throw exception.", ex);
+            throw new IOException("Proximity throw " + ex.getMessage());
+        }
     }
 
     public String[] getChildrenNames(String folderUri) throws IOException {
@@ -82,9 +104,13 @@ public class ProximityWebdavStorageAdapter implements IWebdavStorage {
     public Date getLastModified(String uri) throws IOException {
         Item result = makeRequest(uri, true);
         if (result == null) {
-            throw new IOException("URI " + uri + " not found");
+            return new Date();
         }
-        return result.getProperties().getLastModified();
+        if (result.getProperties().getLastModified() == null) {
+            return new Date();
+        } else {
+            return result.getProperties().getLastModified();
+        }
     }
 
     public InputStream getResourceContent(String resourceUri) throws IOException {
@@ -106,7 +132,7 @@ public class ProximityWebdavStorageAdapter implements IWebdavStorage {
     public boolean isFolder(String uri) throws IOException {
         Item result = makeRequest(uri, true);
         if (result == null) {
-            throw new IOException("URI " + uri + " not found");
+            return false;
         }
         return result.getProperties().isDirectory();
     }
@@ -114,7 +140,7 @@ public class ProximityWebdavStorageAdapter implements IWebdavStorage {
     public boolean isResource(String uri) throws IOException {
         Item result = makeRequest(uri, true);
         if (result == null) {
-            throw new IOException("URI " + uri + " not found");
+            return false;
         }
         return result.getProperties().isFile();
     }
@@ -133,10 +159,6 @@ public class ProximityWebdavStorageAdapter implements IWebdavStorage {
         }
     }
 
-    public void rollback() throws IOException {
-        // nothing
-    }
-
     public void setResourceContent(String resourceUri, InputStream content, String contentType, String characterEncoding)
             throws IOException {
         try {
@@ -145,6 +167,9 @@ public class ProximityWebdavStorageAdapter implements IWebdavStorage {
             ItemPropertiesImpl itemProperties = new ItemPropertiesImpl();
             itemProperties.setAbsolutePath(FilenameUtils.getFullPathNoEndSeparator(resourceUri));
             itemProperties.setName(FilenameUtils.getName(resourceUri));
+            itemProperties.setDirectory(false);
+            itemProperties.setFile(true);
+            itemProperties.setLastModified(new Date());
             item.setStream(content);
             item.setProperties(itemProperties);
             proximity.storeItem(request, item);
