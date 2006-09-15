@@ -142,19 +142,13 @@ public abstract class AbstractProximity implements Proximity {
 
             if (pathList.size() >= 1) {
 
-                String groupId = (String) pathList.get(0);
-                String originalRequestPath = request.getPath();
-                ProximityRequest mangledRequest = new ProximityRequest(request);
+                mangleItemRequest(request);
 
-                // remove prefix, set it as groupid and go
-                if (pathList.size() == 1) {
-                    mangledRequest.setPath(ItemProperties.PATH_ROOT);
-                } else {
-                    mangledRequest.setPath(request.getPath().substring(groupId.length() + 1));
-                }
-                mangledRequest.setTargetedReposGroupId(groupId);
-                logger.debug("This is a request for reposGroupId {}. Mangled request to {} and proceeding.", groupId,
-                        mangledRequest.getPath());
+                String originalRequestPath = request.getPath();
+                ProximityRequest mangledRequest = mangleItemRequest(request);
+
+                logger.debug("This is a request for reposGroupId {}. Mangled request to {} and proceeding.",
+                        mangledRequest.getTargetedReposGroupId(), mangledRequest.getPath());
                 item = retrieveItemController(mangledRequest);
                 // on the returns we have to fool the absolutePath
                 itemProps = (ItemPropertiesImpl) item.getProperties();
@@ -200,7 +194,7 @@ public abstract class AbstractProximity implements Proximity {
         accessManager.decide(request, null);
         Item item = retrieveItem(request);
         Repository repo = (Repository) repositories.get(item.getProperties().getRepositoryId());
-        repo.deleteItem(request);
+        repo.deleteItem(mangleItemRequest(request));
     }
 
     public void moveItem(ProximityRequest source, ProximityRequest target) throws ItemNotFoundException,
@@ -245,7 +239,11 @@ public abstract class AbstractProximity implements Proximity {
 
         if (repositories.containsKey(targetRepoId)) {
             Repository repo = (Repository) repositories.get(targetRepoId);
-            repo.storeItem(request, item);
+            ProximityRequest mangledRequest = mangleItemRequest(request);
+            ItemPropertiesImpl itemProperties = (ItemPropertiesImpl) item.getProperties();
+            // set the mangled path for store
+            itemProperties.setAbsolutePath(FilenameUtils.getFullPathNoEndSeparator(mangledRequest.getPath()));
+            repo.storeItem(mangledRequest, item);
         } else {
             throw new NoSuchRepositoryException(targetRepoId);
         }
@@ -398,6 +396,43 @@ public abstract class AbstractProximity implements Proximity {
             mangleItemPathsForEmergeGroups(result);
         }
         return result;
+    }
+
+    /**
+     * If emergeGroups is on, then the first element of request path is actually
+     * a repos group. This method processes the request in a proper way. If
+     * emergeRepositoryGroups are off, it returns the original request. If the
+     * request have no first element (eg. "/"), the originial request is
+     * returned. Othwerwise, it constructs another request, strips of the first
+     * element from path, sets it as targetedRepositoryGroupId and returns a
+     * this modified request. In all other cases, the same instance of request
+     * is returned!
+     * 
+     * @param request
+     * @return
+     */
+    protected ProximityRequest mangleItemRequest(ProximityRequest request) {
+        if (!isEmergeRepositoryGroups()) {
+            return request;
+        }
+        List pathList = explodePathToList(request.getPath());
+        if (pathList.size() < 1) {
+            return request;
+        } else {
+
+            String groupId = (String) pathList.get(0);
+            ProximityRequest mangledRequest = new ProximityRequest(request);
+
+            // remove prefix, set it as groupid and go
+            if (pathList.size() == 1) {
+                mangledRequest.setPath(ItemProperties.PATH_ROOT);
+            } else {
+                mangledRequest.setPath(request.getPath().substring(groupId.length() + 1));
+            }
+            mangledRequest.setTargetedReposGroupId(groupId);
+            return mangledRequest;
+        }
+
     }
 
     protected void mangleItemPathsForEmergeGroups(List items) {

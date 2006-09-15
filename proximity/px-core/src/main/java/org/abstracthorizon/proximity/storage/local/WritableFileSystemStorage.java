@@ -27,7 +27,7 @@ public class WritableFileSystemStorage extends ReadOnlyFileSystemStorage {
         if (!item.getProperties().isFile()) {
             throw new IllegalArgumentException("Only files can be stored!");
         }
-        logger.debug("Storing item in [{}] in storage directory {}", item.getProperties().getPath(),
+        logger.info("Storing item in [{}] in storage directory {}", item.getProperties().getPath(),
                 getStorageBaseDir());
         try {
             if (item.getStream() != null) {
@@ -51,7 +51,7 @@ public class WritableFileSystemStorage extends ReadOnlyFileSystemStorage {
     }
 
     public void deleteItem(String path) throws StorageException {
-        logger.debug("Deleting [{}] from storage directory {}", path, getStorageBaseDir());
+        logger.info("Deleting [{}] from storage directory {}", path, getStorageBaseDir());
         File file = new File(getStorageBaseDir(), path);
         if (file.exists()) {
             if (!file.delete()) {

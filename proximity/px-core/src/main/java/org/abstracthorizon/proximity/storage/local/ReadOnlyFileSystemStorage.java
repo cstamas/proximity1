@@ -108,8 +108,9 @@ public class ReadOnlyFileSystemStorage extends AbstractLocalStorage {
             result.setProperties(properties);
             if (!propsOnly) {
                 File target = new File(getStorageBaseDir(), path);
-                if (result.getProperties().isFile()) {
+                if (target.isFile()) {
                     result.setStream(new FileInputStream(target));
+                    properties.setSize(target.length());
                 }
             }
             return result;
