@@ -176,8 +176,8 @@ public abstract class AbstractRepository implements Repository {
         }
     }
 
-    public ItemImpl retrieveItem(ProximityRequest request) throws RepositoryNotAvailableException,
-            ItemNotFoundException, StorageException, AccessDeniedException {
+    public Item retrieveItem(ProximityRequest request) throws RepositoryNotAvailableException, ItemNotFoundException,
+            StorageException, AccessDeniedException {
         if (!isAvailable()) {
             throw new RepositoryNotAvailableException("The repository " + getId() + " is NOT available!");
         }
@@ -193,8 +193,8 @@ public abstract class AbstractRepository implements Repository {
             if (getIndexer() != null) {
                 try {
                     ItemProperties itemProps = getLocalStorage().retrieveItem(request.getPath(), true).getProperties();
-                    itemProps.setMetadata(ItemProperties.METADATA_OWNING_REPOSITORY, getId());
-                    itemProps.setMetadata(ItemProperties.METADATA_OWNING_REPOSITORY_GROUP, getGroupId());
+                    itemProps.setRepositoryId(getId());
+                    itemProps.setRepositoryGroupId(getGroupId());
                     getIndexer().deleteItemProperties(itemProps);
                     getLocalStorage().deleteItem(request.getPath());
                 } catch (ItemNotFoundException ex) {
@@ -211,8 +211,8 @@ public abstract class AbstractRepository implements Repository {
             throw new RepositoryNotAvailableException("The repository " + getId() + " is NOT available!");
         }
         if (getLocalStorage() != null && getLocalStorage().isWritable()) {
-            item.getProperties().setMetadata(ItemProperties.METADATA_OWNING_REPOSITORY, getId());
-            item.getProperties().setMetadata(ItemProperties.METADATA_OWNING_REPOSITORY_GROUP, getGroupId());
+            item.getProperties().setRepositoryId(getId());
+            item.getProperties().setRepositoryGroupId(getGroupId());
             getLocalStorage().storeItem(item);
             if (getIndexer() != null && !item.getProperties().isDirectory()) {
                 getIndexer().addItemProperties(item.getProperties());
@@ -232,11 +232,10 @@ public abstract class AbstractRepository implements Repository {
                 List list = getLocalStorage().listItems(request.getPath());
                 for (Iterator i = list.iterator(); i.hasNext();) {
                     ItemProperties ip = (ItemProperties) i.next();
-                    ip.setMetadata(ItemProperties.METADATA_OWNING_REPOSITORY, this.getId());
-                    ip.setMetadata(ItemProperties.METADATA_OWNING_REPOSITORY_GROUP, this.getGroupId());
+                    ip.setRepositoryId(getId());
+                    ip.setRepositoryGroupId(getGroupId());
                     if (getRemoteStorage() != null) {
-                        ip.setMetadata(ItemProperties.METADATA_ORIGINATING_URL, getRemoteStorage().getAbsoluteUrl(
-                                ip.getPath()));
+                        ip.setRemoteUrl(getRemoteStorage().getAbsoluteUrl(ip.getPath()));
                     }
                 }
                 result.addAll(list);
@@ -245,8 +244,8 @@ public abstract class AbstractRepository implements Repository {
         return result;
     }
 
-    protected abstract ItemImpl doRetrieveItem(ProximityRequest request)
-            throws RepositoryNotAvailableException, ItemNotFoundException, StorageException;
+    protected abstract Item doRetrieveItem(ProximityRequest request) throws RepositoryNotAvailableException,
+            ItemNotFoundException, StorageException;
 
     /**
      * Forces repository reindexing. If there is no indexer supplied with repos,
@@ -280,8 +279,8 @@ public abstract class AbstractRepository implements Repository {
             dir = (List) stack.pop();
             for (Iterator i = dir.iterator(); i.hasNext();) {
                 ItemProperties ip = (ItemProperties) i.next();
-                ip.setMetadata(ItemProperties.METADATA_OWNING_REPOSITORY, getId());
-                ip.setMetadata(ItemProperties.METADATA_OWNING_REPOSITORY_GROUP, getGroupId());
+                ip.setRepositoryId(getId());
+                ip.setRepositoryGroupId(getGroupId());
                 // Who is interested in origin from index?
                 // if (getRemoteStorage() != null) {
                 // ip.setMetadata(ItemProperties.METADATA_ORIGINATING_URL,

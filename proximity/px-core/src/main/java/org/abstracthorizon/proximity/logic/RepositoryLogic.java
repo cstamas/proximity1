@@ -1,8 +1,8 @@
 package org.abstracthorizon.proximity.logic;
 
+import org.abstracthorizon.proximity.Item;
 import org.abstracthorizon.proximity.ProximityRequest;
 import org.abstracthorizon.proximity.Repository;
-import org.abstracthorizon.proximity.impl.ItemImpl;
 
 /**
  * Repository logic that drives repository's behaviour.
@@ -32,7 +32,7 @@ public interface RepositoryLogic {
      * @param repository
      * @return
      */
-    ItemImpl afterLocalCopyFound(ProximityRequest request, ItemImpl item, Repository repository);
+    Item afterLocalCopyFound(ProximityRequest request, Item item, Repository repository);
 
     /**
      * Return true if repository should initiate remote lookup.
@@ -42,7 +42,7 @@ public interface RepositoryLogic {
      *            null if there is a local copy found, null otherwise.
      * @return true is there is need to check remote copy
      */
-    boolean shouldCheckForRemoteCopy(ProximityRequest request, ItemImpl localItem);
+    boolean shouldCheckForRemoteCopy(ProximityRequest request, Item localItem);
 
     /**
      * Postprocess item if needed after remote retrieval.
@@ -53,7 +53,7 @@ public interface RepositoryLogic {
      *            the artifact found remotely
      * @return
      */
-    ItemImpl afterRemoteCopyFound(ProximityRequest request, ItemImpl localItem, ItemImpl remoteItem,
+    Item afterRemoteCopyFound(ProximityRequest request, Item localItem, Item remoteItem,
             Repository repository);
 
     /**
@@ -64,11 +64,11 @@ public interface RepositoryLogic {
      * @param remoteItem
      * @return
      */
-    boolean shouldStoreLocallyAfterRemoteRetrieval(ProximityRequest request, ItemImpl localItem, ItemImpl remoteItem);
+    boolean shouldStoreLocallyAfterRemoteRetrieval(ProximityRequest request, Item localItem, Item remoteItem);
 
     /**
      * Choose tha artifact to serve.
      */
-    public ItemImpl afterRetrieval(ProximityRequest request, ItemImpl localItem, ItemImpl remoteItem);
+    public Item afterRetrieval(ProximityRequest request, Item localItem, Item remoteItem);
 
 }

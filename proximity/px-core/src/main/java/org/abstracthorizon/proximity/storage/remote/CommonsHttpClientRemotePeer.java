@@ -9,10 +9,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.abstracthorizon.proximity.Item;
 import org.abstracthorizon.proximity.ItemNotFoundException;
 import org.abstracthorizon.proximity.ItemProperties;
-import org.abstracthorizon.proximity.impl.ItemImpl;
-import org.abstracthorizon.proximity.impl.ItemPropertiesImpl;
 import org.abstracthorizon.proximity.storage.StorageException;
 import org.apache.commons.httpclient.DefaultHttpMethodRetryHandler;
 import org.apache.commons.httpclient.Header;
@@ -171,7 +170,7 @@ public class CommonsHttpClientRemotePeer extends AbstractRemoteStorage {
         return response == HttpStatus.SC_OK;
     }
 
-    public ItemImpl retrieveItem(String path, boolean propsOnly) throws ItemNotFoundException, StorageException {
+    public Item retrieveItem(String path, boolean propsOnly) throws ItemNotFoundException, StorageException {
         // TODO: propsOnly is ignored, use HTTP HEAD?
         String originatingUrlString = getAbsoluteUrl(path);
         GetMethod get = new GetMethod(originatingUrlString);
@@ -184,8 +183,8 @@ public class CommonsHttpClientRemotePeer extends AbstractRemoteStorage {
                     // constructItemPropertiesFromGetResponse(path,
                     // originatingUrlString, get);
 
-                    ItemImpl result = new ItemImpl();
-                    ItemPropertiesImpl ip = null;
+                    Item result = new Item();
+                    ItemProperties ip = null;
 
                     // is it a file?
                     if (get.getResponseHeader("last-modified") != null) {
@@ -210,7 +209,7 @@ public class CommonsHttpClientRemotePeer extends AbstractRemoteStorage {
                         result.setStream(null);
                     }
                     result.setProperties(ip);
-                    result.getProperties().setMetadata(ItemProperties.METADATA_ORIGINATING_URL, originatingUrlString);
+                    result.getProperties().setRemoteUrl(originatingUrlString);
                     return result;
                 } else {
                     if (response == HttpStatus.SC_NOT_FOUND) {

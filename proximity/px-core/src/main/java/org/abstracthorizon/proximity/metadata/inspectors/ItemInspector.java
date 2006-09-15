@@ -1,17 +1,16 @@
 package org.abstracthorizon.proximity.metadata.inspectors;
 
-
 import java.io.File;
 import java.util.List;
 
-import org.abstracthorizon.proximity.impl.ItemPropertiesImpl;
+import org.abstracthorizon.proximity.ItemProperties;
 
 public interface ItemInspector {
-    
-    boolean isHandled(ItemPropertiesImpl ip);
-    
+
+    boolean isHandled(ItemProperties ip);
+
     List getIndexableKeywords();
-    
-    void processItem(ItemPropertiesImpl ip, File file);
+
+    void processItem(ItemProperties ip, File file);
 
 }

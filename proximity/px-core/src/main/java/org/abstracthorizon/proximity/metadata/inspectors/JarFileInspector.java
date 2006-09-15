@@ -1,6 +1,5 @@
 package org.abstracthorizon.proximity.metadata.inspectors;
 
-
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -13,7 +12,6 @@ import java.util.jar.JarFile;
 import java.util.jar.Manifest;
 
 import org.abstracthorizon.proximity.ItemProperties;
-import org.abstracthorizon.proximity.impl.ItemPropertiesImpl;
 
 public class JarFileInspector extends AbstractItemInspector {
 
@@ -23,9 +21,9 @@ public class JarFileInspector extends AbstractItemInspector {
 
     public static String JAR_FILES = "jar.files";
 
-    public boolean isHandled(ItemPropertiesImpl ip) {
+    public boolean isHandled(ItemProperties ip) {
         try {
-            String ext = ip.getMetadata(ItemProperties.METADATA_EXT).toLowerCase();
+            String ext = ip.getExtension().toLowerCase();
             return "jar".equals(ext) || "war".equals(ext) || "ear".equals(ext);
         } catch (NullPointerException ex) {
             return false;
@@ -40,7 +38,7 @@ public class JarFileInspector extends AbstractItemInspector {
         return result;
     }
 
-    public void processItem(ItemPropertiesImpl ip, File file) {
+    public void processItem(ItemProperties ip, File file) {
         try {
 
             JarFile jFile = new JarFile(file);

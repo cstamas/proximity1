@@ -4,8 +4,8 @@ package org.abstracthorizon.proximity.logic;
 import java.io.IOException;
 import java.util.List;
 
+import org.abstracthorizon.proximity.Item;
 import org.abstracthorizon.proximity.ProximityRequest;
-import org.abstracthorizon.proximity.impl.ItemImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,7 +28,7 @@ public class DefaultProximityLogic implements ProximityLogic {
         return request;
     }
 
-    public ItemImpl postprocessItemList(ProximityRequest request, ProximityRequest groupRequest, List listOfProxiedItems) throws IOException {
+    public Item postprocessItemList(ProximityRequest request, ProximityRequest groupRequest, List listOfProxiedItems) throws IOException {
         throw new UnsupportedOperationException("The DefaultProximityLogic does not implements postprocessing.");
     }
 

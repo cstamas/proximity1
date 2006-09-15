@@ -1,10 +1,9 @@
 package org.abstracthorizon.proximity.metadata;
 
-
 import java.io.File;
 import java.util.List;
 
-import org.abstracthorizon.proximity.impl.ItemPropertiesImpl;
+import org.abstracthorizon.proximity.ItemProperties;
 
 public interface ProxiedItemPropertiesFactory {
 
@@ -22,6 +21,6 @@ public interface ProxiedItemPropertiesFactory {
      *            The file about we need more to know.
      * @return filled up ProxiedItemProperties.
      */
-    ItemPropertiesImpl expandItemProperties(String path, File file, boolean defaultOnly);
+    ItemProperties expandItemProperties(String path, File file, boolean defaultOnly);
 
 }

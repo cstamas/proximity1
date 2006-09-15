@@ -9,7 +9,7 @@ import java.util.Set;
 
 import org.abstracthorizon.proximity.ItemNotFoundException;
 import org.abstracthorizon.proximity.ItemProperties;
-import org.abstracthorizon.proximity.impl.ItemPropertiesImpl;
+import org.abstracthorizon.proximity.HashMapItemPropertiesImpl;
 import org.abstracthorizon.proximity.storage.StorageException;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
@@ -176,7 +176,7 @@ public class LuceneIndexer extends AbstractIndexer {
         Document result = new Document();
         String key;
         String md;
-        result.add(new Field(DOC_PATH, item.getDirectory(), Field.Store.YES, Field.Index.UN_TOKENIZED));
+        result.add(new Field(DOC_PATH, item.getDirectoryPath(), Field.Store.YES, Field.Index.UN_TOKENIZED));
         result.add(new Field(DOC_NAME, item.getName(), Field.Store.YES, Field.Index.UN_TOKENIZED));
         result.add(new Field(DOC_REPO, item.getRepositoryId(), Field.Store.YES, Field.Index.UN_TOKENIZED));
         // index all other stuff
@@ -208,9 +208,9 @@ public class LuceneIndexer extends AbstractIndexer {
             Hits hits = searcher.search(query);
             List result = new ArrayList(hits.length());
             for (int i = 0; i < hits.length(); i++) {
-                ItemPropertiesImpl rip = new ItemPropertiesImpl();
+                ItemProperties rip = new HashMapItemPropertiesImpl();
                 Document doc = hits.doc(i);
-                rip.setAbsolutePath(doc.getField(DOC_PATH).stringValue());
+                rip.setDirectoryPath(doc.getField(DOC_PATH).stringValue());
                 rip.setName(doc.getField(DOC_NAME).stringValue());
                 rip.setRepositoryId(doc.getField(DOC_REPO).stringValue());
                 result.add(rip);
