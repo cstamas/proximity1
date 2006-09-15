@@ -43,9 +43,8 @@
 	<!-- MultiActionController that defines user interface actions as separate methods -->
 	<bean id="supportController"
 		class="org.abstracthorizon.proximity.webapp.controllers.SupportController">
-		<property name="proximity">
-			<ref bean="proximity" />
-		</property>
+		<property name="proximity" ref="proximity" />
+		<property name="indexer" ref="proximity.indexer" />
 		<property name="methodNameResolver">
 			<bean
 				class="org.springframework.web.servlet.mvc.multiaction.PropertiesMethodNameResolver">
