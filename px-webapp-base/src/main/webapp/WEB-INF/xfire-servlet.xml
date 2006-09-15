@@ -30,6 +30,7 @@
 	<bean id="searchService"
 		class="org.abstracthorizon.proximity.ws.SearchServiceImpl">
 		<property name="proximity" ref="proximity" />
+		<property name="indexer" ref="proximity.indexer" />
 	</bean>
 
 	<bean id="maintenanceServiceExporter"
