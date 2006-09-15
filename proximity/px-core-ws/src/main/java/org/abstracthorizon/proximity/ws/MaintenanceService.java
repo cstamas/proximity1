@@ -1,6 +1,5 @@
 package org.abstracthorizon.proximity.ws;
 
-
 public interface MaintenanceService {
 
     /**

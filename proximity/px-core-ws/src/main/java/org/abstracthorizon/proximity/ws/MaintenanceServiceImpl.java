@@ -3,9 +3,8 @@ package org.abstracthorizon.proximity.ws;
 import org.abstracthorizon.proximity.Proximity;
 
 public class MaintenanceServiceImpl implements MaintenanceService {
-    
+
     private Proximity proximity;
-    
 
     public Proximity getProximity() {
         return proximity;
