@@ -93,6 +93,7 @@ public class MavenProxyRepositoryLogic extends DefaultExpiringProxyingRepository
         if (shouldServeByPolicies(item.getProperties())) {
             return item;
         } else {
+            logger.info("Logic vetoed the [{}] item local retrieval due to repo policies!", request.getPath());
             return null;
         }
     }
@@ -162,6 +163,7 @@ public class MavenProxyRepositoryLogic extends DefaultExpiringProxyingRepository
         if (shouldServeByPolicies(remoteItem.getProperties())) {
             return remoteItem;
         } else {
+            logger.info("Logic vetoed the [{}] item remote retrieval due to repo policies!", request.getPath());
             return null;
         }
     }
