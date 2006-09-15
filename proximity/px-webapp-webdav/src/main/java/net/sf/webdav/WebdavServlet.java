@@ -43,6 +43,8 @@ import org.apache.catalina.util.MD5Encoder;
 import org.apache.catalina.util.RequestUtil;
 import org.apache.catalina.util.URLEncoder;
 import org.apache.catalina.util.XMLWriter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -59,6 +61,8 @@ import org.xml.sax.InputSource;
  */
 
 public class WebdavServlet extends HttpServlet {
+    
+    protected Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	// -------------------------------------------------------------- Constants
 
@@ -166,7 +170,7 @@ public class WebdavServlet extends HttpServlet {
 	private static int fdebug = -1;
 
 	private Hashtable fParameter;
-
+    
 	/**
 	 * Initialize this servlet.
 	 */
@@ -181,6 +185,9 @@ public class WebdavServlet extends HttpServlet {
 		// Parameters from web.xml
 		String clazz = getServletConfig().getInitParameter(
 				"ResourceHandlerImplementation");
+        
+        logger.info("WebDAV servlet using storage implementation: {}", clazz);
+        
 		try {
             //TODO: Modified by cstamas
             if (clazz.startsWith("spring:")) {
@@ -405,26 +412,33 @@ public class WebdavServlet extends HttpServlet {
 	 */
 	protected String getRelativePath(HttpServletRequest request) {
 
+        //TODO: cstamas modified overall, coz it was unable to
+        // work from other than webapp root (ie. mapping like "/dav/*"
+        // was not working, only "/*")
+        
 		// Are we being processed by a RequestDispatcher.include()?
+        String result;
 		if (request.getAttribute("javax.servlet.include.request_uri") != null) {
-			String result = (String) request
+			result = (String) request
 					.getAttribute("javax.servlet.include.path_info");
 			if (result == null)
 				result = (String) request
 						.getAttribute("javax.servlet.include.servlet_path");
 			if ((result == null) || (result.equals("")))
 				result = "/";
-			return (result);
-		}
-
-		// No, extract the desired path directly from the request
-		String result = request.getPathInfo();
-		if (result == null) {
-			result = request.getServletPath();
-		}
-		if ((result == null) || (result.equals(""))) {
-			result = "/";
-		}
+		} else {
+    		// No, extract the desired path directly from the request
+    		result = request.getPathInfo();
+            //TODO: cstamas, removed servletPath since it is not a solution
+    		//if (result == null) {
+    		//	result = request.getServletPath();
+    		//}
+    		if ((result == null) || (result.equals(""))) {
+    			result = "/";
+    		}
+        }
+        
+        //remove the servlet mapping path from result.
 		return (result);
 
 	}
@@ -1452,6 +1466,16 @@ public class WebdavServlet extends HttpServlet {
 		generatedXML.writeElement(null, "href", XMLWriter.OPENING);
 
 		String href = req.getContextPath();
+        //TODO: cstamas modified by
+        //http://sourceforge.net/tracker/index.php?func=detail&aid=1532898&group_id=156737&atid=800984
+        String servletPath = req.getServletPath();
+        if (servletPath!=null) {
+            if ((href.endsWith("/")) && (servletPath.startsWith("/")))
+                href += servletPath.substring(1);
+            else
+                href += servletPath;
+        }
+        //TODO: cstamas mods end
 		if ((href.endsWith("/")) && (path.startsWith("/")))
 			href += path.substring(1);
 		else
