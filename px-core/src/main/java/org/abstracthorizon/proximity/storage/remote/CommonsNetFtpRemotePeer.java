@@ -1,6 +1,5 @@
 package org.abstracthorizon.proximity.storage.remote;
 
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -9,10 +8,10 @@ import java.net.MalformedURLException;
 import java.net.SocketException;
 import java.net.URL;
 
+import org.abstracthorizon.proximity.HashMapItemPropertiesImpl;
+import org.abstracthorizon.proximity.Item;
 import org.abstracthorizon.proximity.ItemNotFoundException;
 import org.abstracthorizon.proximity.ItemProperties;
-import org.abstracthorizon.proximity.impl.ItemImpl;
-import org.abstracthorizon.proximity.impl.ItemPropertiesImpl;
 import org.abstracthorizon.proximity.storage.StorageException;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.net.ftp.FTPClient;
@@ -157,7 +156,7 @@ public class CommonsNetFtpRemotePeer extends AbstractRemoteStorage {
         }
     }
 
-    public ItemImpl retrieveItem(String path, boolean propsOnly) throws ItemNotFoundException, StorageException {
+    public Item retrieveItem(String path, boolean propsOnly) throws ItemNotFoundException, StorageException {
         String originatingUrlString = getAbsoluteUrl(path);
         FTPClient client = null;
         try {
@@ -168,9 +167,9 @@ public class CommonsNetFtpRemotePeer extends AbstractRemoteStorage {
                     FTPFile[] fileList = client.listFiles(FilenameUtils.getName(path));
                     if (fileList.length == 1) {
                         FTPFile ftpFile = fileList[0];
-                        ItemPropertiesImpl properties = constructItemPropertiesFromGetResponse(path,
-                                originatingUrlString, ftpFile);
-                        ItemImpl result = new ItemImpl();
+                        ItemProperties properties = constructItemPropertiesFromGetResponse(path, originatingUrlString,
+                                ftpFile);
+                        Item result = new Item();
                         if (properties.isFile()) {
                             // TODO: Solve this in a better way
                             File tmpFile = File.createTempFile(FilenameUtils.getName(path), null);
@@ -224,11 +223,11 @@ public class CommonsNetFtpRemotePeer extends AbstractRemoteStorage {
         }
     }
 
-    protected ItemPropertiesImpl constructItemPropertiesFromGetResponse(String path, String originatingUrlString,
+    protected ItemProperties constructItemPropertiesFromGetResponse(String path, String originatingUrlString,
             FTPFile remoteFile) throws MalformedURLException {
         URL originatingUrl = new URL(originatingUrlString);
-        ItemPropertiesImpl result = new ItemPropertiesImpl();
-        result.setAbsolutePath(FilenameUtils.getPath(FilenameUtils.getFullPath(path)));
+        ItemProperties result = new HashMapItemPropertiesImpl();
+        result.setDirectoryPath(FilenameUtils.getPath(FilenameUtils.getFullPath(path)));
         result.setDirectory(remoteFile.isDirectory());
         result.setFile(remoteFile.isFile());
         result.setLastModified(remoteFile.getTimestamp().getTime());
@@ -238,7 +237,7 @@ public class CommonsNetFtpRemotePeer extends AbstractRemoteStorage {
         } else {
             result.setSize(0);
         }
-        result.setMetadata(ItemProperties.METADATA_ORIGINATING_URL, originatingUrl.toString());
+        result.setRemoteUrl(originatingUrl.toString());
         return result;
     }
 

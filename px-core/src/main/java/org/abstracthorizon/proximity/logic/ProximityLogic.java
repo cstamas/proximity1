@@ -4,8 +4,8 @@ package org.abstracthorizon.proximity.logic;
 import java.io.IOException;
 import java.util.List;
 
+import org.abstracthorizon.proximity.Item;
 import org.abstracthorizon.proximity.ProximityRequest;
-import org.abstracthorizon.proximity.impl.ItemImpl;
 
 public interface ProximityLogic {
 
@@ -25,6 +25,6 @@ public interface ProximityLogic {
     
     ProximityRequest getGroupRequest(ProximityRequest request);
 
-    ItemImpl postprocessItemList(ProximityRequest request, ProximityRequest groupRequest, List listOfProxiedItems) throws IOException;
+    Item postprocessItemList(ProximityRequest request, ProximityRequest groupRequest, List listOfProxiedItems) throws IOException;
 
 }

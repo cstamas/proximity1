@@ -1,7 +1,7 @@
 package org.abstracthorizon.proximity.impl;
 
+import org.abstracthorizon.proximity.Item;
 import org.abstracthorizon.proximity.ItemNotFoundException;
-import org.abstracthorizon.proximity.ItemProperties;
 import org.abstracthorizon.proximity.ProximityRequest;
 import org.abstracthorizon.proximity.RepositoryNotAvailableException;
 import org.abstracthorizon.proximity.logic.DefaultProxyingRepositoryLogic;
@@ -23,10 +23,10 @@ public class LogicDrivenRepositoryImpl extends AbstractRepository {
         this.repositoryLogic = repositoryLogic;
     }
 
-    protected ItemImpl doRetrieveItem(ProximityRequest request)
-            throws RepositoryNotAvailableException, ItemNotFoundException, StorageException {
-        ItemImpl localResult = null;
-        ItemImpl remoteResult = null;
+    protected Item doRetrieveItem(ProximityRequest request) throws RepositoryNotAvailableException,
+            ItemNotFoundException, StorageException {
+        Item localResult = null;
+        Item remoteResult = null;
 
         if (getStatisticsGatherer() != null) {
             getStatisticsGatherer().incomingRequest(request);
@@ -36,15 +36,16 @@ public class LogicDrivenRepositoryImpl extends AbstractRepository {
             if (getLocalStorage() != null) {
                 if (getRepositoryLogic().shouldCheckForLocalCopy(request)) {
                     if (getLocalStorage().containsItem(request.getPath())) {
-                        logger.debug("Item [{}] is contained in local storage of repository {}", request.getPath(), getId());
+                        logger.debug("Item [{}] is contained in local storage of repository {}", request.getPath(),
+                                getId());
                         localResult = getLocalStorage().retrieveItem(request.getPath(), request.isPropertiesOnly());
-                        localResult.getProperties().setMetadata(ItemProperties.METADATA_OWNING_REPOSITORY, getId());
-                        localResult.getProperties().setMetadata(ItemProperties.METADATA_OWNING_REPOSITORY_GROUP,
-                                getGroupId());
+                        localResult.getProperties().setRepositoryId(getId());
+                        localResult.getProperties().setRepositoryGroupId(getGroupId());
                         if (getStatisticsGatherer() != null) {
                             getStatisticsGatherer().localHit(request, this, localResult.getProperties());
                         }
-                        logger.debug("Item [{}] fetched from local storage of repository {}", request.getPath(), getId());
+                        logger.debug("Item [{}] fetched from local storage of repository {}", request.getPath(),
+                                getId());
                         localResult = getRepositoryLogic().afterLocalCopyFound(request, localResult, this);
                     } else {
                         logger.debug("Not found [{}] item in storage of repository {}", request.getPath(), getId());
@@ -57,9 +58,8 @@ public class LogicDrivenRepositoryImpl extends AbstractRepository {
                 if (getRemoteStorage().containsItem(request.getPath())) {
                     logger.debug("Found [{}] item in remote storage of repository {}", request.getPath(), getId());
                     remoteResult = getRemoteStorage().retrieveItem(request.getPath(), request.isPropertiesOnly());
-                    remoteResult.getProperties().setMetadata(ItemProperties.METADATA_OWNING_REPOSITORY, getId());
-                    remoteResult.getProperties().setMetadata(ItemProperties.METADATA_OWNING_REPOSITORY_GROUP,
-                            getGroupId());
+                    remoteResult.getProperties().setRepositoryId(getId());
+                    remoteResult.getProperties().setRepositoryGroupId(getGroupId());
                     if (getStatisticsGatherer() != null) {
                         getStatisticsGatherer().remoteHit(request, this, remoteResult.getProperties());
                     }
@@ -72,11 +72,10 @@ public class LogicDrivenRepositoryImpl extends AbstractRepository {
                             logger.debug("Storing [{}] item in writable storage of repository {}", request.getPath(),
                                     getId());
                             storeItem(request, remoteResult);
-                            remoteResult = getLocalStorage().retrieveItem(request.getPath(), request.isPropertiesOnly());
-                            remoteResult.getProperties()
-                                    .setMetadata(ItemProperties.METADATA_OWNING_REPOSITORY, getId());
-                            remoteResult.getProperties().setMetadata(ItemProperties.METADATA_OWNING_REPOSITORY_GROUP,
-                                    getGroupId());
+                            remoteResult = getLocalStorage()
+                                    .retrieveItem(request.getPath(), request.isPropertiesOnly());
+                            remoteResult.getProperties().setRepositoryId(getId());
+                            remoteResult.getProperties().setRepositoryGroupId(getGroupId());
                         }
                     }
                 } else {
@@ -84,14 +83,14 @@ public class LogicDrivenRepositoryImpl extends AbstractRepository {
                 }
 
             }
-            ItemImpl result = getRepositoryLogic().afterRetrieval(request, localResult, remoteResult);
+            Item result = getRepositoryLogic().afterRetrieval(request, localResult, remoteResult);
             if (result == null) {
                 logger.debug("Item [{}] not found in repository {}", request.getPath(), getId());
                 throw new ItemNotFoundException(request.getPath());
             }
             if (getRemoteStorage() != null) {
-                result.getProperties().setMetadata(ItemProperties.METADATA_ORIGINATING_URL,
-                        getRemoteStorage().getAbsoluteUrl(result.getProperties().getPath()));
+                result.getProperties()
+                        .setRemoteUrl(getRemoteStorage().getAbsoluteUrl(result.getProperties().getPath()));
             }
             logger.debug("Item [{}] found in repository {}", request.getPath(), getId());
             return result;

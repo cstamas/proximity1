@@ -1,7 +1,5 @@
-package org.abstracthorizon.proximity.impl;
+package org.abstracthorizon.proximity;
 
-
-import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -9,9 +7,10 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.abstracthorizon.proximity.ItemProperties;
+import org.apache.commons.codec.DecoderException;
+import org.apache.commons.codec.binary.Hex;
 
-public class ItemPropertiesImpl implements ItemProperties, Serializable {
+public class HashMapItemPropertiesImpl implements ItemProperties {
 
     private static final long serialVersionUID = 727307616865507746L;
 
@@ -19,12 +18,20 @@ public class ItemPropertiesImpl implements ItemProperties, Serializable {
 
     private DateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss Z");
 
-    public String getDirectory() {
-        return getMetadata(METADATA_ABSOLUTE_PATH);
+    public HashMapItemPropertiesImpl() {
+        super();
+        // setup some defaults
+        setDirectory(false);
+        setFile(true);
+        setSize(0);
     }
 
-    public void setAbsolutePath(String absolutePath) {
-        setMetadata(METADATA_ABSOLUTE_PATH, absolutePath);
+    public String getDirectoryPath() {
+        return getMetadata(METADATA_DIRECTORY_PATH);
+    }
+
+    public void setDirectoryPath(String absolutePath) {
+        setMetadata(METADATA_DIRECTORY_PATH, absolutePath);
     }
 
     public String getName() {
@@ -39,10 +46,10 @@ public class ItemPropertiesImpl implements ItemProperties, Serializable {
         if (getName().equals(PATH_ROOT)) {
             return getName();
         }
-        if (getDirectory().endsWith(PATH_SEPARATOR)) {
-            return getDirectory() + getName();
+        if (getDirectoryPath().endsWith(PATH_SEPARATOR)) {
+            return getDirectoryPath() + getName();
         } else {
-            return getDirectory() + PATH_SEPARATOR + getName();
+            return getDirectoryPath() + PATH_SEPARATOR + getName();
         }
     }
 
@@ -62,12 +69,20 @@ public class ItemPropertiesImpl implements ItemProperties, Serializable {
         setMetadata(METADATA_IS_FILE, Boolean.toString(file));
     }
 
-    public boolean hasRemoteOrigin() {
-        return getAllMetadata().containsKey(METADATA_ORIGINATING_URL);
+    public boolean isCached() {
+        return Boolean.valueOf(getMetadata(METADATA_IS_CACHED)).booleanValue();
     }
 
-    public String getRemotePath() {
-        return getMetadata(METADATA_ORIGINATING_URL);
+    public void setCached(boolean cached) {
+        setMetadata(METADATA_IS_CACHED, Boolean.toString(cached));
+    }
+
+    public String getRemoteUrl() {
+        return getMetadata(METADATA_REMOTE_URL);
+    }
+
+    public void setRemoteUrl(String remoteUrl) {
+        setMetadata(METADATA_REMOTE_URL, remoteUrl);
     }
 
     public Date getLastModified() {
@@ -163,6 +178,10 @@ public class ItemPropertiesImpl implements ItemProperties, Serializable {
         return getMetadataMap();
     }
 
+    public void putAllMetadata(Map md) {
+        getMetadataMap().putAll(md);
+    }
+
     protected Map getMetadataMap() {
         if (metadataMap == null) {
             metadataMap = new HashMap();
@@ -176,7 +195,7 @@ public class ItemPropertiesImpl implements ItemProperties, Serializable {
 
     public int hashCode() {
         int hash = 7;
-        hash = 31 * hash + (null == getDirectory() ? 0 : getDirectory().hashCode());
+        hash = 31 * hash + (null == getDirectoryPath() ? 0 : getDirectoryPath().hashCode());
         hash = 31 * hash + (null == getName() ? 0 : getName().hashCode());
         return hash;
     }
@@ -185,17 +204,83 @@ public class ItemPropertiesImpl implements ItemProperties, Serializable {
         if (this == obj) {
             return true;
         }
-        if ((obj == null) || (obj.getClass() != this.getClass())) {
+        if ((obj == null) || (obj.getClass().isAssignableFrom(ItemProperties.class))) {
             return false;
         }
-        ItemPropertiesImpl test = (ItemPropertiesImpl) obj;
-        if (this.getDirectory() == test.getDirectory() && this.getName() == test.getName())
+        ItemProperties test = (ItemProperties) obj;
+        if (this.getDirectoryPath() == test.getDirectoryPath() && this.getName() == test.getName())
             return true;
-        if ((this.getDirectory() != null && this.getDirectory().equals(test.getDirectory()))
+        if ((this.getDirectoryPath() != null && this.getDirectoryPath().equals(test.getDirectoryPath()))
                 && (this.getName() != null && this.getName().equals(test.getName())))
             return true;
         return false;
 
+    }
+
+    public String getExtension() {
+        return getMetadata(METADATA_EXT);
+    }
+
+    public void setExtension(String ext) {
+        setMetadata(METADATA_EXT, ext);
+    }
+
+    public String getHashMd5() {
+        return getMetadata(METADATA_HASH_MD5);
+    }
+
+    public void setHashMd5(String md5hash) {
+        setMetadata(METADATA_HASH_MD5, md5hash);
+    }
+
+    public byte[] getHashMd5AsBytes() {
+        String md5hash = getHashMd5();
+        if (md5hash != null) {
+            return decodeHex(md5hash);
+        } else {
+            return null;
+        }
+    }
+
+    public void setHashMd5AsBytes(byte[] md5hash) {
+        if (md5hash != null) {
+            setHashMd5(encodeHex(md5hash));
+        }
+    }
+
+    public String getHashSha1() {
+        return getMetadata(METADATA_HASH_SHA1);
+    }
+
+    public void setHashSha1(String sha1hash) {
+        setMetadata(METADATA_HASH_SHA1, sha1hash);
+    }
+
+    public byte[] getHashSha1AsBytes() {
+        String sha1hash = getHashSha1();
+        if (sha1hash != null) {
+            return decodeHex(sha1hash);
+        } else {
+            return null;
+        }
+    }
+
+    public void setHashSha1AsBytes(byte[] sha1hash) {
+        if (sha1hash != null) {
+            setHashSha1(encodeHex(sha1hash));
+        }
+    }
+
+    protected byte[] decodeHex(String hexEncoded) {
+        try {
+            return Hex.decodeHex(hexEncoded.toCharArray());
+        } catch (DecoderException ex) {
+            return null;
+        }
+    }
+
+    protected String encodeHex(byte[] data) {
+        return new String(Hex.encodeHex(data));
     }
 
 }

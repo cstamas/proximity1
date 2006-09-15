@@ -1,6 +1,5 @@
 package org.abstracthorizon.proximity.metadata.inspectors;
 
-
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -10,7 +9,6 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 import org.abstracthorizon.proximity.ItemProperties;
-import org.abstracthorizon.proximity.impl.ItemPropertiesImpl;
 
 public class ZipFileInspector extends AbstractItemInspector {
 
@@ -18,9 +16,9 @@ public class ZipFileInspector extends AbstractItemInspector {
 
     public static String ZIP_DIRS = "zip.dirs";
 
-    public boolean isHandled(ItemPropertiesImpl ip) {
+    public boolean isHandled(ItemProperties ip) {
         try {
-            String ext = ip.getMetadata(ItemProperties.METADATA_EXT).toLowerCase();
+            String ext = ip.getExtension().toLowerCase();
             return "zip".equals(ext);
         } catch (NullPointerException ex) {
             return false;
@@ -34,7 +32,7 @@ public class ZipFileInspector extends AbstractItemInspector {
         return result;
     }
 
-    public void processItem(ItemPropertiesImpl ip, File file) {
+    public void processItem(ItemProperties ip, File file) {
         try {
             ZipFile zFile = new ZipFile(file);
             StringBuffer files = new StringBuffer(zFile.size());

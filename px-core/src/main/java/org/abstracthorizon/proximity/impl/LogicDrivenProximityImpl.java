@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.abstracthorizon.proximity.AccessDeniedException;
+import org.abstracthorizon.proximity.Item;
 import org.abstracthorizon.proximity.ItemNotFoundException;
 import org.abstracthorizon.proximity.NoSuchRepositoryException;
 import org.abstracthorizon.proximity.ProximityRequest;
@@ -26,10 +27,10 @@ public class LogicDrivenProximityImpl extends AbstractProximity {
         this.proximityLogic = proximityLogic;
     }
 
-    protected ItemImpl retrieveItemController(ProximityRequest request) throws ItemNotFoundException,
+    protected Item retrieveItemController(ProximityRequest request) throws ItemNotFoundException,
             AccessDeniedException, NoSuchRepositoryException {
 
-        ItemImpl item = null;
+        Item item = null;
 
         try {
 
@@ -82,13 +83,13 @@ public class LogicDrivenProximityImpl extends AbstractProximity {
 
     }
 
-    protected ItemImpl retrieveItemByAbsoluteOrder(ProximityRequest request) throws ItemNotFoundException,
+    protected Item retrieveItemByAbsoluteOrder(ProximityRequest request) throws ItemNotFoundException,
             AccessDeniedException, NoSuchRepositoryException {
         for (Iterator i = repositoryOrder.iterator(); i.hasNext();) {
             String reposId = (String) i.next();
             try {
                 Repository repo = (Repository) repositories.get(reposId);
-                ItemImpl item = repo.retrieveItem(request);
+                Item item = repo.retrieveItem(request);
                 return item;
             } catch (RepositoryNotAvailableException ex) {
                 logger.info("Repository unavailable", ex);
@@ -99,7 +100,7 @@ public class LogicDrivenProximityImpl extends AbstractProximity {
         throw new ItemNotFoundException(request.getPath());
     }
 
-    protected ItemImpl retrieveItemByRepoGroupId(String groupId, ProximityRequest request)
+    protected Item retrieveItemByRepoGroupId(String groupId, ProximityRequest request)
             throws ItemNotFoundException, AccessDeniedException, NoSuchRepositoryException {
         if (repositoryGroups.containsKey(groupId)) {
             List repositoryGroupOrder = (List) repositoryGroups.get(groupId);
@@ -107,7 +108,7 @@ public class LogicDrivenProximityImpl extends AbstractProximity {
                 String reposId = (String) i.next();
                 try {
                     Repository repo = (Repository) repositories.get(reposId);
-                    ItemImpl item = repo.retrieveItem(request);
+                    Item item = repo.retrieveItem(request);
                     return item;
                 } catch (RepositoryNotAvailableException ex) {
                     logger.info("Repository unavailable", ex);
@@ -119,12 +120,12 @@ public class LogicDrivenProximityImpl extends AbstractProximity {
         throw new ItemNotFoundException(request.getPath());
     }
 
-    protected ItemImpl retrieveItemByRepoId(String repoId, ProximityRequest request) throws ItemNotFoundException,
+    protected Item retrieveItemByRepoId(String repoId, ProximityRequest request) throws ItemNotFoundException,
             AccessDeniedException, NoSuchRepositoryException {
         if (repositories.containsKey(repoId)) {
             Repository repo = (Repository) repositories.get(repoId);
             try {
-                ItemImpl item = repo.retrieveItem(request);
+                Item item = repo.retrieveItem(request);
                 return item;
             } catch (RepositoryNotAvailableException ex) {
                 logger.info("Repository unavailable", ex);

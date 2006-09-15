@@ -1,5 +1,6 @@
 package org.abstracthorizon.proximity;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.Map;
 
@@ -9,13 +10,13 @@ import java.util.Map;
  * @author cstamas
  * 
  */
-public interface ItemProperties {
+public interface ItemProperties extends Serializable {
     
     public static final String PATH_SEPARATOR = "/";
     
     public static final String PATH_ROOT = PATH_SEPARATOR;
 
-    public static final String METADATA_ABSOLUTE_PATH = "item.absolutePath";
+    public static final String METADATA_DIRECTORY_PATH = "item.directoryPath";
 
     public static final String METADATA_NAME = "item.name";
 
@@ -23,11 +24,13 @@ public interface ItemProperties {
 
     public static final String METADATA_IS_FILE = "item.isFile";
 
+    public static final String METADATA_IS_CACHED = "item.isCached";
+
     public static final String METADATA_FILESIZE = "item.filesize";
 
     public static final String METADATA_LAST_MODIFIED = "item.lastModified";
 
-    public static final String METADATA_ORIGINATING_URL = "item.origin";
+    public static final String METADATA_REMOTE_URL = "item.remoteUrl";
 
     public static final String METADATA_EXT = "item.ext";
 
@@ -49,7 +52,9 @@ public interface ItemProperties {
      * 
      * @return absolute path of the item.
      */
-    String getDirectory();
+    String getDirectoryPath();
+    
+    void setDirectoryPath(String path);
 
     /**
      * Returns the name of the item (pathelements striped off).
@@ -57,6 +62,17 @@ public interface ItemProperties {
      * @return the name of the item.
      */
     String getName();
+    
+    void setName(String name);
+    
+    /**
+     * Returns file extension, if any.
+     * 
+     * @return file extension (without leading ".") or null if none.
+     */
+    String getExtension();
+    
+    void setExtension(String ext);
 
     /**
      * Returns getAbsolutePath() concatenated properly with getName(). Properly
@@ -72,6 +88,8 @@ public interface ItemProperties {
      * @return true if directory, false otherwise.
      */
     boolean isDirectory();
+    
+    void setDirectory(boolean isDir);
 
     /**
      * Tests whether this item is File.
@@ -79,6 +97,8 @@ public interface ItemProperties {
      * @return true if file, false otherwise.
      */
     boolean isFile();
+    
+    void setFile(boolean isFile);
 
     /**
      * Returns the filesize of the item in bytes. If it is a dir, the size equals to 0.
@@ -86,6 +106,8 @@ public interface ItemProperties {
      * @return the file size or 0 in case of directory.
      */
     long getSize();
+    
+    void setSize(long size);
 
     /**
      * Returns the last modification date of the item.
@@ -93,6 +115,8 @@ public interface ItemProperties {
      * @return the last modification date.
      */
     Date getLastModified();
+    
+    void setLastModified(Date lastModified);
 
     /**
      * The date when item was last scanned for default properties.
@@ -101,6 +125,8 @@ public interface ItemProperties {
      */
     Date getLastScanned();
     
+    void setLastScanned(Date lastScanned);
+    
     /**
      * The date whan item was last checksummed and scanned for any extra
      * properties.
@@ -108,6 +134,8 @@ public interface ItemProperties {
      * @return
      */
     Date getLastScannedExt();
+    
+    void setLastScannedExt(Date lastScannedExt);
 
     /**
      * Returns the id of the source repository.
@@ -115,6 +143,8 @@ public interface ItemProperties {
      * @return
      */
     String getRepositoryId();
+    
+    void setRepositoryId(String repoId);
 
     /**
      * Returns the groupId of the source repository.
@@ -122,20 +152,62 @@ public interface ItemProperties {
      * @return
      */
     String getRepositoryGroupId();
+    
+    void setRepositoryGroupId(String repoGroupId);
 
     /**
      * Tests whether this item has remote origin.
      * 
      * @return true if it has remote origin.
      */
-    boolean hasRemoteOrigin();
+    boolean isCached();
+    
+    void setCached(boolean cached);
 
     /**
      * Returns the remote path (URL) of the item.
      * 
      * @return true if it has remote origin.
      */
-    String getRemotePath();
+    String getRemoteUrl();
+    
+    void setRemoteUrl(String remoteUrl);
+
+    /**
+     * Returns items MD5 hash if any, in hex encoded form.
+     * 
+     * @return hash as string in hex encoded form or null if none.
+     */
+    String getHashMd5();
+    
+    void setHashMd5(String md5hash);
+
+    /**
+     * Returns item MD5 hash if any as byte array.
+     * 
+     * @return hash as byte array or null if none.
+     */
+    byte[] getHashMd5AsBytes();
+    
+    void setHashMd5AsBytes(byte[] md5hash);
+
+    /**
+     * Returns item SHA1 hash if any, in hex encoded form.
+     * 
+     * @return hash string in hex encoded form or null if none.
+     */
+    String getHashSha1();
+    
+    void setHashSha1(String sha1hash);
+
+    /**
+     * Returns item SHA1 hash if any as byte array.
+     * 
+     * @return hash as byte array or null if none.
+     */
+    byte[] getHashSha1AsBytes();
+    
+    void setHashSha1AsBytes(byte[] sha1hash);
 
     /**
      * Returns the metadata value.
@@ -159,5 +231,7 @@ public interface ItemProperties {
      * @return
      */
     Map getAllMetadata();
+    
+    void putAllMetadata(Map md);
 
 }

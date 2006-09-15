@@ -5,10 +5,10 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.abstracthorizon.proximity.Item;
 import org.abstracthorizon.proximity.ProximityRequest;
 import org.abstracthorizon.proximity.Repository;
 import org.abstracthorizon.proximity.RepositoryNotAvailableException;
-import org.abstracthorizon.proximity.impl.ItemImpl;
 
 /**
  * Simple logic with expiration support. If expirationPeriod is not -1, it will
@@ -50,7 +50,7 @@ public class DefaultExpiringProxyingRepositoryLogic extends DefaultProxyingRepos
      * If item has defined EXPIRES metadata, will use it and remove item from
      * repository if needed.
      */
-    public ItemImpl afterLocalCopyFound(ProximityRequest request, ItemImpl item, Repository repository) {
+    public Item afterLocalCopyFound(ProximityRequest request, Item item, Repository repository) {
         if (item.getProperties().getMetadata(DefaultExpiringProxyingRepositoryLogic.METADATA_EXPIRES) != null) {
             logger.debug("Item has expiration, checking it.");
             Date expires = new Date(Long.parseLong(item.getProperties().getMetadata(
@@ -68,14 +68,14 @@ public class DefaultExpiringProxyingRepositoryLogic extends DefaultProxyingRepos
         return item;
     }
 
-    public boolean shouldCheckForRemoteCopy(ProximityRequest request, ItemImpl localItem) {
+    public boolean shouldCheckForRemoteCopy(ProximityRequest request, Item localItem) {
         return shouldCheckByNotFoundCache(request) && localItem == null;
     }
 
     /**
      * If expiration period is not NO_EXPIRATION, it will apply it on all items.
      */
-    public ItemImpl afterRemoteCopyFound(ProximityRequest request, ItemImpl localItem, ItemImpl remoteItem,
+    public Item afterRemoteCopyFound(ProximityRequest request, Item localItem, Item remoteItem,
             Repository repository) {
         if (itemExpirationPeriod != NO_EXPIRATION) {
             Date expires = new Date(System.currentTimeMillis() + itemExpirationPeriod);
@@ -86,8 +86,8 @@ public class DefaultExpiringProxyingRepositoryLogic extends DefaultProxyingRepos
         return remoteItem;
     }
 
-    public ItemImpl afterRetrieval(ProximityRequest request, ItemImpl localItem, ItemImpl remoteItem) {
-        ItemImpl item = super.afterRetrieval(request, localItem, remoteItem);
+    public Item afterRetrieval(ProximityRequest request, Item localItem, Item remoteItem) {
+        Item item = super.afterRetrieval(request, localItem, remoteItem);
         if (item == null) {
             // we have not found it
             // put the path into not found cache

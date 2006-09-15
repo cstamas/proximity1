@@ -3,7 +3,6 @@ package org.abstracthorizon.proximity;
 import java.util.List;
 
 import org.abstracthorizon.proximity.access.AccessManager;
-import org.abstracthorizon.proximity.impl.ItemImpl;
 import org.abstracthorizon.proximity.indexer.Indexer;
 import org.abstracthorizon.proximity.stats.StatisticsGatherer;
 import org.abstracthorizon.proximity.storage.StorageException;
@@ -237,7 +236,7 @@ public interface Repository {
      * @throws ItemNotFoundException
      * @throws StorageException
      */
-    ItemImpl retrieveItem(ProximityRequest request) throws RepositoryNotAvailableException, ItemNotFoundException,
+    Item retrieveItem(ProximityRequest request) throws RepositoryNotAvailableException, ItemNotFoundException,
             StorageException, AccessDeniedException;
 
     /**

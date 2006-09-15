@@ -1,8 +1,10 @@
 package org.abstracthorizon.proximity.logic;
 
+import java.io.IOException;
+
+import org.abstracthorizon.proximity.Item;
 import org.abstracthorizon.proximity.ProximityRequest;
 import org.abstracthorizon.proximity.Repository;
-import org.abstracthorizon.proximity.impl.ItemImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,40 +31,42 @@ public class DefaultProxyingRepositoryLogic implements RepositoryLogic {
     /**
      * Does nothing and returns item unmodified.
      */
-    public ItemImpl afterLocalCopyFound(ProximityRequest request, ItemImpl item, Repository repository) {
+    public Item afterLocalCopyFound(ProximityRequest request, Item item, Repository repository) {
         return item;
     }
 
     /**
      * Always returns !locallyExists.
      */
-    public boolean shouldCheckForRemoteCopy(ProximityRequest request, ItemImpl localItem) {
+    public boolean shouldCheckForRemoteCopy(ProximityRequest request, Item localItem) {
         return localItem == null;
     }
 
     /**
      * Does nothing and returns item unmodified.
      */
-    public ItemImpl afterRemoteCopyFound(ProximityRequest request, ItemImpl localItem, ItemImpl remoteItem,
-            Repository repository) {
+    public Item afterRemoteCopyFound(ProximityRequest request, Item localItem, Item remoteItem, Repository repository) {
         return remoteItem;
     }
 
     /**
      * Always returns true.
      */
-    public boolean shouldStoreLocallyAfterRemoteRetrieval(ProximityRequest request, ItemImpl localItem,
-            ItemImpl remoteItem) {
+    public boolean shouldStoreLocallyAfterRemoteRetrieval(ProximityRequest request, Item localItem, Item remoteItem) {
         return true;
     }
 
     /**
      * Always give the best what we have.
      */
-    public ItemImpl afterRetrieval(ProximityRequest request, ItemImpl localItem, ItemImpl remoteItem) {
+    public Item afterRetrieval(ProximityRequest request, Item localItem, Item remoteItem) {
         if (remoteItem != null) {
             if (localItem != null) {
-                localItem.close();
+                try {
+                    localItem.getStream().close();
+                } catch (IOException ex) {
+                    logger.warn("Had a problem trying to close a file: {}", localItem.getProperties(), ex);
+                }
             }
             return remoteItem;
         }

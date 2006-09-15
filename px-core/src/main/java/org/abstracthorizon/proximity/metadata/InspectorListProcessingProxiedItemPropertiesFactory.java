@@ -1,12 +1,11 @@
 package org.abstracthorizon.proximity.metadata;
 
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.abstracthorizon.proximity.impl.ItemPropertiesImpl;
+import org.abstracthorizon.proximity.ItemProperties;
 import org.abstracthorizon.proximity.metadata.inspectors.ItemInspector;
 
 public class InspectorListProcessingProxiedItemPropertiesFactory extends AbstractProxiedItemPropertiesFactory {
@@ -28,7 +27,7 @@ public class InspectorListProcessingProxiedItemPropertiesFactory extends Abstrac
         }
     }
 
-    protected void expandCustomItemProperties(ItemPropertiesImpl ip, File file) {
+    protected void expandCustomItemProperties(ItemProperties ip, File file) {
         for (Iterator i = getItemInspectorList().iterator(); i.hasNext();) {
             ItemInspector inspector = (ItemInspector) i.next();
             if (inspector.isHandled(ip)) {

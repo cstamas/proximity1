@@ -12,6 +12,7 @@ import org.abstracthorizon.proximity.AccessDeniedException;
 import org.abstracthorizon.proximity.Item;
 import org.abstracthorizon.proximity.ItemNotFoundException;
 import org.abstracthorizon.proximity.ItemProperties;
+import org.abstracthorizon.proximity.HashMapItemPropertiesImpl;
 import org.abstracthorizon.proximity.NoSuchRepositoryException;
 import org.abstracthorizon.proximity.Proximity;
 import org.abstracthorizon.proximity.ProximityRequest;
@@ -136,8 +137,8 @@ public abstract class AbstractProximity implements Proximity {
 
         if (isEmergeRepositoryGroups()) {
 
-            ItemImpl item = null;
-            ItemPropertiesImpl itemProps = null;
+            Item item = null;
+            ItemProperties itemProps = null;
             List pathList = explodePathToList(request.getPath());
 
             if (pathList.size() >= 1) {
@@ -151,15 +152,15 @@ public abstract class AbstractProximity implements Proximity {
                         mangledRequest.getTargetedReposGroupId(), mangledRequest.getPath());
                 item = retrieveItemController(mangledRequest);
                 // on the returns we have to fool the absolutePath
-                itemProps = (ItemPropertiesImpl) item.getProperties();
-                itemProps.setAbsolutePath(originalRequestPath);
+                itemProps = (ItemProperties) item.getProperties();
+                itemProps.setDirectoryPath(originalRequestPath);
 
             } else {
 
                 // Prepare as root is a dir
-                item = new ItemImpl();
-                itemProps = new ItemPropertiesImpl();
-                itemProps.setAbsolutePath(ItemProperties.PATH_ROOT);
+                item = new Item();
+                itemProps = new HashMapItemPropertiesImpl();
+                itemProps.setDirectoryPath(ItemProperties.PATH_ROOT);
                 itemProps.setDirectory(true);
                 itemProps.setFile(false);
                 itemProps.setName("");
@@ -180,8 +181,8 @@ public abstract class AbstractProximity implements Proximity {
         accessManager.decide(source, null);
         accessManager.decide(target, null);
         Item item = retrieveItem(source);
-        ItemPropertiesImpl itemProps = (ItemPropertiesImpl) item.getProperties();
-        itemProps.setAbsolutePath(FilenameUtils.getFullPathNoEndSeparator(target.getPath()));
+        ItemProperties itemProps = item.getProperties();
+        itemProps.setDirectoryPath(FilenameUtils.getFullPathNoEndSeparator(target.getPath()));
         itemProps.setName(FilenameUtils.getName(target.getPath()));
         itemProps.setRepositoryId(target.getTargetedReposId());
         itemProps.setRepositoryGroupId(target.getTargetedReposGroupId());
@@ -240,9 +241,9 @@ public abstract class AbstractProximity implements Proximity {
         if (repositories.containsKey(targetRepoId)) {
             Repository repo = (Repository) repositories.get(targetRepoId);
             ProximityRequest mangledRequest = mangleItemRequest(request);
-            ItemPropertiesImpl itemProperties = (ItemPropertiesImpl) item.getProperties();
+            ItemProperties itemProperties = item.getProperties();
             // set the mangled path for store
-            itemProperties.setAbsolutePath(FilenameUtils.getFullPathNoEndSeparator(mangledRequest.getPath()));
+            itemProperties.setDirectoryPath(FilenameUtils.getFullPathNoEndSeparator(mangledRequest.getPath()));
             repo.storeItem(mangledRequest, item);
         } else {
             throw new NoSuchRepositoryException(targetRepoId);
@@ -275,9 +276,9 @@ public abstract class AbstractProximity implements Proximity {
                 if (request.getTargetedReposGroupId() != null) {
 
                     if (getRepositoryGroupIds().contains(request.getTargetedReposGroupId())) {
-                        ItemPropertiesImpl itemProps = null;
-                        itemProps = new ItemPropertiesImpl();
-                        itemProps.setAbsolutePath(ItemProperties.PATH_ROOT);
+                        ItemProperties itemProps = null;
+                        itemProps = new HashMapItemPropertiesImpl();
+                        itemProps.setDirectoryPath(ItemProperties.PATH_ROOT);
                         itemProps.setDirectory(true);
                         itemProps.setFile(false);
                         itemProps.setName(request.getTargetedReposGroupId());
@@ -291,14 +292,14 @@ public abstract class AbstractProximity implements Proximity {
 
                 } else {
 
-                    ItemPropertiesImpl itemProps = null;
+                    HashMapItemPropertiesImpl itemProps = null;
                     for (Iterator i = getRepositoryGroupIds().iterator(); i.hasNext();) {
 
                         groupId = (String) i.next();
                         logger.debug("Adding response with {} as directory.", groupId);
 
-                        itemProps = new ItemPropertiesImpl();
-                        itemProps.setAbsolutePath(ItemProperties.PATH_ROOT);
+                        itemProps = new HashMapItemPropertiesImpl();
+                        itemProps.setDirectoryPath(ItemProperties.PATH_ROOT);
                         itemProps.setDirectory(true);
                         itemProps.setFile(false);
                         itemProps.setName(groupId);
@@ -364,7 +365,7 @@ public abstract class AbstractProximity implements Proximity {
 
     }
 
-    protected abstract ItemImpl retrieveItemController(ProximityRequest request) throws ItemNotFoundException,
+    protected abstract Item retrieveItemController(ProximityRequest request) throws ItemNotFoundException,
             AccessDeniedException, NoSuchRepositoryException;
 
     protected List postprocessSearchResult(List idxresult) {
@@ -438,18 +439,18 @@ public abstract class AbstractProximity implements Proximity {
     protected void mangleItemPathsForEmergeGroups(List items) {
         if (isEmergeRepositoryGroups()) {
             for (Iterator i = items.iterator(); i.hasNext();) {
-                ItemPropertiesImpl ip = (ItemPropertiesImpl) i.next();
-                logger.debug("Mangling item path {} with repositoryGroupId {}...", ip.getDirectory(), ip
+                ItemProperties ip = (ItemProperties) i.next();
+                logger.debug("Mangling item path {} with repositoryGroupId {}...", ip.getDirectoryPath(), ip
                         .getRepositoryGroupId());
-                if (ip.getDirectory().equals(ItemProperties.PATH_ROOT)) {
+                if (ip.getDirectoryPath().equals(ItemProperties.PATH_ROOT)) {
                     // make /groupId as path
-                    ip.setAbsolutePath(ItemProperties.PATH_ROOT + ip.getRepositoryGroupId());
+                    ip.setDirectoryPath(ItemProperties.PATH_ROOT + ip.getRepositoryGroupId());
                 } else {
                     // make /groupId/... as path WITHOUT trailing /
-                    ip.setAbsolutePath(FilenameUtils.normalizeNoEndSeparator(ItemProperties.PATH_ROOT
-                            + ip.getRepositoryGroupId() + ip.getDirectory()));
+                    ip.setDirectoryPath(FilenameUtils.normalizeNoEndSeparator(ItemProperties.PATH_ROOT
+                            + ip.getRepositoryGroupId() + ip.getDirectoryPath()));
                 }
-                logger.debug("Mangled item path {} with repositoryGroupId {}...", ip.getDirectory(), ip
+                logger.debug("Mangled item path {} with repositoryGroupId {}...", ip.getDirectoryPath(), ip
                         .getRepositoryGroupId());
             }
         }

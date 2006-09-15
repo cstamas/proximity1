@@ -1,6 +1,5 @@
 package org.abstracthorizon.proximity.storage.local;
 
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -13,10 +12,9 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Stack;
 
+import org.abstracthorizon.proximity.Item;
 import org.abstracthorizon.proximity.ItemNotFoundException;
 import org.abstracthorizon.proximity.ItemProperties;
-import org.abstracthorizon.proximity.impl.ItemImpl;
-import org.abstracthorizon.proximity.impl.ItemPropertiesImpl;
 import org.abstracthorizon.proximity.storage.StorageException;
 import org.apache.commons.io.FilenameUtils;
 
@@ -100,11 +98,11 @@ public class ReadOnlyFileSystemStorage extends AbstractLocalStorage {
         return checkForExistence(getStorageBaseDir(), path);
     }
 
-    public ItemImpl retrieveItem(String path, boolean propsOnly) throws ItemNotFoundException, StorageException {
+    public Item retrieveItem(String path, boolean propsOnly) throws ItemNotFoundException, StorageException {
         logger.debug("Retrieving {} from storage directory {}", path, getStorageBaseDir());
         try {
-            ItemPropertiesImpl properties = loadItemProperties(path);
-            ItemImpl result = new ItemImpl();
+            ItemProperties properties = loadItemProperties(path);
+            Item result = new Item();
             result.setProperties(properties);
             if (!propsOnly) {
                 File target = new File(getStorageBaseDir(), path);
@@ -128,11 +126,11 @@ public class ReadOnlyFileSystemStorage extends AbstractLocalStorage {
             if (target.isDirectory()) {
                 File[] files = target.listFiles();
                 for (int i = 0; i < files.length; i++) {
-                    ItemPropertiesImpl item = loadItemProperties(FilenameUtils.concat(path, files[i].getName()));
+                    ItemProperties item = loadItemProperties(FilenameUtils.concat(path, files[i].getName()));
                     result.add(item);
                 }
             } else {
-                ItemPropertiesImpl item = loadItemProperties(path);
+                ItemProperties item = loadItemProperties(path);
                 result.add(item);
             }
         }
@@ -160,7 +158,8 @@ public class ReadOnlyFileSystemStorage extends AbstractLocalStorage {
                 } else {
                     logger.debug("**** {}", ip.getPath());
                     File target = new File(getStorageBaseDir(), ip.getPath());
-                    ItemProperties nip = getProxiedItemPropertiesFactory().expandItemProperties(ip.getPath(), target, false);
+                    ItemProperties nip = getProxiedItemPropertiesFactory().expandItemProperties(ip.getPath(), target,
+                            false);
                     if (extraProps != null) {
                         nip.getAllMetadata().putAll(extraProps);
                     }
@@ -177,10 +176,10 @@ public class ReadOnlyFileSystemStorage extends AbstractLocalStorage {
         return target.exists();
     }
 
-    protected ItemPropertiesImpl loadItemProperties(String path) {
+    protected ItemProperties loadItemProperties(String path) {
         File target = new File(getStorageBaseDir(), path);
         File mdTarget = new File(getMetadataBaseDir(), path);
-        ItemPropertiesImpl ip = getProxiedItemPropertiesFactory().expandItemProperties(path, target, true);
+        ItemProperties ip = getProxiedItemPropertiesFactory().expandItemProperties(path, target, true);
         if (target.isFile() && isMetadataAware()) {
             try {
                 if (mdTarget.exists() && mdTarget.isFile()) {
@@ -190,8 +189,10 @@ public class ReadOnlyFileSystemStorage extends AbstractLocalStorage {
                     fis.close();
                     ip.getAllMetadata().putAll(metadata);
                 } else {
-                    logger.info("No metadata exists for [{}] on path [{}] -- recreating the default ones. Reindex operation may be needed to recreate/reindex them completely.", ip.getName(), ip
-                            .getDirectory());
+                    logger
+                            .info(
+                                    "No metadata exists for [{}] on path [{}] -- recreating the default ones. Reindex operation may be needed to recreate/reindex them completely.",
+                                    ip.getName(), ip.getDirectoryPath());
                     ip = getProxiedItemPropertiesFactory().expandItemProperties(path, target, true);
                     storeItemProperties(ip);
                 }
