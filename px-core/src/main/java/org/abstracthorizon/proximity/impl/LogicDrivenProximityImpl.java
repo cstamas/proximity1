@@ -75,7 +75,6 @@ public class LogicDrivenProximityImpl extends AbstractProximity {
         } catch (IOException ex) {
             logger.error("Got IOException during retrieveItem.", ex);
         } catch (ItemNotFoundException ex) {
-            logger.info("Item {} not found.", request.getPath());
             throw ex;
         }
 

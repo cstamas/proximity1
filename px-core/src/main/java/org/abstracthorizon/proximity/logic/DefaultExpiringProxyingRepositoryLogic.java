@@ -91,6 +91,7 @@ public class DefaultExpiringProxyingRepositoryLogic extends DefaultProxyingRepos
         if (item == null) {
             // we have not found it
             // put the path into not found cache
+            logger.debug("Storing failed request [{}] to n-cache.", request.getPath());
             notFoundCache.put(request.getPath(), new Date());
         }
         return item;
@@ -103,11 +104,13 @@ public class DefaultExpiringProxyingRepositoryLogic extends DefaultProxyingRepos
             if (lastRequest.before(new Date(System.currentTimeMillis() - notFoundCachePeriod))) {
                 // the notFoundCache record expired, remove it and check its
                 // existence
+                logger.debug("n-cache record expired, will go again remote to fetch.");
                 notFoundCache.remove(request.getPath());
                 return true;
             } else {
                 // the notFoundCache record is still valid, do not check its
                 // existence
+                logger.debug("n-cache record still active, will not go remote to fetch.");
                 return false;
             }
         } else {
