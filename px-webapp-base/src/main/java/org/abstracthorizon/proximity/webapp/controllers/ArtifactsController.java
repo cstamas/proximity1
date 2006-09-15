@@ -9,8 +9,8 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.abstracthorizon.proximity.ItemProperties;
 import org.abstracthorizon.proximity.Proximity;
-import org.abstracthorizon.proximity.impl.ItemPropertiesImpl;
 import org.abstracthorizon.proximity.indexer.Indexer;
 import org.springframework.beans.support.MutableSortDefinition;
 import org.springframework.beans.support.PropertyComparator;
@@ -139,7 +139,7 @@ public class ArtifactsController extends MultiActionController {
         List result = new ArrayList(artifactList.size());
         List uniqueItemList = new ArrayList(artifactList.size());
         for (Iterator i = artifactList.iterator(); i.hasNext();) {
-            ItemPropertiesImpl item = (ItemPropertiesImpl) i.next();
+            ItemProperties item = (ItemProperties) i.next();
             if (!uniqueItemList.contains(item.getMetadata(metadataKey))) {
                 uniqueItemList.add(item.getMetadata(metadataKey));
                 item.setName(item.getMetadata(metadataKey));
