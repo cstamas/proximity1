@@ -13,10 +13,9 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
+import org.abstracthorizon.proximity.Item;
 import org.abstracthorizon.proximity.ItemProperties;
 import org.abstracthorizon.proximity.ProximityRequest;
-import org.abstracthorizon.proximity.impl.ItemImpl;
-import org.abstracthorizon.proximity.impl.ItemPropertiesImpl;
 import org.abstracthorizon.proximity.logic.DefaultProximityLogic;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.maven.artifact.repository.metadata.Metadata;
@@ -56,7 +55,7 @@ public class MavenProximityLogic extends DefaultProximityLogic {
      * 
      * @return the merged metadata.
      */
-    public ItemImpl postprocessItemList(ProximityRequest request, ProximityRequest groupRequest, List listOfProxiedItems)
+    public Item postprocessItemList(ProximityRequest request, ProximityRequest groupRequest, List listOfProxiedItems)
             throws IOException {
 
         if (listOfProxiedItems.size() == 0) {
@@ -64,8 +63,8 @@ public class MavenProximityLogic extends DefaultProximityLogic {
             throw new IllegalArgumentException("The listOfProxiedItems list cannot be 0 length!");
         }
 
-        ItemImpl item = (ItemImpl) listOfProxiedItems.get(0);
-        ItemPropertiesImpl itemProps = (ItemPropertiesImpl) item.getProperties();
+        Item item = (Item) listOfProxiedItems.get(0);
+        ItemProperties itemProps = item.getProperties();
 
         if (listOfProxiedItems.size() > 1) {
 
@@ -93,17 +92,17 @@ public class MavenProximityLogic extends DefaultProximityLogic {
 
                 for (int i = 0; i < listOfProxiedItems.size(); i++) {
 
-                    ItemImpl currentItem = (ItemImpl) listOfProxiedItems.get(i);
+                    Item currentItem = (Item) listOfProxiedItems.get(i);
                     try {
                         isr = new InputStreamReader(currentItem.getStream());
                         mergedMetadata.merge(metadataReader.read(isr));
                         isr.close();
                     } catch (XmlPullParserException ex) {
-                        logger.warn("Could not merge M2 metadata: " + currentItem.getProperties().getDirectory()
+                        logger.warn("Could not merge M2 metadata: " + currentItem.getProperties().getDirectoryPath()
                                 + " from repository " + currentItem.getProperties().getRepositoryId(), ex);
                     } catch (IOException ex) {
                         logger.warn("Got IOException during merge of M2 metadata: "
-                                + currentItem.getProperties().getDirectory() + " from repository "
+                                + currentItem.getProperties().getDirectoryPath() + " from repository "
                                 + currentItem.getProperties().getRepositoryId(), ex);
                     }
 

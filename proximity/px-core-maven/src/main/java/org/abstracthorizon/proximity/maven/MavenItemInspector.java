@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.abstracthorizon.proximity.impl.ItemPropertiesImpl;
+import org.abstracthorizon.proximity.ItemProperties;
 import org.abstracthorizon.proximity.metadata.inspectors.AbstractItemInspector;
 import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Model;
@@ -41,9 +41,9 @@ public class MavenItemInspector extends AbstractItemInspector {
 
     public static final String POM_PARENT_KEY = "pom.parent";
 
-    public boolean isHandled(ItemPropertiesImpl ip) {
+    public boolean isHandled(ItemProperties ip) {
         return MavenArtifactRecognizer.isPom(ip.getName()) || MavenArtifactRecognizer.isMetadata(ip.getName())
-                || MavenArtifactRecognizer.isSnapshot(ip.getDirectory(), ip.getName());
+                || MavenArtifactRecognizer.isSnapshot(ip.getDirectoryPath(), ip.getName());
     }
 
     public List getIndexableKeywords() {
@@ -58,7 +58,7 @@ public class MavenItemInspector extends AbstractItemInspector {
         return result;
     }
 
-    public void processItem(ItemPropertiesImpl ip, File file) {
+    public void processItem(ItemProperties ip, File file) {
         if (MavenArtifactRecognizer.isPom(ip.getName())) {
 
             if (!MavenArtifactRecognizer.isChecksum(ip.getName())) {
@@ -136,7 +136,7 @@ public class MavenItemInspector extends AbstractItemInspector {
 
         } else if (MavenArtifactRecognizer.isMetadata(ip.getName())) {
             ip.setMetadata(M2KIND, KIND_METADATA);
-        } else if (MavenArtifactRecognizer.isSnapshot(ip.getDirectory(), ip.getName())) {
+        } else if (MavenArtifactRecognizer.isSnapshot(ip.getDirectoryPath(), ip.getName())) {
             ip.setMetadata(M2KIND, KIND_SNAPSHOT);
         }
     }
