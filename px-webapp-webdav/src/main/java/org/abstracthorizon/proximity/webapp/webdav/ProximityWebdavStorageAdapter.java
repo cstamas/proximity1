@@ -62,7 +62,7 @@ public class ProximityWebdavStorageAdapter implements IWebdavStorage {
             ProximityRequest request = createRequest(resourceUri, false);
             Item item = new Item();
             ItemProperties itemProperties = new HashMapItemPropertiesImpl();
-            itemProperties.setDirectoryPath(FilenameUtils.getFullPathNoEndSeparator(resourceUri));
+            itemProperties.setDirectoryPath(FilenameUtils.separatorsToUnix(FilenameUtils.getFullPathNoEndSeparator(resourceUri)));
             itemProperties.setName(FilenameUtils.getName(resourceUri));
             itemProperties.setLastModified(new Date());
             item.setStream(new ByteArrayInputStream(new byte[0]));
@@ -161,7 +161,7 @@ public class ProximityWebdavStorageAdapter implements IWebdavStorage {
             ProximityRequest request = createRequest(resourceUri, false);
             Item item = new Item();
             ItemProperties itemProperties = new HashMapItemPropertiesImpl();
-            itemProperties.setDirectoryPath(FilenameUtils.getFullPathNoEndSeparator(resourceUri));
+            itemProperties.setDirectoryPath(FilenameUtils.separatorsToUnix(FilenameUtils.getFullPathNoEndSeparator(resourceUri)));
             itemProperties.setName(FilenameUtils.getName(resourceUri));
             itemProperties.setLastModified(new Date());
             item.setStream(content);
