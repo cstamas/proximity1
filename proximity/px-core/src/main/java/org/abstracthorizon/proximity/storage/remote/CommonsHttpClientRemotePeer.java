@@ -294,9 +294,9 @@ public class CommonsHttpClientRemotePeer extends AbstractRemoteStorage {
         try {
             resultCode = getHttpClient().executeMethod(httpConfiguration, method);
         } catch (HttpException ex) {
-            logger.error("Protocol error while executing {} method", method.getName(), ex);
+            logger.error("Protocol error while executing " + method.getName() + " method", ex);
         } catch (IOException ex) {
-            logger.error("Tranport error while executing {} method", method.getName(), ex);
+            logger.error("Tranport error while executing " + method.getName() + " method", ex);
         }
         return resultCode;
     }
@@ -307,10 +307,10 @@ public class CommonsHttpClientRemotePeer extends AbstractRemoteStorage {
             try {
                 result = DateUtil.parseDate(date.getValue());
             } catch (DateParseException ex) {
-                logger.warn("Could not parse date {}, using system current time as item creation time.", date, ex);
+                logger.warn("Could not parse date {} because of {}, using system current time as item creation time.", date, ex);
                 result = new Date();
             } catch (NullPointerException ex) {
-                logger.warn("Parsed date is null, using system current time as item creation time.", ex);
+                logger.warn("Parsed date is null, using system current time as item creation time.");
                 result = new Date();
             }
         } else {
