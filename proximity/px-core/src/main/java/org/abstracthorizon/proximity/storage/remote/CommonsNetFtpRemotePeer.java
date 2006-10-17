@@ -227,7 +227,7 @@ public class CommonsNetFtpRemotePeer extends AbstractRemoteStorage {
             FTPFile remoteFile) throws MalformedURLException {
         URL originatingUrl = new URL(originatingUrlString);
         ItemProperties result = new HashMapItemPropertiesImpl();
-        result.setDirectoryPath(FilenameUtils.getPath(FilenameUtils.getFullPath(path)));
+        result.setDirectoryPath(FilenameUtils.separatorsToUnix(FilenameUtils.getPath(FilenameUtils.getFullPath(path))));
         result.setDirectory(remoteFile.isDirectory());
         result.setFile(remoteFile.isFile());
         result.setLastModified(remoteFile.getTimestamp().getTime());

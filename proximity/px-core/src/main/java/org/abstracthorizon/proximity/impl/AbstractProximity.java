@@ -182,7 +182,7 @@ public abstract class AbstractProximity implements Proximity {
         accessManager.decide(target, null);
         Item item = retrieveItem(source);
         ItemProperties itemProps = item.getProperties();
-        itemProps.setDirectoryPath(FilenameUtils.getFullPathNoEndSeparator(target.getPath()));
+        itemProps.setDirectoryPath(FilenameUtils.separatorsToUnix(FilenameUtils.getFullPathNoEndSeparator(target.getPath())));
         itemProps.setName(FilenameUtils.getName(target.getPath()));
         itemProps.setRepositoryId(target.getTargetedReposId());
         itemProps.setRepositoryGroupId(target.getTargetedReposGroupId());
@@ -243,7 +243,7 @@ public abstract class AbstractProximity implements Proximity {
             ProximityRequest mangledRequest = mangleItemRequest(request);
             ItemProperties itemProperties = item.getProperties();
             // set the mangled path for store
-            itemProperties.setDirectoryPath(FilenameUtils.getFullPathNoEndSeparator(mangledRequest.getPath()));
+            itemProperties.setDirectoryPath(FilenameUtils.separatorsToUnix(FilenameUtils.getFullPathNoEndSeparator(mangledRequest.getPath())));
             repo.storeItem(mangledRequest, item);
         } else {
             throw new NoSuchRepositoryException(targetRepoId);
@@ -447,8 +447,8 @@ public abstract class AbstractProximity implements Proximity {
                     ip.setDirectoryPath(ItemProperties.PATH_ROOT + ip.getRepositoryGroupId());
                 } else {
                     // make /groupId/... as path WITHOUT trailing /
-                    ip.setDirectoryPath(FilenameUtils.normalizeNoEndSeparator(ItemProperties.PATH_ROOT
-                            + ip.getRepositoryGroupId() + ip.getDirectoryPath()));
+                    ip.setDirectoryPath(FilenameUtils.separatorsToUnix(FilenameUtils.normalizeNoEndSeparator(ItemProperties.PATH_ROOT
+                            + ip.getRepositoryGroupId() + ip.getDirectoryPath())));
                 }
                 logger.debug("Mangled item path {} with repositoryGroupId {}...", ip.getDirectoryPath(), ip
                         .getRepositoryGroupId());
