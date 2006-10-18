@@ -21,9 +21,6 @@
 	<!-- a short but descriptive name for the project -->
 	<name>Px Webapp (PxMASTER)</name>
 
-	<!-- The module version -->
-	<version>1.0.0-RC5</version>
-
 	<dependencies>
 
 		<dependency>
