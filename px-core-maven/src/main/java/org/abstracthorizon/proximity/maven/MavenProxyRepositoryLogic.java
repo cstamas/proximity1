@@ -108,8 +108,8 @@ public class MavenProxyRepositoryLogic extends DefaultExpiringProxyingRepository
                     // expired
                     // forcing remote retrieval, which will replace the item
                     // locally, but do not delete
-                    logger.info("Item has expired on " + expires + ", expiring it.");
-                    return true;
+                    logger.info("Item {} has expired on {}, trying to refetch it.", request.getPath(), expires);
+                    return super.shouldCheckForRemoteCopy(request, localItem);
                 } else {
                     // has expiration but not expired
                     return false;
