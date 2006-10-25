@@ -38,6 +38,7 @@
 		<dependency>
 			<groupId>org.abstracthorizon.proximity</groupId>
 			<artifactId>px-webapp-base</artifactId>
+			<type>war</type>
 		</dependency>
 
 		<!-- View tech is Velocity, DWR used for AJAX, other needed stuff comes from px-webapp-util -->
