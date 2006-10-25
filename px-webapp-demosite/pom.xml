@@ -37,6 +37,10 @@
 		</dependency>
 		<dependency>
 			<groupId>org.abstracthorizon.proximity</groupId>
+			<artifactId>px-webapp-webdav</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.abstracthorizon.proximity</groupId>
 			<artifactId>px-webapp-base</artifactId>
 			<type>war</type>
 		</dependency>
