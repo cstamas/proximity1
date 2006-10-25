@@ -65,7 +65,7 @@ public class LogicDrivenRepositoryImpl extends AbstractRepository {
                     }
                     logger.debug("Item [{}] fetched from remote storage of repository {}", request.getPath(), getId());
                     remoteResult = getRepositoryLogic().afterRemoteCopyFound(request, localResult, remoteResult, this);
-                    if (remoteResult != null && !remoteResult.getProperties().isDirectory()
+                    if (remoteResult != null && !remoteResult.getProperties().isDirectory() && getLocalStorage() != null
                             && getLocalStorage().isWritable()) {
                         if (getRepositoryLogic().shouldStoreLocallyAfterRemoteRetrieval(request, localResult,
                                 remoteResult)) {
