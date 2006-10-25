@@ -198,17 +198,17 @@
 			                    #springMessage("repositories.repoUrl.proxied")
 #if( ${context.get('emergeRepositoryGroups')} )
 #springMessage("repositories.repoUrl.grouped")<br/><br/>
-<a href="#springUrl('/repository')/${repository.groupId}">http://localhost:8080#springUrl('/repository')/${repository.groupId}</a>
+<a href="#springUrl('/repository')/${repository.groupId}">${request.scheme}://${request.serverName}:${request.serverPort}#springUrl('/repository')/${repository.groupId}</a>
 #else
-<a href="#springUrl('/repository')">http://localhost:8080#springUrl('/repository')</a>
+<a href="#springUrl('/repository')">${request.scheme}://${request.serverName}:${request.serverPort}#springUrl('/repository')</a>
 #end
 	                        #else
 			                    #springMessage("repositories.repoUrl.hosted")
 #if( ${context.get('emergeRepositoryGroups')} )
 #springMessage("repositories.repoUrl.grouped")<br/><br/>
-<a href="#springUrl('/repository')/${repository.groupId}">http://localhost:8080#springUrl('/repository')/${repository.groupId}</a>
+<a href="#springUrl('/repository')/${repository.groupId}">${request.scheme}://${request.serverName}:${request.serverPort}#springUrl('/repository')/${repository.groupId}</a>
 #else
-<a href="#springUrl('/repository')">http://localhost:8080#springUrl('/repository')</a>
+<a href="#springUrl('/repository')">${request.scheme}://${request.serverName}:${request.serverPort}#springUrl('/repository')</a>
 #end
 		                    #end
                         </td>
