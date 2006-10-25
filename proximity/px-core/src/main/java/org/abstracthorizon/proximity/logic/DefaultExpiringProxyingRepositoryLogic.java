@@ -91,8 +91,10 @@ public class DefaultExpiringProxyingRepositoryLogic extends DefaultProxyingRepos
         if (item == null) {
             // we have not found it
             // put the path into not found cache
-            logger.debug("Storing failed request [{}] to n-cache.", request.getPath());
-            notFoundCache.put(request.getPath(), new Date());
+        	if (!notFoundCache.containsKey(request.getPath())) {
+                logger.info("Storing failed request [{}] to neg-cache.", request.getPath());
+                notFoundCache.put(request.getPath(), new Date());
+        	}
         }
         return item;
     }
