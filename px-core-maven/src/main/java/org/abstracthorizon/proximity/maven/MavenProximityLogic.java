@@ -71,7 +71,7 @@ public class MavenProximityLogic extends DefaultProximityLogic {
             if (MavenArtifactRecognizer.isChecksum(request.getPath())) {
 
                 File tmpFile = new File(System.getProperty("java.io.tmpdir"), request.getPath().replace(
-                        ItemProperties.PATH_SEPARATOR, "_"));
+                        ItemProperties.PATH_SEPARATOR.charAt(0), '_'));
                 if (tmpFile.exists()) {
                     logger.info("Item for path " + request.getPath() + " SPOOFED with merged metadata checksum.");
                     FileInputStream fis = new FileInputStream(tmpFile);
@@ -87,7 +87,7 @@ public class MavenProximityLogic extends DefaultProximityLogic {
 
                 MetadataXpp3Reader metadataReader = new MetadataXpp3Reader();
                 MetadataXpp3Writer metadataWriter = new MetadataXpp3Writer();
-                InputStreamReader isr = null;
+                InputStreamReader isr;
                 Metadata mergedMetadata = new Metadata();
 
                 for (int i = 0; i < listOfProxiedItems.size(); i++) {
@@ -139,7 +139,7 @@ public class MavenProximityLogic extends DefaultProximityLogic {
 
     protected void storeDigest(ProximityRequest req, MessageDigest dig) throws IOException {
         File tmpFile = new File(System.getProperty("java.io.tmpdir"), req.getPath().replace(
-                ItemProperties.PATH_SEPARATOR, "_")
+                ItemProperties.PATH_SEPARATOR.charAt(0), '_')
                 + "." + dig.getAlgorithm().toLowerCase());
         tmpFile.deleteOnExit();
         FileWriter fw = new FileWriter(tmpFile);
