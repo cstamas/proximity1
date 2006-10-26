@@ -265,6 +265,10 @@
 						<artifactId>commons-logging</artifactId>
 						<groupId>commons-logging</groupId>
 					</exclusion>
+					<exclusion>
+						<artifactId>struts</artifactId>
+						<groupId>struts</groupId>
+					</exclusion>
 				</exclusions>
 			</dependency>
 			<dependency>
