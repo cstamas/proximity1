@@ -12,44 +12,44 @@ import org.abstracthorizon.proximity.indexer.Indexer;
 
 public class SearchServiceImpl implements SearchService {
 
-    private Proximity proximity;
+	private Proximity proximity;
 
-    private Indexer indexer;
+	private Indexer indexer;
 
-    public Proximity getProximity() {
-        return proximity;
-    }
+	public Proximity getProximity() {
+		return proximity;
+	}
 
-    public void setProximity(Proximity proximity) {
-        this.proximity = proximity;
-    }
+	public void setProximity(Proximity proximity) {
+		this.proximity = proximity;
+	}
 
-    public Indexer getIndexer() {
-        return indexer;
-    }
+	public Indexer getIndexer() {
+		return indexer;
+	}
 
-    public void setIndexer(Indexer indexer) {
-        this.indexer = indexer;
-    }
+	public void setIndexer(Indexer indexer) {
+		this.indexer = indexer;
+	}
 
-    public ItemProperties[] listItems(ProximityRequest request) throws AccessDeniedException, NoSuchRepositoryException {
-        List result = proximity.listItems(request);
-        return (ItemProperties[]) result.toArray(new ItemProperties[result.size()]);
-    }
+	public ItemProperties[] listItems(ProximityRequest request) throws AccessDeniedException, NoSuchRepositoryException {
+		List result = proximity.listItems(request);
+		return (ItemProperties[]) result.toArray(new ItemProperties[result.size()]);
+	}
 
-    public String[] getSearchableKeywords() {
-        List result = indexer.getSearchableKeywords();
-        return (String[]) result.toArray(new String[result.size()]);
-    }
+	public String[] getSearchableKeywords() {
+		List result = indexer.getSearchableKeywords();
+		return (String[]) result.toArray(new String[result.size()]);
+	}
 
-    public ItemProperties[] searchItemByExample(ItemProperties example) throws ProximityException {
-        List result = indexer.searchByItemPropertiesExample(example);
-        return (ItemProperties[]) result.toArray(new ItemProperties[result.size()]);
-    }
+	public ItemProperties[] searchItemByExample(ItemProperties example) throws ProximityException {
+		List result = indexer.searchByItemPropertiesExample(example);
+		return (ItemProperties[]) result.toArray(new ItemProperties[result.size()]);
+	}
 
-    public ItemProperties[] searchItemByQuery(String query) throws ProximityException {
-        List result = indexer.searchByQuery(query);
-        return (ItemProperties[]) result.toArray(new ItemProperties[result.size()]);
-    }
+	public ItemProperties[] searchItemByQuery(String query) throws ProximityException {
+		List result = indexer.searchByQuery(query);
+		return (ItemProperties[]) result.toArray(new ItemProperties[result.size()]);
+	}
 
 }
