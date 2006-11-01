@@ -88,13 +88,36 @@
 
 #macro( plainItemLink $item )
 
-    #if( ${item.repositoryId} )
-      <a href="#springUrl('/repository')${item.path}?repositoryId=${item.repositoryId}">${item.name}</a>
+    #if ( ${item.repositoryGroupId} )
+      #set ( $path = "/$item.repositoryGroupId$item.path" )
     #else
-      <a href="#springUrl('/repository')${item.path}">${item.name}</a>
+      #set ( $path = $item.path )
+    #end
+
+    #if( ${item.repositoryId} )
+      <a href="#springUrl('/repository')${path}?repositoryId=${item.repositoryId}">${item.name}</a>
+    #else
+      <a href="#springUrl('/repository')${path}">${item.name}</a>
     #end
 	
 #end
+
+#macro( itemDirectoryLink $item )
+
+    #if ( ${item.repositoryGroupId} )
+      #set ( $path = "/$item.repositoryGroupId$item.directoryPath" )
+    #else
+      #set ( $path = $item.directoryPath )
+    #end
+
+    #if( ${item.repositoryId} )
+		<a href="#springUrl('/repository')${path}?repositoryId=${item.repositoryId}">${path}</a>
+    #else
+        <a href="#springUrl('/repository')${path}">$path</a>
+    #end
+	
+#end
+
 
 
 
