@@ -38,114 +38,114 @@ import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
  */
 public class MavenProximityLogic extends DefaultProximityLogic {
 
-    /**
-     * This implementation says true if the request is about metadata.
-     * 
-     * @return true if the request is about metadata.
-     */
-    public boolean isGroupSearchNeeded(ProximityRequest request) {
+	/**
+	 * This implementation says true if the request is about metadata.
+	 * 
+	 * @return true if the request is about metadata.
+	 */
+	public boolean isGroupSearchNeeded(ProximityRequest request) {
 
-        // will trigger for metadata and their checksums
-        return MavenArtifactRecognizer.isMetadata(request.getPath());
+		// will trigger for metadata and their checksums
+		return MavenArtifactRecognizer.isMetadata(request.getPath());
 
-    }
+	}
 
-    /**
-     * This postprocessing simply merges the fetched list of metadatas.
-     * 
-     * @return the merged metadata.
-     */
-    public Item postprocessItemList(ProximityRequest request, ProximityRequest groupRequest, List listOfProxiedItems)
-            throws IOException {
+	/**
+	 * This postprocessing simply merges the fetched list of metadatas.
+	 * 
+	 * @return the merged metadata.
+	 */
+	public Item postprocessItemList(ProximityRequest request, ProximityRequest groupRequest, List listOfProxiedItems)
+			throws IOException {
 
-        if (listOfProxiedItems.size() == 0) {
+		if (listOfProxiedItems.size() == 0) {
 
-            throw new IllegalArgumentException("The listOfProxiedItems list cannot be 0 length!");
-        }
+			throw new IllegalArgumentException("The listOfProxiedItems list cannot be 0 length!");
+		}
 
-        Item item = (Item) listOfProxiedItems.get(0);
-        ItemProperties itemProps = item.getProperties();
+		Item item = (Item) listOfProxiedItems.get(0);
+		ItemProperties itemProps = item.getProperties();
 
-        if (listOfProxiedItems.size() > 1) {
+		if (listOfProxiedItems.size() > 1) {
 
-            if (MavenArtifactRecognizer.isChecksum(request.getPath())) {
+			if (MavenArtifactRecognizer.isChecksum(request.getPath())) {
 
-                File tmpFile = new File(System.getProperty("java.io.tmpdir"), request.getPath().replace(
-                        ItemProperties.PATH_SEPARATOR.charAt(0), '_'));
-                if (tmpFile.exists()) {
-                    logger.info("Item for path " + request.getPath() + " SPOOFED with merged metadata checksum.");
-                    FileInputStream fis = new FileInputStream(tmpFile);
-                    item.setStream(fis);
-                    itemProps.setSize(tmpFile.length());
-                } else {
-                    logger.info("Item for path " + request.getPath() + " SPOOFED with first got from repo group.");
-                }
+				File tmpFile = new File(System.getProperty("java.io.tmpdir"), request.getPath().replace(
+						ItemProperties.PATH_SEPARATOR.charAt(0), '_'));
+				if (tmpFile.exists()) {
+					logger.info("Item for path " + request.getPath() + " SPOOFED with merged metadata checksum.");
+					FileInputStream fis = new FileInputStream(tmpFile);
+					item.setStream(fis);
+					itemProps.setSize(tmpFile.length());
+				} else {
+					logger.info("Item for path " + request.getPath() + " SPOOFED with first got from repo group.");
+				}
 
-            } else {
-                logger.info("Item for path " + request.getPath() + " found in total of " + listOfProxiedItems.size()
-                        + " repositories, will merge them.");
+			} else {
+				logger.info("Item for path " + request.getPath() + " found in total of " + listOfProxiedItems.size()
+						+ " repositories, will merge them.");
 
-                MetadataXpp3Reader metadataReader = new MetadataXpp3Reader();
-                MetadataXpp3Writer metadataWriter = new MetadataXpp3Writer();
-                InputStreamReader isr;
-                Metadata mergedMetadata = new Metadata();
+				MetadataXpp3Reader metadataReader = new MetadataXpp3Reader();
+				MetadataXpp3Writer metadataWriter = new MetadataXpp3Writer();
+				InputStreamReader isr;
+				Metadata mergedMetadata = new Metadata();
 
-                for (int i = 0; i < listOfProxiedItems.size(); i++) {
+				for (int i = 0; i < listOfProxiedItems.size(); i++) {
 
-                    Item currentItem = (Item) listOfProxiedItems.get(i);
-                    try {
-                        isr = new InputStreamReader(currentItem.getStream());
-                        mergedMetadata.merge(metadataReader.read(isr));
-                        isr.close();
-                    } catch (XmlPullParserException ex) {
-                        logger.warn("Could not merge M2 metadata: " + currentItem.getProperties().getDirectoryPath()
-                                + " from repository " + currentItem.getProperties().getRepositoryId(), ex);
-                    } catch (IOException ex) {
-                        logger.warn("Got IOException during merge of M2 metadata: "
-                                + currentItem.getProperties().getDirectoryPath() + " from repository "
-                                + currentItem.getProperties().getRepositoryId(), ex);
-                    }
+					Item currentItem = (Item) listOfProxiedItems.get(i);
+					try {
+						isr = new InputStreamReader(currentItem.getStream());
+						mergedMetadata.merge(metadataReader.read(isr));
+						isr.close();
+					} catch (XmlPullParserException ex) {
+						logger.warn("Could not merge M2 metadata: " + currentItem.getProperties().getDirectoryPath()
+								+ " from repository " + currentItem.getProperties().getRepositoryId(), ex);
+					} catch (IOException ex) {
+						logger.warn("Got IOException during merge of M2 metadata: "
+								+ currentItem.getProperties().getDirectoryPath() + " from repository "
+								+ currentItem.getProperties().getRepositoryId(), ex);
+					}
 
-                }
+				}
 
-                try {
-                    // we know that maven-metadata.xml is relatively small (few
-                    // KB)
-                    MessageDigest md5alg = MessageDigest.getInstance("md5");
-                    MessageDigest sha1alg = MessageDigest.getInstance("sha1");
-                    ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                    DigestOutputStream md5os = new DigestOutputStream(bos, md5alg);
-                    DigestOutputStream sha1os = new DigestOutputStream(md5os, sha1alg);
-                    OutputStreamWriter osw = new OutputStreamWriter(sha1os);
-                    metadataWriter.write(osw, mergedMetadata);
-                    osw.flush();
-                    osw.close();
+				try {
+					// we know that maven-metadata.xml is relatively small (few
+					// KB)
+					MessageDigest md5alg = MessageDigest.getInstance("md5");
+					MessageDigest sha1alg = MessageDigest.getInstance("sha1");
+					ByteArrayOutputStream bos = new ByteArrayOutputStream();
+					DigestOutputStream md5os = new DigestOutputStream(bos, md5alg);
+					DigestOutputStream sha1os = new DigestOutputStream(md5os, sha1alg);
+					OutputStreamWriter osw = new OutputStreamWriter(sha1os);
+					metadataWriter.write(osw, mergedMetadata);
+					osw.flush();
+					osw.close();
 
-                    storeDigest(request, md5alg);
-                    storeDigest(request, sha1alg);
+					storeDigest(request, md5alg);
+					storeDigest(request, sha1alg);
 
-                    ByteArrayInputStream is = new ByteArrayInputStream(bos.toByteArray());
-                    item.setStream(is);
-                    itemProps.setSize(bos.size());
-                } catch (NoSuchAlgorithmException ex) {
-                    throw new IllegalArgumentException("No MD5 or SHA1 algorithm?", ex);
-                }
-            }
+					ByteArrayInputStream is = new ByteArrayInputStream(bos.toByteArray());
+					item.setStream(is);
+					itemProps.setSize(bos.size());
+				} catch (NoSuchAlgorithmException ex) {
+					throw new IllegalArgumentException("No MD5 or SHA1 algorithm?", ex);
+				}
+			}
 
-        }
+		}
 
-        return item;
-    }
+		return item;
+	}
 
-    protected void storeDigest(ProximityRequest req, MessageDigest dig) throws IOException {
-        File tmpFile = new File(System.getProperty("java.io.tmpdir"), req.getPath().replace(
-                ItemProperties.PATH_SEPARATOR.charAt(0), '_')
-                + "." + dig.getAlgorithm().toLowerCase());
-        tmpFile.deleteOnExit();
-        FileWriter fw = new FileWriter(tmpFile);
-        fw.write(new String(Hex.encodeHex(dig.digest())) + "\n");
-        fw.flush();
-        fw.close();
+	protected void storeDigest(ProximityRequest req, MessageDigest dig) throws IOException {
+		File tmpFile = new File(System.getProperty("java.io.tmpdir"), req.getPath().replace(
+				ItemProperties.PATH_SEPARATOR.charAt(0), '_')
+				+ "." + dig.getAlgorithm().toLowerCase());
+		tmpFile.deleteOnExit();
+		FileWriter fw = new FileWriter(tmpFile);
+		fw.write(new String(Hex.encodeHex(dig.digest())) + "\n");
+		fw.flush();
+		fw.close();
 
-    }
+	}
 }
