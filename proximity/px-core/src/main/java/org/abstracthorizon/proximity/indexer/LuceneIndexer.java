@@ -38,6 +38,8 @@ public class LuceneIndexer extends AbstractIndexer {
 
 	public static String DOC_REPO = "_repo";
 
+	public static String DOC_GROUP = "_group";
+
 	private boolean recreateIndexes = true;
 
 	private int dirtyItemTreshold = 100;
@@ -179,6 +181,7 @@ public class LuceneIndexer extends AbstractIndexer {
 		result.add(new Field(DOC_PATH, item.getDirectoryPath(), Field.Store.YES, Field.Index.UN_TOKENIZED));
 		result.add(new Field(DOC_NAME, item.getName(), Field.Store.YES, Field.Index.UN_TOKENIZED));
 		result.add(new Field(DOC_REPO, item.getRepositoryId(), Field.Store.YES, Field.Index.UN_TOKENIZED));
+		result.add(new Field(DOC_GROUP, item.getRepositoryGroupId(), Field.Store.YES, Field.Index.UN_TOKENIZED));
 		// index all other stuff
 		for (Iterator i = getSearchableKeywords().iterator(); i.hasNext();) {
 			key = (String) i.next();
@@ -213,6 +216,7 @@ public class LuceneIndexer extends AbstractIndexer {
 				rip.setDirectoryPath(doc.getField(DOC_PATH).stringValue());
 				rip.setName(doc.getField(DOC_NAME).stringValue());
 				rip.setRepositoryId(doc.getField(DOC_REPO).stringValue());
+				rip.setRepositoryGroupId(doc.getField(DOC_GROUP).stringValue());
 				result.add(rip);
 			}
 			searcher.close();
@@ -226,6 +230,7 @@ public class LuceneIndexer extends AbstractIndexer {
 		kwSet.add(DOC_PATH);
 		kwSet.add(DOC_NAME);
 		kwSet.add(DOC_REPO);
+		kwSet.add(DOC_GROUP);
 	}
 
 	protected void doInitialize() {
