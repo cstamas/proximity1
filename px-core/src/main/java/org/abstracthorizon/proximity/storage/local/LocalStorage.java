@@ -1,6 +1,5 @@
 package org.abstracthorizon.proximity.storage.local;
 
-
 import java.util.List;
 import java.util.Map;
 
@@ -10,16 +9,16 @@ import org.abstracthorizon.proximity.storage.StorageException;
 
 public interface LocalStorage extends Storage {
 
-    boolean isWritable();
+	boolean isWritable();
 
-    boolean isMetadataAware();
-    
-    void recreateMetadata(Map additionalProps) throws StorageException;
+	boolean isMetadataAware();
 
-    List listItems(String path) throws StorageException;
+	void recreateMetadata(Map additionalProps) throws StorageException;
 
-    void storeItem(Item item) throws StorageException;
+	List listItems(String path) throws StorageException;
 
-    void deleteItem(String path) throws StorageException;
+	void storeItem(Item item) throws StorageException;
+
+	void deleteItem(String path) throws StorageException;
 
 }

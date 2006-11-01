@@ -16,75 +16,75 @@ import org.abstracthorizon.proximity.storage.StorageException;
  */
 public interface Indexer {
 
-    /**
-     * Initializes indexer. Implementation dependent.
-     * 
-     */
-    void initialize();
+	/**
+	 * Initializes indexer. Implementation dependent.
+	 * 
+	 */
+	void initialize();
 
-    /**
-     * Regiters a repository with indexer.
-     * 
-     * @param repository
-     */
-    void registerRepository(Repository repository);
+	/**
+	 * Regiters a repository with indexer.
+	 * 
+	 * @param repository
+	 */
+	void registerRepository(Repository repository);
 
-    /**
-     * Unregisters a repositort from indexer.
-     * 
-     * @param repository
-     */
-    void unregisterRepository(Repository repository);
+	/**
+	 * Unregisters a repositort from indexer.
+	 * 
+	 * @param repository
+	 */
+	void unregisterRepository(Repository repository);
 
-    /**
-     * Returns the list that this indexer have searchable.
-     * 
-     * @return list of keywords usable in searches.
-     */
-    List getSearchableKeywords();
+	/**
+	 * Returns the list that this indexer have searchable.
+	 * 
+	 * @return list of keywords usable in searches.
+	 */
+	List getSearchableKeywords();
 
-    /**
-     * Adds ItemProperties to index.
-     * 
-     * @param ip
-     * @throws StorageException
-     */
-    void addItemProperties(ItemProperties ip) throws StorageException;
+	/**
+	 * Adds ItemProperties to index.
+	 * 
+	 * @param ip
+	 * @throws StorageException
+	 */
+	void addItemProperties(ItemProperties ip) throws StorageException;
 
-    /**
-     * Adds a list of ItemProperties to index.
-     * 
-     * @param itemProperties
-     * @throws StorageException
-     */
-    void addItemProperties(List itemProperties) throws StorageException;
+	/**
+	 * Adds a list of ItemProperties to index.
+	 * 
+	 * @param itemProperties
+	 * @throws StorageException
+	 */
+	void addItemProperties(List itemProperties) throws StorageException;
 
-    /**
-     * Removes ItemProperties from index.
-     * 
-     * @param ip
-     * @throws ItemNotFoundException
-     * @throws StorageException
-     */
-    void deleteItemProperties(ItemProperties ip) throws ItemNotFoundException, StorageException;
+	/**
+	 * Removes ItemProperties from index.
+	 * 
+	 * @param ip
+	 * @throws ItemNotFoundException
+	 * @throws StorageException
+	 */
+	void deleteItemProperties(ItemProperties ip) throws ItemNotFoundException, StorageException;
 
-    /**
-     * Performs a search using ip as "example".
-     * 
-     * @param ip
-     * @return
-     * @throws StorageException
-     */
-    List searchByItemPropertiesExample(ItemProperties ip) throws StorageException;
+	/**
+	 * Performs a search using ip as "example".
+	 * 
+	 * @param ip
+	 * @return
+	 * @throws StorageException
+	 */
+	List searchByItemPropertiesExample(ItemProperties ip) throws StorageException;
 
-    /**
-     * Indexer implementation dependent. Performs a search by some query.
-     * 
-     * @param query
-     * @return
-     * @throws IndexerException
-     * @throws StorageException
-     */
-    List searchByQuery(String query) throws IndexerException, StorageException;
+	/**
+	 * Indexer implementation dependent. Performs a search by some query.
+	 * 
+	 * @param query
+	 * @return
+	 * @throws IndexerException
+	 * @throws StorageException
+	 */
+	List searchByQuery(String query) throws IndexerException, StorageException;
 
 }

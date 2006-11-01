@@ -44,279 +44,280 @@ import org.apache.commons.io.IOUtils;
  */
 public class CommonsHttpClientRemotePeer extends AbstractRemoteStorage {
 
-    private HttpMethodRetryHandler httpRetryHandler = null;
+	private HttpMethodRetryHandler httpRetryHandler = null;
 
-    private HostConfiguration httpConfiguration = null;
+	private HostConfiguration httpConfiguration = null;
 
-    private HttpClient httpClient = null;
+	private HttpClient httpClient = null;
 
-    private boolean followRedirection = true;
+	private boolean followRedirection = true;
 
-    private String queryString = null;
-    
-    private String userAgentString = null;
+	private String queryString = null;
 
-    private int connectionTimeout = 5000;
+	private String userAgentString = null;
 
-    private int retrievalRetryCount = 3;
+	private int connectionTimeout = 5000;
 
-    private String proxyHost = null;
+	private int retrievalRetryCount = 3;
 
-    private int proxyPort = 8080;
+	private String proxyHost = null;
 
-    private String proxyUsername = null;
+	private int proxyPort = 8080;
 
-    private String proxyPassword = null;
+	private String proxyUsername = null;
 
-    private String proxyNtlmDomain = null;
+	private String proxyPassword = null;
 
-    private String proxyNtlmHost = null;
+	private String proxyNtlmDomain = null;
 
-    public String getUserAgentString() {
-        return userAgentString;
-    }
+	private String proxyNtlmHost = null;
 
-    public void setUserAgentString(String userAgentString) {
-        this.userAgentString = userAgentString;
-    }
+	public String getUserAgentString() {
+		return userAgentString;
+	}
 
-    public String getProxyHost() {
-        return proxyHost;
-    }
+	public void setUserAgentString(String userAgentString) {
+		this.userAgentString = userAgentString;
+	}
 
-    public void setProxyHost(String proxyHost) {
-        this.proxyHost = proxyHost;
-    }
+	public String getProxyHost() {
+		return proxyHost;
+	}
 
-    public String getProxyPassword() {
-        return proxyPassword;
-    }
+	public void setProxyHost(String proxyHost) {
+		this.proxyHost = proxyHost;
+	}
 
-    public void setProxyPassword(String proxyPassword) {
-        this.proxyPassword = proxyPassword;
-    }
+	public String getProxyPassword() {
+		return proxyPassword;
+	}
 
-    public int getProxyPort() {
-        return proxyPort;
-    }
+	public void setProxyPassword(String proxyPassword) {
+		this.proxyPassword = proxyPassword;
+	}
 
-    public void setProxyPort(int proxyPort) {
-        this.proxyPort = proxyPort;
-    }
+	public int getProxyPort() {
+		return proxyPort;
+	}
 
-    public String getProxyUsername() {
-        return proxyUsername;
-    }
+	public void setProxyPort(int proxyPort) {
+		this.proxyPort = proxyPort;
+	}
 
-    public void setProxyUsername(String proxyUsername) {
-        this.proxyUsername = proxyUsername;
-    }
+	public String getProxyUsername() {
+		return proxyUsername;
+	}
 
-    public String getProxyNtlmDomain() {
-        return proxyNtlmDomain;
-    }
+	public void setProxyUsername(String proxyUsername) {
+		this.proxyUsername = proxyUsername;
+	}
 
-    public void setProxyNtlmDomain(String proxyNtlmDomain) {
-        this.proxyNtlmDomain = proxyNtlmDomain;
-    }
+	public String getProxyNtlmDomain() {
+		return proxyNtlmDomain;
+	}
 
-    public String getProxyNtlmHost() {
-        return proxyNtlmHost;
-    }
+	public void setProxyNtlmDomain(String proxyNtlmDomain) {
+		this.proxyNtlmDomain = proxyNtlmDomain;
+	}
 
-    public void setProxyNtlmHost(String proxyNtlmHost) {
-        this.proxyNtlmHost = proxyNtlmHost;
-    }
+	public String getProxyNtlmHost() {
+		return proxyNtlmHost;
+	}
 
-    public String getQueryString() {
-        return queryString;
-    }
+	public void setProxyNtlmHost(String proxyNtlmHost) {
+		this.proxyNtlmHost = proxyNtlmHost;
+	}
 
-    public void setQueryString(String queryString) {
-        this.queryString = queryString;
-    }
+	public String getQueryString() {
+		return queryString;
+	}
 
-    public void setConnectionTimeout(int connectionTimeout) {
-        this.connectionTimeout = connectionTimeout;
-    }
+	public void setQueryString(String queryString) {
+		this.queryString = queryString;
+	}
 
-    public int getConnectionTimeout() {
-        return connectionTimeout;
-    }
+	public void setConnectionTimeout(int connectionTimeout) {
+		this.connectionTimeout = connectionTimeout;
+	}
 
-    public int getRetrievalRetryCount() {
-        return retrievalRetryCount;
-    }
+	public int getConnectionTimeout() {
+		return connectionTimeout;
+	}
 
-    public void setRetrievalRetryCount(int retrievalRetryCount) {
-        this.retrievalRetryCount = retrievalRetryCount;
-    }
+	public int getRetrievalRetryCount() {
+		return retrievalRetryCount;
+	}
 
-    public void setFollowRedirection(boolean followRedirection) {
-        this.followRedirection = followRedirection;
-    }
+	public void setRetrievalRetryCount(int retrievalRetryCount) {
+		this.retrievalRetryCount = retrievalRetryCount;
+	}
 
-    public boolean isFollowRedirection() {
-        return followRedirection;
-    }
+	public void setFollowRedirection(boolean followRedirection) {
+		this.followRedirection = followRedirection;
+	}
 
-    public boolean containsItemProperties(String path) {
-        return containsItem(path);
-    }
+	public boolean isFollowRedirection() {
+		return followRedirection;
+	}
 
-    public boolean containsItem(String path) {
-        HeadMethod head = new HeadMethod(getAbsoluteUrl(path));
-        int response = executeMethod(head);
-        return response == HttpStatus.SC_OK;
-    }
+	public boolean containsItemProperties(String path) {
+		return containsItem(path);
+	}
 
-    public Item retrieveItem(String path, boolean propsOnly) throws ItemNotFoundException, StorageException {
-        // TODO: propsOnly is ignored, use HTTP HEAD?
-        String originatingUrlString = getAbsoluteUrl(path);
-        GetMethod get = new GetMethod(originatingUrlString);
-        try {
-            try {
-                int response = executeMethod(get);
-                if (response == HttpStatus.SC_OK) {
-                    logger.info("Item [{}] fetched from remote location {}", path, getRemoteUrl());
-                    // ProxiedItemProperties properties =
-                    // constructItemPropertiesFromGetResponse(path,
-                    // originatingUrlString, get);
+	public boolean containsItem(String path) {
+		HeadMethod head = new HeadMethod(getAbsoluteUrl(path));
+		int response = executeMethod(head);
+		return response == HttpStatus.SC_OK;
+	}
 
-                    Item result = new Item();
-                    ItemProperties ip = null;
+	public Item retrieveItem(String path, boolean propsOnly) throws ItemNotFoundException, StorageException {
+		// TODO: propsOnly is ignored, use HTTP HEAD?
+		String originatingUrlString = getAbsoluteUrl(path);
+		GetMethod get = new GetMethod(originatingUrlString);
+		try {
+			try {
+				logger.info("Fetching item [{}] from remote location {}", path, originatingUrlString);
+				int response = executeMethod(get);
+				if (response == HttpStatus.SC_OK) {
+					// ProxiedItemProperties properties =
+					// constructItemPropertiesFromGetResponse(path,
+					// originatingUrlString, get);
 
-                    // is it a file?
-                    if (get.getResponseHeader("last-modified") != null) {
-                        File tmpFile = File.createTempFile(FilenameUtils.getName(path), null);
-                        tmpFile.deleteOnExit();
-                        FileOutputStream fos = new FileOutputStream(tmpFile);
-                        IOUtils.copy(get.getResponseBodyAsStream(), fos);
-                        fos.flush();
-                        fos.close();
-                        tmpFile.setLastModified(makeDateFromHeader(get.getResponseHeader("last-modified")));
-                        ip = getProxiedItemPropertiesFactory().expandItemProperties(path, tmpFile, true);
-                        InputStream is = new DeleteOnCloseFileInputStream(tmpFile);
-                        result.setStream(is);
-                    } else {
-                        // TODO: dirty hack, I am creating a dir named after the
-                        // directory retrieval just to get item properties!!!
-                        // Fix this!
-                        File tmpdir = new File(System.getProperty("java.io.tmpdir"), FilenameUtils.getName(path));
-                        tmpdir.mkdir();
-                        ip = getProxiedItemPropertiesFactory().expandItemProperties(path, tmpdir, true);
-                        tmpdir.delete();
-                        result.setStream(null);
-                    }
-                    result.setProperties(ip);
-                    result.getProperties().setRemoteUrl(originatingUrlString);
-                    return result;
-                } else {
-                    if (response == HttpStatus.SC_NOT_FOUND) {
-                        throw new ItemNotFoundException(path);
-                    } else {
-                        throw new StorageException("The method execution returned result code " + response);
-                    }
-                }
-            } catch (MalformedURLException ex) {
-                throw new StorageException("The path " + path + " is malformed!", ex);
-            } catch (IOException ex) {
-                throw new StorageException("IO Error during response stream handling!", ex);
-            }
-        } finally {
-            get.releaseConnection();
-        }
-    }
+					Item result = new Item();
+					ItemProperties ip = null;
 
-    public HttpClient getHttpClient() {
-        if (httpClient == null) {
-            logger.info("Creating CommonsHttpClient instance");
-            httpRetryHandler = new DefaultHttpMethodRetryHandler(retrievalRetryCount, true);
-            httpClient = new HttpClient(new MultiThreadedHttpConnectionManager());
-            httpClient.getParams().setConnectionManagerTimeout(getConnectionTimeout());
+					// is it a file?
+					if (get.getResponseHeader("last-modified") != null) {
+						File tmpFile = File.createTempFile(FilenameUtils.getName(path), null);
+						tmpFile.deleteOnExit();
+						FileOutputStream fos = new FileOutputStream(tmpFile);
+						IOUtils.copy(get.getResponseBodyAsStream(), fos);
+						fos.flush();
+						fos.close();
+						tmpFile.setLastModified(makeDateFromHeader(get.getResponseHeader("last-modified")));
+						ip = getProxiedItemPropertiesFactory().expandItemProperties(path, tmpFile, true);
+						InputStream is = new DeleteOnCloseFileInputStream(tmpFile);
+						result.setStream(is);
+					} else {
+						// TODO: dirty hack, I am creating a dir named after the
+						// directory retrieval just to get item properties!!!
+						// Fix this!
+						File tmpdir = new File(System.getProperty("java.io.tmpdir"), FilenameUtils.getName(path));
+						tmpdir.mkdir();
+						ip = getProxiedItemPropertiesFactory().expandItemProperties(path, tmpdir, true);
+						tmpdir.delete();
+						result.setStream(null);
+					}
+					result.setProperties(ip);
+					result.getProperties().setRemoteUrl(originatingUrlString);
+					return result;
+				} else {
+					if (response == HttpStatus.SC_NOT_FOUND) {
+						throw new ItemNotFoundException(path);
+					} else {
+						throw new StorageException("The method execution returned result code " + response);
+					}
+				}
+			} catch (MalformedURLException ex) {
+				throw new StorageException("The path " + path + " is malformed!", ex);
+			} catch (IOException ex) {
+				throw new StorageException("IO Error during response stream handling!", ex);
+			}
+		} finally {
+			get.releaseConnection();
+		}
+	}
 
-            httpConfiguration = httpClient.getHostConfiguration();
+	public HttpClient getHttpClient() {
+		if (httpClient == null) {
+			logger.info("Creating CommonsHttpClient instance");
+			httpRetryHandler = new DefaultHttpMethodRetryHandler(retrievalRetryCount, true);
+			httpClient = new HttpClient(new MultiThreadedHttpConnectionManager());
+			httpClient.getParams().setConnectionManagerTimeout(getConnectionTimeout());
 
-            if (getProxyHost() != null) {
-                logger.info("... proxy setup with host {}", getProxyHost());
-                httpConfiguration.setProxy(getProxyHost(), getProxyPort());
+			httpConfiguration = httpClient.getHostConfiguration();
 
-                if (getProxyUsername() != null) {
+			if (getProxyHost() != null) {
+				logger.info("... proxy setup with host {}", getProxyHost());
+				httpConfiguration.setProxy(getProxyHost(), getProxyPort());
 
-                    List authPrefs = new ArrayList(2);
-                    authPrefs.add(AuthPolicy.DIGEST);
-                    authPrefs.add(AuthPolicy.BASIC);
+				if (getProxyUsername() != null) {
 
-                    if (getProxyNtlmDomain() != null) {
+					List authPrefs = new ArrayList(2);
+					authPrefs.add(AuthPolicy.DIGEST);
+					authPrefs.add(AuthPolicy.BASIC);
 
-                        // Using NTLM auth, adding it as first in policies
-                        authPrefs.add(0, AuthPolicy.NTLM);
+					if (getProxyNtlmDomain() != null) {
 
-                        logger.info("... proxy authentication setup for NTLM domain {}, username {}",
-                                getProxyNtlmDomain(), getProxyUsername());
-                        httpConfiguration.setHost(getProxyNtlmHost());
+						// Using NTLM auth, adding it as first in policies
+						authPrefs.add(0, AuthPolicy.NTLM);
 
-                        httpClient.getState().setProxyCredentials(
-                                AuthScope.ANY,
-                                new NTCredentials(getProxyUsername(), getProxyPassword(), getProxyNtlmHost(),
-                                        getProxyNtlmDomain()));
-                    } else {
+						logger.info("... proxy authentication setup for NTLM domain {}, username {}",
+								getProxyNtlmDomain(), getProxyUsername());
+						httpConfiguration.setHost(getProxyNtlmHost());
 
-                        // Using Username/Pwd auth, will not add NTLM
-                        logger.info("... proxy authentication setup for http proxy {}, username {}", getProxyHost(),
-                                getProxyUsername());
+						httpClient.getState().setProxyCredentials(
+								AuthScope.ANY,
+								new NTCredentials(getProxyUsername(), getProxyPassword(), getProxyNtlmHost(),
+										getProxyNtlmDomain()));
+					} else {
 
-                        httpClient.getState().setProxyCredentials(AuthScope.ANY,
-                                new UsernamePasswordCredentials(getProxyUsername(), getProxyPassword()));
+						// Using Username/Pwd auth, will not add NTLM
+						logger.info("... proxy authentication setup for http proxy {}, username {}", getProxyHost(),
+								getProxyUsername());
 
-                    }
-                    httpClient.getParams().setParameter(AuthPolicy.AUTH_SCHEME_PRIORITY, authPrefs);
-                }
+						httpClient.getState().setProxyCredentials(AuthScope.ANY,
+								new UsernamePasswordCredentials(getProxyUsername(), getProxyPassword()));
 
-            }
-        }
-        return httpClient;
-    }
+					}
+					httpClient.getParams().setParameter(AuthPolicy.AUTH_SCHEME_PRIORITY, authPrefs);
+				}
 
-    protected int executeMethod(HttpMethod method) {
-        if (getUserAgentString() != null) {
-            method.setRequestHeader(new Header("user-agent", getUserAgentString()));
-        }
-        method.setRequestHeader(new Header("accept", "*/*"));
-        method.setRequestHeader(new Header("accept-language", "en-us"));
-        method.setRequestHeader(new Header("accept-encoding", "gzip, deflate"));
-        method.setRequestHeader(new Header("connection", "Keep-Alive"));
-        method.setRequestHeader(new Header("cache-control", "no-cache"));
-        method.setFollowRedirects(isFollowRedirection());
-        method.getParams().setParameter(HttpMethodParams.RETRY_HANDLER, httpRetryHandler);
-        method.setQueryString(getQueryString());
-        int resultCode = 0;
-        try {
-            resultCode = getHttpClient().executeMethod(httpConfiguration, method);
-        } catch (HttpException ex) {
-            logger.error("Protocol error while executing " + method.getName() + " method", ex);
-        } catch (IOException ex) {
-            logger.error("Tranport error while executing " + method.getName() + " method", ex);
-        }
-        return resultCode;
-    }
+			}
+		}
+		return httpClient;
+	}
 
-    protected long makeDateFromHeader(Header date) {
-        Date result = null;
-        if (date != null) {
-            try {
-                result = DateUtil.parseDate(date.getValue());
-            } catch (DateParseException ex) {
-                logger.warn("Could not parse date {} because of {}, using system current time as item creation time.", date, ex);
-                result = new Date();
-            } catch (NullPointerException ex) {
-                logger.warn("Parsed date is null, using system current time as item creation time.");
-                result = new Date();
-            }
-        } else {
-            result = new Date();
-        }
-        return result.getTime();
-    }
+	protected int executeMethod(HttpMethod method) {
+		if (getUserAgentString() != null) {
+			method.setRequestHeader(new Header("user-agent", getUserAgentString()));
+		}
+		method.setRequestHeader(new Header("accept", "*/*"));
+		method.setRequestHeader(new Header("accept-language", "en-us"));
+		method.setRequestHeader(new Header("accept-encoding", "gzip, deflate"));
+		method.setRequestHeader(new Header("connection", "Keep-Alive"));
+		method.setRequestHeader(new Header("cache-control", "no-cache"));
+		method.setFollowRedirects(isFollowRedirection());
+		method.getParams().setParameter(HttpMethodParams.RETRY_HANDLER, httpRetryHandler);
+		method.setQueryString(getQueryString());
+		int resultCode = 0;
+		try {
+			resultCode = getHttpClient().executeMethod(httpConfiguration, method);
+		} catch (HttpException ex) {
+			logger.error("Protocol error while executing " + method.getName() + " method", ex);
+		} catch (IOException ex) {
+			logger.error("Tranport error while executing " + method.getName() + " method", ex);
+		}
+		return resultCode;
+	}
+
+	protected long makeDateFromHeader(Header date) {
+		Date result = null;
+		if (date != null) {
+			try {
+				result = DateUtil.parseDate(date.getValue());
+			} catch (DateParseException ex) {
+				logger.warn("Could not parse date {} because of {}, using system current time as item creation time.",
+						date, ex);
+				result = new Date();
+			} catch (NullPointerException ex) {
+				logger.warn("Parsed date is null, using system current time as item creation time.");
+				result = new Date();
+			}
+		} else {
+			result = new Date();
+		}
+		return result.getTime();
+	}
 
 }

@@ -7,16 +7,16 @@ import java.io.OutputStream;
  * Sends bytes to nowhere.
  * 
  * @author cstamas
- *
+ * 
  */
 public class DevNullOutputStream extends OutputStream {
 
-    public DevNullOutputStream() {
-        super();
-    }
+	public DevNullOutputStream() {
+		super();
+	}
 
-    public void write(int b) throws IOException {
-        //nothing
-    }
+	public void write(int b) throws IOException {
+		// nothing
+	}
 
 }

@@ -12,12 +12,12 @@ import org.abstracthorizon.proximity.metadata.ProxiedItemPropertiesFactory;
  */
 public interface Storage {
 
-    boolean containsItem(String path) throws StorageException;
+	boolean containsItem(String path) throws StorageException;
 
-    Item retrieveItem(String path, boolean propsOnly) throws ItemNotFoundException, StorageException;
+	Item retrieveItem(String path, boolean propsOnly) throws ItemNotFoundException, StorageException;
 
-    ProxiedItemPropertiesFactory getProxiedItemPropertiesFactory();
+	ProxiedItemPropertiesFactory getProxiedItemPropertiesFactory();
 
-    void setProxiedItemPropertiesFactory(ProxiedItemPropertiesFactory pic);
-    
+	void setProxiedItemPropertiesFactory(ProxiedItemPropertiesFactory pic);
+
 }

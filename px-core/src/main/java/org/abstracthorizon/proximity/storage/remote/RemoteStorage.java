@@ -1,6 +1,5 @@
 package org.abstracthorizon.proximity.storage.remote;
 
-
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -14,10 +13,10 @@ import org.abstracthorizon.proximity.storage.Storage;
  */
 public interface RemoteStorage extends Storage {
 
-    URL getRemoteUrl();
+	URL getRemoteUrl();
 
-    void setRemoteUrl(URL url) throws MalformedURLException;
+	void setRemoteUrl(URL url) throws MalformedURLException;
 
-    String getAbsoluteUrl(String path);
+	String getAbsoluteUrl(String path);
 
 }
