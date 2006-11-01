@@ -149,13 +149,15 @@ public class LuceneIndexer extends AbstractIndexer {
 		BooleanQuery query = new BooleanQuery();
 		for (Iterator i = ip.getAllMetadata().keySet().iterator(); i.hasNext();) {
 			String key = (String) i.next();
-			Query termQ;
-			if (ip.getMetadata(key).indexOf("?") != -1 || ip.getMetadata(key).indexOf("*") != -1) {
-				termQ = new WildcardQuery(new Term(key, ip.getMetadata(key)));
-			} else {
-				termQ = new FuzzyQuery(new Term(key, ip.getMetadata(key)));
+			if (ip.getMetadata(key) != null && ip.getMetadata(key).length() > 0) {
+				Query termQ;
+				if (ip.getMetadata(key).indexOf("?") != -1 || ip.getMetadata(key).indexOf("*") != -1) {
+					termQ = new WildcardQuery(new Term(key, ip.getMetadata(key)));
+				} else {
+					termQ = new FuzzyQuery(new Term(key, ip.getMetadata(key)));
+				}
+				query.add(termQ, BooleanClause.Occur.MUST);
 			}
-			query.add(termQ, BooleanClause.Occur.MUST);
 		}
 		return search(query);
 	}

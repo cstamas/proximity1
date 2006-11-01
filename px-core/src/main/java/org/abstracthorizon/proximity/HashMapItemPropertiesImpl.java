@@ -18,14 +18,6 @@ public class HashMapItemPropertiesImpl implements ItemProperties {
 
 	private DateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss Z");
 
-	public HashMapItemPropertiesImpl() {
-		super();
-		// setup some defaults
-		setDirectory(false);
-		setFile(true);
-		setSize(0);
-	}
-
 	public String getDirectoryPath() {
 		return getMetadata(METADATA_DIRECTORY_PATH);
 	}
@@ -54,7 +46,11 @@ public class HashMapItemPropertiesImpl implements ItemProperties {
 	}
 
 	public boolean isDirectory() {
-		return Boolean.valueOf(getMetadata(METADATA_IS_DIRECTORY)).booleanValue();
+		if (getMetadataMap().containsKey(METADATA_IS_DIRECTORY)) {
+			return Boolean.valueOf(getMetadata(METADATA_IS_DIRECTORY)).booleanValue();
+		} else {
+			return false;
+		}
 	}
 
 	public void setDirectory(boolean directory) {
@@ -62,7 +58,11 @@ public class HashMapItemPropertiesImpl implements ItemProperties {
 	}
 
 	public boolean isFile() {
-		return Boolean.valueOf(getMetadata(METADATA_IS_FILE)).booleanValue();
+		if (getMetadataMap().containsKey(METADATA_IS_FILE)) {
+			return Boolean.valueOf(getMetadata(METADATA_IS_FILE)).booleanValue();
+		} else {
+			return false;
+		}
 	}
 
 	public void setFile(boolean file) {
@@ -70,7 +70,11 @@ public class HashMapItemPropertiesImpl implements ItemProperties {
 	}
 
 	public boolean isCached() {
-		return Boolean.valueOf(getMetadata(METADATA_IS_CACHED)).booleanValue();
+		if (getMetadataMap().containsKey(METADATA_IS_CACHED)) {
+			return Boolean.valueOf(getMetadata(METADATA_IS_CACHED)).booleanValue();
+		} else {
+			return false;
+		}
 	}
 
 	public void setCached(boolean cached) {
@@ -143,7 +147,11 @@ public class HashMapItemPropertiesImpl implements ItemProperties {
 	}
 
 	public long getSize() {
-		return Long.parseLong(getMetadata(METADATA_FILESIZE));
+		if (getMetadataMap().containsKey(METADATA_FILESIZE)) {
+			return Long.parseLong(getMetadata(METADATA_FILESIZE));
+		} else {
+			return 0;
+		}
 	}
 
 	public void setSize(long size) {
