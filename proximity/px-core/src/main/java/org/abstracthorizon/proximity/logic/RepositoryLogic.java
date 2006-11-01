@@ -16,59 +16,59 @@ import org.abstracthorizon.proximity.Repository;
  */
 public interface RepositoryLogic {
 
-    /**
-     * Return true if repository should check for local cached version of the
-     * path.
-     * 
-     * @param path
-     * @return
-     */
-    boolean shouldCheckForLocalCopy(ProximityRequest request);
+	/**
+	 * Return true if repository should check for local cached version of the
+	 * path.
+	 * 
+	 * @param path
+	 * @return
+	 */
+	boolean shouldCheckForLocalCopy(Repository repository, ProximityRequest request);
 
-    /**
-     * Postprocess item if needed after local copy found.
-     * 
-     * @param item
-     * @param repository
-     * @return
-     */
-    Item afterLocalCopyFound(ProximityRequest request, Item item, Repository repository);
+	/**
+	 * Postprocess item if needed after local copy found.
+	 * 
+	 * @param item
+	 * @param repository
+	 * @return
+	 */
+	Item afterLocalCopyFound(Repository repository, ProximityRequest request, Item item);
 
-    /**
-     * Return true if repository should initiate remote lookup.
-     * 
-     * @param path
-     * @param localItemnot
-     *            null if there is a local copy found, null otherwise.
-     * @return true is there is need to check remote copy
-     */
-    boolean shouldCheckForRemoteCopy(ProximityRequest request, Item localItem);
+	/**
+	 * Return true if repository should initiate remote lookup.
+	 * 
+	 * @param path
+	 * @param localItemnot
+	 *            null if there is a local copy found, null otherwise.
+	 * @return true is there is need to check remote copy
+	 */
+	boolean shouldCheckForRemoteCopy(Repository repository, ProximityRequest request, Item localItem);
 
-    /**
-     * Postprocess item if needed after remote retrieval.
-     * 
-     * @param localItem -
-     *            the artifact found locally
-     * @param repository -
-     *            the artifact found remotely
-     * @return
-     */
-    Item afterRemoteCopyFound(ProximityRequest request, Item localItem, Item remoteItem,
-            Repository repository);
+	/**
+	 * Postprocess item if needed after remote retrieval.
+	 * 
+	 * @param localItem -
+	 *            the artifact found locally
+	 * @param repository -
+	 *            the artifact found remotely
+	 * @return
+	 */
+	Item afterRemoteCopyFound(Repository repository, ProximityRequest request, Item localItem, Item remoteItem);
 
-    /**
-     * Return true if reposotiry should store the remote retrieved item in a
-     * local writable store.
-     * 
-     * @param localItem
-     * @param remoteItem
-     * @return
-     */
-    boolean shouldStoreLocallyAfterRemoteRetrieval(ProximityRequest request, Item localItem, Item remoteItem);
+	/**
+	 * Return true if reposotiry should store the remote retrieved item in a
+	 * local writable store.
+	 * 
+	 * @param localItem
+	 * @param remoteItem
+	 * @return
+	 */
+	boolean shouldStoreLocallyAfterRemoteRetrieval(Repository repository, ProximityRequest request, Item localItem,
+			Item remoteItem);
 
-    /**
-     * Choose tha artifact to serve.
-     */
-    public Item afterRetrieval(ProximityRequest request, Item localItem, Item remoteItem);
+	/**
+	 * Choose tha artifact to serve.
+	 */
+	public Item afterRetrieval(Repository repository, ProximityRequest request, Item localItem, Item remoteItem);
 
 }

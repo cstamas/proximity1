@@ -15,67 +15,67 @@ import org.abstracthorizon.proximity.ItemProperties;
 
 public class JarFileInspector extends AbstractItemInspector {
 
-    public static String JAR_MF = "jar.mf";
+	public static String JAR_MF = "jar.mf";
 
-    public static String JAR_DIRS = "jar.dirs";
+	public static String JAR_DIRS = "jar.dirs";
 
-    public static String JAR_FILES = "jar.files";
+	public static String JAR_FILES = "jar.files";
 
-    public boolean isHandled(ItemProperties ip) {
-        try {
-            String ext = ip.getExtension().toLowerCase();
-            return "jar".equals(ext) || "war".equals(ext) || "ear".equals(ext);
-        } catch (NullPointerException ex) {
-            return false;
-        }
-    }
+	public boolean isHandled(ItemProperties ip) {
+		try {
+			String ext = ip.getExtension().toLowerCase();
+			return "jar".equals(ext) || "war".equals(ext) || "ear".equals(ext);
+		} catch (NullPointerException ex) {
+			return false;
+		}
+	}
 
-    public List getIndexableKeywords() {
-        List result = new ArrayList(1);
-        result.add(JAR_FILES);
-        result.add(JAR_DIRS);
-        result.add(JAR_MF);
-        return result;
-    }
+	public List getIndexableKeywords() {
+		List result = new ArrayList(1);
+		result.add(JAR_FILES);
+		result.add(JAR_DIRS);
+		result.add(JAR_MF);
+		return result;
+	}
 
-    public void processItem(ItemProperties ip, File file) {
-        try {
+	public void processItem(ItemProperties ip, File file) {
+		try {
 
-            JarFile jFile = new JarFile(file);
-            StringBuffer dirs = new StringBuffer(jFile.size());
-            StringBuffer files = new StringBuffer(jFile.size());
+			JarFile jFile = new JarFile(file);
+			StringBuffer dirs = new StringBuffer(jFile.size());
+			StringBuffer files = new StringBuffer(jFile.size());
 
-            for (Enumeration e = jFile.entries(); e.hasMoreElements();) {
-                JarEntry entry = (JarEntry) e.nextElement();
-                if (entry.isDirectory()) {
-                    dirs.append(entry.getName());
-                    dirs.append("\n");
-                } else {
-                    files.append(entry.getName());
-                    files.append("\n");
-                }
-            }
+			for (Enumeration e = jFile.entries(); e.hasMoreElements();) {
+				JarEntry entry = (JarEntry) e.nextElement();
+				if (entry.isDirectory()) {
+					dirs.append(entry.getName());
+					dirs.append("\n");
+				} else {
+					files.append(entry.getName());
+					files.append("\n");
+				}
+			}
 
-            ip.setMetadata(JAR_FILES, files.toString());
-            ip.setMetadata(JAR_DIRS, dirs.toString());
+			ip.setMetadata(JAR_FILES, files.toString());
+			ip.setMetadata(JAR_DIRS, dirs.toString());
 
-            Manifest mf = jFile.getManifest();
-            if (mf != null) {
-                StringBuffer mfEntries = new StringBuffer(jFile.getManifest().getMainAttributes().size());
-                Attributes mAttr = mf.getMainAttributes();
-                for (Iterator i = mAttr.keySet().iterator(); i.hasNext();) {
-                    Attributes.Name atrKey = (Attributes.Name) i.next();
-                    mfEntries.append(mAttr.getValue(atrKey));
-                    mfEntries.append("\n");
-                }
-                ip.setMetadata(JAR_MF, mfEntries.toString());
-            }
+			Manifest mf = jFile.getManifest();
+			if (mf != null) {
+				StringBuffer mfEntries = new StringBuffer(jFile.getManifest().getMainAttributes().size());
+				Attributes mAttr = mf.getMainAttributes();
+				for (Iterator i = mAttr.keySet().iterator(); i.hasNext();) {
+					Attributes.Name atrKey = (Attributes.Name) i.next();
+					mfEntries.append(mAttr.getValue(atrKey));
+					mfEntries.append("\n");
+				}
+				ip.setMetadata(JAR_MF, mfEntries.toString());
+			}
 
-            jFile.close();
+			jFile.close();
 
-        } catch (IOException ex) {
-            logger.info("Got IOException while creating JarFile on file [{}].", file.getAbsolutePath(), ex);
-        }
-    }
+		} catch (IOException ex) {
+			logger.info("Got IOException while creating JarFile on file [{}].", file.getAbsolutePath(), ex);
+		}
+	}
 
 }

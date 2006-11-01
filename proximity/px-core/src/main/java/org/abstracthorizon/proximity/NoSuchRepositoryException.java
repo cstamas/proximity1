@@ -8,13 +8,13 @@ package org.abstracthorizon.proximity;
  */
 public class NoSuchRepositoryException extends ProximityException {
 
-    /**
-     * 
-     */
-    private static final long serialVersionUID = -4422677352666814031L;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4422677352666814031L;
 
-    public NoSuchRepositoryException(String repoId) {
-        super("Repository with name " + repoId + " not found!");
-    }
+	public NoSuchRepositoryException(String repoId) {
+		super("Repository with name " + repoId + " not found!");
+	}
 
 }

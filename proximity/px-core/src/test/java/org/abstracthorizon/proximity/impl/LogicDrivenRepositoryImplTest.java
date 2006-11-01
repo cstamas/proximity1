@@ -7,11 +7,11 @@ import junit.framework.TestCase;
 
 public class LogicDrivenRepositoryImplTest extends TestCase {
 
-    private LogicDrivenRepositoryImpl repo = new LogicDrivenRepositoryImpl();
+	private LogicDrivenRepositoryImpl repo = new LogicDrivenRepositoryImpl();
 
-    /** Dummy method */
-    public void testDummy() {
-        Assert.assertEquals(repo.getGroupId(), repo.getGroupId());
-    }
+	/** Dummy method */
+	public void testDummy() {
+		Assert.assertEquals(repo.getGroupId(), repo.getGroupId());
+	}
 
 }
