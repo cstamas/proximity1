@@ -49,14 +49,13 @@ public class LocalFileSystemStorage implements IWebdavStorage {
 
 	private static int debug = -1;
 
-	public void begin(Principal principal, Hashtable parameters)
-			throws Exception {
+	public void begin(Principal principal, Hashtable parameters) throws Exception {
 		if (debug == -1) {
 			String debugString = (String) parameters.get(DEBUG_PARAMETER);
 			if (debugString == null) {
 				debug = 0;
-			}else{
-			debug = Integer.parseInt(debugString);
+			} else {
+				debug = Integer.parseInt(debugString);
 			}
 		}
 		if (debug == 1)
@@ -70,9 +69,7 @@ public class LocalFileSystemStorage implements IWebdavStorage {
 			root = new File(rootPath);
 			if (!root.exists()) {
 				if (!root.mkdirs()) {
-					throw new Exception(ROOTPATH_PARAMETER + ": "
-							+ root
-							+ " does not exist and could not be created");
+					throw new Exception(ROOTPATH_PARAMETER + ": " + root + " does not exist and could not be created");
 				}
 			}
 		}
@@ -101,24 +98,21 @@ public class LocalFileSystemStorage implements IWebdavStorage {
 	public boolean objectExists(String uri) throws IOException {
 		File file = new File(root, uri);
 		if (debug == 1)
-			System.out.println("LocalFileSystemStore.objectExists(" + uri
-					+ ")=" + file.exists());
+			System.out.println("LocalFileSystemStore.objectExists(" + uri + ")=" + file.exists());
 		return file.exists();
 	}
 
 	public boolean isFolder(String uri) throws IOException {
 		File file = new File(root, uri);
 		if (debug == 1)
-			System.out.println("LocalFileSystemStore.isFolder(" + uri + ")="
-					+ file.isDirectory());
+			System.out.println("LocalFileSystemStore.isFolder(" + uri + ")=" + file.isDirectory());
 		return file.isDirectory();
 	}
 
 	public boolean isResource(String uri) throws IOException {
 		File file = new File(root, uri);
 		if (debug == 1)
-			System.out.println("LocalFileSystemStore.isResource(" + uri + ") "
-					+ file.isFile());
+			System.out.println("LocalFileSystemStore.isResource(" + uri + ") " + file.isFile());
 		return file.isFile();
 	}
 
@@ -128,8 +122,7 @@ public class LocalFileSystemStorage implements IWebdavStorage {
 	 */
 	public void createFolder(String uri) throws IOException {
 		if (debug == 1)
-			System.out
-					.println("LocalFileSystemStore.createFolder(" + uri + ")");
+			System.out.println("LocalFileSystemStore.createFolder(" + uri + ")");
 		File file = new File(root, uri);
 		if (!file.mkdir())
 			throw new IOException("cannot create folder: " + uri);
@@ -141,8 +134,7 @@ public class LocalFileSystemStorage implements IWebdavStorage {
 	 */
 	public void createResource(String uri) throws IOException {
 		if (debug == 1)
-			System.out.println("LocalFileSystemStore.createResource(" + uri
-					+ ")");
+			System.out.println("LocalFileSystemStore.createResource(" + uri + ")");
 		File file = new File(root, uri);
 		if (!file.createNewFile())
 			throw new IOException("cannot create file: " + uri);
@@ -152,12 +144,11 @@ public class LocalFileSystemStorage implements IWebdavStorage {
 	 * tries to save the given InputStream to the file at path "uri". content
 	 * type and charachter encoding are ignored
 	 */
-	public void setResourceContent(String uri, InputStream is,
-			String contentType, String characterEncoding) throws IOException {
+	public void setResourceContent(String uri, InputStream is, String contentType, String characterEncoding)
+			throws IOException {
 
 		if (debug == 1)
-			System.out.println("LocalFileSystemStore.setResourceContent(" + uri
-					+ ")");
+			System.out.println("LocalFileSystemStore.setResourceContent(" + uri + ")");
 		File file = new File(root, uri);
 		OutputStream os = new BufferedOutputStream(new FileOutputStream(file));
 		try {
@@ -181,8 +172,7 @@ public class LocalFileSystemStorage implements IWebdavStorage {
 	 */
 	public Date getLastModified(String uri) throws IOException {
 		if (debug == 1)
-			System.out.println("LocalFileSystemStore.getLastModified(" + uri
-					+ ")");
+			System.out.println("LocalFileSystemStore.getLastModified(" + uri + ")");
 		File file = new File(root, uri);
 		return new Date(file.lastModified());
 	}
@@ -193,8 +183,7 @@ public class LocalFileSystemStorage implements IWebdavStorage {
 	 */
 	public Date getCreationDate(String uri) throws IOException {
 		if (debug == 1)
-			System.out.println("LocalFileSystemStore.getCreationDate(" + uri
-					+ ")");
+			System.out.println("LocalFileSystemStore.getCreationDate(" + uri + ")");
 		// TODO return creation date instead of last modified
 		File file = new File(root, uri);
 		return new Date(file.lastModified());
@@ -206,8 +195,7 @@ public class LocalFileSystemStorage implements IWebdavStorage {
 	 */
 	public String[] getChildrenNames(String uri) throws IOException {
 		if (debug == 1)
-			System.out.println("LocalFileSystemStore.getChildrenNames(" + uri
-					+ ")");
+			System.out.println("LocalFileSystemStore.getChildrenNames(" + uri + ")");
 		File file = new File(root, uri);
 		if (file.isDirectory()) {
 
@@ -232,8 +220,7 @@ public class LocalFileSystemStorage implements IWebdavStorage {
 	 */
 	public InputStream getResourceContent(String uri) throws IOException {
 		if (debug == 1)
-			System.out.println("LocalFileSystemStore.getResourceContent(" + uri
-					+ ")");
+			System.out.println("LocalFileSystemStore.getResourceContent(" + uri + ")");
 		File file = new File(root, uri);
 
 		InputStream in = new BufferedInputStream(new FileInputStream(file));
@@ -245,8 +232,7 @@ public class LocalFileSystemStorage implements IWebdavStorage {
 	 */
 	public long getResourceLength(String uri) throws IOException {
 		if (debug == 1)
-			System.out.println("LocalFileSystemStore.getResourceLength(" + uri
-					+ ")");
+			System.out.println("LocalFileSystemStore.getResourceLength(" + uri + ")");
 		File file = new File(root, uri);
 		return file.length();
 	}
@@ -260,8 +246,7 @@ public class LocalFileSystemStorage implements IWebdavStorage {
 		File file = new File(root, uri);
 		boolean success = file.delete();
 		if (debug == 1)
-			System.out.println("LocalFileSystemStore.removeObject(" + uri
-					+ ")=" + success);
+			System.out.println("LocalFileSystemStore.removeObject(" + uri + ")=" + success);
 		if (!success) {
 			throw new IOException("cannot delete object: " + uri);
 		}

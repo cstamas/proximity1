@@ -228,8 +228,7 @@ class WebdavStatus {
 		// WebDav Status Codes
 		addStatusCodeMap(SC_MULTI_STATUS, "Multi-Status");
 		addStatusCodeMap(SC_UNPROCESSABLE_ENTITY, "Unprocessable Entity");
-		addStatusCodeMap(SC_INSUFFICIENT_SPACE_ON_RESOURCE,
-				"Insufficient Space On Resource");
+		addStatusCodeMap(SC_INSUFFICIENT_SPACE_ON_RESOURCE, "Insufficient Space On Resource");
 		addStatusCodeMap(SC_METHOD_FAILURE, "Method Failure");
 		addStatusCodeMap(SC_LOCKED, "Locked");
 	}
