@@ -60,8 +60,7 @@ public class ResourceLocks {
 	 * @return true if the resource at path was successfully locked, false if an
 	 *         existing lock prevented this
 	 */
-	protected synchronized boolean lock(String path, String owner,
-			boolean exclusive, int depth) {
+	protected synchronized boolean lock(String path, String owner, boolean exclusive, int depth) {
 
 		LockObject lo = generateLockObjects(path);
 		if (lo.checkLocks(exclusive, depth)) {
@@ -92,12 +91,12 @@ public class ResourceLocks {
 			LockObject lo = (LockObject) this.fLocks.get(path);
 			lo.removeLockObjectOwner(owner);
 			// System.out.println("number of LockObjects in the hashtable: "
-			//		+ fLocks.size());
+			// + fLocks.size());
 
-		}else{
+		} else {
 			// there is no lock at that path. someone tried to unlock it
 			// anyway. could point to a problem
-			System.out.println("net.sf.webdav.ResourceLocks.unlock(): no lock for path "+path);
+			System.out.println("net.sf.webdav.ResourceLocks.unlock(): no lock for path " + path);
 		}
 
 		if (fCleanupCounter > fCleanupLimit) {
@@ -147,8 +146,8 @@ public class ResourceLocks {
 			for (int i = 0; i < limit; i++) {
 				if (!cleanLockObjects(lo.fChildren[i])) {
 					canDelete = false;
-				}else{
-					
+				} else {
+
 					// because the deleting shifts the array
 					i--;
 					limit--;
@@ -399,23 +398,21 @@ public class ResourceLocks {
 				}
 			} else {
 				// a folder
-				
-					
-				
+
 				if (this.fOwner == null) {
 					// no owner, checking children
-					
-					if (depth!=0){
-					boolean canLock = true;
-					int limit = this.fChildren.length;
-					for (int i = 0; i < limit; i++) {
-						if (!this.fChildren[i].checkChildren(exclusive,depth-1)) {
-							canLock = false;
+
+					if (depth != 0) {
+						boolean canLock = true;
+						int limit = this.fChildren.length;
+						for (int i = 0; i < limit; i++) {
+							if (!this.fChildren[i].checkChildren(exclusive, depth - 1)) {
+								canLock = false;
+							}
 						}
-					}
-					return canLock;
-					}else{
-						// depth == 0  -> we don't care for children
+						return canLock;
+					} else {
+						// depth == 0 -> we don't care for children
 						return true;
 					}
 				} else {
@@ -426,12 +423,13 @@ public class ResourceLocks {
 					} else {
 						// new and old lock are shared.
 						// the old lock was successfully placed, so i can add
-						// the new one as well, since it has the same requirements
+						// the new one as well, since it has the same
+						// requirements
 						return true;
 					}
 				}
 			}
-			
+
 		}
 
 	}
