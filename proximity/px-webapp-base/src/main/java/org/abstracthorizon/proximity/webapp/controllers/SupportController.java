@@ -50,20 +50,20 @@ public class SupportController extends MultiActionController {
 		if (ServletRequestUtils.getStringParameter(request, "searchAllRegexp") != null) {
 
 			example = new HashMapItemPropertiesImpl();
-			example.setName(ServletRequestUtils.getRequiredStringParameter(request, "searchAllRegexp") + "*");
+			example.setName(ServletRequestUtils.getRequiredStringParameter(request, "searchAllRegexp"));
 
 		} else if (ServletRequestUtils.getStringParameter(request, "searchRepositoryRegexp") != null
 				&& ServletRequestUtils.getRequiredStringParameter(request, "searchRepositoryId") != null) {
 
 			example = new HashMapItemPropertiesImpl();
-			example.setName(ServletRequestUtils.getRequiredStringParameter(request, "searchRepositoryRegexp") + "*");
+			example.setName(ServletRequestUtils.getRequiredStringParameter(request, "searchRepositoryRegexp"));
 			example.setRepositoryId(ServletRequestUtils.getRequiredStringParameter(request, "searchRepositoryId"));
 
 		} else if (ServletRequestUtils.getStringParameter(request, "searchGroupRegexp") != null
 				&& ServletRequestUtils.getRequiredStringParameter(request, "searchGroupId") != null) {
 
 			example = new HashMapItemPropertiesImpl();
-			example.setName(ServletRequestUtils.getRequiredStringParameter(request, "searchGroupRegexp") + "*");
+			example.setName(ServletRequestUtils.getRequiredStringParameter(request, "searchGroupRegexp"));
 			example.setRepositoryGroupId(ServletRequestUtils.getRequiredStringParameter(request, "searchGroupId"));
 
 		} else if (ServletRequestUtils.getStringParameter(request, "searchLQL") != null

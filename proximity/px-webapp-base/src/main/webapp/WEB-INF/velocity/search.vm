@@ -87,7 +87,7 @@
 				<td>
 				    #itemImage($item)
 				</td>
-				<td><a href="#springUrl('/repository')${item.absolutePath}?repositoryId=${item.repositoryId}">${item.absolutePath}</a>&nbsp;</td>
+				<td><a href="#springUrl('/repository')${item.directoryPath}?repositoryId=${item.repositoryId}">${item.directoryPath}</a>&nbsp;</td>
 				<td>
 					#plainItemLink($item)
 				</td>

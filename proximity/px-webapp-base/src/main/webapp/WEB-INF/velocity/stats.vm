@@ -16,7 +16,7 @@
 	</tr>
     #foreach($item in $stats.last10Artifacts)
         <tr class="tda">
-             <td colspan="1"><a href="#springUrl('/repository')${item.absolutePath}?repositoryId=${item.repositoryId}">${item.absolutePath}</a></td>
+             <td colspan="1"><a href="#springUrl('/repository')${item.directoryPath}?repositoryId=${item.repositoryId}">${item.directoryPath}</a></td>
              <td colspan="1">#plainItemLink($item)</a></td>
         </tr>
     #end
@@ -36,7 +36,7 @@
 	</tr>
     #foreach($item in $stats.last10LocalHits)
         <tr class="tda">
-             <td colspan="1"><a href="#springUrl('/repository')${item.absolutePath}?repositoryId=${item.repositoryId}">${item.absolutePath}</a></td>
+             <td colspan="1"><a href="#springUrl('/repository')${item.directoryPath}?repositoryId=${item.repositoryId}">${item.directoryPath}</a></td>
              <td colspan="1">#plainItemLink($item)</a></td>
         </tr>
     #end
@@ -77,7 +77,7 @@
 	</tr>
     #foreach($item in $stats.last10RemoteHits)
         <tr class="tda">
-             <td colspan="1"><a href="#springUrl('/repository')${item.absolutePath}?repositoryId=${item.repositoryId}">${item.absolutePath}</a></td>
+             <td colspan="1"><a href="#springUrl('/repository')${item.directoryPath}?repositoryId=${item.repositoryId}">${item.directoryPath}</a></td>
              <td colspan="1">#plainItemLink($item)</a></td>
         </tr>
     #end

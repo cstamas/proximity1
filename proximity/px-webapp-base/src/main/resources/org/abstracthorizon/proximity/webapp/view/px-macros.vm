@@ -117,10 +117,10 @@
 #macro( artifactLink $item )
 
     #if( $version )
-	    <a href="#springUrl('/repository')${item.absolutePath}/${aid}-${version}.${item.getMetadata('pom.pck')}">
+	    <a href="#springUrl('/repository')${item.directoryPath}/${aid}-${version}.${item.getMetadata('pom.pck')}">
 	    #springMessage("artifactslist.getartifact") ${aid}-${version}.${item.getMetadata('pom.pck')}</a>
 	    <br/><br/>
-	    [#springMessage("artifactslist.location") <a href="#springUrl('/repository')${item.absolutePath}">${item.absolutePath}</a>]
+	    [#springMessage("artifactslist.location") <a href="#springUrl('/repository')${item.directoryPath}">${item.directoryPath}</a>]
 
 	    #itemControls( $item )
 
