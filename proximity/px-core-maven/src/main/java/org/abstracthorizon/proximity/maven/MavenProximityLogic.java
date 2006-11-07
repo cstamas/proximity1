@@ -95,7 +95,12 @@ public class MavenProximityLogic extends DefaultProximityLogic {
 					Item currentItem = (Item) listOfProxiedItems.get(i);
 					try {
 						isr = new InputStreamReader(currentItem.getStream());
-						mergedMetadata.merge(metadataReader.read(isr));
+						Metadata imd = metadataReader.read(isr);
+						if (mergedMetadata == null) {
+							mergedMetadata = imd;
+						} else {
+							mergedMetadata.merge(imd);
+						}
 						isr.close();
 					} catch (XmlPullParserException ex) {
 						logger.warn("Could not merge M2 metadata: " + currentItem.getProperties().getDirectoryPath()
