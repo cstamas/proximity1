@@ -46,6 +46,18 @@
 		<property name="accessManager" ref="proximity.accessManager" />
 		<property name="proximityLogic" ref="proximity.logic" />
 		<property name="emergeRepositoryGroups" value="true" />
+		<property name="repositories">
+			<list>
+				<ref bean="extFree" />
+				<ref bean="extNonFree" />
+				<ref bean="central" />
+				<ref bean="codehaus" />
+				<ref bean="apache.snapshot" />
+				<ref bean="codehaus.snapshot" />
+				<ref bean="inhouse" />
+				<ref bean="inhouse.snapshot" />
+			</list>
+		</property>
 	</bean>
 
 	<!--
@@ -65,8 +77,8 @@
 		- Indexer, used to speed up searches ONLY.
 	-->
 	<bean id="proximity.indexer"
-		class="org.abstracthorizon.proximity.indexer.LuceneIndexer"
-		init-method="initialize">
+		class="org.abstracthorizon.proximity.indexer.LuceneIndexer">
+		<property name="proximity" ref="proximity"/>
 		<!-- Where to store indexes? -->
 		<property name="indexDirectory" value="${indexer.dir}" />
 		<!-- On webapp start should i recreate Lucene indexes? -->
