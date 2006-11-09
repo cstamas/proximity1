@@ -8,6 +8,12 @@ public class IndexerIntegrationTest extends AbstractProximityIntegrationTest {
 
 	private Indexer indexer;
 
+	protected String[] getConfigLocations() {
+		return new String[] { "/org/abstracthorizon/proximity/applicationContext.xml",
+				"/org/abstracthorizon/proximity/proximityHelpers.xml",
+				"/org/abstracthorizon/proximity/proximityRepositories.xml"};
+	}
+
 	public void setIndexer(Indexer indexer) {
 		this.indexer = indexer;
 	}

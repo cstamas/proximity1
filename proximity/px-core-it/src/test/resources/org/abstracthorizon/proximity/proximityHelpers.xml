@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+
+	<!--
+		- StatisticsGatherer, gathers statistics. Simple in-memory implementation.
+	-->
+	<bean id="proximity.statisticsGatherer"
+		class="org.abstracthorizon.proximity.stats.SimpleStatisticsGathererImpl" />
+
+	<!--
+		- ItemPropertiesFactory, creates "extra" metadata about files.
+	-->
+	<bean id="proximity.itemPropertiesFactory"
+		class="org.abstracthorizon.proximity.metadata.InspectorListProcessingProxiedItemPropertiesFactory">
+		<property name="itemInspectorList">
+			<list>
+				<bean
+					class="org.abstracthorizon.proximity.metadata.inspectors.ZipFileInspector" />
+				<bean
+					class="org.abstracthorizon.proximity.metadata.inspectors.JarFileInspector" />
+			</list>
+		</property>
+	</bean>
+
+	<!--
+		- AccessManagers. With OpenAccessManager Proximity is wide open.
+	-->
+	<bean id="proximity.openAccessManager"
+		class="org.abstracthorizon.proximity.access.OpenAccessManager" />
+
+	<!--
+		=================================================================================
+	-->
+
+	<!--
+		- Logic used for Maven2 repositories.
+		- Use seconds for setting timeout.
+		- x > 0 - the expiration in seconds
+		- x = 0 - the expiration flag is set to now, thus it will expire initially and be refetched always
+		- x = -1 - turn off for the group expiration handling.
+	-->
+
+	<!-- A release (stable) repository logic, never expires nothing -->
+	<bean id="proximity.maven2ReleaseRepoLogic"
+		class="org.abstracthorizon.proximity.logic.DefaultExpiringProxyingRepositoryLogic">
+		<!-- everything else will never expire once downloaded -->
+		<property name="itemExpirationPeriodInSeconds" value="-1" />
+	</bean>
+
+	<!-- A snapshot (unstable) repository logic, generally 24h is expiration -->
+	<bean id="proximity.maven2SnapshotRepoLogic"
+		class="org.abstracthorizon.proximity.logic.DefaultExpiringProxyingRepositoryLogic">
+		<!-- everything else will expire once downloaded after 12h -->
+		<property name="itemExpirationPeriodInSeconds" value="43200" />
+	</bean>
+
+</beans>
