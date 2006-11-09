@@ -218,7 +218,7 @@ public abstract class AbstractRepository implements Repository {
 				getIndexer().addItemProperties(item.getProperties());
 			}
 		} else {
-			throw new UnsupportedOperationException("The repository " + getId() + " have no local storage!");
+			throw new UnsupportedOperationException("The repository " + getId() + " have no writable local storage defined!");
 		}
 	}
 
