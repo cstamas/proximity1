@@ -66,6 +66,8 @@ public class ProximityWebdavStorageAdapter implements IWebdavStorage {
 					.getFullPathNoEndSeparator(resourceUri)));
 			itemProperties.setName(FilenameUtils.getName(resourceUri));
 			itemProperties.setLastModified(new Date());
+			itemProperties.setDirectory(false);
+			itemProperties.setFile(true);
 			item.setStream(new ByteArrayInputStream(new byte[0]));
 			item.setProperties(itemProperties);
 			proximity.storeItem(request, item);
@@ -166,8 +168,10 @@ public class ProximityWebdavStorageAdapter implements IWebdavStorage {
 					.getFullPathNoEndSeparator(resourceUri)));
 			itemProperties.setName(FilenameUtils.getName(resourceUri));
 			itemProperties.setLastModified(new Date());
-			item.setStream(content);
+			itemProperties.setDirectory(false);
+			itemProperties.setFile(true);
 			item.setProperties(itemProperties);
+			item.setStream(content);
 			proximity.storeItem(request, item);
 		} catch (ProximityException ex) {
 			logger.error("Proximity throw exception.", ex);
