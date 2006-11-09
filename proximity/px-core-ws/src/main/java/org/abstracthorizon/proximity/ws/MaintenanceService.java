@@ -1,5 +1,7 @@
 package org.abstracthorizon.proximity.ws;
 
+import org.abstracthorizon.proximity.NoSuchRepositoryException;
+
 public interface MaintenanceService {
 
 	/**
@@ -12,6 +14,6 @@ public interface MaintenanceService {
 	 * Forces reindex of repository with ID repoId.
 	 * 
 	 */
-	void reindexRepository(String repoId);
+	void reindexRepository(String repoId) throws NoSuchRepositoryException;
 
 }
