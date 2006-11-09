@@ -9,16 +9,13 @@
 		- A standard maven2 repository.
 	-->
 	<bean id="central"
-		class="org.abstracthorizon.proximity.impl.LogicDrivenRepositoryImpl"
-		init-method="initialize">
-		<property name="proximity" ref="proximity" />
+		class="org.abstracthorizon.proximity.impl.LogicDrivenRepositoryImpl">
 		<property name="id" value="central" />
 		<property name="groupId" value="public" />
 		<property name="rank" value="50" />
 
 		<property name="localStorage" ref="centralFSStorage" />
 		<property name="remoteStorage" ref="centralRemotePeer" />
-		<property name="indexer" ref="proximity.indexer"/>
 		<property name="statisticsGatherer" ref="proximity.statisticsGatherer" />
 		<property name="accessManager" ref="proximity.openAccessManager" />
 		<!-- Uncomment this and delete previous accessManager declaration to restrict access to this repo
@@ -31,6 +28,10 @@
 		<property name="available" value="true" />
 		<!-- Am I offline? If yes, i will not touch my remote peer, will serve only from localStorage -->
 		<property name="offline" value="false" />
+		<!-- Is repo indexable? -->
+		<property name="indexable" value="true"/>
+		<!-- Should repo be indexed at startup? (NOT USED?) -->
+		<property name="reindexAtInitialize" value="true"/>
 	</bean>
 
 	<bean id="centralFSStorage"
@@ -88,16 +89,13 @@
 		- A standard maven2 repository.
 	-->
 	<bean id="codehaus"
-		class="org.abstracthorizon.proximity.impl.LogicDrivenRepositoryImpl"
-		init-method="initialize">
-		<property name="proximity" ref="proximity" />
+		class="org.abstracthorizon.proximity.impl.LogicDrivenRepositoryImpl">
 		<property name="id" value="codehaus" />
 		<property name="groupId" value="codehaus" />
 		<property name="rank" value="60" />
 
 		<property name="localStorage" ref="codehausFSStorage" />
 		<property name="remoteStorage" ref="codehausRemotePeer" />
-		<property name="indexer" ref="proximity.indexer"/>
 		<property name="statisticsGatherer" ref="proximity.statisticsGatherer" />
 		<property name="accessManager" ref="proximity.openAccessManager" />
 		<!-- Uncomment this and delete previous accessManager declaration to restrict access to this repo
@@ -110,6 +108,10 @@
 		<property name="available" value="true" />
 		<!-- Am I offline? If yes, i will not touch my remote peer, will serve only from localStorage -->
 		<property name="offline" value="false" />
+		<!-- Is repo indexable? -->
+		<property name="indexable" value="true"/>
+		<!-- Should repo be indexed at startup? (NOT USED?) -->
+		<property name="reindexAtInitialize" value="true"/>
 	</bean>
 
 	<bean id="codehausFSStorage"
@@ -157,16 +159,13 @@
 		- A standard maven2 repository.
 	-->
 	<bean id="apache.snapshot"
-		class="org.abstracthorizon.proximity.impl.LogicDrivenRepositoryImpl"
-		init-method="initialize">
-		<property name="proximity" ref="proximity" />
+		class="org.abstracthorizon.proximity.impl.LogicDrivenRepositoryImpl">
 		<property name="id" value="apache.snapshot" />
 		<property name="groupId" value="apache.snapshot" />
 		<property name="rank" value="80" />
 
 		<property name="localStorage" ref="apache.snapshotFSStorage" />
 		<property name="remoteStorage" ref="apache.snapshotRemotePeer" />
-		<property name="indexer" ref="proximity.indexer"/>
 		<property name="statisticsGatherer" ref="proximity.statisticsGatherer" />
 		<property name="accessManager" ref="proximity.openAccessManager" />
 		<!-- Uncomment this and delete previous accessManager declaration to restrict access to this repo
@@ -179,6 +178,10 @@
 		<property name="available" value="true" />
 		<!-- Am I offline? If yes, i will not touch my remote peer, will serve only from localStorage -->
 		<property name="offline" value="false" />
+		<!-- Is repo indexable? -->
+		<property name="indexable" value="true"/>
+		<!-- Should repo be indexed at startup? (NOT USED?) -->
+		<property name="reindexAtInitialize" value="true"/>
 	</bean>
 
 	<bean id="apache.snapshotFSStorage"
@@ -226,9 +229,7 @@
 		- A standard maven2 repository.
 	-->
 	<bean id="codehaus.snapshot"
-		class="org.abstracthorizon.proximity.impl.LogicDrivenRepositoryImpl"
-		init-method="initialize">
-		<property name="proximity" ref="proximity" />
+		class="org.abstracthorizon.proximity.impl.LogicDrivenRepositoryImpl">
 		<property name="id" value="codehaus.snapshot" />
 		<property name="groupId" value="codehaus.snapshot" />
 		<property name="rank" value="90" />
@@ -236,7 +237,6 @@
 		<property name="localStorage" ref="codehaus.snapshotFSStorage" />
 		<property name="remoteStorage"
 			ref="codehaus.snapshotRemotePeer" />
-		<property name="indexer" ref="proximity.indexer"/>
 		<property name="statisticsGatherer" ref="proximity.statisticsGatherer" />
 		<property name="accessManager" ref="proximity.openAccessManager" />
 		<!-- Uncomment this and delete previous accessManager declaration to restrict access to this repo
@@ -249,6 +249,10 @@
 		<property name="available" value="true" />
 		<!-- Am I offline? If yes, i will not touch my remote peer, will serve only from localStorage -->
 		<property name="offline" value="false" />
+		<!-- Is repo indexable? -->
+		<property name="indexable" value="true"/>
+		<!-- Should repo be indexed at startup? (NOT USED?) -->
+		<property name="reindexAtInitialize" value="true"/>
 	</bean>
 
 	<bean id="codehaus.snapshotFSStorage"
@@ -296,16 +300,13 @@
 		- A maven repository for publishing in-house artifacts.
 	-->
 	<bean id="inhouse"
-		class="org.abstracthorizon.proximity.impl.LogicDrivenRepositoryImpl"
-		init-method="initialize">
-		<property name="proximity" ref="proximity" />
+		class="org.abstracthorizon.proximity.impl.LogicDrivenRepositoryImpl">
 		<property name="id" value="inhouse" />
 		<property name="groupId" value="inhouse" />
 		<property name="rank" value="10" />
 
 		<property name="localStorage" ref="inhouseFSStorage" />
 		<property name="statisticsGatherer" ref="proximity.statisticsGatherer" />
-		<property name="indexer" ref="proximity.indexer"/>
 		<property name="repositoryLogic" ref="proximity.maven2ReleaseRepoLogic" />
 		<property name="accessManager" ref="proximity.openAccessManager" />
 		<!-- Uncomment this and delete previous row to restrict access to this repo
@@ -317,6 +318,10 @@
 		<property name="available" value="true" />
 		<!-- Am I offline? If yes, i will not touch my remote peer, will serve only from localStorage -->
 		<property name="offline" value="false" />
+		<!-- Is repo indexable? -->
+		<property name="indexable" value="true"/>
+		<!-- Should repo be indexed at startup? (NOT USED?) -->
+		<property name="reindexAtInitialize" value="true"/>
 	</bean>
 
 	<bean id="inhouseFSStorage"
@@ -331,16 +336,13 @@
 	</bean>
 
 	<bean id="inhouse.snapshot"
-		class="org.abstracthorizon.proximity.impl.LogicDrivenRepositoryImpl"
-		init-method="initialize">
-		<property name="proximity" ref="proximity" />
+		class="org.abstracthorizon.proximity.impl.LogicDrivenRepositoryImpl">
 		<property name="id" value="inhouse.snapshot" />
 		<property name="groupId" value="inhouse.snapshot" />
 		<property name="rank" value="15" />
 
 		<property name="localStorage" ref="inhouse.snapshotFSStorage" />
 		<property name="statisticsGatherer" ref="proximity.statisticsGatherer" />
-		<property name="indexer" ref="proximity.indexer"/>
 		<property name="repositoryLogic" ref="proximity.maven2SnapshotRepoLogic" />
 		<property name="accessManager" ref="proximity.openAccessManager" />
 		<!-- Uncomment this and delete previous row to restrict access to this repo
@@ -352,6 +354,8 @@
 		<property name="available" value="true" />
 		<!-- Am I offline? If yes, i will not touch my remote peer, will serve only from localStorage -->
 		<property name="offline" value="false" />
+		<property name="indexable" value="true"/>
+		<property name="reindexAtInitialize" value="true"/>
 	</bean>
 
 	<bean id="inhouse.snapshotFSStorage"
@@ -371,16 +375,13 @@
 		- not deployed on standard maven repositories (oracle JDBC, J2EE, etc...).
 	-->
 	<bean id="extNonFree"
-		class="org.abstracthorizon.proximity.impl.LogicDrivenRepositoryImpl"
-		init-method="initialize">
-		<property name="proximity" ref="proximity" />
+		class="org.abstracthorizon.proximity.impl.LogicDrivenRepositoryImpl">
 		<property name="id" value="extNonFree" />
 		<property name="groupId" value="public" />
 		<property name="rank" value="35" />
 
 		<property name="localStorage" ref="extNonFreeFSStorage" />
 		<property name="statisticsGatherer" ref="proximity.statisticsGatherer" />
-		<property name="indexer" ref="proximity.indexer"/>
 		<property name="repositoryLogic" ref="proximity.maven2ReleaseRepoLogic" />
 		<property name="accessManager" ref="proximity.openAccessManager" />
 		<!-- Uncomment this and delete previous row to restrict access to this repo
@@ -392,6 +393,10 @@
 		<property name="available" value="true" />
 		<!-- Am I offline? If yes, i will not touch my remote peer, will serve only from localStorage -->
 		<property name="offline" value="false" />
+		<!-- Is repo indexable? -->
+		<property name="indexable" value="true"/>
+		<!-- Should repo be indexed at startup? (NOT USED?) -->
+		<property name="reindexAtInitialize" value="true"/>
 	</bean>
 
 	<bean id="extNonFreeFSStorage"
@@ -411,16 +416,13 @@
 		- not deployed on standard maven repositories (dwr, etc...).
 	-->
 	<bean id="extFree"
-		class="org.abstracthorizon.proximity.impl.LogicDrivenRepositoryImpl"
-		init-method="initialize">
-		<property name="proximity" ref="proximity" />
+		class="org.abstracthorizon.proximity.impl.LogicDrivenRepositoryImpl">
 		<property name="id" value="extFree" />
 		<property name="groupId" value="public" />
 		<property name="rank" value="25" />
 
 		<property name="localStorage" ref="extFreeFSStorage" />
 		<property name="statisticsGatherer" ref="proximity.statisticsGatherer" />
-		<property name="indexer" ref="proximity.indexer"/>
 		<property name="repositoryLogic" ref="proximity.maven2ReleaseRepoLogic" />
 		<property name="accessManager" ref="proximity.openAccessManager" />
 		<!-- Uncomment this and delete previous row to restrict access to this repo
@@ -432,6 +434,10 @@
 		<property name="available" value="true" />
 		<!-- Am I offline? If yes, i will not touch my remote peer, will serve only from localStorage -->
 		<property name="offline" value="false" />
+		<!-- Is repo indexable? -->
+		<property name="indexable" value="true"/>
+		<!-- Should repo be indexed at startup? (NOT USED?) -->
+		<property name="reindexAtInitialize" value="true"/>
 	</bean>
 
 	<bean id="extFreeFSStorage"

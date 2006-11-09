@@ -17,17 +17,9 @@ import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
 
 public class SupportController extends MultiActionController {
 
-	private Proximity proximity;
-
 	private Indexer indexer;
 
-	public void setProximity(Proximity proximity) {
-		this.proximity = proximity;
-	}
-
-	public Proximity getProximity() {
-		return proximity;
-	}
+	private Proximity proximity;
 
 	public Indexer getIndexer() {
 		return indexer;
@@ -35,6 +27,14 @@ public class SupportController extends MultiActionController {
 
 	public void setIndexer(Indexer indexer) {
 		this.indexer = indexer;
+	}
+
+	public void setProximity(Proximity proximity) {
+		this.proximity = proximity;
+	}
+
+	public Proximity getProximity() {
+		return proximity;
 	}
 
 	public ModelAndView index(HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -93,10 +93,10 @@ public class SupportController extends MultiActionController {
 	public ModelAndView maintenance(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		logger.debug("Got request for maintenance");
 		if (ServletRequestUtils.getStringParameter(request, "reindexAll") != null) {
-			proximity.reindex();
+			getIndexer().reindex();
 		} else if (ServletRequestUtils.getStringParameter(request, "reindexSelected") != null
 				&& ServletRequestUtils.getRequiredStringParameter(request, "reindexSelectedRepos") != null) {
-			proximity.reindex(ServletRequestUtils.getRequiredStringParameter(request, "reindexSelectedRepos"));
+			getIndexer().reindex(ServletRequestUtils.getRequiredStringParameter(request, "reindexSelectedRepos"));
 		}
 
 		Map context = new HashMap();
@@ -117,9 +117,9 @@ public class SupportController extends MultiActionController {
 	public ModelAndView repositories(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		logger.debug("Got request for repositories layout");
 		Map context = new HashMap();
-		context.put("emergeRepositoryGroups", Boolean.valueOf(proximity.isEmergeRepositoryGroups()));
-		context.put("repositories", proximity.getRepositories());
-		context.put("repositoryGroups", proximity.getRepositoryGroups());
+		context.put("emergeRepositoryGroups", Boolean.valueOf(getProximity().isEmergeRepositoryGroups()));
+		context.put("repositories", getProximity().getRepositories());
+		context.put("repositoryGroups", getProximity().getRepositoryGroups());
 		return new ModelAndView("repositories", "context", context);
 	}
 

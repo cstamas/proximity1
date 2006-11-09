@@ -88,32 +88,20 @@
 
 #macro( plainItemLink $item )
 
-    #if ( ${item.repositoryGroupId} )
-      #set ( $path = "/$item.repositoryGroupId$item.path" )
-    #else
-      #set ( $path = $item.path )
-    #end
-
     #if( ${item.repositoryId} )
-      <a href="#springUrl('/repository')${path}?repositoryId=${item.repositoryId}">${item.name}</a>
+      <a href="#springUrl('/repository')${item.path}?repositoryId=${item.repositoryId}">${item.name}</a>
     #else
-      <a href="#springUrl('/repository')${path}">${item.name}</a>
+      <a href="#springUrl('/repository')${item.path}">${item.name}</a>
     #end
 	
 #end
 
 #macro( itemDirectoryLink $item )
 
-    #if ( ${item.repositoryGroupId} )
-      #set ( $path = "/$item.repositoryGroupId$item.directoryPath" )
-    #else
-      #set ( $path = $item.directoryPath )
-    #end
-
     #if( ${item.repositoryId} )
-		<a href="#springUrl('/repository')${path}?repositoryId=${item.repositoryId}">${path}</a>
+		<a href="#springUrl('/repository')${item.directoryPath}?repositoryId=${item.repositoryId}">${item.directoryPath}</a>
     #else
-        <a href="#springUrl('/repository')${path}">$path</a>
+        <a href="#springUrl('/repository')${item.directoryPath}">${item.directoryPath}</a>
     #end
 	
 #end
@@ -149,7 +137,7 @@
 
     #elseif( $aid )
 	    <a href="#springUrl('/artifacts')/${gid}/${aid}/${item.getMetadata('pom.version')}">${item.getMetadata('pom.version')}</a>
-    #elseif( $gid)
+    #elseif( $gid )
 	    <a href="#springUrl('/artifacts')/${gid}/${item.getMetadata('pom.aid')}">${item.getMetadata('pom.aid')}</a>
 	#else
 	    <a href="#springUrl('/artifacts')/${item.getMetadata('pom.gid')}">${item.getMetadata('pom.gid')}</a>
