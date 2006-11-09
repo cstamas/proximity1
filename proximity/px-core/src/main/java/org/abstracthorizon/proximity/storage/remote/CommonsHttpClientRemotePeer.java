@@ -64,6 +64,14 @@ public class CommonsHttpClientRemotePeer extends AbstractRemoteStorage {
 
 	private int proxyPort = 8080;
 
+	private String username = null;
+
+	private String password = null;
+
+	private String ntlmDomain = null;
+
+	private String ntlmHost = null;
+
 	private String proxyUsername = null;
 
 	private String proxyPassword = null;
@@ -78,6 +86,38 @@ public class CommonsHttpClientRemotePeer extends AbstractRemoteStorage {
 
 	public void setUserAgentString(String userAgentString) {
 		this.userAgentString = userAgentString;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public String getNtlmDomain() {
+		return ntlmDomain;
+	}
+
+	public void setNtlmDomain(String ntlmDomain) {
+		this.ntlmDomain = ntlmDomain;
+	}
+
+	public String getNtlmHost() {
+		return ntlmHost;
+	}
+
+	public void setNtlmHost(String ntlmHost) {
+		this.ntlmHost = ntlmHost;
 	}
 
 	public String getProxyHost() {
@@ -237,6 +277,36 @@ public class CommonsHttpClientRemotePeer extends AbstractRemoteStorage {
 
 			httpConfiguration = httpClient.getHostConfiguration();
 
+			// BASIC and DIGEST auth only
+			if (getUsername() != null) {
+
+				List authPrefs = new ArrayList(2);
+				authPrefs.add(AuthPolicy.DIGEST);
+				authPrefs.add(AuthPolicy.BASIC);
+
+				if (getNtlmDomain() != null) {
+					// Using NTLM auth, adding it as first in policies
+					authPrefs.add(0, AuthPolicy.NTLM);
+
+					logger.info("... authentication setup for NTLM domain {}, username {}", getNtlmDomain(),
+							getUsername());
+					httpConfiguration.setHost(getNtlmHost());
+
+					httpClient.getState().setCredentials(AuthScope.ANY,
+							new NTCredentials(getUsername(), getPassword(), getNtlmHost(), getNtlmDomain()));
+				} else {
+
+					// Using Username/Pwd auth, will not add NTLM
+					logger.info("... setting authentication setup for remote peer {}, with username {}",
+							getRemoteUrl(), getUsername());
+
+					httpClient.getState().setCredentials(AuthScope.ANY,
+							new UsernamePasswordCredentials(getUsername(), getPassword()));
+
+				}
+				httpClient.getParams().setParameter(AuthPolicy.AUTH_SCHEME_PRIORITY, authPrefs);
+			}
+
 			if (getProxyHost() != null) {
 				logger.info("... proxy setup with host {}", getProxyHost());
 				httpConfiguration.setProxy(getProxyHost(), getProxyPort());
@@ -252,6 +322,13 @@ public class CommonsHttpClientRemotePeer extends AbstractRemoteStorage {
 						// Using NTLM auth, adding it as first in policies
 						authPrefs.add(0, AuthPolicy.NTLM);
 
+						if (getNtlmHost() != null) {
+							logger.warn("... CommonsHttpClient is unable to use NTLM auth scheme\n"
+									+ " for BOTH server side and proxy side authentication!\n"
+									+ " You MUST reconfigure server side auth and use BASIC/DIGEST scheme\n"
+									+ " if you have to use NTLM proxy, since otherwise it will not work!\n"
+									+ " *** SERVER SIDE AUTH OVERRIDDEN");
+						}
 						logger.info("... proxy authentication setup for NTLM domain {}, username {}",
 								getProxyNtlmDomain(), getProxyUsername());
 						httpConfiguration.setHost(getProxyNtlmHost());
