@@ -1,6 +1,8 @@
 package org.abstracthorizon.proximity.impl;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -54,6 +56,10 @@ public abstract class AbstractRepository implements Repository {
 	private boolean offline = false;
 
 	private boolean listable = true;
+
+	private long notFoundCachePeriod = 86400 * 1000; // 24 hours
+
+	private Map notFoundCache = Collections.synchronizedMap(new HashMap());
 
 	public AccessManager getAccessManager() {
 		return accessManager;
@@ -159,6 +165,14 @@ public abstract class AbstractRepository implements Repository {
 		this.statisticsGatherer = statisticsGatherer;
 	}
 
+	public long getNotFoundCachePeriodInSeconds() {
+		return notFoundCachePeriod / 1000;
+	}
+
+	public void setNotFoundCachePeriodInSeconds(long notFoundCachePeriod) {
+		this.notFoundCachePeriod = notFoundCachePeriod * 1000;
+	}
+
 	// ---------------------------------------------------------------------------------
 	// Repository Iface
 
@@ -182,7 +196,38 @@ public abstract class AbstractRepository implements Repository {
 			throw new RepositoryNotAvailableException("The repository " + getId() + " is NOT available!");
 		}
 		getAccessManager().decide(request, null);
-		return doRetrieveItem(request);
+		try {
+			String requestKey = getRepositoryRequestAsKey(this, request);
+			if (notFoundCache.containsKey(requestKey)) {
+				// it is in cache, check when it got in
+				Date lastRequest = (Date) notFoundCache.get(requestKey);
+				if (lastRequest.before(new Date(System.currentTimeMillis() - notFoundCachePeriod))) {
+					// the notFoundCache record expired, remove it and check its
+					// existence
+					logger.debug("n-cache record expired, will go again remote to fetch.");
+					notFoundCache.remove(requestKey);
+					request.setLocalOnly(false);
+				} else {
+					// the notFoundCache record is still valid, do not check its
+					// existence
+					logger.debug("n-cache record still active, will not go remote to fetch.");
+					request.setLocalOnly(true);
+				}
+			} else {
+				// it is not in notFoundCache, check its existence
+				request.setLocalOnly(false);
+			}
+			return doRetrieveItem(request);
+		} catch (ItemNotFoundException ex) {
+			// we have not found it
+			// put the path into not found cache
+			String requestPath = getRepositoryRequestAsKey(this, request);
+			if (!notFoundCache.containsKey(requestPath)) {
+				logger.info("Caching failed request [{}] to n-cache.", requestPath);
+				notFoundCache.put(requestPath, new Date());
+			}
+			throw ex;
+		}
 	}
 
 	public void deleteItem(ProximityRequest request) throws RepositoryNotAvailableException, StorageException {
@@ -190,16 +235,22 @@ public abstract class AbstractRepository implements Repository {
 			throw new RepositoryNotAvailableException("The repository " + getId() + " is NOT available!");
 		}
 		if (getLocalStorage() != null) {
-			if (getIndexer() != null) {
-				try {
-					ItemProperties itemProps = getLocalStorage().retrieveItem(request.getPath(), true).getProperties();
-					itemProps.setRepositoryId(getId());
-					itemProps.setRepositoryGroupId(getGroupId());
+			try {
+				ItemProperties itemProps = getLocalStorage().retrieveItem(request.getPath(), true).getProperties();
+				itemProps.setRepositoryId(getId());
+				itemProps.setRepositoryGroupId(getGroupId());
+				if (getIndexer() != null) {
 					getIndexer().deleteItemProperties(itemProps);
-					getLocalStorage().deleteItem(request.getPath());
-				} catch (ItemNotFoundException ex) {
-					logger.info("Path [{}] not found but deletion requested.", request.getPath(), ex);
 				}
+				getLocalStorage().deleteItem(request.getPath());
+				
+				// remove it from n-cache also
+				String requestKey = getRepositoryRequestAsKey(this, request);
+				if (notFoundCache.containsKey(requestKey)) {
+					notFoundCache.remove(requestKey);
+				}
+			} catch (ItemNotFoundException ex) {
+				logger.info("Path [{}] not found but deletion requested.", request.getPath());
 			}
 		} else {
 			throw new UnsupportedOperationException("The repository " + getId() + " have no local storage!");
@@ -217,8 +268,15 @@ public abstract class AbstractRepository implements Repository {
 			if (getIndexer() != null && !item.getProperties().isDirectory()) {
 				getIndexer().addItemProperties(item.getProperties());
 			}
+
+			// remove it from n-cache also
+			String requestKey = getRepositoryRequestAsKey(this, request);
+			if (notFoundCache.containsKey(requestKey)) {
+				notFoundCache.remove(requestKey);
+			}
 		} else {
-			throw new UnsupportedOperationException("The repository " + getId() + " have no writable local storage defined!");
+			throw new UnsupportedOperationException("The repository " + getId()
+					+ " have no writable local storage defined!");
 		}
 	}
 
@@ -300,6 +358,20 @@ public abstract class AbstractRepository implements Repository {
 		}
 		getIndexer().addItemProperties(batch);
 		logger.info("Indexed {} items", Integer.toString(indexed));
+	}
+
+	/**
+	 * Constructs a unique request key using repoId and request path.
+	 * 
+	 * @param repository
+	 * @param request
+	 * @return a unique key in form "repoId:/path/to/artifact"
+	 */
+	protected String getRepositoryRequestAsKey(Repository repository, ProximityRequest request) {
+		StringBuffer sb = new StringBuffer(repository.getId());
+		sb.append(":");
+		sb.append(request.getPath());
+		return sb.toString();
 	}
 
 }
