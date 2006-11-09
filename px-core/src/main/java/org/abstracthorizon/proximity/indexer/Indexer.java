@@ -4,7 +4,8 @@ import java.util.List;
 
 import org.abstracthorizon.proximity.ItemNotFoundException;
 import org.abstracthorizon.proximity.ItemProperties;
-import org.abstracthorizon.proximity.Repository;
+import org.abstracthorizon.proximity.NoSuchRepositoryException;
+import org.abstracthorizon.proximity.Proximity;
 import org.abstracthorizon.proximity.storage.StorageException;
 
 /**
@@ -14,34 +15,14 @@ import org.abstracthorizon.proximity.storage.StorageException;
  * @author cstamas
  * 
  */
-public interface Indexer {
+public interface Indexer extends Searchable {
 
 	/**
-	 * Initializes indexer. Implementation dependent.
+	 * Initialize the current indexer implementation.
 	 * 
+	 * @param proximity
 	 */
-	void initialize();
-
-	/**
-	 * Regiters a repository with indexer.
-	 * 
-	 * @param repository
-	 */
-	void registerRepository(Repository repository);
-
-	/**
-	 * Unregisters a repositort from indexer.
-	 * 
-	 * @param repository
-	 */
-	void unregisterRepository(Repository repository);
-
-	/**
-	 * Returns the list that this indexer have searchable.
-	 * 
-	 * @return list of keywords usable in searches.
-	 */
-	List getSearchableKeywords();
+	public void initialize(Proximity proximity);
 
 	/**
 	 * Adds ItemProperties to index.
@@ -66,25 +47,21 @@ public interface Indexer {
 	 * @throws ItemNotFoundException
 	 * @throws StorageException
 	 */
-	void deleteItemProperties(ItemProperties ip) throws ItemNotFoundException, StorageException;
+	void deleteItemProperties(ItemProperties ip) throws StorageException;
+
+	// ============================================================================================
+	// Maintenance
 
 	/**
-	 * Performs a search using ip as "example".
+	 * Forces reindex of repositories.
 	 * 
-	 * @param ip
-	 * @return
-	 * @throws StorageException
 	 */
-	List searchByItemPropertiesExample(ItemProperties ip) throws StorageException;
+	void reindex();
 
 	/**
-	 * Indexer implementation dependent. Performs a search by some query.
+	 * Forces reindex of repository.
 	 * 
-	 * @param query
-	 * @return
-	 * @throws IndexerException
-	 * @throws StorageException
 	 */
-	List searchByQuery(String query) throws IndexerException, StorageException;
+	void reindex(String repoId) throws NoSuchRepositoryException;
 
 }

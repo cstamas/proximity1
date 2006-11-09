@@ -5,11 +5,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
-import org.abstracthorizon.proximity.ItemNotFoundException;
-import org.abstracthorizon.proximity.ItemProperties;
 import org.abstracthorizon.proximity.HashMapItemPropertiesImpl;
+import org.abstracthorizon.proximity.ItemProperties;
 import org.abstracthorizon.proximity.storage.StorageException;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
@@ -32,16 +30,6 @@ import org.apache.lucene.store.FSDirectory;
 
 public class LuceneIndexer extends AbstractIndexer {
 
-	public static String DOC_PATH = "_path";
-
-	public static String DOC_NAME = "_name";
-
-	public static String DOC_REPO = "_repo";
-
-	public static String DOC_GROUP = "_group";
-
-	private boolean recreateIndexes = true;
-
 	private int dirtyItemTreshold = 100;
 
 	private int dirtyItems = 0;
@@ -49,14 +37,6 @@ public class LuceneIndexer extends AbstractIndexer {
 	private Directory indexDirectory;
 
 	private Analyzer analyzer = new StandardAnalyzer();
-
-	public boolean isRecreateIndexes() {
-		return recreateIndexes;
-	}
-
-	public void setRecreateIndexes(boolean recreateIndexes) {
-		this.recreateIndexes = recreateIndexes;
-	}
 
 	public int getDirtyItemTreshold() {
 		return dirtyItemTreshold;
@@ -75,14 +55,26 @@ public class LuceneIndexer extends AbstractIndexer {
 			} else {
 				logger.info("Created indexer basedir {}", pathFile.getAbsolutePath());
 			}
-		}
-		if (!pathFile.isDirectory()) {
-			throw new IllegalArgumentException("The supplied parameter " + path + " is not a directory!");
+		} else {
+			if (!pathFile.isDirectory()) {
+				throw new IllegalArgumentException("The supplied parameter " + path + " is not a directory!");
+			}
 		}
 		this.indexDirectory = FSDirectory.getDirectory(pathFile, false);
 	}
 
-	public synchronized void addItemProperties(ItemProperties item) throws StorageException {
+	protected void doInitialize() {
+		try {
+			IndexWriter writer = new IndexWriter(indexDirectory, analyzer, isRecreateIndexes()
+					|| !IndexReader.indexExists(indexDirectory));
+			writer.optimize();
+			writer.close();
+		} catch (IOException ex) {
+			throw new StorageException("Got IOException during index creation.", ex);
+		}
+	}
+
+	protected synchronized void doAddItemProperties(ItemProperties item) throws StorageException {
 		logger.debug("Adding item to index");
 		try {
 			// prevent duplication on idx
@@ -98,7 +90,7 @@ public class LuceneIndexer extends AbstractIndexer {
 		}
 	}
 
-	public synchronized void addItemProperties(List items) throws StorageException {
+	protected synchronized void doAddItemProperties(List items) throws StorageException {
 		logger.debug("Adding batch items to index");
 		try {
 			IndexReader reader = IndexReader.open(indexDirectory);
@@ -123,7 +115,7 @@ public class LuceneIndexer extends AbstractIndexer {
 		}
 	}
 
-	public synchronized void deleteItemProperties(ItemProperties ip) throws ItemNotFoundException, StorageException {
+	protected synchronized void doDeleteItemProperties(ItemProperties ip) throws StorageException {
 		logger.debug("Deleting item from index");
 		try {
 			IndexReader reader = IndexReader.open(indexDirectory);
@@ -145,7 +137,7 @@ public class LuceneIndexer extends AbstractIndexer {
 		}
 	}
 
-	public List searchByItemPropertiesExample(ItemProperties ip) throws StorageException {
+	protected List doSearchByItemPropertiesExample(ItemProperties ip) throws StorageException {
 		BooleanQuery query = new BooleanQuery();
 		for (Iterator i = ip.getAllMetadata().keySet().iterator(); i.hasNext();) {
 			String key = (String) i.next();
@@ -162,7 +154,7 @@ public class LuceneIndexer extends AbstractIndexer {
 		return search(query);
 	}
 
-	public List searchByQuery(String queryStr) throws IndexerException, StorageException {
+	protected List doSearchByQuery(String queryStr) throws IndexerException, StorageException {
 		QueryParser qparser = new QueryParser(ItemProperties.METADATA_NAME, analyzer);
 		try {
 			Query query = qparser.parse(queryStr);
@@ -174,6 +166,18 @@ public class LuceneIndexer extends AbstractIndexer {
 
 	protected String getItemUid(ItemProperties ip) {
 		return ip.getRepositoryId() + ":" + ip.getPath();
+	}
+
+	protected void addItemToIndex(IndexWriter writer, String UID, ItemProperties item) throws IOException {
+		Document ipDoc = itemProperties2Document(item);
+		ipDoc.add(new Field("UID", UID, Field.Store.YES, Field.Index.UN_TOKENIZED));
+		writer.addDocument(ipDoc);
+		dirtyItems++;
+		if (dirtyItems > dirtyItemTreshold) {
+			logger.info("Optimizing Lucene index as dirtyItemTreshold is exceeded.");
+			writer.optimize();
+			dirtyItems = 0;
+		}
 	}
 
 	protected Document itemProperties2Document(ItemProperties item) {
@@ -195,18 +199,6 @@ public class LuceneIndexer extends AbstractIndexer {
 		return result;
 	}
 
-	protected void addItemToIndex(IndexWriter writer, String UID, ItemProperties item) throws IOException {
-		Document ipDoc = itemProperties2Document(item);
-		ipDoc.add(new Field("UID", UID, Field.Store.YES, Field.Index.UN_TOKENIZED));
-		writer.addDocument(ipDoc);
-		dirtyItems++;
-		if (dirtyItems > dirtyItemTreshold) {
-			logger.info("Optimizing Lucene index as dirtyItemTreshold is exceeded.");
-			writer.optimize();
-			dirtyItems = 0;
-		}
-	}
-
 	protected List search(Query query) {
 		try {
 			IndexSearcher searcher = new IndexSearcher(indexDirectory);
@@ -225,24 +217,6 @@ public class LuceneIndexer extends AbstractIndexer {
 			return result;
 		} catch (IOException ex) {
 			throw new StorageException("Got IOException during search by query.", ex);
-		}
-	}
-
-	protected void getIndexerSpecificSearchableKeywords(Set kwSet) {
-		kwSet.add(DOC_PATH);
-		kwSet.add(DOC_NAME);
-		kwSet.add(DOC_REPO);
-		kwSet.add(DOC_GROUP);
-	}
-
-	protected void doInitialize() {
-		try {
-			IndexWriter writer = new IndexWriter(indexDirectory, analyzer, recreateIndexes
-					|| !IndexReader.indexExists(indexDirectory));
-			writer.optimize();
-			writer.close();
-		} catch (IOException ex) {
-			throw new StorageException("Got IOException during index creation.", ex);
 		}
 	}
 
