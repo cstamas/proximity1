@@ -3,7 +3,6 @@ package org.abstracthorizon.proximity;
 import java.util.List;
 
 import org.abstracthorizon.proximity.access.AccessManager;
-import org.abstracthorizon.proximity.indexer.Indexer;
 import org.abstracthorizon.proximity.stats.StatisticsGatherer;
 import org.abstracthorizon.proximity.storage.StorageException;
 import org.abstracthorizon.proximity.storage.local.LocalStorage;
@@ -16,26 +15,6 @@ import org.abstracthorizon.proximity.storage.remote.RemoteStorage;
  * 
  */
 public interface Repository {
-
-	/**
-	 * Call once to initialize repository.
-	 * 
-	 */
-	void initialize();
-
-	/**
-	 * Returns proximity instance known by this repo.
-	 * 
-	 * @return
-	 */
-	Proximity getProximity();
-
-	/**
-	 * Registers itself with Proximity.
-	 * 
-	 * @param proximity
-	 */
-	void setProximity(Proximity proximity);
 
 	/**
 	 * Returns the ID of the repository.
@@ -81,20 +60,6 @@ public interface Repository {
 	 * @param rank
 	 */
 	void setRank(int rank);
-
-	/**
-	 * Is reindexing at startup/initialize on?
-	 * 
-	 * @return
-	 */
-	boolean isReindexAtInitialize();
-
-	/**
-	 * Sets reindexing and startup/initialize.
-	 * 
-	 * @param reindexAtInitialize
-	 */
-	void setReindexAtInitialize(boolean reindexAtInitialize);
 
 	/**
 	 * Is Repository available? If no, it will reject all incoming requests.
@@ -143,6 +108,35 @@ public interface Repository {
 	void setListable(boolean val);
 
 	/**
+	 * Is Repository indexable?
+	 * 
+	 * @return true if is indexable, otherwise false.
+	 */
+	boolean isIndexable();
+
+	/**
+	 * Sets the indexable property of repository. If true, its content will be
+	 * indexed by Indexer, otherwise not.
+	 * 
+	 * @param val
+	 */
+	void setIndexable(boolean val);
+
+	/**
+	 * Is reindexing at startup/initialize on?
+	 * 
+	 * @return
+	 */
+	boolean isReindexAtInitialize();
+
+	/**
+	 * Sets reindexing and startup/initialize.
+	 * 
+	 * @param reindexAtInitialize
+	 */
+	void setReindexAtInitialize(boolean reindexAtInitialize);
+
+	/**
 	 * Returns the local storage of the repository. Per repository instance may
 	 * exists.
 	 * 
@@ -176,21 +170,6 @@ public interface Repository {
 	void setRemoteStorage(RemoteStorage storage);
 
 	/**
-	 * Returns the indexer used by this repository. Only one indexer may be used
-	 * Proximity wide.
-	 * 
-	 * @return
-	 */
-	Indexer getIndexer();
-
-	/**
-	 * Sets the indexer used by repository. May be null, to switch indexing off.
-	 * 
-	 * @param indexer
-	 */
-	void setIndexer(Indexer indexer);
-
-	/**
 	 * Returns the repository level AccessManager. Per repository instance may
 	 * exists.
 	 * 
@@ -221,12 +200,6 @@ public interface Repository {
 	 * @param stats
 	 */
 	void setStatisticsGatherer(StatisticsGatherer stats);
-
-	/**
-	 * Forces reindex of repository.
-	 * 
-	 */
-	void reindex();
 
 	/**
 	 * Retrieves item with content from the path.

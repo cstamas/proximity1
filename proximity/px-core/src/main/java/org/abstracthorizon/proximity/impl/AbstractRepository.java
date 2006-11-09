@@ -7,19 +7,16 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Stack;
 
 import org.abstracthorizon.proximity.AccessDeniedException;
 import org.abstracthorizon.proximity.Item;
 import org.abstracthorizon.proximity.ItemNotFoundException;
 import org.abstracthorizon.proximity.ItemProperties;
-import org.abstracthorizon.proximity.Proximity;
 import org.abstracthorizon.proximity.ProximityRequest;
 import org.abstracthorizon.proximity.Repository;
 import org.abstracthorizon.proximity.RepositoryNotAvailableException;
 import org.abstracthorizon.proximity.access.AccessManager;
 import org.abstracthorizon.proximity.access.OpenAccessManager;
-import org.abstracthorizon.proximity.indexer.Indexer;
 import org.abstracthorizon.proximity.stats.StatisticsGatherer;
 import org.abstracthorizon.proximity.storage.StorageException;
 import org.abstracthorizon.proximity.storage.local.LocalStorage;
@@ -31,19 +28,13 @@ public abstract class AbstractRepository implements Repository {
 
 	protected Logger logger = LoggerFactory.getLogger(this.getClass());
 
-	private Proximity proximity;
-
 	private String id;
 
 	private String groupId = "default";
 
-	private boolean reindexAtInitialize = true;
-
 	private LocalStorage localStorage;
 
 	private RemoteStorage remoteStorage;
-
-	private Indexer indexer;
 
 	private AccessManager accessManager = new OpenAccessManager();
 
@@ -56,6 +47,10 @@ public abstract class AbstractRepository implements Repository {
 	private boolean offline = false;
 
 	private boolean listable = true;
+
+	private boolean indexable = true;
+
+	private boolean reindexAtInitialize = true;
 
 	private long notFoundCachePeriod = 86400 * 1000; // 24 hours
 
@@ -93,14 +88,6 @@ public abstract class AbstractRepository implements Repository {
 		this.id = id;
 	}
 
-	public Indexer getIndexer() {
-		return indexer;
-	}
-
-	public void setIndexer(Indexer indexer) {
-		this.indexer = indexer;
-	}
-
 	public boolean isListable() {
 		return listable;
 	}
@@ -125,14 +112,6 @@ public abstract class AbstractRepository implements Repository {
 		this.offline = offline;
 	}
 
-	public Proximity getProximity() {
-		return proximity;
-	}
-
-	public void setProximity(Proximity proximity) {
-		this.proximity = proximity;
-	}
-
 	public int getRank() {
 		return rank;
 	}
@@ -147,6 +126,14 @@ public abstract class AbstractRepository implements Repository {
 
 	public void setReindexAtInitialize(boolean reindexAtInitialize) {
 		this.reindexAtInitialize = reindexAtInitialize;
+	}
+
+	public boolean isIndexable() {
+		return indexable;
+	}
+
+	public void setIndexable(boolean indexable) {
+		this.indexable = indexable;
 	}
 
 	public RemoteStorage getRemoteStorage() {
@@ -175,20 +162,6 @@ public abstract class AbstractRepository implements Repository {
 
 	// ---------------------------------------------------------------------------------
 	// Repository Iface
-
-	public void initialize() {
-		if (getProximity() == null) {
-			throw new IllegalStateException("Repository cannot initialize without Proximity reference!");
-		} else {
-			getProximity().addRepository(this);
-		}
-		if (getIndexer() != null) {
-			getIndexer().registerRepository(this);
-		}
-		if (isReindexAtInitialize()) {
-			reindex();
-		}
-	}
 
 	public Item retrieveItem(ProximityRequest request) throws RepositoryNotAvailableException, ItemNotFoundException,
 			StorageException, AccessDeniedException {
@@ -239,11 +212,8 @@ public abstract class AbstractRepository implements Repository {
 				ItemProperties itemProps = getLocalStorage().retrieveItem(request.getPath(), true).getProperties();
 				itemProps.setRepositoryId(getId());
 				itemProps.setRepositoryGroupId(getGroupId());
-				if (getIndexer() != null) {
-					getIndexer().deleteItemProperties(itemProps);
-				}
 				getLocalStorage().deleteItem(request.getPath());
-				
+
 				// remove it from n-cache also
 				String requestKey = getRepositoryRequestAsKey(this, request);
 				if (notFoundCache.containsKey(requestKey)) {
@@ -265,9 +235,6 @@ public abstract class AbstractRepository implements Repository {
 			item.getProperties().setRepositoryId(getId());
 			item.getProperties().setRepositoryGroupId(getGroupId());
 			getLocalStorage().storeItem(item);
-			if (getIndexer() != null && !item.getProperties().isDirectory()) {
-				getIndexer().addItemProperties(item.getProperties());
-			}
 
 			// remove it from n-cache also
 			String requestKey = getRepositoryRequestAsKey(this, request);
@@ -304,61 +271,6 @@ public abstract class AbstractRepository implements Repository {
 
 	protected abstract Item doRetrieveItem(ProximityRequest request) throws RepositoryNotAvailableException,
 			ItemNotFoundException, StorageException;
-
-	/**
-	 * Forces repository reindexing. If there is no indexer supplied with repos,
-	 * this call will do nothing.
-	 * 
-	 */
-	public void reindex() {
-		if (getLocalStorage() == null) {
-			logger.info(
-					"Will NOT reindex nor recreateMetadata on repository {}, since it have no local storage defined.",
-					getId());
-			return;
-		}
-		if (getLocalStorage().isMetadataAware()) {
-			logger.info("Recreating metadata on repository {}", getId());
-			Map initialData = new HashMap();
-			getLocalStorage().recreateMetadata(initialData);
-		}
-		if (getIndexer() == null) {
-			logger.info("Will NOT reindex repository {}, since it have no indexer defined.", getId());
-			return;
-		}
-		logger.info("Reindexing repository {}", getId());
-
-		int indexed = 0;
-		Stack stack = new Stack();
-		List dir = getLocalStorage().listItems(ItemProperties.PATH_ROOT);
-		List batch = new ArrayList();
-		stack.push(dir);
-		while (!stack.isEmpty()) {
-			dir = (List) stack.pop();
-			for (Iterator i = dir.iterator(); i.hasNext();) {
-				ItemProperties ip = (ItemProperties) i.next();
-				ip.setRepositoryId(getId());
-				ip.setRepositoryGroupId(getGroupId());
-				// Who is interested in origin from index?
-				// if (getRemoteStorage() != null) {
-				// ip.setMetadata(ItemProperties.METADATA_ORIGINATING_URL,
-				// getRemoteStorage().getAbsoluteUrl(
-				// ip.getPath()), false);
-				// }
-				if (ip.isDirectory()) {
-					List subdir = getLocalStorage().listItems(ip.getPath());
-					stack.push(subdir);
-				} else {
-					// TODO: possible memory problem here with large
-					// repositories!
-					batch.add(ip);
-					indexed++;
-				}
-			}
-		}
-		getIndexer().addItemProperties(batch);
-		logger.info("Indexed {} items", Integer.toString(indexed));
-	}
 
 	/**
 	 * Constructs a unique request key using repoId and request path.

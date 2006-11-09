@@ -11,7 +11,7 @@ import org.abstracthorizon.proximity.access.AccessManager;
  * @author cstamas
  * 
  */
-public interface Proximity {
+public interface Proximity extends ProximityRequestMulticaster {
 
 	/**
 	 * Retrieve Proximity-level AccessManager.
@@ -28,13 +28,6 @@ public interface Proximity {
 	void setAccessManager(AccessManager accessManager);
 
 	/**
-	 * Returns the list of Repositories that serves Proximity.
-	 * 
-	 * @return
-	 */
-	List getRepositories();
-
-	/**
 	 * Adds single repository to Proximity.
 	 * 
 	 * @param repository
@@ -48,6 +41,29 @@ public interface Proximity {
 	 * @throws NoSuchRepositoryException
 	 */
 	void removeRepository(String repoId) throws NoSuchRepositoryException;
+
+	/**
+	 * Returns the requested Repository by ID.
+	 * 
+	 * @param repoId
+	 * @return
+	 * @throws NoSuchRepositoryException
+	 */
+	Repository getRepository(String repoId) throws NoSuchRepositoryException;
+
+	/**
+	 * Adds list of repositories to Proximity. Used during startup.
+	 * 
+	 * @param repositories
+	 */
+	void setRepositories(List repositories);
+
+	/**
+	 * Returns the list of Repositories that serves Proximity.
+	 * 
+	 * @return a List<Repository>
+	 */
+	List getRepositories();
 
 	/**
 	 * Returns existing Repository groups.
@@ -164,20 +180,5 @@ public interface Proximity {
 	 * @return list of ItemProperties, possibly 0 length.
 	 */
 	List listItems(ProximityRequest request) throws AccessDeniedException, NoSuchRepositoryException;
-
-	// ============================================================================================
-	// Maintenance
-
-	/**
-	 * Forces reindex of repositories.
-	 * 
-	 */
-	void reindex();
-
-	/**
-	 * Forces reindex of repository.
-	 * 
-	 */
-	void reindex(String repoId);
 
 }
