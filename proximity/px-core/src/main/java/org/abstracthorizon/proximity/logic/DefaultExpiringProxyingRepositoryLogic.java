@@ -115,7 +115,7 @@ public class DefaultExpiringProxyingRepositoryLogic extends DefaultProxyingRepos
 			// put the path into not found cache
 			String requestPath = getRepositoryRequestAsKey(repository, request);
 			if (!notFoundCache.containsKey(requestPath)) {
-				logger.info("Storing failed request [{}] to neg-cache.", requestPath);
+				logger.info("Caching failed request [{}] to n-cache.", requestPath);
 				notFoundCache.put(requestPath, new Date());
 			}
 		}
