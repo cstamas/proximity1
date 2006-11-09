@@ -320,7 +320,7 @@
 	</bean>
 
 	<bean id="inhouseFSStorage"
-		class="org.abstracthorizon.proximity.storage.local.ReadOnlyFileSystemStorage">
+		class="org.abstracthorizon.proximity.storage.local.WritableFileSystemStorage">
 		<property name="metadataAware" value="true" />
 		<property name="metadataDirFile"
 			value="${inhouseFSStorage.metadataDir}" />
@@ -355,7 +355,7 @@
 	</bean>
 
 	<bean id="inhouse.snapshotFSStorage"
-		class="org.abstracthorizon.proximity.storage.local.ReadOnlyFileSystemStorage">
+		class="org.abstracthorizon.proximity.storage.local.WritableFileSystemStorage">
 		<property name="metadataAware" value="true" />
 		<property name="metadataDirFile"
 			value="${inhouse.snapshotFSStorage.metadataDir}" />
@@ -435,7 +435,7 @@
 	</bean>
 
 	<bean id="extFreeFSStorage"
-		class="org.abstracthorizon.proximity.storage.local.ReadOnlyFileSystemStorage">
+		class="org.abstracthorizon.proximity.storage.local.WritableFileSystemStorage">
 		<property name="metadataAware" value="true" />
 		<property name="metadataDirFile"
 			value="${extFreeFSStorage.metadataDir}" />
