@@ -37,8 +37,8 @@ do a proper configuration.
 |                 | artifact spoofing) | hosting)               |
 *-----------------*--------------------*------------------------*
 | With ReadWrite  | caching proxy      | inhouse repository     |
-| local storage   | (the real value,   | (but write operation will never occur|
-|                 | will proxy and     | on local storage, logical equivalent of upper one) |
+| local storage   | (the real value,   | (but write operation will occur|
+|                 | will proxy and     | only on WebDAV deployment, logical equivalent of upper one) |
 |                 | cache)             |                        |
 *-----------------*--------------------*-------------------------*
 Possible configurations
