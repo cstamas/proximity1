@@ -6,6 +6,12 @@ public class ProximityIntegrationTest extends AbstractProximityIntegrationTest {
 
 	private Proximity proximity;
 
+	protected String[] getConfigLocations() {
+		return new String[] { "/org/abstracthorizon/proximity/applicationContext.xml",
+				"/org/abstracthorizon/proximity/proximityHelpers.xml",
+				"/org/abstracthorizon/proximity/proximityRepositories.xml"};
+	}
+
 	public void setProximity(Proximity proximity) {
 		this.proximity = proximity;
 	}
@@ -23,14 +29,14 @@ public class ProximityIntegrationTest extends AbstractProximityIntegrationTest {
 
 	public void testSimpleArtifact() {
 		try {
-			Item item = proximity.retrieveItem(getRequest("/antlr/antlr/2.7.5/antlr-2.7.5.jar"));
+			Item item = proximity.retrieveItem(getRequest("/public/antlr/antlr/2.7.5/antlr-2.7.5.jar"));
 			logger.info("Got response of type " + item.getClass() + ":" + item);
 		} catch (ProximityException ex) {
 			logger.error("Got exception", ex);
 			fail();
 		}
 		try {
-			Item item = proximity.retrieveItem(getRequest("/antlr/antlr/2.7.5/antlr-2.7.5.jar-NO_SUCH"));
+			Item item = proximity.retrieveItem(getRequest("/public/antlr/antlr/2.7.5/antlr-2.7.5.jar-NO_SUCH"));
 			logger.info("Got response of type " + item.getClass() + ":" + item);
 			fail();
 		} catch (ProximityException ex) {
@@ -40,7 +46,7 @@ public class ProximityIntegrationTest extends AbstractProximityIntegrationTest {
 
 	public void testPomArtifact() {
 		try {
-			Item item = proximity.retrieveItem(getRequest("/antlr/antlr/2.7.5/antlr-2.7.5.pom"));
+			Item item = proximity.retrieveItem(getRequest("/public/antlr/antlr/2.7.5/antlr-2.7.5.pom"));
 			logger.info("Got response of type " + item.getClass() + ":" + item);
 		} catch (ProximityException ex) {
 			logger.error("BAD, got exception", ex);
@@ -50,14 +56,14 @@ public class ProximityIntegrationTest extends AbstractProximityIntegrationTest {
 
 	public void testMetadatadaArtifact() {
 		try {
-			Item item = proximity.retrieveItem(getRequest("/ant/ant/maven-metadata.xml"));
+			Item item = proximity.retrieveItem(getRequest("/public/ant/ant/maven-metadata.xml"));
 			logger.info("Got response of type " + item.getClass() + ":" + item);
 		} catch (ProximityException ex) {
 			logger.error("Got exception", ex);
 			fail();
 		}
 		try {
-			Item item = proximity.retrieveItem(getRequest("/ant/ant/maven-metadata.xml.md5"));
+			Item item = proximity.retrieveItem(getRequest("/public/ant/ant/maven-metadata.xml.md5"));
 			logger.info("Got response of type " + item.getClass() + ":" + item);
 		} catch (ProximityException ex) {
 			logger.error("Got exception", ex);
@@ -69,9 +75,9 @@ public class ProximityIntegrationTest extends AbstractProximityIntegrationTest {
 		try {
 			List items = proximity.listItems(getRequest("/"));
 			logger.info("Got response of type " + items.getClass() + ":" + items);
-			items = proximity.listItems(getRequest("/ismicro"));
+			items = proximity.listItems(getRequest("/public"));
 			logger.info("Got response of type " + items.getClass() + ":" + items);
-			items = proximity.listItems(getRequest("/ismicro/jars"));
+			items = proximity.listItems(getRequest("/public/ant"));
 			logger.info("Got response of type " + items.getClass() + ":" + items);
 		} catch (ProximityException ex) {
 			logger.error("Got ex but i should not have it!", ex);
