@@ -80,6 +80,15 @@
 			<scope>compile</scope>
 		</dependency>
 
+		<!-- Needed by MIME choose in RepositoriyController servlet -->
+		<dependency>
+			<groupId>javax.activation</groupId>
+			<artifactId>activation</artifactId>
+			<version>1.1</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+
 		<!-- Needed by org.springframework::spring-webmvc -->
 		<dependency>
 			<groupId>commons-digester</groupId>
