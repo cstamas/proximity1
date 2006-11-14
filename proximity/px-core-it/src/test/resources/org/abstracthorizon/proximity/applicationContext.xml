@@ -29,7 +29,9 @@
 			value="SYSTEM_PROPERTIES_MODE_FALLBACK" />
 		<property name="locations">
 			<list>
-				<value>/org/abstracthorizon/proximity/proximity.properties</value>
+				<value>
+					/org/abstracthorizon/proximity/proximity.properties
+				</value>
 			</list>
 		</property>
 	</bean>
@@ -77,8 +79,9 @@
 		- Indexer, used to speed up searches ONLY.
 	-->
 	<bean id="proximity.indexer"
-		class="org.abstracthorizon.proximity.indexer.LuceneIndexer">
-		<property name="proximity" ref="proximity"/>
+		class="org.abstracthorizon.proximity.indexer.LuceneIndexer"
+		init-method="initialize">
+		<property name="proximity" ref="proximity" />
 		<!-- Where to store indexes? -->
 		<property name="indexDirectory" value="${indexer.dir}" />
 		<!-- On webapp start should i recreate Lucene indexes? -->
