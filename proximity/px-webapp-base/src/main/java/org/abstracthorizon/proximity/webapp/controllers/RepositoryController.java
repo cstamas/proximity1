@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.activation.MimetypesFileTypeMap;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -23,6 +24,8 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
 
 public class RepositoryController extends MultiActionController {
+
+	private MimetypesFileTypeMap mimeFiletypeMap = new MimetypesFileTypeMap();
 
 	private Proximity proximity;
 
@@ -77,7 +80,8 @@ public class RepositoryController extends MultiActionController {
 				return new ModelAndView("repository/repositoryList", result);
 			} else {
 				// TODO: check for If-Modified-Since?
-				response.setContentType("application/octet-stream");
+				// response.setContentType("application/octet-stream");
+				response.setContentType(mimeFiletypeMap.getContentType(item.getProperties().getName()));
 				response.setContentLength((int) item.getProperties().getSize());
 				response.setDateHeader("Last-Modified", item.getProperties().getLastModified().getTime());
 				InputStream is = item.getStream();
