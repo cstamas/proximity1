@@ -39,8 +39,18 @@ public abstract class AbstractIndexer implements Indexer, ProximityRequestListen
 	private Proximity proximity;
 
 	private boolean recreateIndexes = true;
+	
+	private int reindexBatchSize = 1000;
 
 	protected Logger logger = LoggerFactory.getLogger(this.getClass());
+	
+	public int getReindexBatchSize() {
+		return reindexBatchSize;
+	}
+
+	public void setReindexBatchSize(int reindexBatchSize) {
+		this.reindexBatchSize = reindexBatchSize;
+	}
 	
 	public void initialize() {
 		if (getProximity() != null) {
@@ -194,14 +204,12 @@ public abstract class AbstractIndexer implements Indexer, ProximityRequestListen
 		int indexed = 0;
 		Stack stack = new Stack();
 		List dir = repository.getLocalStorage().listItems(ItemProperties.PATH_ROOT);
-		List batch = new ArrayList();
+		List batch = new ArrayList(getReindexBatchSize());
 		stack.push(dir);
 		while (!stack.isEmpty()) {
 			dir = (List) stack.pop();
 			for (Iterator i = dir.iterator(); i.hasNext();) {
 				ItemProperties ip = (ItemProperties) i.next();
-				ip.setRepositoryId(repository.getId());
-				ip.setRepositoryGroupId(repository.getGroupId());
 				// Who is interested in origin from index?
 				// if (getRemoteStorage() != null) {
 				// ip.setMetadata(ItemProperties.METADATA_ORIGINATING_URL,
@@ -209,17 +217,22 @@ public abstract class AbstractIndexer implements Indexer, ProximityRequestListen
 				// ip.getPath()), false);
 				// }
 				if (ip.isDirectory()) {
-					List subdir = repository.getLocalStorage().listItems(ip.getPath());
-					stack.push(subdir);
+					stack.push(repository.getLocalStorage().listItems(ip.getPath()));
 				} else {
-					// TODO: possible memory problem here with large
-					// repositories!
+					ip.setRepositoryId(repository.getId());
+					ip.setRepositoryGroupId(repository.getGroupId());
 					batch.add(ip);
 					indexed++;
 				}
 			}
+			if (batch.size() > getReindexBatchSize()) {
+				addItemProperties(batch);
+				batch.clear();
+			}
 		}
-		addItemProperties(batch);
+		if (batch.size() > 0) {
+			addItemProperties(batch);
+		}
 		logger.info("Indexed {} items", Integer.toString(indexed));
 
 	}
@@ -235,5 +248,5 @@ public abstract class AbstractIndexer implements Indexer, ProximityRequestListen
 	protected abstract void doAddItemProperties(List itemProperties) throws StorageException;
 
 	protected abstract void doDeleteItemProperties(ItemProperties ip) throws StorageException;
-	
+
 }
