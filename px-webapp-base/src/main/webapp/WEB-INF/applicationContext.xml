@@ -78,7 +78,8 @@
 		- Indexer, used to speed up searches ONLY.
 	-->
 	<bean id="proximity.indexer"
-		class="org.abstracthorizon.proximity.indexer.LuceneIndexer">
+		class="org.abstracthorizon.proximity.indexer.LuceneIndexer"
+		init-method="initialize">
 		<property name="proximity" ref="proximity"/>
 		<!-- Where to store indexes? -->
 		<property name="indexDirectory" value="${indexer.dir}" />
