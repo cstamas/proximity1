@@ -88,7 +88,8 @@ public class MavenProximityLogic extends DefaultProximityLogic {
 				MetadataXpp3Reader metadataReader = new MetadataXpp3Reader();
 				MetadataXpp3Writer metadataWriter = new MetadataXpp3Writer();
 				InputStreamReader isr;
-				Metadata mergedMetadata = new Metadata();
+				
+				Metadata mergedMetadata = null;
 
 				for (int i = 0; i < listOfProxiedItems.size(); i++) {
 
