@@ -18,11 +18,23 @@ import org.abstracthorizon.proximity.storage.StorageException;
 public interface Indexer extends Searchable {
 
 	/**
-	 * Initialize the current indexer implementation.
+	 * Returns the indexers instance of proximity.
+	 * @return
+	 */
+	Proximity getProximity();
+	
+	/**
+	 * Sets the proximity instance.
 	 * 
 	 * @param proximity
 	 */
-	public void initialize(Proximity proximity);
+	void setProximity(Proximity proximity);
+
+	/**
+	 * Initialize the current indexer implementation.
+	 * 
+	 */
+	public void initialize();
 
 	/**
 	 * Adds ItemProperties to index.

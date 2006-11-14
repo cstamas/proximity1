@@ -41,11 +41,21 @@ public abstract class AbstractIndexer implements Indexer, ProximityRequestListen
 	private boolean recreateIndexes = true;
 
 	protected Logger logger = LoggerFactory.getLogger(this.getClass());
-
-	public void initialize(Proximity proximity) {
-		setProximity(proximity);
-		logger.info("Initializing indexer {}...", this.getClass().getName());
-		doInitialize();
+	
+	public void initialize() {
+		if (getProximity() != null) {
+			logger.info("Initializing indexer {}...", this.getClass().getName());
+			doInitialize();
+			logger.info("* Reindexing all repositories marked as (reindexAtInitialize = true)");
+			for (Iterator i = getProximity().getRepositories().iterator(); i.hasNext();) {
+				Repository repo = (Repository) i.next();
+				if (repo.isReindexAtInitialize()) {
+					reindex(repo);
+				}
+			}
+		} else {
+			throw new IllegalStateException("Indexer has no Proximity instance!");
+		}
 	}
 
 	public void setProximity(Proximity proximity) {
