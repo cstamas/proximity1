@@ -1,59 +1,76 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="Proximity">
 
-  <bannerLeft>
-    <name>ABSTRACT HORIZON</name>
-    <src>images/ah.png</src>
-    <href>http://www.abstracthorizon.org/</href>
-  </bannerLeft>
+	<bannerLeft>
+		<name>ABSTRACT HORIZON</name>
+		<src>images/ah.png</src>
+		<href>http://www.abstracthorizon.org/</href>
+	</bannerLeft>
 
-  <bannerRight>
-    <name>Proximity</name>
-    <src>images/logo.png</src>
-    <href>http://proximity.abstracthorizon.org/</href>
-  </bannerRight>
+	<bannerRight>
+		<name>Proximity</name>
+		<src>images/logo.png</src>
+		<href>http://proximity.abstracthorizon.org/</href>
+	</bannerRight>
 
-  <body>
+	<body>
 
-	<head>
-	  <meta name="keywords" content="abstracthorizon, abstract horizon, proximity, proxy, maven proxy, build management systems, build systems, build tools, enterprise build software, enterprise build tools, build automation, maven, mvn, maven2, continuous integration, java"/>
-	  <meta name="description" content="Proximity - the proactive mirror hosted at Abstracthorizon.org"/>
-	</head>
+		<head>
+			<meta name="keywords"
+				content="abstracthorizon, abstract horizon, proximity, proxy, maven proxy, build management systems, build systems, build tools, enterprise build software, enterprise build tools, build automation, maven, mvn, maven2, continuous integration, java" />
+			<meta name="description"
+				content="Proximity - the proactive mirror hosted at Abstracthorizon.org" />
+			<script src="http://www.google-analytics.com/urchin.js"
+				type="text/javascript">
+			</script>
+			<script type="text/javascript">
+				_uacct = "UA-882245-2"; urchinTracker();
+			</script>
+		</head>
 
-    <links>
-      <item name="Abstract Horizon" href="http://www.abstracthorizon.org/" />
-      <item name="Proximity Wiki" href="http://trac.abstracthorizon.org/proximity/" />
-      <item name="Proximity Support Forum" href="http://forum.abstracthorizon.org/index.php?c=9" />
-      <item name="Proximity DEMO" href="http://proximity.abstracthorizon.org:12000/px-webapp" />
-    </links>
+		<links>
+			<item name="Abstract Horizon"
+				href="http://www.abstracthorizon.org/" />
+			<item name="Proximity Wiki"
+				href="http://trac.abstracthorizon.org/proximity/" />
+			<item name="Proximity Support Forum"
+				href="http://forum.abstracthorizon.org/index.php?c=9" />
+			<item name="Proximity DEMO"
+				href="http://proximity.abstracthorizon.org:12000/px-webapp" />
+		</links>
 
-    <menu ref="parent" />
+		<menu ref="parent" />
 
-    <menu name="Proximity">
-      <item name="About" href="index.html"/>
-      <item name="Features in brief" href="about-proximity.html"/>
-      <item name="Download" href="downloads.html"/>
-    </menu>
+		<menu name="Proximity">
+			<item name="About" href="index.html" />
+			<item name="Features in brief" href="about-proximity.html" />
+			<item name="Download" href="downloads.html" />
+		</menu>
 
-    <menu name="Guides">
-      <item name="Quick Start" href="quick-start.html"/>
-      <item name="Deployment" href="deployment-guide.html"/>
-      <item name="Using Proximity" href="using-proximity.html"/>
-      <item name="Chaining Proximity" href="chaining-proximity.html"/>
-      <item name="About repositories" href="repositories.html"/>
-      <item name="Corporate Environments" href="corporate-environment.html"/>
-      <item name="HTTP Proxies" href="http-proxies.html"/>
-      <item name="Configuring Proximity" href="configuration.html"/>
-      <item name="Configuring Repositories" href="repository-configuration.html"/>
-      <item name="Configuration Reference" href="factory-conf.html"/>
-    </menu>
+		<menu name="Guides">
+			<item name="Quick Start" href="quick-start.html" />
+			<item name="Deployment" href="deployment-guide.html" />
+			<item name="Using Proximity" href="using-proximity.html" />
+			<item name="Chaining Proximity"
+				href="chaining-proximity.html" />
+			<item name="About repositories" href="repositories.html" />
+			<item name="Corporate Environments"
+				href="corporate-environment.html" />
+			<item name="HTTP Proxies" href="http-proxies.html" />
+			<item name="Configuring Proximity"
+				href="configuration.html" />
+			<item name="Configuring Repositories"
+				href="repository-configuration.html" />
+			<item name="Configuration Reference"
+				href="factory-conf.html" />
+		</menu>
 
-    <menu name="For developers">
-      <item name="Developers guide" href="developers-guide.html"/>
-    </menu>
+		<menu name="For developers">
+			<item name="Developers guide" href="developers-guide.html" />
+		</menu>
 
-    <menu ref="modules" />
-    <menu ref="reports" />
+		<menu ref="modules" />
+		<menu ref="reports" />
 
-  </body>
+	</body>
 </project>
