@@ -501,7 +501,6 @@ public abstract class AbstractProximity implements Proximity {
 	}
 
 	protected void mangleItemPathsForEmergeGroupsIfNeeded(List items) {
-		logger.debug("Mangling {} item paths", Integer.valueOf(items.size()));
 		if (isEmergeRepositoryGroups()) {
 			ProximityUtils.mangleItemPathsForEmergeGroups(items);
 		}
