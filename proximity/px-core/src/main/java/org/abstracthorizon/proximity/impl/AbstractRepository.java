@@ -196,7 +196,7 @@ public abstract class AbstractRepository implements Repository {
 			// put the path into not found cache
 			String requestPath = getRepositoryRequestAsKey(this, request);
 			if (!notFoundCache.containsKey(requestPath)) {
-				logger.info("Caching failed request [{}] to n-cache.", requestPath);
+				logger.debug("Caching failed request [{}] to n-cache.", requestPath);
 				notFoundCache.put(requestPath, new Date());
 			}
 			throw ex;

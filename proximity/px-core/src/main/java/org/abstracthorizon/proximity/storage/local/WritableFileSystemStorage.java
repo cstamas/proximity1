@@ -26,9 +26,8 @@ public class WritableFileSystemStorage extends ReadOnlyFileSystemStorage {
 		if (!item.getProperties().isFile()) {
 			throw new IllegalArgumentException("Only files can be stored!");
 		}
-		logger
-				.info("Storing item in [{}] in storage directory {}", item.getProperties().getPath(),
-						getStorageBaseDir());
+		logger.debug("Storing item in [{}] in storage directory {}", item.getProperties().getPath(),
+				getStorageBaseDir());
 		try {
 			if (item.getStream() != null) {
 				File file = new File(getStorageBaseDir(), item.getProperties().getPath());

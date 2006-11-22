@@ -39,11 +39,11 @@ public abstract class AbstractIndexer implements Indexer, ProximityRequestListen
 	private Proximity proximity;
 
 	private boolean recreateIndexes = true;
-	
+
 	private int reindexBatchSize = 1000;
 
 	protected Logger logger = LoggerFactory.getLogger(this.getClass());
-	
+
 	public int getReindexBatchSize() {
 		return reindexBatchSize;
 	}
@@ -51,7 +51,7 @@ public abstract class AbstractIndexer implements Indexer, ProximityRequestListen
 	public void setReindexBatchSize(int reindexBatchSize) {
 		this.reindexBatchSize = reindexBatchSize;
 	}
-	
+
 	public void initialize() {
 		if (getProximity() != null) {
 			logger.info("Initializing indexer {}...", this.getClass().getName());
@@ -114,17 +114,17 @@ public abstract class AbstractIndexer implements Indexer, ProximityRequestListen
 		return postprocessSearchResult(doSearchByQuery(queryStr));
 	}
 
-		public void proximityRequestEvent(ProximityRequestEvent event) {
+	public void proximityRequestEvent(ProximityRequestEvent event) {
 		if (ItemDeleteEvent.class.isAssignableFrom(event.getClass())) {
 			// delete from index
-			logger.info("Deleting item [{}] from index.", event.getRequest().getPath());
-			deleteItemProperties( ((ItemDeleteEvent) event).getItemProperties() );
+			logger.debug("Deleting item [{}] from index.", event.getRequest().getPath());
+			deleteItemProperties(((ItemDeleteEvent) event).getItemProperties());
 		} else if (ItemStoreEvent.class.isAssignableFrom(event.getClass())) {
 			// add to index
-			logger.info("Adding item [{}] to index.", event.getRequest().getPath());
-			addItemProperties( ((ItemStoreEvent) event).getItemProperties() );
+			logger.debug("Adding item [{}] to index.", event.getRequest().getPath());
+			addItemProperties(((ItemStoreEvent) event).getItemProperties());
 		}
-		
+
 	}
 
 	public boolean isRecreateIndexes() {
