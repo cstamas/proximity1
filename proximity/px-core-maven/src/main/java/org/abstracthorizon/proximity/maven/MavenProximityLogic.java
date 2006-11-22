@@ -78,11 +78,11 @@ public class MavenProximityLogic extends DefaultProximityLogic {
 					item.setStream(fis);
 					itemProps.setSize(tmpFile.length());
 				} else {
-					logger.info("Item for path " + request.getPath() + " SPOOFED with first got from repo group.");
+					logger.debug("Item for path " + request.getPath() + " SPOOFED with first got from repo group.");
 				}
 
 			} else {
-				logger.info("Item for path " + request.getPath() + " found in total of " + listOfProxiedItems.size()
+				logger.debug("Item for path " + request.getPath() + " found in total of " + listOfProxiedItems.size()
 						+ " repositories, will merge them.");
 
 				MetadataXpp3Reader metadataReader = new MetadataXpp3Reader();
