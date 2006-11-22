@@ -121,12 +121,12 @@ public class LuceneIndexer extends AbstractIndexer {
 			IndexReader reader = IndexReader.open(indexDirectory);
 			int deleted = reader.deleteDocuments(new Term("UID", getItemUid(ip)));
 			reader.close();
-			logger.info("Deleted {} items from index for UID={}", Integer.toString(deleted), getItemUid(ip));
+			logger.debug("Deleted {} items from index for UID={}", Integer.toString(deleted), getItemUid(ip));
 			dirtyItems = dirtyItems + deleted;
 
 			if (dirtyItems > dirtyItemTreshold) {
 				IndexWriter writer = new IndexWriter(indexDirectory, analyzer, false);
-				logger.info("Optimizing Lucene index as dirtyItemTreshold is exceeded.");
+				logger.debug("Optimizing Lucene index as dirtyItemTreshold is exceeded.");
 				writer.optimize();
 				dirtyItems = 0;
 				writer.close();
@@ -174,7 +174,7 @@ public class LuceneIndexer extends AbstractIndexer {
 		writer.addDocument(ipDoc);
 		dirtyItems++;
 		if (dirtyItems > dirtyItemTreshold) {
-			logger.info("Optimizing Lucene index as dirtyItemTreshold is exceeded.");
+			logger.debug("Optimizing Lucene index as dirtyItemTreshold is exceeded.");
 			writer.optimize();
 			dirtyItems = 0;
 		}
