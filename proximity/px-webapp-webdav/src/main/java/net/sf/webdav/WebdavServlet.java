@@ -62,6 +62,8 @@ import org.xml.sax.InputSource;
 
 public class WebdavServlet extends HttpServlet {
 
+	private static final long serialVersionUID = -7211751894635464480L;
+
 	protected Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	// -------------------------------------------------------------- Constants
