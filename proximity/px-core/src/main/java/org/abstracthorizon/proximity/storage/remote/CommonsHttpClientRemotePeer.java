@@ -50,8 +50,6 @@ public class CommonsHttpClientRemotePeer extends AbstractRemoteStorage {
 
 	private HttpClient httpClient = null;
 
-	private boolean followRedirection = true;
-
 	private String queryString = null;
 
 	private String userAgentString = null;
@@ -192,12 +190,21 @@ public class CommonsHttpClientRemotePeer extends AbstractRemoteStorage {
 		this.retrievalRetryCount = retrievalRetryCount;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setFollowRedirection(boolean followRedirection) {
-		this.followRedirection = followRedirection;
+		logger.warn("Attribute followRedirection is deprecated." + "Your setting will be overridden with TRUE!");
+		// this.followRedirection = followRedirection;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public boolean isFollowRedirection() {
-		return followRedirection;
+		// TODO: fix of issue #93. Redirection is always active.
+		// return followRedirection;
+		return true;
 	}
 
 	public boolean containsItemProperties(String path) {
@@ -227,7 +234,13 @@ public class CommonsHttpClientRemotePeer extends AbstractRemoteStorage {
 					ItemProperties ip = null;
 
 					// is it a file?
-					if (get.getResponseHeader("last-modified") != null) {
+					// TODO: fix for #93 ticket?
+					// Asking GET methods getPath() after execution will result
+					// in ACTUAL
+					// path after eventual redirection. So, it will end with "/"
+					// if it is a dir.
+					if (get.getPath().endsWith(ItemProperties.PATH_SEPARATOR)) {
+					// if (get.getResponseHeader("last-modified") != null) {
 						File tmpFile = File.createTempFile(FilenameUtils.getName(path), null);
 						tmpFile.deleteOnExit();
 						FileOutputStream fos = new FileOutputStream(tmpFile);
@@ -364,7 +377,9 @@ public class CommonsHttpClientRemotePeer extends AbstractRemoteStorage {
 		method.setRequestHeader(new Header("accept-encoding", "gzip, deflate"));
 		method.setRequestHeader(new Header("connection", "Keep-Alive"));
 		method.setRequestHeader(new Header("cache-control", "no-cache"));
-		method.setFollowRedirects(isFollowRedirection());
+		// TODO: fix for #93
+		// method.setFollowRedirects(isFollowRedirection());
+		method.setFollowRedirects(true);
 		method.getParams().setParameter(HttpMethodParams.RETRY_HANDLER, httpRetryHandler);
 		method.setQueryString(getQueryString());
 		int resultCode = 0;
