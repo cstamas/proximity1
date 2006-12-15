@@ -239,7 +239,7 @@ public class CommonsHttpClientRemotePeer extends AbstractRemoteStorage {
 					// in ACTUAL
 					// path after eventual redirection. So, it will end with "/"
 					// if it is a dir.
-					if (get.getPath().endsWith(ItemProperties.PATH_SEPARATOR)) {
+					if (!get.getPath().endsWith(ItemProperties.PATH_SEPARATOR)) {
 					// if (get.getResponseHeader("last-modified") != null) {
 						File tmpFile = File.createTempFile(FilenameUtils.getName(path), null);
 						tmpFile.deleteOnExit();
