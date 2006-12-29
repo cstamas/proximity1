@@ -132,10 +132,10 @@
 		<!-- <module>px-webapp-base-it</module>  -->
 		<module>px-webapp-webdav</module>
 		<module>px-webapp-default</module>
-		<module>px-webapp-minimal</module>
 		<module>px-webapp-demosite</module>
-		<module>px-webapp-pmaster</module>
-		<module>px-webapp-pslave</module>
+		<!-- <module>px-webapp-minimal</module>  -->
+		<!-- <module>px-webapp-pmaster</module>  -->
+		<!-- <module>px-webapp-pslave</module>  -->
 	</modules>
 
 	<!-- jar files the project is dependent on -->
@@ -143,7 +143,7 @@
 
 	<!-- Shortcut for outnumbered deps :) -->
 	<properties>
-		<spring.version>2.0</spring.version>
+		<spring.version>2.0.1</spring.version>
 	</properties>
 
 	<dependencyManagement>
@@ -328,7 +328,6 @@
 			<dependency>
 				<groupId>org.abstracthorizon.proximity</groupId>
 				<artifactId>px-webapp-webdav</artifactId>
-				<type>jar</type>
 				<version>${pom.version}</version>
 			</dependency>
 			<dependency>
