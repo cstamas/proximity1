@@ -86,7 +86,7 @@
 		</servlet-class>
 		<load-on-startup>15</load-on-startup>
 	</servlet>
-	
+
 	<servlet>
 		<servlet-name>px-webdav</servlet-name>
 		<servlet-class>net.sf.webdav.WebdavServlet</servlet-class>
@@ -132,6 +132,10 @@
 		<url-pattern>/index.do</url-pattern>
 	</servlet-mapping>
 
+	<mime-mapping>
+		<extension>pom</extension>
+		<mime-type>application/xml</mime-type>
+	</mime-mapping>
 
 	<!--
 		- Welcome files.
