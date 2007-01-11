@@ -25,8 +25,6 @@ import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
 
 public class RepositoryController extends MultiActionController {
 
-	private MimetypesFileTypeMap mimeFiletypeMap = new MimetypesFileTypeMap();
-
 	private Proximity proximity;
 
 	public void setProximity(Proximity proximity) {
@@ -81,7 +79,8 @@ public class RepositoryController extends MultiActionController {
 			} else {
 				// TODO: check for If-Modified-Since?
 				// response.setContentType("application/octet-stream");
-				response.setContentType(mimeFiletypeMap.getContentType(item.getProperties().getName()));
+				response.setContentType(getWebApplicationContext().getServletContext().getMimeType(
+						item.getProperties().getName()));
 				response.setContentLength((int) item.getProperties().getSize());
 				response.setDateHeader("Last-Modified", item.getProperties().getLastModified().getTime());
 				InputStream is = item.getStream();
