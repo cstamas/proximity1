@@ -134,7 +134,7 @@ public class MavenProximityLogic extends DefaultProximityLogic {
 					item.setStream(is);
 					itemProps.setSize(bos.size());
 				} catch (NoSuchAlgorithmException ex) {
-					throw new IllegalArgumentException("No MD5 or SHA1 algorithm?", ex);
+					throw new IllegalArgumentException("No MD5 or SHA1 algorithm?");
 				}
 			}
 
