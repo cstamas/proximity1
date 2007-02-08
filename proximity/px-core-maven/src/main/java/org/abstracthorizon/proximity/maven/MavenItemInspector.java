@@ -114,8 +114,8 @@ public class MavenItemInspector extends AbstractItemInspector {
 							deps.append(":");
 							deps.append(dep.getArtifactId());
 							// TODO: version ranges?
-							if (dep.getVersion() != null && !dep.getVersion().contains("[")
-									&& !dep.getVersion().contains("(")) {
+							if (dep.getVersion() != null && !(dep.getVersion().indexOf("[") > 0)
+									&& !(dep.getVersion().indexOf("(") > 0)) {
 								deps.append(":");
 								deps.append(dep.getVersion());
 							}
