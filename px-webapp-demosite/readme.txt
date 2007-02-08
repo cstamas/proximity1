@@ -1,4 +1,5 @@
-px-webapp-default
-=================
+px-webapp-demosite
+==================
 
-A J2EE Web Application Proximity front-end.
+A customized Proximity webapp running as Demosite on http://proximity.abstracthorizon.org/ site.
+

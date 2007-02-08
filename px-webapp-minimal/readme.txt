@@ -1,4 +1,7 @@
 px-webapp-minimal
 =================
 
-A J2EE Web Application Proximity front-end.
+UNMAINTAINED!!!
+This module is probably deprecated and will cause compile-time errors and/or will create a broken WAR!
+
+A minimal Web Application Proximity front-end.
