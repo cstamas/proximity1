@@ -23,11 +23,10 @@
 
 	<dependencies>
 
-		<!--  Dear god! Who had foreseen that logging will become such an issue? -->
 		<!-- For App -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
-			<artifactId>nlog4j</artifactId>
+			<artifactId>slf4j-log4j12</artifactId>
 		</dependency>
 
 		<dependency>
@@ -66,12 +65,15 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<scope>test</scope>
 		</dependency>
-		<!-- For Spring et al. -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>jcl104-over-slf4j</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>xml-apis</groupId>
+			<artifactId>xml-apis</artifactId>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
