@@ -9,7 +9,7 @@
 
 <section name="Deployment guide">
 
-<p>This Guide is <b>work in progress</b>.</p>
+<p>This Guide is <b>work in progress</b>. Packaging will change soon. Currently, only a WAR package is being created.</p>
 
 <p>The prepackaged WARs comes with following general configurations (for details see 
 <a href="factory-conf.html">Proximity Default Configuration</a>):</p>
@@ -19,7 +19,7 @@
 </ul>
 
 <p>Since Proximity uses SLF4J project for logging, see 
-<a href="http://slf4j.org/">SLF4J Site</a> for additional logging configuration possibilities.</p>
+<a href="http://www.slf4j.org/">SLF4J Site</a> for additional logging configuration possibilities.</p>
 
 <p>Now, we will see some web container specific tasks for Proximity deployment.</p>
 
@@ -41,7 +41,7 @@ review the logging settings (nLog4j currently), since it may not be suited your 
 
 <subsection name="Jetty">
 
-<p>Proximity has been extensively tested on Jetty 5.1.11 line. For deployment on Jetty, you need some
+<p>Proximity has been extensively tested on Jetty 6.1.1 line. For deployment on Jetty, you need some
 additional steps:</p>
 
 <ul>

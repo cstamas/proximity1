@@ -59,6 +59,8 @@ their dependencies> ever built with Maven2 using the given local repository.
 
 Repository aggregation
 
+  Please read the the {{{http://docs.codehaus.org/display/MAVENUSER/Creating+a+Maven+proxy}Aggregation of proxies may not be your friend}} article!
+
   As we said already, Proximity <<aggregates>> multiple repositories. What does it mean actually? Well,
 first of all, you don't need to reference four (as provided in default config) different remote repositories 
 (IT nightmare), it is enough only to reference Proximity.

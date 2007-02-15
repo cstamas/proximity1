@@ -8,6 +8,8 @@
 
 Chaining Proximity instances
 
+  <<The chaining modules px-master and px-slave are currently not maintained!>>
+
   One of the interesting "feature" of Proximity is "chaining". Sometimes, there is a need (or IT
 preference) to explicitly forbid direct internet access to developers within some network segment.
 This environment is sure death to Maven, since it heavily relies on network access. A possible
