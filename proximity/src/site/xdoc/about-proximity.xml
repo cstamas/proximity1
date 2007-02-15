@@ -10,7 +10,7 @@
 <section name="Proximity">
 
 <p>Proximity is in function somewhere between http-proxy and
-proactive-mirror.</p>
+proactive-mirror. Proximity <b>is not HTTP Proxy</b>!</p>
 
 <p>One of it's primary use is as Java web application to serve as maven proxy on our
 company's intranet. As for reducing outgoing traffic (caching central and other
