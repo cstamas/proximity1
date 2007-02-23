@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
  * @author Marc Eaddy
  * @version 1.0, 16 Nov 1997
  */
-class WebdavStatus {
+public class WebdavStatus {
 
 	// ----------------------------------------------------- Instance Variables
 
@@ -228,7 +228,8 @@ class WebdavStatus {
 		// WebDav Status Codes
 		addStatusCodeMap(SC_MULTI_STATUS, "Multi-Status");
 		addStatusCodeMap(SC_UNPROCESSABLE_ENTITY, "Unprocessable Entity");
-		addStatusCodeMap(SC_INSUFFICIENT_SPACE_ON_RESOURCE, "Insufficient Space On Resource");
+		addStatusCodeMap(SC_INSUFFICIENT_SPACE_ON_RESOURCE,
+				"Insufficient Space On Resource");
 		addStatusCodeMap(SC_METHOD_FAILURE, "Method Failure");
 		addStatusCodeMap(SC_LOCKED, "Locked");
 	}

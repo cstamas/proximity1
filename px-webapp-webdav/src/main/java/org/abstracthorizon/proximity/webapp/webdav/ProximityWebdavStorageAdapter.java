@@ -8,7 +8,8 @@ import java.util.Date;
 import java.util.Hashtable;
 import java.util.List;
 
-import net.sf.webdav.IWebdavStorage;
+import net.sf.webdav.WebdavStore;
+import net.sf.webdav.exceptions.WebdavException;
 
 import org.abstracthorizon.proximity.AccessDeniedException;
 import org.abstracthorizon.proximity.Item;
@@ -22,7 +23,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ProximityWebdavStorageAdapter implements IWebdavStorage {
+public class ProximityWebdavStorageAdapter implements WebdavStore{
 
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -36,7 +37,7 @@ public class ProximityWebdavStorageAdapter implements IWebdavStorage {
 		this.proximity = proximity;
 	}
 
-	public void begin(Principal principal, Hashtable parameters) throws Exception {
+	public void begin(Principal principal) throws WebdavException {
 		// nothing
 	}
 
@@ -44,19 +45,19 @@ public class ProximityWebdavStorageAdapter implements IWebdavStorage {
 		// nothing
 	}
 
-	public void commit() throws IOException {
+	public void commit() throws WebdavException {
 		// nothing
 	}
 
-	public void rollback() throws IOException {
+	public void rollback() throws WebdavException {
 		// nothing
 	}
 
-	public void createFolder(String folderUri) throws IOException {
+	public void createFolder(String folderUri) throws WebdavException {
 		// nothing
 	}
 
-	public void createResource(String resourceUri) throws IOException {
+	public void createResource(String resourceUri) throws WebdavException {
 		// we have to store something.... it will be zero byte
 		try {
 			ProximityRequest request = createRequest(resourceUri, false);
@@ -73,11 +74,11 @@ public class ProximityWebdavStorageAdapter implements IWebdavStorage {
 			proximity.storeItem(request, item);
 		} catch (ProximityException ex) {
 			logger.error("Proximity throw exception.", ex);
-			throw new IOException("Proximity throw " + ex.getMessage());
+			throw new WebdavException("Proximity throw " + ex.getMessage());
 		}
 	}
 
-	public String[] getChildrenNames(String folderUri) throws IOException {
+	public String[] getChildrenNames(String folderUri) throws WebdavException {
 		try {
 			if (objectExists(folderUri) && isFolder(folderUri)) {
 				ProximityRequest request = new ProximityRequest(folderUri);
@@ -92,15 +93,15 @@ public class ProximityWebdavStorageAdapter implements IWebdavStorage {
 			}
 		} catch (ProximityException ex) {
 			logger.error("Proximity thrown exception", ex);
-			throw new IOException("Proximity reported exception " + ex.getMessage());
+			throw new WebdavException("Proximity reported exception " + ex.getMessage());
 		}
 	}
 
-	public Date getCreationDate(String uri) throws IOException {
+	public Date getCreationDate(String uri) throws WebdavException {
 		return getLastModified(uri);
 	}
 
-	public Date getLastModified(String uri) throws IOException {
+	public Date getLastModified(String uri) throws WebdavException {
 		Item result = makeRequest(uri, true);
 		if (result == null) {
 			return new Date();
@@ -112,23 +113,23 @@ public class ProximityWebdavStorageAdapter implements IWebdavStorage {
 		}
 	}
 
-	public InputStream getResourceContent(String resourceUri) throws IOException {
+	public InputStream getResourceContent(String resourceUri) throws WebdavException {
 		Item result = makeRequest(resourceUri, true);
 		if (result == null) {
-			throw new IOException("URI " + resourceUri + " not found");
+			throw new WebdavException("URI " + resourceUri + " not found");
 		}
 		return result.getStream();
 	}
 
-	public long getResourceLength(String resourceUri) throws IOException {
+	public long getResourceLength(String resourceUri) throws WebdavException {
 		Item result = makeRequest(resourceUri, true);
 		if (result == null) {
-			throw new IOException("URI " + resourceUri + " not found");
+			throw new WebdavException("URI " + resourceUri + " not found");
 		}
 		return result.getProperties().getSize();
 	}
 
-	public boolean isFolder(String uri) throws IOException {
+	public boolean isFolder(String uri) throws WebdavException {
 		Item result = makeRequest(uri, true);
 		if (result == null) {
 			return false;
@@ -136,7 +137,7 @@ public class ProximityWebdavStorageAdapter implements IWebdavStorage {
 		return result.getProperties().isDirectory();
 	}
 
-	public boolean isResource(String uri) throws IOException {
+	public boolean isResource(String uri) throws WebdavException {
 		Item result = makeRequest(uri, true);
 		if (result == null) {
 			return false;
@@ -144,12 +145,12 @@ public class ProximityWebdavStorageAdapter implements IWebdavStorage {
 		return result.getProperties().isFile();
 	}
 
-	public boolean objectExists(String uri) throws IOException {
+	public boolean objectExists(String uri) throws WebdavException {
 		Item result = makeRequest(uri, true);
 		return result != null;
 	}
 
-	public void removeObject(String uri) throws IOException {
+	public void removeObject(String uri) throws WebdavException {
 		try {
 			ProximityRequest request = createRequest(uri, false);
 			proximity.deleteItem(request);
@@ -159,7 +160,7 @@ public class ProximityWebdavStorageAdapter implements IWebdavStorage {
 	}
 
 	public void setResourceContent(String resourceUri, InputStream content, String contentType, String characterEncoding)
-			throws IOException {
+			throws WebdavException {
 		try {
 			ProximityRequest request = createRequest(resourceUri, false);
 			Item item = new Item();
@@ -175,7 +176,7 @@ public class ProximityWebdavStorageAdapter implements IWebdavStorage {
 			proximity.storeItem(request, item);
 		} catch (ProximityException ex) {
 			logger.error("Proximity throw exception.", ex);
-			throw new IOException("Proximity throw " + ex.getMessage());
+			throw new WebdavException("Proximity throw " + ex.getMessage());
 		}
 	}
 
@@ -185,7 +186,7 @@ public class ProximityWebdavStorageAdapter implements IWebdavStorage {
 		return req;
 	}
 
-	protected Item makeRequest(String uri, boolean propsOnly) throws IOException {
+	protected Item makeRequest(String uri, boolean propsOnly) throws WebdavException {
 		try {
 			ProximityRequest request = createRequest(uri, propsOnly);
 			Item item = proximity.retrieveItem(request);
@@ -196,7 +197,7 @@ public class ProximityWebdavStorageAdapter implements IWebdavStorage {
 			return null;
 		} catch (ProximityException ex) {
 			logger.error("Proximity thrown exception", ex);
-			throw new IOException("Proximity reported exception " + ex.getMessage());
+			throw new WebdavException("Proximity reported exception " + ex.getMessage());
 		}
 	}
 
