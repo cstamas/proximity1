@@ -95,6 +95,14 @@
 			<param-name>ResourceHandlerImplementation</param-name>
 			<param-value>spring:proximity.webdavstorage</param-value>
 		</init-param>
+		<init-param>
+			<param-name>lazyFolderCreationOnPut</param-name>
+			<param-value>1</param-value>
+		</init-param>
+		<init-param>
+			<param-name>no-content-length-headers</param-name>
+			<param-value>0</param-value>
+		</init-param>
 		<load-on-startup>20</load-on-startup>
 	</servlet>
 
@@ -133,6 +141,10 @@
 		<url-pattern>/index.do</url-pattern>
 	</servlet-mapping>
 
+	<mime-mapping>
+		<extension>pom</extension>
+		<mime-type>application/xml</mime-type>
+	</mime-mapping>
 
 	<!--
 		- Welcome files.
