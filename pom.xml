@@ -148,7 +148,7 @@
 
 	<dependencyManagement>
 		<dependencies>
-		    <!-- Use whichever SLF4J implementation -->
+			<!-- Use whichever SLF4J implementation -->
 			<dependency>
 				<groupId>org.slf4j</groupId>
 				<artifactId>slf4j-log4j12</artifactId>
@@ -156,7 +156,7 @@
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
-		    <!-- To Satisfy Spring JCL deps and our spring-inherited classes (scope:compile then!) -->
+			<!-- To Satisfy Spring JCL deps and our spring-inherited classes (scope:compile then!) -->
 			<dependency>
 				<groupId>org.slf4j</groupId>
 				<artifactId>jcl104-over-slf4j</artifactId>
@@ -164,7 +164,7 @@
 				<type>jar</type>
 				<scope>runtime</scope>
 			</dependency>
-		    <!-- The actual logging backend -->
+			<!-- The actual logging backend -->
 			<dependency>
 				<groupId>log4j</groupId>
 				<artifactId>log4j</artifactId>
@@ -457,9 +457,14 @@
 		<snapshotRepository>
 			<id>abstracthorizon.snapshot</id>
 			<name>Abstract Horizon Central Development Repository</name>
+			<!-- 
 			<url>
-				scp://213.232.95.19/srv/213.232.95.142/html/repository/maven2/abstracthorizon.snapshot
+				dav:http://localhost:8080/px-webapp-default/dav/inhouse.snapshot
 			</url>
+			-->
+				<url>
+				scp://213.232.95.19/srv/213.232.95.142/html/repository/maven2/abstracthorizon.snapshot
+				</url>
 		</snapshotRepository>
 		<site>
 			<id>abstracthorizon.site</id>
