@@ -8,6 +8,7 @@ import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.zip.GZIPInputStream;
 
 import org.abstracthorizon.proximity.Item;
 import org.abstracthorizon.proximity.ItemNotFoundException;
@@ -244,13 +245,18 @@ public class CommonsHttpClientRemotePeer extends AbstractRemoteStorage {
 						File tmpFile = File.createTempFile(FilenameUtils.getName(path), null);
 						tmpFile.deleteOnExit();
 						FileOutputStream fos = new FileOutputStream(tmpFile);
-						IOUtils.copy(get.getResponseBodyAsStream(), fos);
+
+						InputStream is = get.getResponseBodyAsStream();
+						if ("gzip".equals(get.getResponseHeader("content-encoding"))) {
+							is = new GZIPInputStream(is);
+						}
+						
+						IOUtils.copy(is, fos);
 						fos.flush();
 						fos.close();
 						tmpFile.setLastModified(makeDateFromHeader(get.getResponseHeader("last-modified")));
 						ip = getProxiedItemPropertiesFactory().expandItemProperties(path, tmpFile, true);
-						InputStream is = new DeleteOnCloseFileInputStream(tmpFile);
-						result.setStream(is);
+						result.setStream(new DeleteOnCloseFileInputStream(tmpFile));
 					} else {
 						// TODO: dirty hack, I am creating a dir named after the
 						// directory retrieval just to get item properties!!!
@@ -374,7 +380,7 @@ public class CommonsHttpClientRemotePeer extends AbstractRemoteStorage {
 		}
 		method.setRequestHeader(new Header("accept", "*/*"));
 		method.setRequestHeader(new Header("accept-language", "en-us"));
-		method.setRequestHeader(new Header("accept-encoding", "gzip, deflate"));
+		method.setRequestHeader(new Header("accept-encoding", "gzip, identity"));
 		method.setRequestHeader(new Header("connection", "Keep-Alive"));
 		method.setRequestHeader(new Header("cache-control", "no-cache"));
 		// TODO: fix for #93
