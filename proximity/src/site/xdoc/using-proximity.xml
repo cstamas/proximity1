@@ -61,6 +61,19 @@ and you will in the moment get the picture.</p>
 
 </subsection>
 
+<subsection name="Deploying artifacts">
+
+<p>Proximity became <b>WebDAV capable!</b>.</p>
+
+<p>Proximity offers a DAV view on it's repositories on "/dav/" path. You can use Maven2 to deploy artifacts
+directly onto Proximity. This way, there is no need for "deployment circumvention" (publishing the underlying
+file system for deployment) and the index will be up-to-date.</p>
+
+<p>All you have to do is decleare the Proximity as repository (a WebDAV one) and voila! (Also, you have to
+setup Maven with WebDAV Wagon as build extension). See [where?].</p>
+
+</subsection>
+
 </section>
 
 
