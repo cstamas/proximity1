@@ -21,7 +21,7 @@ Jars, etc...).</p>
 
 <p>See a <a href="quick-start.html">Quick Start for Proximity</a></p>
 
-<p>Visit <a href="http://trac.abstracthorizon.org/proximity/">Proximity WIKI</a>
+<p>Visit <a href="http://trac.abstracthorizon.org/proximity/wiki">Proximity WIKI</a>
 for WIKI and issue tracking.</p>
 
 
@@ -92,7 +92,7 @@ and in Codehaus Plexus container (together with embedded Maven2), SAS and/or Dan
 
 <section name="Using Proximity as corporate Maven proxy">
 
-<p>See <a href="corporate-environment.html">corporate environmemt</a> for full description
+<p>See <a href="corporate-environment.html">corporate environment</a> for full description
 about Proximity usage in such environment.</p>
 
 <p>The Proximity has the following features, that enables it to act as
