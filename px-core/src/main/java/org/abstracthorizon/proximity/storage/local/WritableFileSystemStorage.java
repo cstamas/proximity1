@@ -48,8 +48,8 @@ public class WritableFileSystemStorage extends ReadOnlyFileSystemStorage {
 				file.setLastModified(item.getProperties().getLastModified()
 						.getTime());
 				if (isMetadataAware()) {
-					getProxiedItemPropertiesFactory().expandItemProperties(
-							item.getProperties().getPath(), file, false);
+					item.getProperties().putAllMetadata(getProxiedItemPropertiesFactory().expandItemProperties(
+							item.getProperties().getPath(), file, false).getAllMetadata());
 					storeItemProperties(item.getProperties());
 				}
 			}
