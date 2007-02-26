@@ -18,17 +18,21 @@
 			<td width="34%">
 				<form action="#springUrl('/search.do')">
 					#springMessage('search.byName'):<br/>
-					<input id="searchAllRegexp" type="text" name="searchAllRegexp" value="" size="20"/>
+					<input id="searchAllRegexp" type="text" name="searchAllRegexp" value="$!{searchAllRegexp}" size="20"/>
 					<input type="submit" name="searchAll" value="#springMessage('search.button')"/>
 				</form>
 			</td>
 			<td width="33%">
 				<form action="#springUrl('/search.do')">
 					#springMessage('search.byName'):<br/>
-					<input id="searchRepositoryRegexp" type="text" name="searchRepositoryRegexp" value="" size="20"/>
+					<input id="searchRepositoryRegexp" type="text" name="searchRepositoryRegexp" value="$!{searchRepositoryRegexp}" size="20"/>
 					<select id="searchRepositoryId" name="searchRepositoryId">
 						#foreach($repository in $repositories)
-							<option value="${repository}">${repository}</option>
+							<option value="${repository}"
+							#if(${repository} == ${searchRepositoryId})
+							  selected="selected"
+							#end
+							>${repository}</option>
 						#end
 					</select>
 					<input type="submit" name="searchSelectedRepos" value="#springMessage('search.button')"/>
@@ -37,10 +41,14 @@
 			<td width="33%">
 				<form action="#springUrl('/search.do')">
 					#springMessage('search.byName'):<br/>
-					<input id="searchGroupRegexp" type="text" name="searchGroupRegexp" value="" size="20"/>
+					<input id="searchGroupRegexp" type="text" name="searchGroupRegexp" value="$!{searchGroupRegexp}" size="20"/>
 					<select id="searchGroupId" name="searchGroupId">
 						#foreach($groupId in $groups)
-							<option value="${groupId}">${groupId}</option>
+							<option value="${groupId}"
+							#if(${groupId} == ${searchGroupId})
+							  selected="selected"
+							#end
+							>${groupId}</option>
 						#end
 					</select>
 					<input type="submit" name="searchSelectedGroup" value="#springMessage('search.button')"/>
@@ -55,7 +63,7 @@
 				<div class="center">
 				<p>#springMessage('search.lql.intro')</p>
 				<form action="#springUrl('/search.do')">
-					<input id="searchLQLQuery" type="text" name="searchLQLQuery" value="" size="50"/>
+					<input id="searchLQLQuery" type="text" name="searchLQLQuery" value="$!{searchLQLQuery}" size="50"/>
 					<input type="submit" name="searchLQL" value="#springMessage('search.button')"/>
 				</form>
 				</div>
