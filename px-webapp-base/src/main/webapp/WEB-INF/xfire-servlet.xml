@@ -46,6 +46,7 @@
 	<bean id="maintenanceService"
 		class="org.abstracthorizon.proximity.ws.MaintenanceServiceImpl">
 		<property name="proximity" ref="proximity" />
+		<property name="indexer" ref="proximity.indexer" />
 	</bean>
 
 </beans>
