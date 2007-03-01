@@ -40,7 +40,7 @@
 		Proximity
 	-->
 	<!--
-		- Central proximity bean with list of repos and it's helpers.
+		- Central proximity bean with list of registered repos.
 	-->
 	<bean id="proximity"
 		class="org.abstracthorizon.proximity.impl.LogicDrivenProximityImpl">
@@ -53,6 +53,7 @@
 				<ref bean="extNonFree" />
 				<ref bean="central" />
 				<ref bean="codehaus" />
+				<ref bean="maven2-repository.dev.java.net" />
 				<ref bean="apache.snapshot" />
 				<ref bean="codehaus.snapshot" />
 				<ref bean="inhouse" />
@@ -73,20 +74,5 @@
 	-->
 	<bean id="proximity.logic"
 		class="org.abstracthorizon.proximity.maven.MavenProximityLogic" />
-
-	<!--
-		- Indexer, used to speed up searches ONLY.
-	-->
-	<bean id="proximity.indexer"
-		class="org.abstracthorizon.proximity.indexer.LuceneIndexer"
-		init-method="initialize">
-		<property name="proximity" ref="proximity"/>
-		<!-- Where to store indexes? -->
-		<property name="indexDirectory" value="${indexer.dir}" />
-		<!-- On webapp start should i recreate Lucene indexes? -->
-		<property name="recreateIndexes" value="true" />
-		<!-- After how much of item insertion should i optimize indexes? -->
-		<property name="dirtyItemTreshold" value="100" />
-	</bean>
 
 </beans>
