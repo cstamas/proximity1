@@ -53,8 +53,6 @@
 		<property name="connectionTimeout" value="10000" />
 		<!-- The count of retries (used by DefaultRetryHandler) -->
 		<property name="retrievalRetryCount" value="3" />
-		<!-- Should HttpClient follow redirections? (preferred!) -->
-		<property name="followRedirection" value="true" />
 		<!-- Fix query string appended to URL, used for ProximityPiping "repositoryId=central" -->
 		<property name="queryString" value="" />
 		<!-- Proxy setup, uncomment if needed
@@ -133,8 +131,74 @@
 		<property name="connectionTimeout" value="10000" />
 		<!-- The count of retries (used by DefaultRetryHandler) -->
 		<property name="retrievalRetryCount" value="3" />
-		<!-- Should HttpClient follow redirections? (preferred!) -->
-		<property name="followRedirection" value="true" />
+		<!-- Fix query string appended to URL, used for ProximityPiping "repositoryId=central" -->
+		<property name="queryString" value="" />
+		<!-- Proxy setup, uncomment if needed
+			<property name="proxyHost" value="myproxyhost.company.com" />
+			<property name="proxyPort" value="8080" />
+		-->
+		<!-- Proxy authentication setup, uncomment if proxy needs this
+			<property name="proxyUsername" value="userOnProxy" />
+			<property name="proxyPassword" value="bigSecret" />
+		-->
+		<!-- Proxy NTLM authentication setup, uncomment if proxy needs this
+			<property name="proxyNtlmDomain" value="domain to authenticate within" />
+			<property name="proxyNtlmHost" value="originating hostname" />
+			<property name="proxyUsername" value="userOnProxyWithoutDomainPrefix" />
+			<property name="proxyPassword" value="bigSecret" />
+		-->
+	</bean>
+
+	<!--
+		- MAVEN2 repository!
+		- repo1.maven.org Central Repository (with writable cache storage and remote peer)
+		- A standard maven2 repository.
+	-->
+	<bean id="maven2-repository.dev.java.net"
+		class="org.abstracthorizon.proximity.impl.LogicDrivenRepositoryImpl">
+		<property name="id" value="maven2-repository.dev.java.net" />
+		<property name="groupId" value="maven2-repository.dev.java.net" />
+		<property name="rank" value="65" />
+
+		<property name="localStorage" ref="maven2-repository.dev.java.netFSStorage" />
+		<property name="remoteStorage" ref="maven2-repository.dev.java.netRemotePeer" />
+		<property name="statisticsGatherer" ref="proximity.statisticsGatherer" />
+		<property name="accessManager" ref="proximity.openAccessManager" />
+		<!-- Uncomment this and delete previous accessManager declaration to restrict access to this repo
+			<property name="accessManager" ref="internalLanOnlyAccessManager" />
+		-->
+		<property name="repositoryLogic" ref="proximity.maven2ReleaseRepoLogic" />
+		<!-- Am I listable? -->
+		<property name="listable" value="true" />
+		<!-- Am I available? If no, i will refuse all requests -->
+		<property name="available" value="true" />
+		<!-- Am I offline? If yes, i will not touch my remote peer, will serve only from localStorage -->
+		<property name="offline" value="false" />
+		<!-- Is repo indexable? -->
+		<property name="indexable" value="true"/>
+		<!-- Should repo be indexed at startup? (NOT USED?) -->
+		<property name="reindexAtInitialize" value="true"/>
+	</bean>
+
+	<bean id="maven2-repository.dev.java.netFSStorage"
+		class="org.abstracthorizon.proximity.storage.local.WritableFileSystemStorage">
+		<property name="metadataAware" value="true" />
+		<property name="metadataDirFile"
+			value="${maven2-repository.dev.java.netFSStorage.metadataDir}" />
+		<property name="storageDirFile"
+			value="${maven2-repository.dev.java.netFSStorage.baseDir}" />
+		<property name="proxiedItemPropertiesFactory"
+			ref="proximity.itemPropertiesFactory" />
+	</bean>
+
+	<bean id="maven2-repository.dev.java.netRemotePeer"
+		class="org.abstracthorizon.proximity.storage.remote.CommonsHttpClientRemotePeer">
+		<property name="remoteUrl"
+			value="https://maven2-repository.dev.java.net/nonav/repository/" />
+		<!-- The timeout of HTTP connection -->
+		<property name="connectionTimeout" value="10000" />
+		<!-- The count of retries (used by DefaultRetryHandler) -->
+		<property name="retrievalRetryCount" value="3" />
 		<!-- Fix query string appended to URL, used for ProximityPiping "repositoryId=central" -->
 		<property name="queryString" value="" />
 		<!-- Proxy setup, uncomment if needed
@@ -203,8 +267,6 @@
 		<property name="connectionTimeout" value="10000" />
 		<!-- The count of retries (used by DefaultRetryHandler) -->
 		<property name="retrievalRetryCount" value="3" />
-		<!-- Should HttpClient follow redirections? (preferred!) -->
-		<property name="followRedirection" value="true" />
 		<!-- Fix query string appended to URL, used for ProximityPiping "repositoryId=central" -->
 		<property name="queryString" value="" />
 		<!-- Proxy setup, uncomment if needed
@@ -274,8 +336,6 @@
 		<property name="connectionTimeout" value="10000" />
 		<!-- The count of retries (used by DefaultRetryHandler) -->
 		<property name="retrievalRetryCount" value="3" />
-		<!-- Should HttpClient follow redirections? (preferred!) -->
-		<property name="followRedirection" value="true" />
 		<!-- Fix query string appended to URL, used for ProximityPiping "repositoryId=central" -->
 		<property name="queryString" value="" />
 		<!-- Proxy setup, uncomment if needed
@@ -400,7 +460,7 @@
 	</bean>
 
 	<bean id="extNonFreeFSStorage"
-		class="org.abstracthorizon.proximity.storage.local.ReadOnlyFileSystemStorage">
+		class="org.abstracthorizon.proximity.storage.local.WritableFileSystemStorage">
 		<property name="metadataAware" value="true" />
 		<property name="metadataDirFile"
 			value="${extNonFreeFSStorage.metadataDir}" />

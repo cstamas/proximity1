@@ -4,6 +4,10 @@
 <beans>
 
 	<!--
+		=================================================================================
+	-->
+
+	<!--
 		- WebDav storage adapter, using proximity itself as storage.
 	-->
 	<bean id="proximity.webdavstorage"
@@ -12,36 +16,31 @@
 	</bean>
 
 	<!--
-		- StatisticsGatherer, gathers statistics. Simple in-memory implementation.
+		=================================================================================
 	-->
+
+	<!--
+		- StatisticsGatherer, gathers statistics. Simple in-memory implementation.
 	<bean id="proximity.statisticsGatherer"
 		class="org.abstracthorizon.proximity.stats.SimpleStatisticsGathererImpl" />
-
-	<!--
-		- ItemPropertiesFactory, creates "extra" metadata about files.
 	-->
-	<bean id="proximity.itemPropertiesFactory"
-		class="org.abstracthorizon.proximity.metadata.InspectorListProcessingProxiedItemPropertiesFactory">
-		<property name="itemInspectorList">
-			<list>
-				<bean
-					class="org.abstracthorizon.proximity.maven.MavenItemInspector" />
-				<bean
-					class="org.abstracthorizon.proximity.metadata.inspectors.ZipFileInspector" />
-				<bean
-					class="org.abstracthorizon.proximity.metadata.inspectors.JarFileInspector" />
-			</list>
-		</property>
-	</bean>
 
 	<!--
-		- AccessManagers. With OpenAccessManager Proximity is wide open.
+		=================================================================================
+	-->
+
+	<!--
+		- AccessManagers, to set some access restrictions if needed.
+	-->
+
+	<!--
+		- With OpenAccessManager Proximity is wide open.
 	-->
 	<bean id="proximity.openAccessManager"
 		class="org.abstracthorizon.proximity.access.OpenAccessManager" />
 
 	<!--
-		- AccessManagers. With AffirmativeAccessManager, we will have access if all defined
+		- With AffirmativeAccessManager, we will have access if all defined
 		- voters vote AFFIRMATIVE.
 		
 		- We have currently ONE voter, that tries to resemble Apache HTTPD2 Basic Access Control.
@@ -73,6 +72,26 @@
 				</bean>
 			</list>
 		</property>
+	</bean>
+
+	<!--
+		=================================================================================
+	-->
+
+	<!--
+		- Indexer, used to speed up searches ONLY.
+		- It listens for Proximity events.
+	-->
+	<bean id="proximity.indexer"
+		class="org.abstracthorizon.proximity.indexer.LuceneIndexer"
+		init-method="initialize">
+		<property name="proximity" ref="proximity"/>
+		<!-- Where to store indexes? -->
+		<property name="indexDirectory" value="${indexer.dir}" />
+		<!-- On webapp start should i recreate Lucene indexes? -->
+		<property name="recreateIndexes" value="true" />
+		<!-- After how much of item insertion should i optimize indexes? -->
+		<property name="dirtyItemTreshold" value="100" />
 	</bean>
 
 	<!--
@@ -121,6 +140,32 @@
 		<property name="shouldServeSnapshots" value="true" />
 		<!-- Should repository driven by this logic serve releases? -->
 		<property name="shouldServeReleases" value="false" />
+	</bean>
+
+	<!--
+		=================================================================================
+	-->
+
+	<!--
+		- ItemPropertiesFactory used for repositories.
+		- It inspects the files using the registered inspectors.
+	-->
+
+	<!--
+		- ItemPropertiesFactory, creates "extra" metadata about files.
+	-->
+	<bean id="proximity.itemPropertiesFactory"
+		class="org.abstracthorizon.proximity.metadata.InspectorListProcessingProxiedItemPropertiesFactory">
+		<property name="itemInspectorList">
+			<list>
+				<bean
+					class="org.abstracthorizon.proximity.maven.MavenItemInspector" />
+				<bean
+					class="org.abstracthorizon.proximity.metadata.inspectors.ZipFileInspector" />
+				<bean
+					class="org.abstracthorizon.proximity.metadata.inspectors.JarFileInspector" />
+			</list>
+		</property>
 	</bean>
 
 </beans>
