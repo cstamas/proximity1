@@ -13,8 +13,14 @@
 
 <subsection name="Using Eclipse to develop Proximity">
 
-<p>If you checkout Proximity from subversion (see <a href="source-repository.html">here</a>), you
-will get complete Eclipse 3.x project. Try it!</p>
+<p>If you checkout Proximity from subversion /trunk (see <a href="source-repository.html">here</a>), you
+will get complete sources. Next, you will want to do:</p>
+
+<source>
+  $ mvn eclipse:eclipse -DwtpVersion=1.0 -DdownloadSources=true
+</source>
+
+<p>And you will able to import all modules into Eclipse as Eclipse projects.</p>
 
 <p>Any bugfix/enhancement patch is welcome!</p>
 
