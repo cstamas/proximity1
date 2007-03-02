@@ -2,16 +2,18 @@
 
 <p>#springMessage('maintenance.intro')</p>
 
+<h3>#springMessage("maintenance.reindex.title")</h3>
+
+<p>#springMessage('maintenance.reindex.intro')</p>
+
 <table>
 	<thead>
 		<tr class="tdb">
-			<td colspan="2">#springMessage('maintenance.reindex.title')</td>
+			<td width="50%">#springMessage('maintenance.reindex.all')</td>
+			<td width="50%">#springMessage('maintenance.reindex.selected')</td>
 		</tr>
 	</thead>
 	<tbody>
-		<tr class="tda">
-			<td colspan="2">#springMessage('maintenance.reindex.intro')</td>
-		</tr>
 		<tr class="tda">
 			<td width="50%">
 				<form action="#springUrl('/maintenance.do')">
@@ -29,5 +31,66 @@
 				</form>
 			</td>
 		</tr>
+	</tbody>
+</table>
+
+<p>&nbsp;</p>
+
+<h3>#springMessage("maintenance.job.title")</h3>
+
+<p>#springMessage('maintenance.job.intro')</p>
+
+<table>
+	<thead>
+		<tr class="tdb">
+			<td colspan="3">#springMessage('maintenance.job.active') - #springMessage('maintenance.job.active.intro')</td>
+		</tr>
+	</thead>
+	<tbody>
+		<tr class="tdb">
+			<td width="10%">#springMessage('maintenance.job.name')</td>
+			<td width="70%">#springMessage('maintenance.job.description')</td>
+			<td width="20%">#springMessage('maintenance.job.firetime')</td>
+		</tr>
+        #foreach( $job in $activeJobs )
+		<tr class="tdc">
+			<td width="10%">${job.fullName}</td>
+			<td width="70%">${job.description}</td>
+			<td width="20%">$vtldatetool.format('medium',${job.fireTime})</td>
+		</tr>
+        #end
+	</tbody>
+</table>
+
+<p>&nbsp;</p>
+
+<table>
+	<thead>
+		<tr class="tdb">
+			<td colspan="5">#springMessage('maintenance.job.registered') - #springMessage('maintenance.job.registered.intro')</td>
+		</tr>
+	</thead>
+	<tbody>
+		<tr class="tdb">
+			<td width="10%">#springMessage('maintenance.job.name')</td>
+			<td width="60%">#springMessage('maintenance.job.description')</td>
+			<td width="10%">#springMessage('maintenance.job.nextTime')</td>
+			<td width="10%">#springMessage('maintenance.job.cronExpression')</td>
+			<td width="10%">&nbsp;</td>
+		</tr>
+        #foreach( $job in $registeredJobs )
+		<tr class="tdc">
+			<td width="10%">${job.fullName}</td>
+			<td width="60%">${job.description}</td>
+			<td width="10%">$!vtldatetool.format('medium',${job.nextTime})</td>
+			<td width="10%">$!{job.cronExpression}</td>
+			<td width="10%">
+				<form action="#springUrl('/maintenance.do')">
+					<input type="hidden" name="jobFullName" value="${job.fullName}" />
+					<input type="submit" name="runJob" value="#springMessage('maintenance.job.run')"/>
+				</form>
+			</td>
+		</tr>
+        #end
 	</tbody>
 </table>

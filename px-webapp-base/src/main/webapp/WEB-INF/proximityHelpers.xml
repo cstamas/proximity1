@@ -21,9 +21,9 @@
 
 	<!--
 		- StatisticsGatherer, gathers statistics. Simple in-memory implementation.
+	-->
 	<bean id="proximity.statisticsGatherer"
 		class="org.abstracthorizon.proximity.stats.SimpleStatisticsGathererImpl" />
-	-->
 
 	<!--
 		=================================================================================

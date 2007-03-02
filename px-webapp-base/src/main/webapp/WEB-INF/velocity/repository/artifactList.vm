@@ -37,7 +37,7 @@
 	<tbody>
   
 		#foreach($item in $items)
-			<tr class="tda">
+			<tr class="tdc">
 				<td>
 				    #artifactImage($item)
 				</td>
