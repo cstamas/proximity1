@@ -4,9 +4,6 @@
 
 <table>
 
-        <tr class="tdb">
-                <td colspan="2"><img src="#springUrl('/images/logo.png')"/></td>
-        </tr>
         <tr class="tda" onmouseover="return escape('#springMessage('repositories.proximity.emergeRepositoryGroups.help')')">
                 <td colspan="1">#springMessage("repositories.proximity.emergeRepositoryGroups")</td>
                 <td colspan="1">

@@ -29,7 +29,7 @@
 	<tbody>
   
 		#foreach($item in $items)
-			<tr class="tda">
+			<tr class="tdc">
 				<td>
 				    #itemImage($item)
 				</td>

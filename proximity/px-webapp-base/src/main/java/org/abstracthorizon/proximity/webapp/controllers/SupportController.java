@@ -1,6 +1,8 @@
 package org.abstracthorizon.proximity.webapp.controllers;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -12,6 +14,11 @@ import org.abstracthorizon.proximity.ItemProperties;
 import org.abstracthorizon.proximity.Proximity;
 import org.abstracthorizon.proximity.indexer.Indexer;
 import org.abstracthorizon.proximity.stats.StatisticsGatherer;
+import org.quartz.CronTrigger;
+import org.quartz.JobDetail;
+import org.quartz.JobExecutionContext;
+import org.quartz.Scheduler;
+import org.quartz.Trigger;
 import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
@@ -23,6 +30,16 @@ public class SupportController extends MultiActionController {
 	private StatisticsGatherer statsGatherer;
 
 	private Proximity proximity;
+	
+	private Scheduler scheduler;
+	
+	public Scheduler getScheduler() {
+		return this.scheduler;
+	}
+	
+	public void setScheduler(Scheduler scheduler) {
+		this.scheduler = scheduler;
+	}
 
 	public Indexer getIndexer() {
 		return indexer;
@@ -126,11 +143,48 @@ public class SupportController extends MultiActionController {
 		} else if (ServletRequestUtils.getStringParameter(request, "reindexSelected") != null
 				&& ServletRequestUtils.getRequiredStringParameter(request, "reindexSelectedRepos") != null) {
 			getIndexer().reindex(ServletRequestUtils.getRequiredStringParameter(request, "reindexSelectedRepos"));
+		} else if (ServletRequestUtils.getStringParameter(request, "runJob") != null
+				&& ServletRequestUtils.getRequiredStringParameter(request, "jobFullName") != null) {
+			String fullName = ServletRequestUtils.getRequiredStringParameter(request, "jobFullName");
+			
+			String groupName = fullName.substring(0, fullName.indexOf("."));
+			String jobName = fullName.substring(fullName.indexOf(".") + 1);
+			scheduler.triggerJob(jobName, groupName);
+		}
+		
+		List activeQJobs = getScheduler().getCurrentlyExecutingJobs();
+		List activeJobs = new ArrayList(activeQJobs.size());
+		for (Iterator i = activeQJobs.iterator(); i.hasNext(); ) {
+			JobExecutionContext ctx = (JobExecutionContext) i.next();
+			Map jobMap = new HashMap();
+			jobMap.put("fullName", ctx.getJobDetail().getFullName());
+			jobMap.put("description", ctx.getJobDetail().getDescription());
+			jobMap.put("fireTime", ctx.getScheduledFireTime());
+			activeJobs.add(jobMap);
+		}
+		List registeredJobs = new ArrayList();
+		String[] jobGroups = getScheduler().getTriggerGroupNames();
+		for (int i = 0; i < jobGroups.length; i++) {
+			String[] jobNames = getScheduler().getTriggerNames(jobGroups[i]);
+			for (int j = 0; j < jobNames.length; j++) {
+				Trigger trigger = getScheduler().getTrigger(jobNames[j], jobGroups[i]);
+				JobDetail jobDetail = getScheduler().getJobDetail(trigger.getJobName(), trigger.getJobGroup());
+				Map jobMap = new HashMap();
+				jobMap.put("fullName", jobDetail.getFullName());
+				jobMap.put("description", jobDetail.getDescription());
+				jobMap.put("nextTime", trigger.getNextFireTime());
+				if (trigger instanceof CronTrigger) {
+					jobMap.put("cronExpression", ((CronTrigger) trigger).getCronExpression());
+				}
+				registeredJobs.add(jobMap);
+			}
 		}
 
 		Map context = new HashMap();
 		List repositories = getProximity().getRepositories();
 		context.put("repositories", repositories);
+		context.put("activeJobs", activeJobs);
+		context.put("registeredJobs", registeredJobs);
 		return new ModelAndView("maintenance", context);
 	}
 

@@ -45,6 +45,7 @@
 		class="org.abstracthorizon.proximity.webapp.controllers.SupportController">
 		<property name="proximity" ref="proximity" />
 		<property name="indexer" ref="proximity.indexer" />
+		<property name="scheduler" ref="scheduler" />
 		<property name="methodNameResolver">
 			<bean
 				class="org.springframework.web.servlet.mvc.multiaction.PropertiesMethodNameResolver">
