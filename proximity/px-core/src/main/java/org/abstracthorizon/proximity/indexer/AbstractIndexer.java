@@ -170,7 +170,7 @@ public abstract class AbstractIndexer implements Indexer, ProximityRequestListen
 	}
 
 	public void reindex() {
-		logger.info("Forced reindexing of all defined repositories.");
+		logger.info("Reindexing of all defined repositories requested.");
 		for (Iterator i = getProximity().getRepositories().iterator(); i.hasNext();) {
 			Repository repo = (Repository) i.next();
 			reindex(repo);
@@ -178,7 +178,7 @@ public abstract class AbstractIndexer implements Indexer, ProximityRequestListen
 	}
 
 	public void reindex(String repoId) throws NoSuchRepositoryException {
-		logger.info("Forced reindexing of {} repository", repoId);
+		logger.info("Reindexing of {} repository requested", repoId);
 		Repository repo = getProximity().getRepository(repoId);
 		reindex(repo);
 	}
