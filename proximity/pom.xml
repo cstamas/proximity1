@@ -128,6 +128,7 @@
 		<module>px-core-it</module>
 		<module>px-core-ws</module>
 		<module>px-core-maven</module>
+		<module>px-core-scheduler</module>
 		<module>px-webapp-base</module>
 		<!-- <module>px-webapp-base-it</module>  -->
 		<module>px-webapp-webdav</module>
@@ -289,6 +290,18 @@
 			</dependency>
 			<dependency>
 				<groupId>org.springframework</groupId>
+				<artifactId>spring-dao</artifactId>
+				<version>${spring.version}</version>
+				<type>jar</type>
+				<exclusions>
+					<exclusion>
+						<artifactId>commons-logging</artifactId>
+						<groupId>commons-logging</groupId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
 				<artifactId>spring-mock</artifactId>
 				<version>${spring.version}</version>
 				<type>jar</type>
@@ -321,6 +334,11 @@
 			<dependency>
 				<groupId>org.abstracthorizon.proximity</groupId>
 				<artifactId>px-core-ws</artifactId>
+				<version>${pom.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.abstracthorizon.proximity</groupId>
+				<artifactId>px-core-scheduler</artifactId>
 				<version>${pom.version}</version>
 			</dependency>
 			<dependency>
