@@ -33,6 +33,11 @@ for WIKI and issue tracking.</p>
 while proxying other repositories</i> and have all the benefits of local (read FAST)
 repository access.</li>
 
+<li><b>Maintenance Jobs</b> - Jobs for regular maintenance tasks, like reindexing,
+stale Maven SNAPSHOT removal, etc. The Job engine used in Proximity is Quartz.
+You can easily add new jobs by implementing pure Quartz Jobs, or use the provided
+abstract class.</li>
+
 <li><b>Access control</b> - Proximity is well suited for <i>corporate deployments</i>, since it has extensible
 and configurable AccessManager. Proximity has various AccessManager and AccessDecisionVoter
 implementations out-of-the-box. Some examples: IP based access restriction, HTTPS
