@@ -131,7 +131,7 @@ public class CommonsNetFtpRemotePeer extends AbstractRemoteStorage {
 		try {
 			client = getFTPClient();
 			try {
-				if (client.changeWorkingDirectory(FilenameUtils.concat(getRemoteUrl().getPath(), FilenameUtils
+				if (client.changeWorkingDirectory(concatPaths(getRemoteUrl().getPath(), FilenameUtils
 						.getPath(path)))) {
 					FTPFile[] fileList = client.listFiles(FilenameUtils.getName(path));
 					if (fileList.length == 1) {
@@ -162,7 +162,7 @@ public class CommonsNetFtpRemotePeer extends AbstractRemoteStorage {
 		try {
 			client = getFTPClient();
 			try {
-				if (client.changeWorkingDirectory(FilenameUtils.concat(getRemoteUrl().getPath(), FilenameUtils
+				if (client.changeWorkingDirectory(concatPaths(getRemoteUrl().getPath(), FilenameUtils
 						.getPath(path)))) {
 					FTPFile[] fileList = client.listFiles(FilenameUtils.getName(path));
 					if (fileList.length == 1) {
@@ -221,6 +221,11 @@ public class CommonsNetFtpRemotePeer extends AbstractRemoteStorage {
 		} catch (IOException ex) {
 			throw new StorageException("Got IOException while creating FTPClient", ex);
 		}
+	}
+	
+	protected String concatPaths(String path1, String path2) {
+		String result = FilenameUtils.concat(path1, path2);
+		return FilenameUtils.separatorsToUnix(result);
 	}
 
 	protected ItemProperties constructItemPropertiesFromGetResponse(String path, String originatingUrlString,
