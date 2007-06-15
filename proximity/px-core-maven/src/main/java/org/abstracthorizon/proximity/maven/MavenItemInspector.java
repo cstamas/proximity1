@@ -10,6 +10,7 @@ import java.util.List;
 
 import org.abstracthorizon.proximity.ItemProperties;
 import org.abstracthorizon.proximity.metadata.inspectors.AbstractItemInspector;
+import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
 import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
@@ -30,6 +31,16 @@ public class MavenItemInspector extends AbstractItemInspector {
 	public static final String POM_AID_KEY = "pom.aid";
 
 	public static final String POM_VERSION_KEY = "pom.version";
+
+	public static final String POM_VERSION_MAJOR_KEY = "pom.version";
+
+	public static final String POM_VERSION_MINOR_KEY = "pom.version.minor";
+	
+	public static final String POM_VERSION_INCREMENTAL_KEY = "pom.version.incremental";
+	
+	public static final String POM_VERSION_BUILDNUM_KEY = "pom.version.buildNum";
+	
+	public static final String POM_VERSION_QUALIFIER_KEY = "pom.version.qualifier";
 
 	public static final String POM_PCK_KEY = "pom.pck";
 
@@ -53,6 +64,11 @@ public class MavenItemInspector extends AbstractItemInspector {
 		result.add(POM_AID_KEY);
 		result.add(POM_PCK_KEY);
 		result.add(POM_VERSION_KEY);
+		result.add(POM_VERSION_MAJOR_KEY);
+		result.add(POM_VERSION_MINOR_KEY);
+		result.add(POM_VERSION_INCREMENTAL_KEY);
+		result.add(POM_VERSION_BUILDNUM_KEY);
+		result.add(POM_VERSION_QUALIFIER_KEY);
 		result.add(POM_DEPENDENCIES_KEY);
 		result.add(POM_PARENT_KEY);
 		return result;
@@ -86,6 +102,12 @@ public class MavenItemInspector extends AbstractItemInspector {
 					}
 					if (pom.getVersion() != null) {
 						ip.setMetadata(POM_VERSION_KEY, pom.getVersion());
+						DefaultArtifactVersion af = new DefaultArtifactVersion(pom.getVersion());
+						ip.setMetadata(POM_VERSION_MAJOR_KEY, Integer.toString(af.getMajorVersion()));
+						ip.setMetadata(POM_VERSION_MINOR_KEY, Integer.toString(af.getMinorVersion()));
+						ip.setMetadata(POM_VERSION_INCREMENTAL_KEY, Integer.toString(af.getIncrementalVersion()));
+						ip.setMetadata(POM_VERSION_BUILDNUM_KEY, Integer.toString(af.getBuildNumber()));
+						ip.setMetadata(POM_VERSION_QUALIFIER_KEY, af.getQualifier());
 					}
 					if (pom.getUrl() != null) {
 						ip.setMetadata(POM_URL_KEY, pom.getUrl());
