@@ -32,7 +32,7 @@ public class MavenItemInspector extends AbstractItemInspector {
 
 	public static final String POM_VERSION_KEY = "pom.version";
 
-	public static final String POM_VERSION_MAJOR_KEY = "pom.version";
+	public static final String POM_VERSION_MAJOR_KEY = "pom.version.major";
 
 	public static final String POM_VERSION_MINOR_KEY = "pom.version.minor";
 	
