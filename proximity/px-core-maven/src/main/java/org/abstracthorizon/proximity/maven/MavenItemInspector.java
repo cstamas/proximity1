@@ -107,7 +107,11 @@ public class MavenItemInspector extends AbstractItemInspector {
 						ip.setMetadata(POM_VERSION_MINOR_KEY, Integer.toString(af.getMinorVersion()));
 						ip.setMetadata(POM_VERSION_INCREMENTAL_KEY, Integer.toString(af.getIncrementalVersion()));
 						ip.setMetadata(POM_VERSION_BUILDNUM_KEY, Integer.toString(af.getBuildNumber()));
-						ip.setMetadata(POM_VERSION_QUALIFIER_KEY, af.getQualifier());
+						// do not put null
+						if (af.getQualifier() != null) {
+							ip.setMetadata(POM_VERSION_QUALIFIER_KEY, af.getQualifier());
+						}
+					
 					}
 					if (pom.getUrl() != null) {
 						ip.setMetadata(POM_URL_KEY, pom.getUrl());
