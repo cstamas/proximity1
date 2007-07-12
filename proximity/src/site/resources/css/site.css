@@ -12,7 +12,7 @@ a.externalLink, a.externalLink:link, a.externalLink:visited, a.externalLink:acti
 }
 
 #bannerLeft img, #bannerRight img {
-  padding: 10px;
+  padding: 0px;
   margin: 0px;
 }
 

@@ -3,6 +3,13 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
+	<!-- Parent POM -->
+	<parent>
+		<groupId>org.abstracthorizon</groupId>
+		<artifactId>abstracthorizon-parent</artifactId>
+		<version>1.0.0</version>
+	</parent>
+
 	<!-- the version of maven's project object model -->
 	<modelVersion>4.0.0</modelVersion>
 
@@ -116,12 +123,6 @@
 			http://trac.abstracthorizon.org/proximity/browser/trunk/proximity/
 		</url>
 	</scm>
-
-	<!-- details about the organization that 'owns' the project -->
-	<organization>
-		<name>ABSTRACT HORIZON</name>
-		<url>http://www.abstracthorizon.org/</url>
-	</organization>
 
 	<modules>
 		<module>px-core</module>
