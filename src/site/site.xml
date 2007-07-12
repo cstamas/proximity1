@@ -3,15 +3,22 @@
 
 	<bannerLeft>
 		<name>ABSTRACT HORIZON</name>
-		<src>images/ah.png</src>
+		<src>images/banner-left.jpg</src>
 		<href>http://www.abstracthorizon.org/</href>
 	</bannerLeft>
 
 	<bannerRight>
 		<name>Proximity</name>
-		<src>images/logo.png</src>
+		<src>images/banner-right.jpg</src>
 		<href>http://proximity.abstracthorizon.org/</href>
 	</bannerRight>
+
+	<publishDate format="dd MMM yyyy" position="left" />
+
+	<skin>
+		<groupId>org.apache.maven.skins</groupId>
+		<artifactId>maven-stylus-skin</artifactId>
+	</skin>
 
 	<body>
 
