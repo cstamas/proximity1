@@ -1,9 +1,10 @@
 package org.abstracthorizon.proximity.storage.remote;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+
+import org.abstracthorizon.proximity.storage.local.LazyFileInputStream;
 
 /**
  * A simple FileInputStream wrapper that closes and deletes the file associated
@@ -12,18 +13,15 @@ import java.io.IOException;
  * @author cstamas
  * 
  */
-public class DeleteOnCloseFileInputStream extends FileInputStream {
+public class DeleteOnCloseFileInputStream extends LazyFileInputStream {
 
-	private File file;
+    public DeleteOnCloseFileInputStream(File file) throws FileNotFoundException {
+	super(file);
+    }
 
-	public DeleteOnCloseFileInputStream(File file) throws FileNotFoundException {
-		super(file);
-		this.file = file;
-	}
-
-	public void close() throws IOException {
-		super.close();
-		file.delete();
-	}
+    public void close() throws IOException {
+	super.close();
+	getFile().delete();
+    }
 
 }

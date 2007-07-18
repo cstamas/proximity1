@@ -29,6 +29,8 @@ public class FileDigest {
 			} finally {
 				if (dis != null) {
 					dis.close();
+				}
+				if (fis != null) {
 					fis.close();
 				}
 			}
