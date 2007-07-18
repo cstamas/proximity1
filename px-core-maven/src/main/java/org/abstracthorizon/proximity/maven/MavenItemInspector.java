@@ -18,153 +18,163 @@ import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 
 public class MavenItemInspector extends AbstractItemInspector {
 
-	public static final String M2KIND = "m2kind";
+    public static final String M2KIND = "m2kind";
 
-	public static final String KIND_POM = "pom";
+    public static final String KIND_POM = "pom";
 
-	public static final String KIND_METADATA = "metadata";
+    public static final String KIND_METADATA = "metadata";
 
-	public static final String KIND_SNAPSHOT = "snapshot";
+    public static final String KIND_SNAPSHOT = "snapshot";
 
-	public static final String POM_GID_KEY = "pom.gid";
+    public static final String POM_GID_KEY = "pom.gid";
 
-	public static final String POM_AID_KEY = "pom.aid";
+    public static final String POM_AID_KEY = "pom.aid";
 
-	public static final String POM_VERSION_KEY = "pom.version";
+    public static final String POM_VERSION_KEY = "pom.version";
 
-	public static final String POM_VERSION_MAJOR_KEY = "pom.version.major";
+    public static final String POM_VERSION_MAJOR_KEY = "pom.version.major";
 
-	public static final String POM_VERSION_MINOR_KEY = "pom.version.minor";
-	
-	public static final String POM_VERSION_INCREMENTAL_KEY = "pom.version.incremental";
-	
-	public static final String POM_VERSION_BUILDNUM_KEY = "pom.version.buildNum";
-	
-	public static final String POM_VERSION_QUALIFIER_KEY = "pom.version.qualifier";
+    public static final String POM_VERSION_MINOR_KEY = "pom.version.minor";
 
-	public static final String POM_PCK_KEY = "pom.pck";
+    public static final String POM_VERSION_INCREMENTAL_KEY = "pom.version.incremental";
 
-	public static final String POM_URL_KEY = "pom.url";
+    public static final String POM_VERSION_BUILDNUM_KEY = "pom.version.buildNum";
 
-	public static final String POM_DESCRIPTION_KEY = "pom.prjDesc";
+    public static final String POM_VERSION_QUALIFIER_KEY = "pom.version.qualifier";
 
-	public static final String POM_DEPENDENCIES_KEY = "pom.deps";
+    public static final String POM_PCK_KEY = "pom.pck";
 
-	public static final String POM_PARENT_KEY = "pom.parent";
+    public static final String POM_URL_KEY = "pom.url";
 
-	public boolean isHandled(ItemProperties ip) {
-		return MavenArtifactRecognizer.isPom(ip.getName()) || MavenArtifactRecognizer.isMetadata(ip.getName())
-				|| MavenArtifactRecognizer.isSnapshot(ip.getDirectoryPath(), ip.getName());
-	}
+    public static final String POM_DESCRIPTION_KEY = "pom.prjDesc";
 
-	public List getIndexableKeywords() {
-		List result = new ArrayList(4);
-		result.add(M2KIND);
-		result.add(POM_GID_KEY);
-		result.add(POM_AID_KEY);
-		result.add(POM_PCK_KEY);
-		result.add(POM_VERSION_KEY);
-		result.add(POM_VERSION_MAJOR_KEY);
-		result.add(POM_VERSION_MINOR_KEY);
-		result.add(POM_VERSION_INCREMENTAL_KEY);
-		result.add(POM_VERSION_BUILDNUM_KEY);
-		result.add(POM_VERSION_QUALIFIER_KEY);
-		result.add(POM_DEPENDENCIES_KEY);
-		result.add(POM_PARENT_KEY);
-		return result;
-	}
+    public static final String POM_DEPENDENCIES_KEY = "pom.deps";
 
-	public void processItem(ItemProperties ip, File file) {
-		if (MavenArtifactRecognizer.isPom(ip.getName())) {
+    public static final String POM_PARENT_KEY = "pom.parent";
 
-			if (!MavenArtifactRecognizer.isChecksum(ip.getName())) {
+    public boolean isHandled(ItemProperties ip) {
+	return MavenArtifactRecognizer.isPom(ip.getName()) || MavenArtifactRecognizer.isMetadata(ip.getName())
+		|| MavenArtifactRecognizer.isSnapshot(ip.getDirectoryPath(), ip.getName());
+    }
 
-				ip.setMetadata(M2KIND, KIND_POM);
+    public List getIndexableKeywords() {
+	List result = new ArrayList(4);
+	result.add(M2KIND);
+	result.add(POM_GID_KEY);
+	result.add(POM_AID_KEY);
+	result.add(POM_PCK_KEY);
+	result.add(POM_VERSION_KEY);
+	result.add(POM_VERSION_MAJOR_KEY);
+	result.add(POM_VERSION_MINOR_KEY);
+	result.add(POM_VERSION_INCREMENTAL_KEY);
+	result.add(POM_VERSION_BUILDNUM_KEY);
+	result.add(POM_VERSION_QUALIFIER_KEY);
+	result.add(POM_DEPENDENCIES_KEY);
+	result.add(POM_PARENT_KEY);
+	return result;
+    }
 
-				try {
+    public void processItem(ItemProperties ip, File file) {
+	if (MavenArtifactRecognizer.isPom(ip.getName())) {
 
-					MavenXpp3Reader reader = new MavenXpp3Reader();
-					InputStreamReader ir = new InputStreamReader(new FileInputStream(file));
-					Model pom = reader.read(ir);
+	    if (!MavenArtifactRecognizer.isChecksum(ip.getName())) {
 
-					if (pom.getGroupId() != null) {
-						ip.setMetadata(POM_GID_KEY, pom.getGroupId());
-					} else {
-						if (pom.getParent().getGroupId() != null) {
-							ip.setMetadata(POM_GID_KEY, pom.getParent().getGroupId());
-						}
-					}
-					if (pom.getArtifactId() != null) {
-						ip.setMetadata(POM_AID_KEY, pom.getArtifactId());
-					}
-					if (pom.getPackaging() != null) {
-						ip.setMetadata(POM_PCK_KEY, pom.getPackaging());
-					}
-					if (pom.getVersion() != null) {
-						ip.setMetadata(POM_VERSION_KEY, pom.getVersion());
-						DefaultArtifactVersion af = new DefaultArtifactVersion(pom.getVersion());
-						ip.setMetadata(POM_VERSION_MAJOR_KEY, Integer.toString(af.getMajorVersion()));
-						ip.setMetadata(POM_VERSION_MINOR_KEY, Integer.toString(af.getMinorVersion()));
-						ip.setMetadata(POM_VERSION_INCREMENTAL_KEY, Integer.toString(af.getIncrementalVersion()));
-						ip.setMetadata(POM_VERSION_BUILDNUM_KEY, Integer.toString(af.getBuildNumber()));
-						// do not put null
-						if (af.getQualifier() != null) {
-							ip.setMetadata(POM_VERSION_QUALIFIER_KEY, af.getQualifier());
-						}
-					
-					}
-					if (pom.getUrl() != null) {
-						ip.setMetadata(POM_URL_KEY, pom.getUrl());
-					}
-					if (pom.getDescription() != null) {
-						ip.setMetadata(POM_DESCRIPTION_KEY, pom.getDescription());
-					}
+		ip.setMetadata(M2KIND, KIND_POM);
 
-					if (pom.getParent() != null) {
-						StringBuffer parent = new StringBuffer();
-						parent.append(pom.getParent().getGroupId());
-						parent.append(":");
-						parent.append(pom.getParent().getArtifactId());
-						if (pom.getParent().getVersion() != null) {
-							parent.append(":");
-							parent.append(pom.getParent().getVersion());
-						}
-						ip.setMetadata(POM_PARENT_KEY, parent.toString());
-					}
+		try {
 
-					if (pom.getDependencies() != null) {
-						StringBuffer deps = new StringBuffer();
-						for (Iterator i = pom.getDependencies().iterator(); i.hasNext();) {
-							Dependency dep = (Dependency) i.next();
-							deps.append(dep.getGroupId());
-							deps.append(":");
-							deps.append(dep.getArtifactId());
-							// TODO: version ranges?
-							if (dep.getVersion() != null && !(dep.getVersion().indexOf("[") > 0)
-									&& !(dep.getVersion().indexOf("(") > 0)) {
-								deps.append(":");
-								deps.append(dep.getVersion());
-							}
-							deps.append("\n");
-						}
-						ip.setMetadata(POM_DEPENDENCIES_KEY, deps.toString());
-					}
+		    MavenXpp3Reader reader = new MavenXpp3Reader();
+		    FileInputStream fis = new FileInputStream(file);
+		    InputStreamReader ir = new InputStreamReader(fis);
+		    Model pom = null;
+		    try {
+			pom = reader.read(ir);
+			ir.close();
+		    } finally {
+			fis.close();
+		    }
 
-				} catch (XmlPullParserException ex) {
-					logger.warn("Got XmlPullParserException during reading POM, content will not be indexed on "
-							+ ip.getPath(), ex);
-				} catch (IOException ex) {
-					logger.error("Got IOException during reading POM, content will not be indexed on " + ip.getPath(),
-							ex);
-				}
-
+		    if (pom.getGroupId() != null) {
+			ip.setMetadata(POM_GID_KEY, pom.getGroupId());
+		    } else {
+			if (pom.getParent().getGroupId() != null) {
+			    ip.setMetadata(POM_GID_KEY, pom.getParent().getGroupId());
 			}
+		    }
+		    if (pom.getArtifactId() != null) {
+			ip.setMetadata(POM_AID_KEY, pom.getArtifactId());
+		    }
+		    if (pom.getPackaging() != null) {
+			ip.setMetadata(POM_PCK_KEY, pom.getPackaging());
+		    }
+		    if (pom.getVersion() != null) {
+			ip.setMetadata(POM_VERSION_KEY, pom.getVersion());
+		    } else {
+			if (pom.getParent().getVersion() != null) {
+			    ip.setMetadata(POM_VERSION_KEY, pom.getParent().getVersion());
+			}
+		    }
+		    if (ip.getMetadata(POM_VERSION_KEY) != null) {
+			DefaultArtifactVersion af = new DefaultArtifactVersion(ip.getMetadata(POM_VERSION_KEY));
+			ip.setMetadata(POM_VERSION_MAJOR_KEY, Integer.toString(af.getMajorVersion()));
+			ip.setMetadata(POM_VERSION_MINOR_KEY, Integer.toString(af.getMinorVersion()));
+			ip.setMetadata(POM_VERSION_INCREMENTAL_KEY, Integer.toString(af.getIncrementalVersion()));
+			ip.setMetadata(POM_VERSION_BUILDNUM_KEY, Integer.toString(af.getBuildNumber()));
+			// do not put null
+			if (af.getQualifier() != null) {
+			    ip.setMetadata(POM_VERSION_QUALIFIER_KEY, af.getQualifier());
+			}
+		    }
 
-		} else if (MavenArtifactRecognizer.isMetadata(ip.getName())) {
-			ip.setMetadata(M2KIND, KIND_METADATA);
-		} else if (MavenArtifactRecognizer.isSnapshot(ip.getDirectoryPath(), ip.getName())) {
-			ip.setMetadata(M2KIND, KIND_SNAPSHOT);
+		    if (pom.getUrl() != null) {
+			ip.setMetadata(POM_URL_KEY, pom.getUrl());
+		    }
+		    if (pom.getDescription() != null) {
+			ip.setMetadata(POM_DESCRIPTION_KEY, pom.getDescription());
+		    }
+
+		    if (pom.getParent() != null) {
+			StringBuffer parent = new StringBuffer();
+			parent.append(pom.getParent().getGroupId());
+			parent.append(":");
+			parent.append(pom.getParent().getArtifactId());
+			if (pom.getParent().getVersion() != null) {
+			    parent.append(":");
+			    parent.append(pom.getParent().getVersion());
+			}
+			ip.setMetadata(POM_PARENT_KEY, parent.toString());
+		    }
+
+		    if (pom.getDependencies() != null) {
+			StringBuffer deps = new StringBuffer();
+			for (Iterator i = pom.getDependencies().iterator(); i.hasNext();) {
+			    Dependency dep = (Dependency) i.next();
+			    deps.append(dep.getGroupId());
+			    deps.append(":");
+			    deps.append(dep.getArtifactId());
+			    // TODO: version ranges?
+			    if (dep.getVersion() != null && !(dep.getVersion().indexOf("[") > 0) && !(dep.getVersion().indexOf("(") > 0)) {
+				deps.append(":");
+				deps.append(dep.getVersion());
+			    }
+			    deps.append("\n");
+			}
+			ip.setMetadata(POM_DEPENDENCIES_KEY, deps.toString());
+		    }
+
+		} catch (XmlPullParserException ex) {
+		    logger.warn("Got XmlPullParserException during reading POM, content will not be indexed on " + ip.getPath(), ex);
+		} catch (IOException ex) {
+		    logger.error("Got IOException during reading POM, content will not be indexed on " + ip.getPath(), ex);
 		}
+
+	    }
+
+	} else if (MavenArtifactRecognizer.isMetadata(ip.getName())) {
+	    ip.setMetadata(M2KIND, KIND_METADATA);
+	} else if (MavenArtifactRecognizer.isSnapshot(ip.getDirectoryPath(), ip.getName())) {
+	    ip.setMetadata(M2KIND, KIND_SNAPSHOT);
 	}
+    }
 
 }
