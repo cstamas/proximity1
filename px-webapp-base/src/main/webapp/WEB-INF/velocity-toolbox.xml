@@ -17,4 +17,11 @@
 			org.abstracthorizon.proximity.webapp.view.FormatFileSize
 		</class>
 	</tool>
+	<tool>
+		<key>textUtils</key>
+		<scope>application</scope>
+		<class>
+			org.abstracthorizon.proximity.webapp.view.TextUtils
+		</class>
+	</tool>
 </toolbox>

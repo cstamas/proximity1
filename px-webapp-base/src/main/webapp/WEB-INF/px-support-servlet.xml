@@ -46,6 +46,7 @@
 		<property name="proximity" ref="proximity" />
 		<property name="indexer" ref="proximity.indexer" />
 		<property name="scheduler" ref="scheduler" />
+		<property name="statisticsGatherer" ref="proximity.statisticsGatherer" />
 		<property name="methodNameResolver">
 			<bean
 				class="org.springframework.web.servlet.mvc.multiaction.PropertiesMethodNameResolver">

@@ -27,7 +27,7 @@ public class SupportController extends MultiActionController {
 
 	private Indexer indexer;
 
-	private StatisticsGatherer statsGatherer;
+	private StatisticsGatherer statisticsGatherer;
 
 	private Proximity proximity;
 	
@@ -57,6 +57,14 @@ public class SupportController extends MultiActionController {
 		return proximity;
 	}
 
+	public StatisticsGatherer getStatisticsGatherer() {
+	    return statisticsGatherer;
+	}
+
+	public void setStatisticsGatherer(StatisticsGatherer statisticsGatherer) {
+	    this.statisticsGatherer = statisticsGatherer;
+	}
+
 	public ModelAndView index(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		logger.debug("Got request for index");
 		return new ModelAndView("index");
@@ -69,10 +77,10 @@ public class SupportController extends MultiActionController {
 		String searchAllRegexp = null;
 		
 		String searchRepositoryRegexp = null;
-		String searchRepositoryId = null;
+		String searchRepositoryId = "";
 		
 		String searchGroupRegexp = null;
-		String searchGroupId = null;
+		String searchGroupId = "";
 
 		String searchLQLQuery = null;
 
@@ -191,8 +199,8 @@ public class SupportController extends MultiActionController {
 	public ModelAndView stats(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		logger.debug("Got request for stats");
 		Map stats = null;
-		if (statsGatherer != null) {
-			stats = statsGatherer.getStatistics();
+		if (getStatisticsGatherer() != null) {
+			stats = getStatisticsGatherer().getStatistics();
 		}
 		Map context = new HashMap();
 		context.put("stats", stats);
