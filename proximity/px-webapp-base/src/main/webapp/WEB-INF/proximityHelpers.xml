@@ -23,7 +23,10 @@
 		- StatisticsGatherer, gathers statistics. Simple in-memory implementation.
 	-->
 	<bean id="proximity.statisticsGatherer"
-		class="org.abstracthorizon.proximity.stats.SimpleStatisticsGathererImpl" />
+		class="org.abstracthorizon.proximity.stats.SimpleStatisticsGathererImpl"
+		init-method="initialize">
+		<property name="proximity" ref="proximity" />
+	</bean>
 
 	<!--
 		=================================================================================
