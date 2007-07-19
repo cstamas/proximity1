@@ -8,16 +8,18 @@
 
 <table width="100%">
 	<tr class="tdb">
-		<td colspan="2">#springMessage('stats.last10Artifacts')</td>
+		<td colspan="3">#springMessage('stats.last10Artifacts')</td>
 	</tr>
 	<tr class="tdb">
+		<td colspan="1" width="50%">#springMessage('stats.item.repositoryId')</td>
 		<td colspan="1" width="50%">#springMessage('stats.item.path')</td>
 		<td colspan="1" width="50%">#springMessage('stats.item.name')</td>
 	</tr>
     #foreach($item in $stats.last10Artifacts)
         <tr class="tda">
-             <td colspan="1"><a href="#springUrl('/repository')${item.directoryPath}?repositoryId=${item.repositoryId}">${item.directoryPath}</a></td>
-             <td colspan="1">#plainItemLink($item)</a></td>
+             <td colspan="1">${item.repositoryId}</td>
+             <td colspan="1"><a href="#springUrl('/repository')${item.directoryPath}?repositoryId=${item.repositoryId}">$textUtils.getAsLabel($item.directoryPath)</a></td>
+             <td colspan="1">#plainItemLink($item)</td>
         </tr>
     #end
 </table>
@@ -28,16 +30,14 @@
 
 <table width="100%">
 	<tr class="tdb">
-		<td colspan="2">#springMessage('stats.last10LocalHits')</td>
+		<td colspan="2">#springMessage('stats.last10RequesterIpAddresses')</td>
 	</tr>
 	<tr class="tdb">
-		<td colspan="1" width="50%">#springMessage('stats.item.path')</td>
-		<td colspan="1" width="50%">#springMessage('stats.item.name')</td>
+		<td colspan="1" width="50%">#springMessage('stats.item.ipaddress')</td>
 	</tr>
-    #foreach($item in $stats.last10LocalHits)
+    #foreach($item in $stats.last10RequesterIpAddresses)
         <tr class="tda">
-             <td colspan="1"><a href="#springUrl('/repository')${item.directoryPath}?repositoryId=${item.repositoryId}">${item.directoryPath}</a></td>
-             <td colspan="1">#plainItemLink($item)</a></td>
+             <td colspan="1">$item</td>
         </tr>
     #end
 </table>
@@ -51,14 +51,16 @@
 
 <table width="100%">
 	<tr class="tdb">
-		<td colspan="2">#springMessage('stats.last10IpAddresses')</td>
+		<td colspan="2">#springMessage('stats.last10LocalHits')</td>
 	</tr>
 	<tr class="tdb">
-		<td colspan="1" width="50%">#springMessage('stats.item.ipaddress')</td>
+		<td colspan="1" width="50%">#springMessage('stats.item.path')</td>
+		<td colspan="1" width="50%">#springMessage('stats.item.name')</td>
 	</tr>
-    #foreach($item in $stats.last10IpAddresses)
+    #foreach($item in $stats.last10LocalHits)
         <tr class="tda">
-             <td colspan="1">$item</td>
+             <td colspan="1"><a href="#springUrl('/repository')${item.directoryPath}?repositoryId=${item.repositoryId}">$textUtils.getAsLabel($item.directoryPath)</a></td>
+             <td colspan="1">#plainItemLink($item)</td>
         </tr>
     #end
 </table>
@@ -77,11 +79,54 @@
 	</tr>
     #foreach($item in $stats.last10RemoteHits)
         <tr class="tda">
-             <td colspan="1"><a href="#springUrl('/repository')${item.directoryPath}?repositoryId=${item.repositoryId}">${item.directoryPath}</a></td>
-             <td colspan="1">#plainItemLink($item)</a></td>
+             <td colspan="1"><a href="#springUrl('/repository')${item.directoryPath}?repositoryId=${item.repositoryId}">$textUtils.getAsLabel($item.directoryPath)</a></td>
+             <td colspan="1">#plainItemLink($item)</td>
         </tr>
     #end
 </table>
+<p/>
+
+</td>
+</tr>
+<tr>
+<td>
+
+<table width="100%">
+	<tr class="tdb">
+		<td colspan="3">#springMessage('stats.last10Deployments')</td>
+	</tr>
+	<tr class="tdb">
+		<td colspan="1" width="50%">#springMessage('stats.item.repositoryId')</td>
+		<td colspan="1" width="50%">#springMessage('stats.item.path')</td>
+		<td colspan="1" width="50%">#springMessage('stats.item.name')</td>
+	</tr>
+    #foreach($item in $stats.last10Deployments)
+        <tr class="tda">
+             <td colspan="1">${item.repositoryId}</td>
+             <td colspan="1"><a href="#springUrl('/repository')${item.directoryPath}?repositoryId=${item.repositoryId}">$textUtils.getAsLabel($item.directoryPath)</a></td>
+             <td colspan="1">#plainItemLink($item)</td>
+        </tr>
+    #end
+</table>
+<p/>
+
+</td>
+<td>
+
+<table width="100%">
+	<tr class="tdb">
+		<td colspan="2">#springMessage('stats.last10DeployerIpAddresses')</td>
+	</tr>
+	<tr class="tdb">
+		<td colspan="1" width="50%">#springMessage('stats.item.ipaddress')</td>
+	</tr>
+    #foreach($item in $stats.last10DeployerIpAddresses)
+        <tr class="tda">
+             <td colspan="1">$item</td>
+        </tr>
+    #end
+</table>
+<p/>
 
 </td>
 </tr>

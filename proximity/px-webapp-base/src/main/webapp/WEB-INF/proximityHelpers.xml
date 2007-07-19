@@ -92,7 +92,7 @@
 		<!-- Where to store indexes? -->
 		<property name="indexDirectory" value="${indexer.dir}" />
 		<!-- On webapp start should i recreate Lucene indexes? -->
-		<property name="recreateIndexes" value="true" />
+		<property name="recreateIndexes" value="false" />
 		<!-- After how much of item insertion should i optimize indexes? -->
 		<property name="dirtyItemTreshold" value="100" />
 	</bean>
