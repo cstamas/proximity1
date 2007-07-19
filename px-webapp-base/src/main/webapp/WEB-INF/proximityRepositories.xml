@@ -30,7 +30,7 @@
 		<!-- Is repo indexable? -->
 		<property name="indexable" value="true"/>
 		<!-- Should repo be indexed at startup? (NOT USED?) -->
-		<property name="reindexAtInitialize" value="true"/>
+		<property name="reindexAtInitialize" value="false"/>
 	</bean>
 
 	<bean id="centralFSStorage"
@@ -107,7 +107,7 @@
 		<!-- Is repo indexable? -->
 		<property name="indexable" value="true"/>
 		<!-- Should repo be indexed at startup? (NOT USED?) -->
-		<property name="reindexAtInitialize" value="true"/>
+		<property name="reindexAtInitialize" value="false"/>
 	</bean>
 
 	<bean id="codehausFSStorage"
@@ -174,7 +174,7 @@
 		<!-- Is repo indexable? -->
 		<property name="indexable" value="true"/>
 		<!-- Should repo be indexed at startup? (NOT USED?) -->
-		<property name="reindexAtInitialize" value="true"/>
+		<property name="reindexAtInitialize" value="false"/>
 	</bean>
 
 	<bean id="maven2-repository.dev.java.netFSStorage"
@@ -241,7 +241,7 @@
 		<!-- Is repo indexable? -->
 		<property name="indexable" value="true"/>
 		<!-- Should repo be indexed at startup? (NOT USED?) -->
-		<property name="reindexAtInitialize" value="true"/>
+		<property name="reindexAtInitialize" value="false"/>
 	</bean>
 
 	<bean id="apache.snapshotFSStorage"
@@ -309,7 +309,7 @@
 		<!-- Is repo indexable? -->
 		<property name="indexable" value="true"/>
 		<!-- Should repo be indexed at startup? (NOT USED?) -->
-		<property name="reindexAtInitialize" value="true"/>
+		<property name="reindexAtInitialize" value="false"/>
 	</bean>
 
 	<bean id="codehaus.snapshotFSStorage"
@@ -375,7 +375,7 @@
 		<!-- Is repo indexable? -->
 		<property name="indexable" value="true"/>
 		<!-- Should repo be indexed at startup? (NOT USED?) -->
-		<property name="reindexAtInitialize" value="true"/>
+		<property name="reindexAtInitialize" value="false"/>
 	</bean>
 
 	<bean id="inhouseFSStorage"
@@ -408,7 +408,7 @@
 		<!-- Am I offline? If yes, i will not touch my remote peer, will serve only from localStorage -->
 		<property name="offline" value="false" />
 		<property name="indexable" value="true"/>
-		<property name="reindexAtInitialize" value="true"/>
+		<property name="reindexAtInitialize" value="false"/>
 	</bean>
 
 	<bean id="inhouse.snapshotFSStorage"
@@ -448,7 +448,7 @@
 		<!-- Is repo indexable? -->
 		<property name="indexable" value="true"/>
 		<!-- Should repo be indexed at startup? (NOT USED?) -->
-		<property name="reindexAtInitialize" value="true"/>
+		<property name="reindexAtInitialize" value="false"/>
 	</bean>
 
 	<bean id="extNonFreeFSStorage"
@@ -488,7 +488,7 @@
 		<!-- Is repo indexable? -->
 		<property name="indexable" value="true"/>
 		<!-- Should repo be indexed at startup? (NOT USED?) -->
-		<property name="reindexAtInitialize" value="true"/>
+		<property name="reindexAtInitialize" value="false"/>
 	</bean>
 
 	<bean id="extFreeFSStorage"
