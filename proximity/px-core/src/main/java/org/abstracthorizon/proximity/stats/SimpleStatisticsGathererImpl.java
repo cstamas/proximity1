@@ -11,6 +11,7 @@ import org.abstracthorizon.proximity.ProximityRequest;
 import org.abstracthorizon.proximity.ProximityRequestListener;
 import org.abstracthorizon.proximity.events.ItemCacheEvent;
 import org.abstracthorizon.proximity.events.ItemRetrieveEvent;
+import org.abstracthorizon.proximity.events.ItemStoreEvent;
 import org.abstracthorizon.proximity.events.ProximityRequestEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,7 +28,11 @@ public class SimpleStatisticsGathererImpl implements StatisticsGatherer, Proximi
 
     private List last10Artifacts = new ArrayList(10);
 
-    private List last10IpAddresses = new ArrayList(10);
+    private List last10RequesterIpAddresses = new ArrayList(10);
+
+    private List last10DeployerIpAddresses = new ArrayList(10);
+
+    private List last10Deployments = new ArrayList(10);
 
     public Proximity getProximity() {
 	return this.proximity;
@@ -45,11 +50,11 @@ public class SimpleStatisticsGathererImpl implements StatisticsGatherer, Proximi
 
     public void proximityRequestEvent(ProximityRequestEvent event) {
 	if (ItemCacheEvent.class.isAssignableFrom(event.getClass())) {
-	    // delete from index
 	    remoteHit(event.getRequest(), ((ItemCacheEvent) event).getItemProperties());
+	} else if (ItemStoreEvent.class.isAssignableFrom(event.getClass())) {
+	    deploymentHit(event.getRequest(), ((ItemStoreEvent) event).getItemProperties());
 	} else if (ItemRetrieveEvent.class.isAssignableFrom(event.getClass())) {
-	    // add to index
-	    remoteHit(event.getRequest(), ((ItemRetrieveEvent) event).getItemProperties());
+	    localHit(event.getRequest(), ((ItemRetrieveEvent) event).getItemProperties());
 	}
 
     }
@@ -59,7 +64,16 @@ public class SimpleStatisticsGathererImpl implements StatisticsGatherer, Proximi
 	    addMaxTen(last10Artifacts, ip);
 	    addMaxTen(last10LocalHits, ip);
 	    if (req.getAttributes().get(ProximityRequest.REQUEST_REMOTE_ADDRESS) != null) {
-		addMaxTen(last10IpAddresses, req.getAttributes().get(ProximityRequest.REQUEST_REMOTE_ADDRESS));
+		addMaxTen(last10RequesterIpAddresses, req.getAttributes().get(ProximityRequest.REQUEST_REMOTE_ADDRESS));
+	    }
+	}
+    }
+
+    public void deploymentHit(ProximityRequest req, ItemProperties ip) {
+	if (ip.isFile()) {
+	    addMaxTen(last10Deployments, ip);
+	    if (req.getAttributes().get(ProximityRequest.REQUEST_REMOTE_ADDRESS) != null) {
+		addMaxTen(last10DeployerIpAddresses, req.getAttributes().get(ProximityRequest.REQUEST_REMOTE_ADDRESS));
 	    }
 	}
     }
@@ -69,7 +83,7 @@ public class SimpleStatisticsGathererImpl implements StatisticsGatherer, Proximi
 	    addMaxTen(last10Artifacts, ip);
 	    addMaxTen(last10RemoteHits, ip);
 	    if (req.getAttributes().get(ProximityRequest.REQUEST_REMOTE_ADDRESS) != null) {
-		addMaxTen(last10IpAddresses, req.getAttributes().get(ProximityRequest.REQUEST_REMOTE_ADDRESS));
+		addMaxTen(last10RequesterIpAddresses, req.getAttributes().get(ProximityRequest.REQUEST_REMOTE_ADDRESS));
 	    }
 	}
     }
@@ -79,7 +93,9 @@ public class SimpleStatisticsGathererImpl implements StatisticsGatherer, Proximi
 	result.put("last10LocalHits", last10LocalHits);
 	result.put("last10RemoteHits", last10RemoteHits);
 	result.put("last10Artifacts", last10Artifacts);
-	result.put("last10IpAddresses", last10IpAddresses);
+	result.put("last10Deployments", last10Deployments);
+	result.put("last10RequesterIpAddresses", last10RequesterIpAddresses);
+	result.put("last10DeployerIpAddresses", last10DeployerIpAddresses);
 	return new HashMap(result);
     }
 

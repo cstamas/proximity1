@@ -22,11 +22,6 @@ import org.abstracthorizon.proximity.Repository;
 import org.abstracthorizon.proximity.RepositoryNotAvailableException;
 import org.abstracthorizon.proximity.access.AccessManager;
 import org.abstracthorizon.proximity.access.OpenAccessManager;
-import org.abstracthorizon.proximity.events.ItemCopyEvent;
-import org.abstracthorizon.proximity.events.ItemDeleteEvent;
-import org.abstracthorizon.proximity.events.ItemMoveEvent;
-import org.abstracthorizon.proximity.events.ItemRetrieveEvent;
-import org.abstracthorizon.proximity.events.ItemStoreEvent;
 import org.abstracthorizon.proximity.events.ProximityRequestEvent;
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
@@ -187,7 +182,6 @@ public abstract class AbstractProximity implements Proximity, ProximityRequestLi
 	} else {
 	    item = retrieveItemController(request);
 	}
-	notifyProximityRequestListeners(new ItemRetrieveEvent(request, item.getProperties()));
 	return item;
     }
 
@@ -203,7 +197,6 @@ public abstract class AbstractProximity implements Proximity, ProximityRequestLi
 	itemProps.setRepositoryId(target.getTargetedReposId());
 	itemProps.setRepositoryGroupId(target.getTargetedReposGroupId());
 	storeItem(target, item);
-	notifyProximityRequestListeners(new ItemCopyEvent(source, target));
     }
 
     public void deleteItem(ProximityRequest request) throws ItemNotFoundException, AccessDeniedException, NoSuchRepositoryException,
@@ -213,7 +206,6 @@ public abstract class AbstractProximity implements Proximity, ProximityRequestLi
 	Item item = retrieveItem(request);
 	Repository repo = (Repository) repositories.get(item.getProperties().getRepositoryId());
 	repo.deleteItem(mangleItemRequest(request));
-	notifyProximityRequestListeners(new ItemDeleteEvent(request, item.getProperties()));
     }
 
     public void moveItem(ProximityRequest source, ProximityRequest target) throws ItemNotFoundException, AccessDeniedException,
@@ -223,7 +215,6 @@ public abstract class AbstractProximity implements Proximity, ProximityRequestLi
 	accessManager.decide(target, null);
 	copyItem(source, target);
 	deleteItem(source);
-	notifyProximityRequestListeners(new ItemMoveEvent(source, target));
     }
 
     public void storeItem(ProximityRequest request, Item item) throws AccessDeniedException, NoSuchRepositoryException,
@@ -263,7 +254,6 @@ public abstract class AbstractProximity implements Proximity, ProximityRequestLi
 	    // set the mangled path for store
 	    itemProperties.setDirectoryPath(FilenameUtils.separatorsToUnix(FilenameUtils.getFullPathNoEndSeparator(mangledRequest.getPath())));
 	    repo.storeItem(mangledRequest, item);
-	    notifyProximityRequestListeners(new ItemStoreEvent(request, item.getProperties()));
 	} else {
 	    throw new NoSuchRepositoryException(targetRepoId);
 	}
