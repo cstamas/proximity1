@@ -258,20 +258,8 @@ public abstract class AbstractRepository implements Repository {
 	if (!isAvailable()) {
 	    throw new RepositoryNotAvailableException("The repository " + getId() + " is NOT available!");
 	}
-	if (getLocalStorage() != null && getLocalStorage().isWritable()) {
-	    item.getProperties().setRepositoryId(getId());
-	    item.getProperties().setRepositoryGroupId(getGroupId());
-	    getLocalStorage().storeItem(item);
-	    notifyProximityRequestListeners(new ItemStoreEvent(request, item.getProperties()));
-
-	    // remove it from n-cache also
-	    String requestKey = getRepositoryRequestAsKey(this, request);
-	    if (notFoundCache.containsKey(requestKey)) {
-		notFoundCache.remove(requestKey);
-	    }
-	} else {
-	    throw new UnsupportedOperationException("The repository " + getId() + " have no writable local storage defined!");
-	}
+	doStoreItem(request, item);
+	notifyProximityRequestListeners(new ItemStoreEvent(request, item.getProperties()));
     }
 
     public List listItems(ProximityRequest request) throws RepositoryNotAvailableException, StorageException {
@@ -294,6 +282,21 @@ public abstract class AbstractRepository implements Repository {
 	    }
 	}
 	return result;
+    }
+
+    protected final void doStoreItem(ProximityRequest request, Item item) throws RepositoryNotAvailableException, StorageException {
+	if (getLocalStorage() != null && getLocalStorage().isWritable()) {
+	    item.getProperties().setRepositoryId(getId());
+	    item.getProperties().setRepositoryGroupId(getGroupId());
+	    getLocalStorage().storeItem(item);
+	    // remove it from n-cache also
+	    String requestKey = getRepositoryRequestAsKey(this, request);
+	    if (notFoundCache.containsKey(requestKey)) {
+		notFoundCache.remove(requestKey);
+	    }
+	} else {
+	    throw new UnsupportedOperationException("The repository " + getId() + " have no writable local storage defined!");
+	}
     }
 
     protected abstract Item doRetrieveItem(ProximityRequest request) throws RepositoryNotAvailableException, ItemNotFoundException, StorageException;

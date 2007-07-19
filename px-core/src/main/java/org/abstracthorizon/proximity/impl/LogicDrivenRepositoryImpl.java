@@ -56,7 +56,7 @@ public class LogicDrivenRepositoryImpl extends AbstractRepository {
 			    && getLocalStorage().isWritable()) {
 			if (getRepositoryLogic().shouldStoreLocallyAfterRemoteRetrieval(this, request, localResult, remoteResult)) {
 			    logger.debug("Storing [{}] item in writable storage of repository {}", request.getPath(), getId());
-			    storeItem(request, remoteResult);
+			    doStoreItem(request, remoteResult);
 			    notifyProximityRequestListeners(new ItemCacheEvent(request, remoteResult.getProperties()));
 
 			    remoteResult = getLocalStorage().retrieveItem(request.getPath(), request.isPropertiesOnly());
