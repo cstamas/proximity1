@@ -33,7 +33,8 @@
       </div>
 
 <p>Proximity is in function somewhere between http-proxy and
-proactive-mirror. Proximity <b>is not</b> HTTP Proxy.</p>
+proactive-mirror. Proximity <b>is not</b> HTTP Proxy. Proximity requires Java 1.4.2 platform and is a standard J2EE Web Application
+(altough, the px-core, the engine is pure J2SE application).</p>
 
 <p>One of it's primary use is as Java web application to serve as maven proxy on our
 company's intranet. As for reducing outgoing traffic (caching central and other
