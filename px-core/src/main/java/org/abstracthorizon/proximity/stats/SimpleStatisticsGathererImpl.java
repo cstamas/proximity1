@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.abstracthorizon.proximity.ItemProperties;
+import org.abstracthorizon.proximity.Proximity;
 import org.abstracthorizon.proximity.ProximityRequest;
 import org.abstracthorizon.proximity.ProximityRequestListener;
 import org.abstracthorizon.proximity.events.ItemCacheEvent;
@@ -17,6 +18,8 @@ import org.slf4j.LoggerFactory;
 public class SimpleStatisticsGathererImpl implements StatisticsGatherer, ProximityRequestListener {
 
     protected Logger logger = LoggerFactory.getLogger(this.getClass());
+    
+    private Proximity proximity;
 
     private List last10LocalHits = new ArrayList(10);
 
@@ -26,13 +29,18 @@ public class SimpleStatisticsGathererImpl implements StatisticsGatherer, Proximi
 
     private List last10IpAddresses = new ArrayList(10);
 
+    public Proximity getProximity() {
+	return this.proximity;
+    }
+
+    public void setProximity(Proximity proximity) {
+	this.proximity = proximity;
+	proximity.addProximityRequestListener(this);
+    }
+
     public void initialize() {
 	logger.info("Initializing...");
 	// nothing
-    }
-
-    public void incomingRequest(ProximityRequest req) {
-	// nishta
     }
 
     public void proximityRequestEvent(ProximityRequestEvent event) {
