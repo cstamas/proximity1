@@ -17,19 +17,18 @@ import org.slf4j.LoggerFactory;
  */
 public class DefaultProximityLogic implements ProximityLogic {
 
-	protected Logger logger = LoggerFactory.getLogger(this.getClass());
+    protected Logger logger = LoggerFactory.getLogger(this.getClass());
 
-	public boolean isGroupSearchNeeded(ProximityRequest request) {
-		return false;
-	}
+    public boolean isGroupSearchNeeded(ProximityRequest request) {
+	return false;
+    }
 
-	public ProximityRequest getGroupRequest(ProximityRequest request) {
-		return request;
-	}
+    public ProximityRequest getGroupRequest(ProximityRequest request) {
+	return request;
+    }
 
-	public Item postprocessItemList(ProximityRequest request, ProximityRequest groupRequest, List listOfProxiedItems)
-			throws IOException {
-		throw new UnsupportedOperationException("The DefaultProximityLogic does not implements postprocessing.");
-	}
+    public Item postprocessItemList(ProximityRequest request, ProximityRequest groupRequest, List listOfProxiedItems) throws IOException {
+	throw new UnsupportedOperationException("The DefaultProximityLogic does not implements postprocessing.");
+    }
 
 }

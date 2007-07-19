@@ -11,12 +11,12 @@ import java.io.OutputStream;
  */
 public class DevNullOutputStream extends OutputStream {
 
-	public DevNullOutputStream() {
-		super();
-	}
+    public DevNullOutputStream() {
+	super();
+    }
 
-	public void write(int b) throws IOException {
-		// nothing
-	}
+    public void write(int b) throws IOException {
+	// nothing
+    }
 
 }

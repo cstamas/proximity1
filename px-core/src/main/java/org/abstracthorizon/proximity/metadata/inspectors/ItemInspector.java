@@ -7,10 +7,10 @@ import org.abstracthorizon.proximity.ItemProperties;
 
 public interface ItemInspector {
 
-	boolean isHandled(ItemProperties ip);
+    boolean isHandled(ItemProperties ip);
 
-	List getIndexableKeywords();
+    List getIndexableKeywords();
 
-	void processItem(ItemProperties ip, File file);
+    void processItem(ItemProperties ip, File file);
 
 }
