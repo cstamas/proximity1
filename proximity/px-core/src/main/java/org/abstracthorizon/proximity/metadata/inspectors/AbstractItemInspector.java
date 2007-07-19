@@ -5,6 +5,6 @@ import org.slf4j.LoggerFactory;
 
 public abstract class AbstractItemInspector implements ItemInspector {
 
-	protected Logger logger = LoggerFactory.getLogger(this.getClass());
+    protected Logger logger = LoggerFactory.getLogger(this.getClass());
 
 }

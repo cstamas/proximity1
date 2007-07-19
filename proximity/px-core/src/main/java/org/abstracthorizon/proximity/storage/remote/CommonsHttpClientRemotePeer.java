@@ -237,10 +237,10 @@ public class CommonsHttpClientRemotePeer extends AbstractRemoteStorage {
 		    // is it a file?
 		    // TODO: fix for #93 ticket?
 		    // Asking GET methods getPath() after execution will
-                        // result
+		    // result
 		    // in ACTUAL
 		    // path after eventual redirection. So, it will end with
-                        // "/"
+		    // "/"
 		    // if it is a dir.
 		    if (!get.getPath().endsWith(ItemProperties.PATH_SEPARATOR)) {
 			// if (get.getResponseHeader("last-modified") != null) {

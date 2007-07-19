@@ -17,63 +17,64 @@ import org.abstracthorizon.proximity.storage.StorageException;
  */
 public interface Indexer extends Searchable {
 
-	/**
-	 * Returns the indexers instance of proximity.
-	 * @return
-	 */
-	Proximity getProximity();
-	
-	/**
-	 * Sets the proximity instance.
-	 * 
-	 * @param proximity
-	 */
-	void setProximity(Proximity proximity);
+    /**
+         * Returns the indexers instance of proximity.
+         * 
+         * @return
+         */
+    Proximity getProximity();
 
-	/**
-	 * Initialize the current indexer implementation.
-	 * 
-	 */
-	public void initialize();
+    /**
+         * Sets the proximity instance.
+         * 
+         * @param proximity
+         */
+    void setProximity(Proximity proximity);
 
-	/**
-	 * Adds ItemProperties to index.
-	 * 
-	 * @param ip
-	 * @throws StorageException
-	 */
-	void addItemProperties(ItemProperties ip) throws StorageException;
+    /**
+         * Initialize the current indexer implementation.
+         * 
+         */
+    public void initialize();
 
-	/**
-	 * Adds a list of ItemProperties to index.
-	 * 
-	 * @param itemProperties
-	 * @throws StorageException
-	 */
-	void addItemProperties(List itemProperties) throws StorageException;
+    /**
+         * Adds ItemProperties to index.
+         * 
+         * @param ip
+         * @throws StorageException
+         */
+    void addItemProperties(ItemProperties ip) throws StorageException;
 
-	/**
-	 * Removes ItemProperties from index.
-	 * 
-	 * @param ip
-	 * @throws ItemNotFoundException
-	 * @throws StorageException
-	 */
-	void deleteItemProperties(ItemProperties ip) throws StorageException;
+    /**
+         * Adds a list of ItemProperties to index.
+         * 
+         * @param itemProperties
+         * @throws StorageException
+         */
+    void addItemProperties(List itemProperties) throws StorageException;
 
-	// ============================================================================================
-	// Maintenance
+    /**
+         * Removes ItemProperties from index.
+         * 
+         * @param ip
+         * @throws ItemNotFoundException
+         * @throws StorageException
+         */
+    void deleteItemProperties(ItemProperties ip) throws StorageException;
 
-	/**
-	 * Forces reindex of repositories.
-	 * 
-	 */
-	void reindex();
+    // ============================================================================================
+    // Maintenance
 
-	/**
-	 * Forces reindex of repository.
-	 * 
-	 */
-	void reindex(String repoId) throws NoSuchRepositoryException;
+    /**
+         * Forces reindex of repositories.
+         * 
+         */
+    void reindex();
+
+    /**
+         * Forces reindex of repository.
+         * 
+         */
+    void reindex(String repoId) throws NoSuchRepositoryException;
 
 }
