@@ -249,7 +249,7 @@ public class CommonsHttpClientRemotePeer extends AbstractRemoteStorage {
 			FileOutputStream fos = new FileOutputStream(tmpFile);
 			try {
 			    InputStream is = get.getResponseBodyAsStream();
-			    if ("gzip".equals(get.getResponseHeader("content-encoding"))) {
+			    if ("gzip".equals(get.getResponseHeader("Content-Encoding").getValue())) {
 				is = new GZIPInputStream(is);
 			    }
 
