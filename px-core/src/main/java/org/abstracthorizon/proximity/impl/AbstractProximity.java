@@ -23,6 +23,7 @@ import org.abstracthorizon.proximity.RepositoryNotAvailableException;
 import org.abstracthorizon.proximity.access.AccessManager;
 import org.abstracthorizon.proximity.access.OpenAccessManager;
 import org.abstracthorizon.proximity.events.ProximityRequestEvent;
+import org.abstracthorizon.proximity.mapping.GroupRequestMapper;
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,6 +46,8 @@ public abstract class AbstractProximity implements Proximity, ProximityRequestLi
 
     private AccessManager accessManager = new OpenAccessManager();
 
+    private GroupRequestMapper groupRequestMapper;
+
     private Vector requestListeners = new Vector();
 
     public boolean isEmergeRepositoryGroups() {
@@ -61,6 +64,14 @@ public abstract class AbstractProximity implements Proximity, ProximityRequestLi
 
     public void setAccessManager(AccessManager accessManager) {
 	this.accessManager = accessManager;
+    }
+
+    public GroupRequestMapper getGroupRequestMapper() {
+	return groupRequestMapper;
+    }
+
+    public void setGroupRequestMapper(GroupRequestMapper groupRequestMapper) {
+	this.groupRequestMapper = groupRequestMapper;
     }
 
     public List getRepositories() {
@@ -425,6 +436,11 @@ public abstract class AbstractProximity implements Proximity, ProximityRequestLi
 	    NoSuchRepositoryException {
 	if (repositoryGroups.containsKey(groupId)) {
 	    List repositoryGroupOrder = (List) repositoryGroups.get(groupId);
+
+	    if (getGroupRequestMapper() != null) {
+		repositoryGroupOrder = getGroupRequestMapper().getMappedRepositories(groupId, request, repositoryGroupOrder);
+	    }
+
 	    for (Iterator i = repositoryGroupOrder.iterator(); i.hasNext();) {
 		String reposId = (String) i.next();
 		try {
@@ -432,7 +448,7 @@ public abstract class AbstractProximity implements Proximity, ProximityRequestLi
 		    Item item = repo.retrieveItem(request);
 		    return item;
 		} catch (RepositoryNotAvailableException ex) {
-		    logger.info("Repository unavailable", ex);
+		    logger.info("Repository {} unavailable, skipping it.", reposId);
 		} catch (ItemNotFoundException ex) {
 		    logger.debug(request.getPath() + " not found in repository " + reposId);
 		}

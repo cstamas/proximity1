@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.abstracthorizon.proximity.access.AccessManager;
+import org.abstracthorizon.proximity.mapping.GroupRequestMapper;
 
 /**
  * The Proximity interface.
@@ -101,7 +102,22 @@ public interface Proximity extends ProximityRequestMulticaster {
          * @param emergeGroups
          *                set to true if you want group emerge.
          */
+
     void setEmergeRepositoryGroups(boolean emergeGroups);
+
+    /**
+         * Mapping of the group based requests to repositories.
+         * 
+         * @return the actual mapping
+         */
+    public GroupRequestMapper getGroupRequestMapper();
+
+    /**
+         * Mapping of the group based requests to repositories.
+         * 
+         * @param groupRequestMapper
+         */
+    public void setGroupRequestMapper(GroupRequestMapper groupRequestMapper);
 
     // ============================================================================================
     // Proxy stuff
