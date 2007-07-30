@@ -54,10 +54,10 @@ public class PathBasedGroupRequestMapper implements GroupRequestMapper {
 	// at the end, if the list is empty, add all repos
 	// if reposList is empty, return original list
 	if (reposList.isEmpty()) {
-	    logger.info("No mapping exists for request path, using all repository group members for request.");
+	    logger.debug("No mapping exists for request path, using all repository group members for request.");
 	    return originalRepositoryGroupOrder;
 	} else {
-	    logger.info("Request path is mapped, using only {} group members for request.", reposList.toString());
+	    logger.info("Request path in group {} is mapped, using only {} group members for request.", reposList.toString());
 	    return reposList;
 	}
     }
