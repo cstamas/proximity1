@@ -16,6 +16,9 @@
 		<property name="triggers">
 			<list>
 				<ref bean="reindexerTrigger" />
+				<!--
+				<ref bean="inhouseReindexerTrigger" />
+				-->
 				<ref bean="snapshotRemoverTrigger" />
 			</list>
 		</property>
@@ -46,18 +49,38 @@
 			value="Job for reindexing all registered repositories on regular basis." />
 		<property name="jobDataAsMap">
 			<map>
-				<entry key="proximity">
-					<ref bean="proximity" />
-				</entry>
 				<entry key="indexer">
 					<ref bean="proximity.indexer" />
 				</entry>
-				<!--  Shut down, nonfunctional currently
-					<entry key="statisticGatherer"><ref bean="proximity.statisticsGatherer"/></entry>
-				-->
 			</map>
 		</property>
 	</bean>
+
+	<!--
+		Inhouse reindexer job
+	<bean id="inhouseReindexerTrigger"
+		class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="inhouseReindexerJob" />
+		<property name="cronExpression" value="0 0 3 * * ?" />
+	</bean>
+	<bean name="inhouseReindexerJob"
+		class="org.springframework.scheduling.quartz.JobDetailBean">
+		<property name="jobClass"
+			value="org.abstracthorizon.proximity.scheduler.jobs.RepositoryReindexerJob" />
+		<property name="description"
+			value="Job for reindexing inhouse repository on regular basis." />
+		<property name="jobDataAsMap">
+			<map>
+				<entry key="indexer">
+					<ref bean="proximity.indexer" />
+				</entry>
+				<entry key="repositoryId">
+					<value>inhouse</value>
+				</entry>
+			</map>
+		</property>
+	</bean>
+	-->
 
 	<!--
 		Maven old snapshot remover job
@@ -82,9 +105,12 @@
 				<entry key="indexer">
 					<ref bean="proximity.indexer" />
 				</entry>
-				<!--  Shut down, nonfunctional currently
-					<entry key="statisticGatherer"><ref bean="proximity.statisticsGatherer"/></entry>
-				-->
+				<entry key="minCountOfSnapshotsToKeep">
+					<value>5</value>
+				</entry>
+				<entry key="removeSnapshotsOlderThanDays">
+					<value>7</value>
+				</entry>
 			</map>
 		</property>
 	</bean>

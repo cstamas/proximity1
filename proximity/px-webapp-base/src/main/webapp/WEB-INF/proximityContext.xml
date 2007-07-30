@@ -46,6 +46,7 @@
 		class="org.abstracthorizon.proximity.impl.LogicDrivenProximityImpl">
 		<property name="accessManager" ref="proximity.accessManager" />
 		<property name="proximityLogic" ref="proximity.logic" />
+		<property name="groupRequestMapper" ref="proximity.groupRequestMapper"/>
 		<property name="emergeRepositoryGroups" value="true" />
 		<property name="repositories">
 			<list>
@@ -59,6 +60,38 @@
 				<ref bean="inhouse" />
 				<ref bean="inhouse.snapshot" />
 			</list>
+		</property>
+	</bean>
+
+	<!--
+		- GroupRequestMapper, helps to reduce group searches to known ones.
+	-->
+	<bean id="proximity.groupRequestMapper"
+		class="org.abstracthorizon.proximity.mapping.PathBasedGroupRequestMapper">
+		<property name="inclusions">
+			<map>
+				<entry key="public">
+					<list>
+						<value>
+							/com/company/someproject/.*=extNonFree
+						</value>
+					</list>
+				</entry>
+			</map>
+		</property>
+		<property name="exclusions">
+			<map>
+				<entry key="public">
+					<list>
+						<value>
+							/com/company/someproject/.*=central,extFree
+						</value>
+						<value>
+							/com/company/otherproject/.*=central
+						</value>
+					</list>
+				</entry>
+			</map>
 		</property>
 	</bean>
 
