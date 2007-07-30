@@ -213,6 +213,7 @@ public class SupportController extends MultiActionController {
 		context.put("emergeRepositoryGroups", Boolean.valueOf(getProximity().isEmergeRepositoryGroups()));
 		context.put("repositories", getProximity().getRepositories());
 		context.put("repositoryGroups", getProximity().getRepositoryGroups());
+		context.put("groupRequestMapper", getProximity().getGroupRequestMapper());
 		return new ModelAndView("repositories", "context", context);
 	}
 

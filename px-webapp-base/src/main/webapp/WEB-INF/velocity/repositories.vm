@@ -28,6 +28,40 @@
                   <ul>
                 </td>
         </tr>
+        <tr class="tda" onmouseover="return escape('#springMessage('repositories.proximity.groupmapping.help')')">
+                <td colspan="1">#springMessage("repositories.proximity.groupmapping")</td>
+                <td colspan="1">
+                  <ul>
+                  <li><b>#springMessage("repositories.proximity.groupmapping.inclusions")</b>
+                  <ul>
+			        #foreach($groupId in ${context.get('groupRequestMapper').getInclusions().keySet()})
+		               <li>#springMessage("repositories.proximity.groupmapping.groupId") ${groupId}
+		               <ol>
+		               #foreach($mapping in ${context.get('groupRequestMapper').getInclusions().get($groupId)})
+		                 <li>${mapping}</li>
+		               #end
+		               </ol>
+		               </li>
+			        #end
+			      </ul>
+			      </li>
+
+                  <li><b>#springMessage("repositories.proximity.groupmapping.exclusions")</b>
+                  <ul>
+			        #foreach($groupId in ${context.get('groupRequestMapper').getExclusions().keySet()})
+		               <li>#springMessage("repositories.proximity.groupmapping.groupId") ${groupId}
+		               <ol>
+		               #foreach($mapping in ${context.get('groupRequestMapper').getExclusions().get($groupId)})
+		                 <li>${mapping}</li>
+		               #end
+		               </ol>
+		               </li>
+			        #end
+			      </ul>
+			      </li>
+                  <ul>
+                </td>
+        </tr>
         <tr class="tda" onmouseover="return escape('#springMessage('repositories.proximity.repogrouplist.help')')">
                 <td colspan="1">#springMessage("repositories.proximity.repogrouplist")</td>
                 <td colspan="1">
