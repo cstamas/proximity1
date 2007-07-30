@@ -191,23 +191,6 @@ public class CommonsHttpClientRemotePeer extends AbstractRemoteStorage {
 	this.retrievalRetryCount = retrievalRetryCount;
     }
 
-    /**
-         * @deprecated
-         */
-    public void setFollowRedirection(boolean followRedirection) {
-	logger.warn("Attribute followRedirection is deprecated." + "Your setting will be overridden with TRUE!");
-	// this.followRedirection = followRedirection;
-    }
-
-    /**
-         * @deprecated
-         */
-    public boolean isFollowRedirection() {
-	// TODO: fix of issue #93. Redirection is always active.
-	// return followRedirection;
-	return true;
-    }
-
     public boolean containsItemProperties(String path) {
 	return containsItem(path);
     }
@@ -249,7 +232,8 @@ public class CommonsHttpClientRemotePeer extends AbstractRemoteStorage {
 			FileOutputStream fos = new FileOutputStream(tmpFile);
 			try {
 			    InputStream is = get.getResponseBodyAsStream();
-			    if ("gzip".equals(get.getResponseHeader("Content-Encoding").getValue())) {
+			    if (get.getResponseHeader("Content-Encoding") != null
+				    && "gzip".equals(get.getResponseHeader("Content-Encoding").getValue())) {
 				is = new GZIPInputStream(is);
 			    }
 
