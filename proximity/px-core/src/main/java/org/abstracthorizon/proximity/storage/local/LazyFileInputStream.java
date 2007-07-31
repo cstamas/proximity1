@@ -33,7 +33,9 @@ public class LazyFileInputStream extends InputStream {
     }
 
     public void close() throws IOException {
-	fis.close();
+	if (fis != null) {
+	    fis.close();
+	}
     }
 
 }
