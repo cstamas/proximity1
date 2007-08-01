@@ -18,6 +18,7 @@
 	<skin>
 		<groupId>org.apache.maven.skins</groupId>
 		<artifactId>maven-stylus-skin</artifactId>
+		<version>1.0.1</version>
 	</skin>
 
 	<body>
@@ -36,8 +37,6 @@
 		</head>
 
 		<links>
-			<item name="Abstract Horizon"
-				href="http://www.abstracthorizon.org/" />
 			<item name="Proximity Wiki"
 				href="http://trac.abstracthorizon.org/proximity/" />
 			<item name="Proximity Support Forum"
@@ -50,19 +49,13 @@
 
 		<menu name="Proximity">
 			<item name="About" href="index.html" />
-			<item name="Features in brief" href="about-proximity.html" />
 			<item name="Download" href="downloads.html" />
+			<item name="Features in brief" href="about-proximity.html" />
 		</menu>
 
-		<menu name="Guides">
-			<item name="Quick Start" href="quick-start.html" />
+		<menu name="Configuration">
 			<item name="Deployment" href="deployment-guide.html" />
 			<item name="Using Proximity" href="using-proximity.html" />
-			<item name="Chaining Proximity"
-				href="chaining-proximity.html" />
-			<item name="About repositories" href="repositories.html" />
-			<item name="Corporate Environments"
-				href="corporate-environment.html" />
 			<item name="HTTP Proxies" href="http-proxies.html" />
 			<item name="Configuring Proximity"
 				href="configuration.html" />
@@ -70,6 +63,15 @@
 				href="repository-configuration.html" />
 			<item name="Configuration Reference"
 				href="factory-conf.html" />
+		</menu>
+
+		<menu name="Guides">
+			<item name="Quick Start" href="quick-start.html" />
+			<item name="Chaining Proximity"
+				href="chaining-proximity.html" />
+			<item name="About repositories" href="repositories.html" />
+			<item name="Corporate Environments"
+				href="corporate-environment.html" />
 		</menu>
 
 		<menu name="For developers">

@@ -20,6 +20,8 @@
 
 	<!-- a short but descriptive name for the project -->
 	<name>Px Webapp Base</name>
+	
+	<description>This module makes the base of the Proximity J2EE Web Application.</description>
 
 	<dependencies>
 

@@ -7,41 +7,67 @@
 
 <body>
 
-<section name="Proximity">
-
      <div id="downloadbox">
         <h5>Download latest Proximity</h5>
-        <p>
           <a href="downloads.html">
             <img valign="top" src="images/folder-remote.png" border="0" alt="" title="download"/>
             Download
           </a>
           Proximity
-          <small>(current is RC8)</small>
-        </p>
+          <small>(current is 1.0.0)</small>
         <ul>
           <li>
             Read <a href="quick-start.html">Quick Start</a>
           </li>
           <li>
-            Use <a href="http://trac.abstracthorizon.org/proximity/">Proximity WIKI</a>
+            Visit <a href="http://trac.abstracthorizon.org/proximity/">Proximity WIKI</a>
           </li>
           <li>
-            Use <a href="http://forum.abstracthorizon.org/index.php?c=9">Proximity Support Forum</a>
+            Visit <a href="http://forum.abstracthorizon.org/">Proximity Support Forum</a>
           </li>
         </ul>
       </div>
 
+<section name="About Proximity">
+
 <p>Proximity is in function somewhere between http-proxy and
-proactive-mirror. Proximity <b>is not</b> HTTP Proxy. Proximity requires Java 1.4.2 platform and is a standard J2EE Web Application
+proactive-mirror: it is Maven proxy. Proximity <b>is not</b> a HTTP Proxy (something like Squid is). 
+Proximity requires Java 1.4.2 platform and is a standard J2EE Web Application
 (altough, the px-core, the engine is pure J2SE application).</p>
 
-<p>One of it's primary use is as Java web application to serve as maven proxy on our
+<p>One of it's primary use is as Java web application to serve as Maven proxy on our
 company's intranet. As for reducing outgoing traffic (caching central and other
 maven repos), aggregating more repositories (reducing project config) with acting
 as one logical repository and for publishing in-house and other external maven 
 artifacts which are not uploadable to ibiblio (like commercial projects, J2EE
 Jars, etc...).</p>
+
+<subsection name="What is Proximity?">
+
+<p>Proximity (px-core) is a generic fetch-and-cache engine with various extra capabilities like
+indexing. The Px-Core module is driven by Maven bindings (px-core-maven) to implement a Maven 
+Proxy application behaviour.</p>
+
+<p>You can look at Proximity as something that comes "in parts" (IKEA furniture, LEGO, etc).
+While Proximity delivers itself in "default" flavour and various packaging (bundled and WAR), that should suffice the
+most of Maven2 developer needs, Proximity is actually just a "bunch of beans", with
+various local and remote peer implementations (you can reach "central" repo even over
+FTP, did you know that?). It's like a toolbox, and it is left to you to do the assembling part of it (or just
+use the "preassembled" defaults).</p>
+
+<p>Proximity heavily uses the IoC capabilities of the latest containers, this is the reason of it's most
+hated (hard to re/configure) or beloved (easy to adapt to any needs) nature. Proximity is container
+independent. The default container used with Proximity is Spring Framework, but the are existing
+instances working in Plexus too.</p>
+
+<p>The main thing behind "hard to configure" is these two reasons:</p>
+
+<ul>
+  <li>Container independent</li>
+  <li>Proximity <b>is proper configuration</b> of px-core, px-core-maven and other modules as a whole.</li>
+</ul>
+
+</subsection>
 
 <subsection name="Proximity places">
 
@@ -51,9 +77,11 @@ Jars, etc...).</p>
 	<li><a href="http://proximity.abstracthorizon.org:12000/px-webapp">Proximity Demo LIVE Site</a>.</li>
 	<li><a href="quick-start.html">Quick Start for Proximity</a>.</li>
 	<li><a href="http://trac.abstracthorizon.org/proximity/">Proximity WIKI</a>
-		for news, newest docs and issue tracking.</li>
-	<li><a href="http://forum.abstracthorizon.org/index.php?c=9">Support Forum</a>.</li>
+		for news, newest docs, timeline and issue tracking.</li>
+	<li><a href="http://forum.abstracthorizon.org/">Support Forum</a>.</li>
+<!-- 
 	<li><a href="http://ci.abstracthorizon.org/continuum">Continuum</a> for CI, but it deploys under <a href="http://proximity.abstracthorizon.org:12000/px-webapp">Proximity Demo Site</a> into <b>inhouse.snapshots</b> repository.</li>
+-->
 </ul>
 
 </subsection>

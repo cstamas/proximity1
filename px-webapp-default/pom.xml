@@ -21,6 +21,10 @@
 	<!-- a short but descriptive name for the project -->
 	<name>Px Webapp (Default)</name>
 
+	<description>
+		The default "flavour" of Proximity J2EE Web Application.
+	</description>
+
 	<dependencies>
 
 		<dependency>

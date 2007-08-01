@@ -382,19 +382,19 @@
 	<build>
 		<pluginManagement>
 			<plugins>
-<!--
-				<plugin>
+				<!--
+					<plugin>
 					<groupId>org.codehaus.mojo</groupId>
 					<artifactId>cobertura-maven-plugin</artifactId>
 					<executions>
-						<execution>
-							<goals>
-								<goal>clean</goal>
-							</goals>
-						</execution>
+					<execution>
+					<goals>
+					<goal>clean</goal>
+					</goals>
+					</execution>
 					</executions>
-				</plugin>
--->
+					</plugin>
+				-->
 				<plugin>
 					<artifactId>maven-release-plugin</artifactId>
 					<configuration>
@@ -471,18 +471,21 @@
 			<id>abstracthorizon.snapshot</id>
 			<name>Abstract Horizon Central Development Repository</name>
 			<!-- 
-			<url>
-				dav:http://localhost:8080/proximity/dav/inhouse.snapshot
-			</url>
-			-->
 				<url>
-				scp://213.232.95.19/srv/213.232.95.142/html/repository/maven2/abstracthorizon.snapshot
+				dav:http://localhost:8080/proximity/dav/inhouse.snapshot
 				</url>
+			-->
+			<url>
+				scp://213.232.95.19/srv/213.232.95.142/html/repository/maven2/abstracthorizon.snapshot
+			</url>
 		</snapshotRepository>
 		<site>
 			<id>abstracthorizon.site</id>
 			<url>
 				scp://213.232.95.19/srv/abstracthorizon.org/html/proximity
+				<!--
+					file:/home/cstamas/tmp/px-site
+				-->
 			</url>
 		</site>
 	</distributionManagement>
