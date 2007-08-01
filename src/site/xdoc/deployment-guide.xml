@@ -35,21 +35,17 @@ see <a href="configuration.html">Configuration</a>.</p>
 
 <section name="Deployment guide for bundled packaging">
 
-<subsection name="Proximity Extend bundle">
+<h3>Proximity Extend bundle</h3>
 
 <p>Just unzip the package, and you will have a Extend with Proximity configured.</p>
 
 <p>Use the provided shell scripts to start it up.</p>
 
-</subsection>
-
-<subsection name="Proximity Jetty bundle">
+<h3>Proximity Jetty bundle</h3>
 
 <p>Just unzip the package, and you will have a Jetty with Proximity configured.</p>
 
 <p>Use the provided shell scripts to start it up.</p>
-
-</subsection>
 
 </section>
 
@@ -65,7 +61,7 @@ is log4j.</p>
 
 <p>Now, we will see some web container specific tasks for Proximity deployment.</p>
 
-<subsection name="Apache Tomcat">
+<h3>Apache Tomcat</h3>
 
 <p>Proximity has been extensively tested on Tomcat 5.5.x line. For deployment on Tomcat, you simply need 
 to "drop" the WAR file in $CATALINA_HOME/webapps directory, or better, unzip it into 
@@ -79,9 +75,7 @@ as described on SLF4J site.</li>
 <p>Advanced users may edit the configuration files. Also, please
 review the logging settings (Log4j currently), since it may not be suited your needs!</p>
 
-</subsection>
-
-<subsection name="Jetty">
+<h3>Jetty</h3>
 
 <p>Proximity has been extensively tested on Jetty 6.1.x line.</p>
 
@@ -89,8 +83,6 @@ review the logging settings (Log4j currently), since it may not be suited your n
 
 <p>Advanced users may edit the configuration files. Also, please
 review the logging settings (Log4j currently), since it may not be suited your needs!</p>
-
-</subsection>
 
 </section>
 
