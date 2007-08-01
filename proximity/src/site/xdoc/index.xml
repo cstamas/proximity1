@@ -42,7 +42,7 @@ as one logical repository and for publishing in-house and other external maven
 artifacts which are not uploadable to ibiblio (like commercial projects, J2EE
 Jars, etc...).</p>
 
-<subsection name="What is Proximity?">
+<h3>What is Proximity?</h3>
 
 <p>Proximity (px-core) is a generic fetch-and-cache engine with various extra capabilities like
 indexing. The Px-Core module is driven by Maven bindings (px-core-maven) to implement a Maven 
@@ -67,14 +67,14 @@ instances working in Plexus too.</p>
   <li>Proximity <b>is proper configuration</b> of px-core, px-core-maven and other modules as a whole.</li>
 </ul>
 
-</subsection>
-
-<subsection name="Proximity places">
+<h3>Proximity places</h3>
 
 <p>Places to visit to get a grasp about Proximity:</p>
 
 <ul>
+<!--
 	<li><a href="http://proximity.abstracthorizon.org:12000/px-webapp">Proximity Demo LIVE Site</a>.</li>
+-->
 	<li><a href="quick-start.html">Quick Start for Proximity</a>.</li>
 	<li><a href="http://trac.abstracthorizon.org/proximity/">Proximity WIKI</a>
 		for news, newest docs, timeline and issue tracking.</li>
@@ -83,8 +83,6 @@ instances working in Plexus too.</p>
 	<li><a href="http://ci.abstracthorizon.org/continuum">Continuum</a> for CI, but it deploys under <a href="http://proximity.abstracthorizon.org:12000/px-webapp">Proximity Demo Site</a> into <b>inhouse.snapshots</b> repository.</li>
 -->
 </ul>
-
-</subsection>
 
 </section>
 
