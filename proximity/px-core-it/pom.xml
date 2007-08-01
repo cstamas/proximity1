@@ -18,6 +18,8 @@
 	<!-- a short but descriptive name for the project -->
 	<name>Px Core IT</name>
 
+	<description>Some integration tests of Core module.</description>
+
 	<dependencies>
 
 		<!--  Dear god! Who had foreseen that logging will become such an issue? -->

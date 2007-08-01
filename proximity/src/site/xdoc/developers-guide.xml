@@ -11,18 +11,47 @@
 
 <p>This Guide is <b>work in progress</b>.</p>
 
-<subsection name="Using Eclipse to develop Proximity">
+<subsection name="Using Eclipse 3.x to develop Proximity">
 
-<p>If you checkout Proximity from subversion /trunk (see <a href="source-repository.html">here</a>), you
+<p>You will need the following things to hop in:</p>
+
+<ul>
+  <li>JDK 1.4.2+</li>
+  <li>Eclipse 3.x</li>
+  <li>Latest Maven 2.0.x</li>
+  <li>Subversion client - to access SVN repository. Either "standalone" svn, kdesvn, TortoiseSVN, or even Eclipse plug-in like Subversion or Subclipse.</li>
+</ul>
+
+<p>You should checkout Proximity sources from Subversion (see <a href="source-repository.html">here</a>), and you
 will get complete sources. Next, you will want to do:</p>
 
 <source>
-  $ mvn eclipse:eclipse -DwtpVersion=1.0 -DdownloadSources=true
+  $ mvn eclipse:clean eclipse:eclipse -DdownloadSources=true
 </source>
 
-<p>And you will able to import all modules into Eclipse as Eclipse projects.</p>
+<p>And you will able to import all modules into Eclipse as Eclipse projects using File -> Import -> Existing Projects into Workspace menu.</p>
 
-<p>Any bugfix/enhancement patch is welcome!</p>
+<p>You will need to define a classpath variable M2_REPO pointing to your local M2 repository (usually ~/.m2/repository on Linux).</p>
+
+</subsection>
+
+<subsection name="Using NetBeans 5.x to develop Proximity">
+
+<p>You will need the following things
+to join:</p>
+
+<ul>
+  <li>JDK 1.4.2+</li>
+  <li>NetBeans 5.x (RECOMMENDED: The currently greatest Maven IDE integration, MevenIDE for NetBeans.)</li>
+  <li>Latest Maven 2.0.x</li>
+  <li>Subversion client - to access SVN repository. Either "standalone" svn, kdesvn, TortoiseSVN, or even NetBeans SVN plug-in.</li>
+</ul>
+
+<p>You should checkout Proximity sources from Subversion (see <a href="source-repository.html">here</a>), and you
+will get complete sources.</p>
+
+<p>And, now - thanks to MevenIDE - you just open the Proximity parent dir as any other NetBeans projects, and MevenIDE
+will sort out all other little thingies! Very cool!</p>
 
 </subsection>
 

@@ -21,6 +21,8 @@
 
 	<!-- a short but descriptive name for the project -->
 	<name>Px Scheduler</name>
+	
+	<description>The Scheduler module for Proximity.</description>
 
 	<dependencies>
 

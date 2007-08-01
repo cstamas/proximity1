@@ -7,53 +7,88 @@
 
 <body>
 
-<section name="Deployment guide">
+<section name="The release packaging and flavours">
 
-<p>This Guide is <b>work in progress</b>. Packaging will change soon. Currently, only a WAR package is being created.</p>
-
-<p>The prepackaged WARs comes with following general configurations (for details see 
-<a href="factory-conf.html">Proximity Default Configuration</a>):</p>
+<p>Proximity is released in public in various packagings:</p>
 
 <ul>
-<li>The root of proximity storages are in <b>user home</b> directory.</li>
+  <li>Proximity/Extend - Proximity bundled with Extend appserver.</li>
+  <li>Proximity/Jetty - Proximity bundled with Jetty webapp container.</li>
+  <li>WAR - The standard J2EE Web Application Archive format.</li>
 </ul>
 
-<p>Since Proximity uses SLF4J project for logging, see 
-<a href="http://www.slf4j.org/">SLF4J Site</a> for additional logging configuration possibilities.</p>
+<p>Proximity is released in public in various configurations (flavours):</p>
+
+<ul>
+  <li>default - The default general purpose configuration.</li>
+  <li>demosite - The configuration used for demoing. Not usable in real life.</li>
+  <li>minimal - The smallest working subset of Proximity (without indexing, search, artifact view, etc.).</li>
+  <li>pmaster - Proximity configured as "master" in chained configuration.</li>
+  <li>pslave - Proximity configured as "slave" in chained configuration.</li>
+</ul>
+
+<p>The "default" configuration should suffice in 90% cases (a rought estimate :). 
+For more information about configuring Proximity, 
+see <a href="configuration.html">Configuration</a>.</p>
+
+</section>
+
+<section name="Deployment guide for bundled packaging">
+
+<subsection name="Proximity Extend bundle">
+
+<p>Just unzip the package, and you will have a Extend with Proximity configured.</p>
+
+<p>Use the provided shell scripts to start it up.</p>
+
+</subsection>
+
+<subsection name="Proximity Jetty bundle">
+
+<p>Just unzip the package, and you will have a Jetty with Proximity configured.</p>
+
+<p>Use the provided shell scripts to start it up.</p>
+
+</subsection>
+
+</section>
+
+<section name="Deployment guide for WAR packaging">
+
+<p>Proximity is released as standard J2EE Web Application Archive (WAR). Due to default
+IoC container used (Spring Framework), it is a must to unpack the WAR before using it (Tomcat does it
+per default).</p>
+
+<p>Since Proximity uses SLF4J API for logging, see <a href="http://www.slf4j.org/">SLF4J Site</a> 
+for additional logging or deployment-time configuration possibilities. The default logging back-end
+is log4j.</p>
 
 <p>Now, we will see some web container specific tasks for Proximity deployment.</p>
 
 <subsection name="Apache Tomcat">
 
 <p>Proximity has been extensively tested on Tomcat 5.5.x line. For deployment on Tomcat, you simply need 
-to "drop" the WAR file in $CATALINA_HOME/webapps directory. Proximity may have problems with
-logging, see SLF4J documentation about it. You may need some additional steps:</p>
+to "drop" the WAR file in $CATALINA_HOME/webapps directory, or better, unzip it into 
+$CATALINA_HOME/webapps/proximity directory. You may need some additional steps:</p>
 
 <ul>
 <li>If you can, remove log4j.jar from Tomcat installation, or swap logger implementation during deployment,
 as described on SLF4J site.</li>
 </ul>
 
-<p>Advanced users may <b>unpack</b> the WAR and gain access to configuration files. Also, please
-review the logging settings (nLog4j currently), since it may not be suited your needs!</p>
+<p>Advanced users may edit the configuration files. Also, please
+review the logging settings (Log4j currently), since it may not be suited your needs!</p>
 
 </subsection>
 
 <subsection name="Jetty">
 
-<p>Proximity has been extensively tested on Jetty 6.1.1 line. For deployment on Jetty, you need some
-additional steps:</p>
+<p>Proximity has been extensively tested on Jetty 6.1.x line.</p>
 
-<ul>
-<li>Remove XercesImpl-2.6.2.jar from WAR, since it conflicts with Jetty's one.</li>
-</ul>
+<p>Simply "unpack" the WAR file in $JETTY_HOME/webapps/proximity directory.</p>
 
-<p>Finally, simply "drop" the WAR file in $JETTY_HOME/webapps directory.</p>
-
-<p>Advanced users may <b>unpack</b> the WAR and gain access to configuration files. Also, please
+<p>Advanced users may edit the configuration files. Also, please
 review the logging settings (Log4j currently), since it may not be suited your needs!</p>
-
-<p><b>NOTE:</b> On unreleased Jetty6 no steps are reqiured to deploy Proximity.</p>
 
 </subsection>
 

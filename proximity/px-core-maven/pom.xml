@@ -21,6 +21,8 @@
 	<!-- a short but descriptive name for the project -->
 	<name>Px Maven bindings</name>
 
+	<description>Maven2 bindings and specific stuff for Proximity.</description>
+
 	<dependencies>
 
 		<dependency>

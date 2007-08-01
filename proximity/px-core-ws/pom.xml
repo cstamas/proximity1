@@ -21,6 +21,8 @@
 
 	<!-- a short but descriptive name for the project -->
 	<name>Px Core exposed WS</name>
+	
+	<description>The WebService interface exported by XFire.</description>
 
 	<dependencies>
 

@@ -1,5 +1,5 @@
                            ----------------------
-                           Proximity and HTTP proxies
+                           HTTP proxies
                            ----------------------
                            Cservenak Tamas
                            ----------------------
@@ -8,9 +8,11 @@
 
 Proximity and HTTP Proxies
 
+  Proximity needs access to the Internet to fetch the files requested by users.
+
   In many corporate environments a HTTP Proxy is placed between inner (private) network and outer (public)
 Internet. Since Proximity uses {{{http://jakarta.apache.org/commons/httpclient/} Commons HttpClient}} as
-one of the remote repository implementation, all HTTP proxies supported by Commons HttpClient is transitively
+a default remote repository implementation, all HTTP proxies supported by Commons HttpClient is transitively
 supported by Proximity.
 
   Proximity offers the maximum of configurability by letting proxy configurations per remotePeer. Thus, for 
@@ -54,7 +56,7 @@ methods.
 
   That's completes the NTLM authentication HTTP proxy authentication setup.
   
-  <<IMPORTANT:>> Since Proximity relles for HTTP traffic completely on Apache Jakarta 
+  <<IMPORTANT:>> Since Proximity relies for HTTP traffic completely on Apache Jakarta 
 {{{http://jakarta.apache.org/commons/httpclient/} Commons HttpClient}} implementation, the proxy servers 
 supported by HttpClient are automatically supported by Proximity. One of known issue is broken NTLMv2 
 support for Microsoft ISA Proxy servers. For them, it is advisable to use BASIC or DIGEST authentication,

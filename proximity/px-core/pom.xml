@@ -17,6 +17,8 @@
 
 	<!-- POM packaging -->
 	<packaging>jar</packaging>
+	
+	<description>The Core module of the Proximity application.</description>
 
 	<!-- a short but descriptive name for the project -->
 	<name>Px Core</name>

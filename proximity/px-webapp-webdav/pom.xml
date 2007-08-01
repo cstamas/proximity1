@@ -21,6 +21,8 @@
 	<!-- a short but descriptive name for the project -->
 	<name>Px Webapp WebDAV Adapter</name>
 
+	<description>WebDAV adapter for Proximity.</description>
+
 	<dependencies>
 
 		<dependency>
