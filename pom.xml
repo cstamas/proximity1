@@ -150,7 +150,19 @@
 
 	<dependencyManagement>
 		<dependencies>
-			<!-- Use whichever SLF4J implementation -->
+			<!-- No Commons Logging hack, see http://day-to-day-stuff.blogspot.com/2007/07/no-more-commons-logging.html -->
+			<dependency>
+    				<groupId>commons-logging</groupId>
+	    			<artifactId>commons-logging</artifactId>
+		    		<version>99.0-does-not-exist</version>
+			</dependency>
+			<dependency>
+			        <groupId>commons-logging</groupId>
+			        <artifactId>commons-logging-api</artifactId>
+			        <version>99.0-does-not-exist</version>
+			</dependency>
+
+			<!-- Use SLF4J implementation -->
 			<dependency>
 				<groupId>org.slf4j</groupId>
 				<artifactId>slf4j-log4j12</artifactId>
@@ -186,72 +198,36 @@
 				<artifactId>spring-core</artifactId>
 				<version>${spring.version}</version>
 				<type>jar</type>
-				<exclusions>
-					<exclusion>
-						<artifactId>commons-logging</artifactId>
-						<groupId>commons-logging</groupId>
-					</exclusion>
-				</exclusions>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-beans</artifactId>
 				<version>${spring.version}</version>
 				<type>jar</type>
-				<exclusions>
-					<exclusion>
-						<artifactId>commons-logging</artifactId>
-						<groupId>commons-logging</groupId>
-					</exclusion>
-				</exclusions>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-context</artifactId>
 				<version>${spring.version}</version>
 				<type>jar</type>
-				<exclusions>
-					<exclusion>
-						<artifactId>commons-logging</artifactId>
-						<groupId>commons-logging</groupId>
-					</exclusion>
-				</exclusions>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-aop</artifactId>
 				<version>${spring.version}</version>
 				<type>jar</type>
-				<exclusions>
-					<exclusion>
-						<artifactId>commons-logging</artifactId>
-						<groupId>commons-logging</groupId>
-					</exclusion>
-				</exclusions>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-mock</artifactId>
 				<version>${spring.version}</version>
 				<type>jar</type>
-				<exclusions>
-					<exclusion>
-						<artifactId>commons-logging</artifactId>
-						<groupId>commons-logging</groupId>
-					</exclusion>
-				</exclusions>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-web</artifactId>
 				<version>${spring.version}</version>
 				<type>jar</type>
-				<exclusions>
-					<exclusion>
-						<artifactId>commons-logging</artifactId>
-						<groupId>commons-logging</groupId>
-					</exclusion>
-				</exclusions>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework</groupId>
@@ -259,10 +235,6 @@
 				<version>${spring.version}</version>
 				<type>jar</type>
 				<exclusions>
-					<exclusion>
-						<artifactId>commons-logging</artifactId>
-						<groupId>commons-logging</groupId>
-					</exclusion>
 					<exclusion>
 						<artifactId>struts</artifactId>
 						<groupId>struts</groupId>
@@ -274,24 +246,12 @@
 				<artifactId>spring-support</artifactId>
 				<version>${spring.version}</version>
 				<type>jar</type>
-				<exclusions>
-					<exclusion>
-						<artifactId>commons-logging</artifactId>
-						<groupId>commons-logging</groupId>
-					</exclusion>
-				</exclusions>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-dao</artifactId>
 				<version>${spring.version}</version>
 				<type>jar</type>
-				<exclusions>
-					<exclusion>
-						<artifactId>commons-logging</artifactId>
-						<groupId>commons-logging</groupId>
-					</exclusion>
-				</exclusions>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework</groupId>
@@ -299,12 +259,6 @@
 				<version>${spring.version}</version>
 				<type>jar</type>
 				<scope>test</scope>
-				<exclusions>
-					<exclusion>
-						<artifactId>commons-logging</artifactId>
-						<groupId>commons-logging</groupId>
-					</exclusion>
-				</exclusions>
 			</dependency>
 			<dependency>
 				<groupId>junit</groupId>
@@ -456,6 +410,12 @@
 			<url>
 				http://repository.abstracthorizon.org/maven2/abstracthorizon.snapshot
 			</url>
+		</repository>
+		<repository>
+    			<id>no-commons-logging</id>
+	    		<name>No-commons-logging Maven Repository</name>
+		        <layout>default</layout>
+			<url>http://no-commons-logging.zapto.org/mvn2</url>
 		</repository>
 	</repositories>
 

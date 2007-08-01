@@ -97,12 +97,6 @@
 			<version>1.8</version>
 			<type>jar</type>
 			<scope>runtime</scope>
-			<exclusions>
-				<exclusion>
-					<groupId>commons-logging</groupId>
-					<artifactId>commons-logging</artifactId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 
 		<!--  Velocity as view tech -->
@@ -123,10 +117,6 @@
 				<exclusion>
 					<groupId>struts</groupId>
 					<artifactId>struts</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>commons-logging</groupId>
-					<artifactId>commons-logging</artifactId>
 				</exclusion>
 			</exclusions>
 		</dependency>
