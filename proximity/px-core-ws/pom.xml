@@ -23,6 +23,10 @@
 	<name>Px Core exposed WS</name>
 	
 	<description>The WebService interface exported by XFire.</description>
+	
+	<properties>
+	    <xfire.version>1.2.6</xfire.version>
+	</properties>
 
 	<dependencies>
 
@@ -34,23 +38,17 @@
 		<dependency>
 			<groupId>org.codehaus.xfire</groupId>
 			<artifactId>xfire-core</artifactId>
-			<version>1.2.6</version>
-			<exclusions>
-				<exclusion>
-					<groupId>log4j</groupId>
-					<artifactId>log4j</artifactId>
-				</exclusion>
-			</exclusions>
+			<version>${xfire.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.codehaus.xfire</groupId>
 			<artifactId>xfire-aegis</artifactId>
-			<version>1.2.6</version>
+			<version>${xfire.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.codehaus.xfire</groupId>
 			<artifactId>xfire-spring</artifactId>
-			<version>1.2.6</version>
+			<version>${xfire.version}</version>
 			<exclusions>
 				<exclusion>
 					<groupId>org.springframework</groupId>

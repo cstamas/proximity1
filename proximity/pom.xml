@@ -165,10 +165,17 @@
 			<!-- Use SLF4J implementation -->
 			<dependency>
 				<groupId>org.slf4j</groupId>
-				<artifactId>slf4j-log4j12</artifactId>
+				<artifactId>slf4j-api</artifactId>
 				<version>1.4.2</version>
 				<type>jar</type>
 				<scope>compile</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-log4j12</artifactId>
+				<version>1.4.2</version>
+				<type>jar</type>
+				<scope>runtime</scope>
 			</dependency>
 			<!-- To Satisfy Spring JCL deps and our spring-inherited classes (scope:compile then!) -->
 			<dependency>
