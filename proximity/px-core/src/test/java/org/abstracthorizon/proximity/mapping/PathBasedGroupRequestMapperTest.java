@@ -23,8 +23,10 @@ public class PathBasedGroupRequestMapperTest extends TestCase {
 	incl.put("public", publicIncl);
 	Map excl = new HashMap();
 	List publicExcl = new ArrayList();
-	// publicExcl.add("/com/mycompany/.*=central");
+	publicExcl.add("/com/mycompany/.*=central");
 	publicExcl.add("/com/mycompany/alpha/.*=internal2");
+	publicExcl.add("/com/something/.*=internal2");
+	publicExcl.add("/.*=internal3");
 	excl.put("public", publicExcl);
 	mapper.setExclusions(excl);
 	mapper.setInclusions(incl);
@@ -36,6 +38,7 @@ public class PathBasedGroupRequestMapperTest extends TestCase {
 	reposes.add("central");
 	reposes.add("internal1");
 	reposes.add("internal2");
+	reposes.add("internal3");
 
 	ProximityRequest request = new ProximityRequest();
 	List result = null;
@@ -48,6 +51,15 @@ public class PathBasedGroupRequestMapperTest extends TestCase {
 	expectedResult.add("central");
 	expectedResult.add("internal1");
 	expectedResult.add("internal2");
+	System.out.println(result);
+	Assert.assertEquals(expectedResult, result);
+
+	request.setPath("/com/something/somewhere");
+	System.out.println(request.getPath());
+	result = mapper.getMappedRepositories("public", request, reposes);
+	expectedResult = new ArrayList();
+	expectedResult.add("central");
+	expectedResult.add("internal1");
 	System.out.println(result);
 	Assert.assertEquals(expectedResult, result);
 

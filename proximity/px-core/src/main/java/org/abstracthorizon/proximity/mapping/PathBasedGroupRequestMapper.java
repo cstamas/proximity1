@@ -13,30 +13,37 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class PathBasedGroupRequestMapper implements GroupRequestMapper {
-    
+
     protected Logger logger = LoggerFactory.getLogger(this.getClass());
-    
+
     private boolean compiled = false;
 
     private Map groupInclusionsPrepared = new HashMap();
-    
+
     private Map groupExclusionsPrepared = new HashMap();
 
     private Map groupInclusions = new HashMap();
-    
+
     private Map groupExclusions = new HashMap();
 
     public List getMappedRepositories(String groupId, ProximityRequest request, List originalRepositoryGroupOrder) {
 	if (!compiled) {
 	    compile();
 	}
-	List reposList = new ArrayList();
+	boolean mapped = false;
+	List reposList = new ArrayList(originalRepositoryGroupOrder);
 	// if include found, add it to the list.
 	if (groupInclusionsPrepared.containsKey(groupId)) {
 	    Map inclusions = (Map) groupInclusionsPrepared.get(groupId);
+	    boolean firstAdd = true;
 	    for (Iterator i = inclusions.keySet().iterator(); i.hasNext();) {
 		Pattern pattern = (Pattern) i.next();
 		if (pattern.matcher(request.getPath()).matches()) {
+		    if (firstAdd) {
+			reposList.clear();
+			firstAdd = false;
+		    }
+		    mapped = true;
 		    reposList.addAll((List) inclusions.get(pattern));
 		}
 	    }
@@ -47,21 +54,21 @@ public class PathBasedGroupRequestMapper implements GroupRequestMapper {
 	    for (Iterator i = exclusions.keySet().iterator(); i.hasNext();) {
 		Pattern pattern = (Pattern) i.next();
 		if (pattern.matcher(request.getPath()).matches()) {
+		    mapped = true;
 		    reposList.removeAll((List) exclusions.get(pattern));
 		}
 	    }
 	}
 	// at the end, if the list is empty, add all repos
 	// if reposList is empty, return original list
-	if (reposList.isEmpty()) {
+	if (!mapped) {
 	    logger.debug("No mapping exists in group {} for request path, using all repository group members for request.", groupId);
-	    return originalRepositoryGroupOrder;
 	} else {
 	    logger.info("Request path in group {} is mapped, using only {} group members for request.", groupId, reposList.toString());
-	    return reposList;
 	}
+	return reposList;
     }
-    
+
     protected void compile() {
 	HashMap res = new HashMap(groupInclusions.size());
 	for (Iterator i = groupInclusions.keySet().iterator(); i.hasNext();) {
@@ -101,7 +108,7 @@ public class PathBasedGroupRequestMapper implements GroupRequestMapper {
 	this.groupInclusions = inclusions;
 	this.compiled = false;
     }
-    
+
     public void setExclusions(Map exclusions) {
 	this.groupExclusions = exclusions;
 	this.compiled = false;
@@ -110,34 +117,34 @@ public class PathBasedGroupRequestMapper implements GroupRequestMapper {
     public Map getInclusions() {
 	return this.groupInclusions;
     }
-    
+
     public Map getExclusions() {
 	return this.groupExclusions;
     }
-    
+
     public String toString() {
 	StringBuffer sb = new StringBuffer();
 	sb.append("INCLUSIONS:\n");
 	Map inc = getInclusions();
-	for (Iterator groups = inc.keySet().iterator(); groups.hasNext(); ) {
+	for (Iterator groups = inc.keySet().iterator(); groups.hasNext();) {
 	    String groupId = (String) groups.next();
 	    List gInc = (List) inc.get(groupId);
-	    for (Iterator patterns = gInc.iterator(); patterns.hasNext(); ) {
+	    for (Iterator patterns = gInc.iterator(); patterns.hasNext();) {
 		sb.append(patterns.next());
 		sb.append("\n");
 	    }
-		
+
 	}
 	sb.append("EXCLUSIONS:\n");
 	Map exc = getExclusions();
-	for (Iterator groups = exc.keySet().iterator(); groups.hasNext(); ) {
+	for (Iterator groups = exc.keySet().iterator(); groups.hasNext();) {
 	    String groupId = (String) groups.next();
 	    List gExc = (List) exc.get(groupId);
-	    for (Iterator patterns = gExc.iterator(); patterns.hasNext(); ) {
+	    for (Iterator patterns = gExc.iterator(); patterns.hasNext();) {
 		sb.append(patterns.next());
 		sb.append("\n");
 	    }
-		
+
 	}
 	return sb.toString();
     }
