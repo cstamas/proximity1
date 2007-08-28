@@ -1,3 +1,20 @@
+/*
+
+   Copyright 2005-2007 Tamas Cservenak (t.cservenak@gmail.com)
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+
+ */
 package org.abstracthorizon.proximity.ws;
 
 import java.util.List;
@@ -11,46 +28,98 @@ import org.abstracthorizon.proximity.ProximityException;
 import org.abstracthorizon.proximity.ProximityRequest;
 import org.abstracthorizon.proximity.indexer.Indexer;
 
-public class SearchServiceImpl implements SearchService {
+// TODO: Auto-generated Javadoc
+/**
+ * The Class SearchServiceImpl.
+ */
+public class SearchServiceImpl
+    implements SearchService
+{
 
-	private Indexer indexer;
+    /** The indexer. */
+    private Indexer indexer;
 
-	private Proximity proximity;
+    /** The proximity. */
+    private Proximity proximity;
 
-	public Indexer getIndexer() {
-		return indexer;
-	}
+    /**
+     * Gets the indexer.
+     * 
+     * @return the indexer
+     */
+    public Indexer getIndexer()
+    {
+        return indexer;
+    }
 
-	public void setIndexer(Indexer indexer) {
-		this.indexer = indexer;
-	}
+    /**
+     * Sets the indexer.
+     * 
+     * @param indexer the new indexer
+     */
+    public void setIndexer( Indexer indexer )
+    {
+        this.indexer = indexer;
+    }
 
-	public Proximity getProximity() {
-		return proximity;
-	}
+    /**
+     * Gets the proximity.
+     * 
+     * @return the proximity
+     */
+    public Proximity getProximity()
+    {
+        return proximity;
+    }
 
-	public void setProximity(Proximity proximity) {
-		this.proximity = proximity;
-	}
+    /**
+     * Sets the proximity.
+     * 
+     * @param proximity the new proximity
+     */
+    public void setProximity( Proximity proximity )
+    {
+        this.proximity = proximity;
+    }
 
-	public ItemProperties[] listItems(ProximityRequest request) throws AccessDeniedException, NoSuchRepositoryException {
-		List result = getProximity().listItems(request);
-		return (ItemProperties[]) result.toArray(new ItemProperties[result.size()]);
-	}
+    /* (non-Javadoc)
+     * @see org.abstracthorizon.proximity.ws.SearchService#listItems(org.abstracthorizon.proximity.ProximityRequest)
+     */
+    public ItemProperties[] listItems( ProximityRequest request )
+        throws AccessDeniedException,
+            NoSuchRepositoryException
+    {
+        List result = getProximity().listItems( request );
+        return (ItemProperties[]) result.toArray( new ItemProperties[result.size()] );
+    }
 
-	public String[] getSearchableKeywords() {
-		Set result = getIndexer().getSearchableKeywords();
-		return (String[]) result.toArray(new String[result.size()]);
-	}
+    /* (non-Javadoc)
+     * @see org.abstracthorizon.proximity.ws.SearchService#getSearchableKeywords()
+     */
+    public String[] getSearchableKeywords()
+    {
+        Set result = getIndexer().getSearchableKeywords();
+        return (String[]) result.toArray( new String[result.size()] );
+    }
 
-	public ItemProperties[] searchItemByExample(ItemProperties example) throws ProximityException {
-		List result = getIndexer().searchByItemPropertiesExample(example);
-		return (ItemProperties[]) result.toArray(new ItemProperties[result.size()]);
-	}
+    /* (non-Javadoc)
+     * @see org.abstracthorizon.proximity.ws.SearchService#searchItemByExample(org.abstracthorizon.proximity.ItemProperties)
+     */
+    public ItemProperties[] searchItemByExample( ItemProperties example )
+        throws ProximityException
+    {
+        List result = getIndexer().searchByItemPropertiesExample( example );
+        return (ItemProperties[]) result.toArray( new ItemProperties[result.size()] );
+    }
 
-	public ItemProperties[] searchItemByQuery(String query) throws ProximityException {
-		List result = getIndexer().searchByQuery(query);
-		return (ItemProperties[]) result.toArray(new ItemProperties[result.size()]);
-	}
+    /* (non-Javadoc)
+     * @see org.abstracthorizon.proximity.ws.SearchService#searchItemByQuery(java.lang.String)
+     */
+    public ItemProperties[] searchItemByQuery( String query )
+        throws ProximityException
+    {
+        List result = getIndexer().searchByQuery( query );
+        return (ItemProperties[]) result.toArray( new ItemProperties[result.size()] );
+    }
 
 }
