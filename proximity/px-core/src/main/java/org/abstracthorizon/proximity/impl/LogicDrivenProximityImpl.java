@@ -1,3 +1,20 @@
+/*
+
+   Copyright 2005-2007 Tamas Cservenak (t.cservenak@gmail.com)
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+
+ */
 package org.abstracthorizon.proximity.impl;
 
 import java.io.IOException;
@@ -13,70 +30,113 @@ import org.abstracthorizon.proximity.ProximityRequest;
 import org.abstracthorizon.proximity.logic.DefaultProximityLogic;
 import org.abstracthorizon.proximity.logic.ProximityLogic;
 
-public class LogicDrivenProximityImpl extends AbstractProximity {
+// TODO: Auto-generated Javadoc
+/**
+ * The Class LogicDrivenProximityImpl.
+ */
+public class LogicDrivenProximityImpl
+    extends AbstractProximity
+{
 
+    /** The proximity logic. */
     private ProximityLogic proximityLogic = new DefaultProximityLogic();
 
-    public ProximityLogic getProximityLogic() {
-	return proximityLogic;
+    /**
+     * Gets the proximity logic.
+     * 
+     * @return the proximity logic
+     */
+    public ProximityLogic getProximityLogic()
+    {
+        return proximityLogic;
     }
 
-    public void setProximityLogic(ProximityLogic proximityLogic) {
-	this.proximityLogic = proximityLogic;
+    /**
+     * Sets the proximity logic.
+     * 
+     * @param proximityLogic the new proximity logic
+     */
+    public void setProximityLogic( ProximityLogic proximityLogic )
+    {
+        this.proximityLogic = proximityLogic;
     }
 
-    protected Item retrieveItemController(ProximityRequest request) throws ItemNotFoundException, AccessDeniedException, NoSuchRepositoryException {
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.abstracthorizon.proximity.impl.AbstractProximity#retrieveItemController(org.abstracthorizon.proximity.ProximityRequest)
+     */
+    protected Item retrieveItemController( ProximityRequest request )
+        throws ItemNotFoundException,
+            AccessDeniedException,
+            NoSuchRepositoryException
+    {
 
-	Item item = null;
+        Item item = null;
 
-	try {
+        try
+        {
 
-	    if (request.getTargetedReposId() != null) {
+            if ( request.getTargetedReposId() != null )
+            {
 
-		logger.debug("Going for targeted reposId {}", request.getTargetedReposId());
-		item = retrieveItemByRepoId(request.getTargetedReposId(), request);
+                logger.debug( "Going for targeted reposId {}", request.getTargetedReposId() );
+                item = retrieveItemByRepoId( request.getTargetedReposId(), request );
 
-	    } else if (request.getTargetedReposGroupId() != null) {
+            }
+            else if ( request.getTargetedReposGroupId() != null )
+            {
 
-		logger.debug("Going for targeted reposGroupId {}", request.getTargetedReposGroupId());
-		item = retrieveItemByRepoGroupId(request.getTargetedReposGroupId(), request);
+                logger.debug( "Going for targeted reposGroupId {}", request.getTargetedReposGroupId() );
+                item = retrieveItemByRepoGroupId( request.getTargetedReposGroupId(), request );
 
-	    } else {
+            }
+            else
+            {
 
-		logger.debug("Going for by absolute order, no target");
-		item = retrieveItemByAbsoluteOrder(request);
+                logger.debug( "Going for by absolute order, no target" );
+                item = retrieveItemByAbsoluteOrder( request );
 
-	    }
+            }
 
-	    // if not a targeted request that affects only one repos and
-	    // we need group search
-	    if (request.getTargetedReposId() == null && proximityLogic.isGroupSearchNeeded(request)) {
+            // if not a targeted request that affects only one repos and
+            // we need group search
+            if ( request.getTargetedReposId() == null && proximityLogic.isGroupSearchNeeded( request ) )
+            {
 
-		ProximityRequest groupRequest = proximityLogic.getGroupRequest(request);
+                ProximityRequest groupRequest = proximityLogic.getGroupRequest( request );
 
-		List repositoryGroupOrder = (List) repositoryGroups.get(item.getProperties().getRepositoryGroupId());
-		List itemList = new ArrayList();
+                List repositoryGroupOrder = (List) repositoryGroups.get( item.getProperties().getRepositoryGroupId() );
+                List itemList = new ArrayList();
 
-		for (Iterator i = repositoryGroupOrder.iterator(); i.hasNext();) {
-		    String reposId = (String) i.next();
-		    try {
-			itemList.add(retrieveItemByRepoId(reposId, groupRequest));
-		    } catch (ItemNotFoundException ex) {
-			logger.debug("[{}] not found in repository {}", groupRequest.getPath(), reposId);
-		    }
-		}
+                for ( Iterator i = repositoryGroupOrder.iterator(); i.hasNext(); )
+                {
+                    String reposId = (String) i.next();
+                    try
+                    {
+                        itemList.add( retrieveItemByRepoId( reposId, groupRequest ) );
+                    }
+                    catch ( ItemNotFoundException ex )
+                    {
+                        logger.debug( "[{}] not found in repository {}", groupRequest.getPath(), reposId );
+                    }
+                }
 
-		item = proximityLogic.postprocessItemList(request, groupRequest, itemList);
+                item = proximityLogic.postprocessItemList( request, groupRequest, itemList );
 
-	    }
+            }
 
-	} catch (IOException ex) {
-	    logger.error("Got IOException during retrieveItem.", ex);
-	} catch (ItemNotFoundException ex) {
-	    throw ex;
-	}
+        }
+        catch ( IOException ex )
+        {
+            logger.error( "Got IOException during retrieveItem.", ex );
+        }
+        catch ( ItemNotFoundException ex )
+        {
+            throw ex;
+        }
 
-	return item;
+        return item;
 
     }
 
