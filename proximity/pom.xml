@@ -39,6 +39,7 @@
 		<url>http://trac.abstracthorizon.org/proximity</url>
 	</issueManagement>
 
+<!--
 	<ciManagement>
 		<system>Continuum</system>
 		<url>http://ci.abstracthorizon.org/continuum</url>
@@ -50,6 +51,7 @@
 			</notifier>
 		</notifiers>
 	</ciManagement>
+-->
 
 	<!-- the year the project started -->
 	<inceptionYear>2005</inceptionYear>
