@@ -72,7 +72,7 @@
 		<developer>
 			<id>cstamas</id>
 			<name>CSERVENAK, Tamas</name>
-			<email>t.cservenak@gmail.com</email>
+			<email>tamas.cservenak@abstracthorizon.org</email>
 			<organization>Abstract Horizon</organization>
 			<roles>
 				<role>Lead Developer</role>
@@ -82,7 +82,7 @@
 		<developer>
 			<id>click</id>
 			<name>SENDULA, Daniel</name>
-			<email>xxxx@gmail.com</email>
+			<email>daniel.sendula@abstracthorizon.org</email>
 			<organization>Abstract Horizon</organization>
 			<roles>
 				<role>Developer</role>
@@ -358,6 +358,13 @@
 					</executions>
 					</plugin>
 				-->
+				<plugin>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<configuration>
+						<source>1.4</source>
+						<target>1.4</target>
+					</configuration>
+				</plugin>
 				<plugin>
 					<artifactId>maven-release-plugin</artifactId>
 					<configuration>
