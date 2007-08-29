@@ -45,7 +45,6 @@
 	-->
 	<bean id="proximity"
 		class="org.abstracthorizon.proximity.impl.LogicDrivenProximityImpl">
-		<property name="accessManager" ref="proximity.accessManager" />
 		<property name="proximityLogic" ref="proximity.logic" />
 		<property name="emergeRepositoryGroups" value="true" />
 		<property name="repositories">

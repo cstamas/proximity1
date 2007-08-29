@@ -16,7 +16,6 @@
 
 		<property name="localStorage" ref="centralFSStorage" />
 		<property name="remoteStorage" ref="centralRemotePeer" />
-		<property name="statisticsGatherer" ref="proximity.statisticsGatherer" />
 		<property name="accessManager" ref="proximity.openAccessManager" />
 		<!-- Uncomment this and delete previous accessManager declaration to restrict access to this repo
 			<property name="accessManager" ref="internalLanOnlyAccessManager" />
@@ -53,8 +52,6 @@
 		<property name="connectionTimeout" value="10000" />
 		<!-- The count of retries (used by DefaultRetryHandler) -->
 		<property name="retrievalRetryCount" value="3" />
-		<!-- Should HttpClient follow redirections? (preferred!) -->
-		<property name="followRedirection" value="true" />
 		<!-- Fix query string appended to URL, used for ProximityPiping "repositoryId=central" -->
 		<property name="queryString" value="" />
 		<!-- Proxy setup, uncomment if needed
@@ -96,7 +93,6 @@
 
 		<property name="localStorage" ref="codehausFSStorage" />
 		<property name="remoteStorage" ref="codehausRemotePeer" />
-		<property name="statisticsGatherer" ref="proximity.statisticsGatherer" />
 		<property name="accessManager" ref="proximity.openAccessManager" />
 		<!-- Uncomment this and delete previous accessManager declaration to restrict access to this repo
 			<property name="accessManager" ref="internalLanOnlyAccessManager" />
@@ -133,8 +129,6 @@
 		<property name="connectionTimeout" value="10000" />
 		<!-- The count of retries (used by DefaultRetryHandler) -->
 		<property name="retrievalRetryCount" value="3" />
-		<!-- Should HttpClient follow redirections? (preferred!) -->
-		<property name="followRedirection" value="true" />
 		<!-- Fix query string appended to URL, used for ProximityPiping "repositoryId=central" -->
 		<property name="queryString" value="" />
 		<!-- Proxy setup, uncomment if needed
@@ -166,7 +160,6 @@
 
 		<property name="localStorage" ref="apache.snapshotFSStorage" />
 		<property name="remoteStorage" ref="apache.snapshotRemotePeer" />
-		<property name="statisticsGatherer" ref="proximity.statisticsGatherer" />
 		<property name="accessManager" ref="proximity.openAccessManager" />
 		<!-- Uncomment this and delete previous accessManager declaration to restrict access to this repo
 			<property name="accessManager" ref="internalLanOnlyAccessManager" />
@@ -203,8 +196,6 @@
 		<property name="connectionTimeout" value="10000" />
 		<!-- The count of retries (used by DefaultRetryHandler) -->
 		<property name="retrievalRetryCount" value="3" />
-		<!-- Should HttpClient follow redirections? (preferred!) -->
-		<property name="followRedirection" value="true" />
 		<!-- Fix query string appended to URL, used for ProximityPiping "repositoryId=central" -->
 		<property name="queryString" value="" />
 		<!-- Proxy setup, uncomment if needed
@@ -237,7 +228,6 @@
 		<property name="localStorage" ref="codehaus.snapshotFSStorage" />
 		<property name="remoteStorage"
 			ref="codehaus.snapshotRemotePeer" />
-		<property name="statisticsGatherer" ref="proximity.statisticsGatherer" />
 		<property name="accessManager" ref="proximity.openAccessManager" />
 		<!-- Uncomment this and delete previous accessManager declaration to restrict access to this repo
 			<property name="accessManager" ref="internalLanOnlyAccessManager" />
@@ -274,8 +264,6 @@
 		<property name="connectionTimeout" value="10000" />
 		<!-- The count of retries (used by DefaultRetryHandler) -->
 		<property name="retrievalRetryCount" value="3" />
-		<!-- Should HttpClient follow redirections? (preferred!) -->
-		<property name="followRedirection" value="true" />
 		<!-- Fix query string appended to URL, used for ProximityPiping "repositoryId=central" -->
 		<property name="queryString" value="" />
 		<!-- Proxy setup, uncomment if needed
@@ -306,7 +294,6 @@
 		<property name="rank" value="10" />
 
 		<property name="localStorage" ref="inhouseFSStorage" />
-		<property name="statisticsGatherer" ref="proximity.statisticsGatherer" />
 		<property name="repositoryLogic" ref="proximity.maven2ReleaseRepoLogic" />
 		<property name="accessManager" ref="proximity.openAccessManager" />
 		<!-- Uncomment this and delete previous row to restrict access to this repo
@@ -342,7 +329,6 @@
 		<property name="rank" value="15" />
 
 		<property name="localStorage" ref="inhouse.snapshotFSStorage" />
-		<property name="statisticsGatherer" ref="proximity.statisticsGatherer" />
 		<property name="repositoryLogic" ref="proximity.maven2SnapshotRepoLogic" />
 		<property name="accessManager" ref="proximity.openAccessManager" />
 		<!-- Uncomment this and delete previous row to restrict access to this repo
@@ -381,7 +367,6 @@
 		<property name="rank" value="35" />
 
 		<property name="localStorage" ref="extNonFreeFSStorage" />
-		<property name="statisticsGatherer" ref="proximity.statisticsGatherer" />
 		<property name="repositoryLogic" ref="proximity.maven2ReleaseRepoLogic" />
 		<property name="accessManager" ref="proximity.openAccessManager" />
 		<!-- Uncomment this and delete previous row to restrict access to this repo
@@ -422,7 +407,6 @@
 		<property name="rank" value="25" />
 
 		<property name="localStorage" ref="extFreeFSStorage" />
-		<property name="statisticsGatherer" ref="proximity.statisticsGatherer" />
 		<property name="repositoryLogic" ref="proximity.maven2ReleaseRepoLogic" />
 		<property name="accessManager" ref="proximity.openAccessManager" />
 		<!-- Uncomment this and delete previous row to restrict access to this repo
