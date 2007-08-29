@@ -440,7 +440,7 @@
 			<id>abstracthorizon</id>
 			<name>Abstract Horizon Central Repository</name>
 			<url>
-				scp://213.232.95.19/srv/213.232.95.142/html/repository/maven2/abstracthorizon
+				scp://213.232.95.19/srv/repository.abstracthorizon.org/html/repository/maven2/abstracthorizon
 			</url>
 		</repository>
 		<snapshotRepository>
@@ -452,13 +452,13 @@
 				</url>
 			-->
 			<url>
-				scp://213.232.95.19/srv/213.232.95.142/html/repository/maven2/abstracthorizon.snapshot
+				scp://213.232.95.19/srv/repository.abstracthorizon.org/html/repository/maven2/abstracthorizon.snapshot
 			</url>
 		</snapshotRepository>
 		<site>
 			<id>abstracthorizon.site</id>
 			<url>
-				scp://213.232.95.19/srv/abstracthorizon.org/html/proximity
+				scp://213.232.95.19/srv/www.abstracthorizon.org/html/proximity
 				<!--
 					file:/home/cstamas/tmp/px-site
 				-->
