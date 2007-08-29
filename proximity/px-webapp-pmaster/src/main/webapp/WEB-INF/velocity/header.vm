@@ -1,0 +1,25 @@
+<table>
+	<tr>
+		<td class="leftBand">
+			<div class="logo"><br/>
+				<img src="#springUrl('/images/logo.png')"/>
+			</div>
+		</td>
+		<td class="topBar">
+			<div id="versionLabel">
+				#springMessage('proximity.product.name'), #springMessage('proximity.product.version')
+			</div>
+			<div class="right">
+				<a href="#springUrl('/')">#springMessage('links.documentation')</a> | 
+				<a href="#springUrl('/search.do')">#springMessage('links.search')</a> | 
+				<a href="#springUrl('/repositories.do')">#springMessage('links.repositories')</a> | 
+				<a href="#springUrl('/stats.do')">#springMessage('links.stats')</a> | 
+				<a href="#springUrl('/maintenance.do')">#springMessage('links.maintenance')</a> |
+				<!-- PxMaster does not have this view 
+				<a href="#springUrl('/artifacts')">#springMessage('links.artifactBrowse')</a> |
+				--> 
+				<a href="#springUrl('/repository')">#springMessage('links.repoBrowse')</a>
+			</div>
+		</td>
+	</tr>
+</table>

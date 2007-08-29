@@ -21,6 +21,10 @@
 	<!-- a short but descriptive name for the project -->
 	<name>Px Webapp (PxMASTER)</name>
 
+	<description>
+		The PxMaster "flavour" of Proximity J2EE Web Application suitable to be in DMZ.
+	</description>
+
 	<dependencies>
 
 		<dependency>
@@ -30,6 +34,14 @@
 		<dependency>
 			<groupId>org.abstracthorizon.proximity</groupId>
 			<artifactId>px-core-maven</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.abstracthorizon.proximity</groupId>
+			<artifactId>px-core-ws</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.abstracthorizon.proximity</groupId>
+			<artifactId>px-webapp-webdav</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.abstracthorizon.proximity</groupId>
