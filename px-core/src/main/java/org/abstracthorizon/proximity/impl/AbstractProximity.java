@@ -658,7 +658,9 @@ public abstract class AbstractProximity
      * Retrieve item controller.
      * 
      * @param request the request
+     * 
      * @return the item
+     * 
      * @throws ItemNotFoundException the item not found exception
      * @throws AccessDeniedException the access denied exception
      * @throws NoSuchRepositoryException the no such repository exception
@@ -672,7 +674,9 @@ public abstract class AbstractProximity
      * Retrieve item by absolute order.
      * 
      * @param request the request
+     * 
      * @return the item
+     * 
      * @throws ItemNotFoundException the item not found exception
      * @throws AccessDeniedException the access denied exception
      * @throws NoSuchRepositoryException the no such repository exception
@@ -708,7 +712,9 @@ public abstract class AbstractProximity
      * 
      * @param groupId the group id
      * @param request the request
+     * 
      * @return the item
+     * 
      * @throws ItemNotFoundException the item not found exception
      * @throws AccessDeniedException the access denied exception
      * @throws NoSuchRepositoryException the no such repository exception
@@ -757,7 +763,9 @@ public abstract class AbstractProximity
      * 
      * @param repoId the repo id
      * @param request the request
+     * 
      * @return the item
+     * 
      * @throws ItemNotFoundException the item not found exception
      * @throws AccessDeniedException the access denied exception
      * @throws NoSuchRepositoryException the no such repository exception
@@ -796,6 +804,7 @@ public abstract class AbstractProximity
      * In all other cases, the same instance of request is returned!
      * 
      * @param request the request
+     * 
      * @return the proximity request
      */
     protected ProximityRequest mangleItemRequest( ProximityRequest request )

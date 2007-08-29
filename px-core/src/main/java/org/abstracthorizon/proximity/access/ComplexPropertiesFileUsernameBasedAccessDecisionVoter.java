@@ -1,3 +1,20 @@
+/*
+
+   Copyright 2005-2007 Tamas Cservenak (t.cservenak@gmail.com)
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+
+*/
 package org.abstracthorizon.proximity.access;
 
 import java.io.File;
@@ -12,6 +29,7 @@ import org.abstracthorizon.proximity.Repository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+// TODO: Auto-generated Javadoc
 /**
  * <p>
  * Quasi complex voter that allows/denies the repository access based on property files. The property files are searched
@@ -40,12 +58,21 @@ import org.slf4j.LoggerFactory;
 public class ComplexPropertiesFileUsernameBasedAccessDecisionVoter
     implements UsernameBasedAccessDecisionVoter
 {
+    
+    /** The logger. */
     private Logger logger = LoggerFactory.getLogger( this.getClass() );
 
+    /** The default rights. */
     private Properties defaultRights;
 
+    /** The properties base. */
     private String propertiesBase;
 
+    /**
+     * Gets the properties base.
+     * 
+     * @return the properties base
+     */
     public String getPropertiesBase()
     {
         if ( this.propertiesBase == null )
@@ -58,6 +85,11 @@ public class ComplexPropertiesFileUsernameBasedAccessDecisionVoter
         }
     }
 
+    /**
+     * Sets the properties base.
+     * 
+     * @param propertiesBase the new properties base
+     */
     public void setPropertiesBase( String propertiesBase )
     {
         this.propertiesBase = propertiesBase;
@@ -67,6 +99,11 @@ public class ComplexPropertiesFileUsernameBasedAccessDecisionVoter
         }
     }
 
+    /**
+     * Gets the default rights.
+     * 
+     * @return the default rights
+     */
     public Properties getDefaultRights()
     {
         if ( defaultRights == null )
@@ -76,17 +113,34 @@ public class ComplexPropertiesFileUsernameBasedAccessDecisionVoter
         return defaultRights;
     }
 
+    /**
+     * Sets the default rights.
+     * 
+     * @param defaultRights the new default rights
+     */
     public void setDefaultRights( Properties defaultRights )
     {
         this.defaultRights = defaultRights;
     }
 
+    /* (non-Javadoc)
+     * @see org.abstracthorizon.proximity.access.AccessDecisionVoter#vote(org.abstracthorizon.proximity.ProximityRequest, org.abstracthorizon.proximity.Repository, org.abstracthorizon.proximity.access.RepositoryPermission)
+     */
     public int vote( ProximityRequest request, Repository repository, RepositoryPermission permission )
     {
         Properties props = getProperties( (String) request.getAttributes().get( REQUEST_USERNAME ), repository.getId() );
         return authorizeTree( props, request.getPath(), permission );
     }
 
+    /**
+     * Authorize tree.
+     * 
+     * @param path2rights the path2rights
+     * @param path the path
+     * @param permission the permission
+     * 
+     * @return the int
+     */
     private int authorizeTree( Properties path2rights, String path, RepositoryPermission permission )
     {
         String pathRights = path2rights.getProperty( path );
@@ -110,6 +164,14 @@ public class ComplexPropertiesFileUsernameBasedAccessDecisionVoter
         return authorizeTree( path2rights, parent, permission );
     }
 
+    /**
+     * Gets the properties.
+     * 
+     * @param username the username
+     * @param repositoryId the repository id
+     * 
+     * @return the properties
+     */
     protected Properties getProperties( String username, String repositoryId )
     {
         Properties props = new Properties( getDefaultRights() );
