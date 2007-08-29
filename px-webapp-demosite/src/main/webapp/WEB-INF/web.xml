@@ -6,9 +6,9 @@
 
 <web-app>
 
-	<display-name>Proximity WEB Module</display-name>
+	<display-name>Proximity Demosite WEB Module</display-name>
 
-	<description>Proximity WEB Module</description>
+	<description>Proximity Demosite WEB Module</description>
 
 	<!--
 		- Location of the XML file that defines the root application context.
