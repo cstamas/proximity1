@@ -31,7 +31,19 @@
 		</dependency>
 		<dependency>
 			<groupId>org.abstracthorizon.proximity</groupId>
+			<artifactId>px-core-ws</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.abstracthorizon.proximity</groupId>
+			<artifactId>px-core-maven</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.abstracthorizon.proximity</groupId>
 			<artifactId>px-core-scheduler</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.abstracthorizon.proximity</groupId>
+			<artifactId>px-webapp-webdav</artifactId>
 		</dependency>
 
 		<!-- For Spring et al. -->

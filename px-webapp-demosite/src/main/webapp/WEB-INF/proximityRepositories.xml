@@ -68,8 +68,6 @@
 		<property name="connectionTimeout" value="10000" />
 		<!-- The count of retries (used by DefaultRetryHandler) -->
 		<property name="retrievalRetryCount" value="3" />
-		<!-- Should HttpClient follow redirections? (preferred!) -->
-		<property name="followRedirection" value="true" />
 		<!-- Fix query string appended to URL, used for ProximityPiping "repositoryId=central" -->
 		<property name="queryString" value="" />
 		<!-- Proxy setup, uncomment if needed
@@ -147,8 +145,6 @@
 		<property name="connectionTimeout" value="10000" />
 		<!-- The count of retries (used by DefaultRetryHandler) -->
 		<property name="retrievalRetryCount" value="3" />
-		<!-- Should HttpClient follow redirections? (preferred!) -->
-		<property name="followRedirection" value="true" />
 		<!-- Fix query string appended to URL, used for ProximityPiping "repositoryId=central" -->
 		<property name="queryString" value="" />
 		<!-- Proxy setup, uncomment if needed
@@ -282,8 +278,6 @@
 		<property name="connectionTimeout" value="10000" />
 		<!-- The count of retries (used by DefaultRetryHandler) -->
 		<property name="retrievalRetryCount" value="3" />
-		<!-- Should HttpClient follow redirections? (preferred!) -->
-		<property name="followRedirection" value="true" />
 		<!-- Fix query string appended to URL, used for ProximityPiping "repositoryId=central" -->
 		<property name="queryString" value="" />
 		<!-- Proxy setup, uncomment if needed
@@ -352,8 +346,6 @@
 		<property name="connectionTimeout" value="10000" />
 		<!-- The count of retries (used by DefaultRetryHandler) -->
 		<property name="retrievalRetryCount" value="3" />
-		<!-- Should HttpClient follow redirections? (preferred!) -->
-		<property name="followRedirection" value="true" />
 		<!-- Fix query string appended to URL, used for ProximityPiping "repositoryId=central" -->
 		<property name="queryString" value="" />
 		<!-- Proxy setup, uncomment if needed
