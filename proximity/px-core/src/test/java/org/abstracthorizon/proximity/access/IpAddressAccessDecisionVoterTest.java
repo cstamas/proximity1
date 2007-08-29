@@ -56,7 +56,8 @@ public class IpAddressAccessDecisionVoterTest
         voter.setAllowDeny( true );
         voter.setAllowFromPattern( "192\\.168\\.0\\..*" );
         voter.setDenyFromPattern( ".*" );
-        Assert.assertEquals( AccessDecisionVoter.ACCESS_APPROVED, voter.vote( getDummyRq( "192.168.0.1" ), null, null ) );
+        Assert
+            .assertEquals( AccessDecisionVoter.ACCESS_APPROVED, voter.vote( getDummyRq( "192.168.0.1" ), null, null ) );
     }
 
     /**
@@ -67,7 +68,8 @@ public class IpAddressAccessDecisionVoterTest
         voter.setAllowDeny( false );
         voter.setAllowFromPattern( "192\\.168\\.0\\..*" );
         voter.setDenyFromPattern( "192\\.169.*" );
-        Assert.assertEquals( AccessDecisionVoter.ACCESS_APPROVED, voter.vote( getDummyRq( "192.168.0.1" ), null, null ) );
+        Assert
+            .assertEquals( AccessDecisionVoter.ACCESS_APPROVED, voter.vote( getDummyRq( "192.168.0.1" ), null, null ) );
     }
 
     /**

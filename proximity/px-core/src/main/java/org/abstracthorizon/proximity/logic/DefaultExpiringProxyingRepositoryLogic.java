@@ -71,6 +71,7 @@ public class DefaultExpiringProxyingRepositoryLogic
      * @param repository the repository
      * @param request the request
      * @param item the item
+     * 
      * @return the item
      */
     public Item afterLocalCopyFound( Repository repository, ProximityRequest request, Item item )
@@ -108,6 +109,7 @@ public class DefaultExpiringProxyingRepositoryLogic
      * @param request the request
      * @param localItem the local item
      * @param remoteItem the remote item
+     * 
      * @return the item
      */
     public Item afterRemoteCopyFound( Repository repository, ProximityRequest request, Item localItem, Item remoteItem )
