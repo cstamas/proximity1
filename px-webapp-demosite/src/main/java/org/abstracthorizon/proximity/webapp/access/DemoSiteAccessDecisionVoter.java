@@ -19,10 +19,11 @@ package org.abstracthorizon.proximity.webapp.access;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import org.abstracthorizon.proximity.ProximityRequest;
+import org.abstracthorizon.proximity.Repository;
 import org.abstracthorizon.proximity.access.AccessDecisionVoter;
+import org.abstracthorizon.proximity.access.RepositoryPermission;
 import org.apache.commons.io.FilenameUtils;
 
 // TODO: Auto-generated Javadoc
@@ -62,7 +63,7 @@ public class DemoSiteAccessDecisionVoter
     /* (non-Javadoc)
      * @see org.abstracthorizon.proximity.access.AccessDecisionVoter#vote(org.abstracthorizon.proximity.ProximityRequest, java.util.Map)
      */
-    public int vote( ProximityRequest request, Map attribs )
+    public int vote( ProximityRequest request, Repository repository, RepositoryPermission permission )
     {
         // we are forbidding JAR download
         if ( request.getAttributes().containsKey( ProximityRequest.REQUEST_REMOTE_ADDRESS )
