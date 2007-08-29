@@ -19,6 +19,7 @@ package org.abstracthorizon.proximity.logic;
 
 import java.util.Date;
 
+import org.abstracthorizon.proximity.AccessDeniedException;
 import org.abstracthorizon.proximity.Item;
 import org.abstracthorizon.proximity.ProximityRequest;
 import org.abstracthorizon.proximity.Repository;
@@ -70,7 +71,6 @@ public class DefaultExpiringProxyingRepositoryLogic
      * @param repository the repository
      * @param request the request
      * @param item the item
-     * 
      * @return the item
      */
     public Item afterLocalCopyFound( Repository repository, ProximityRequest request, Item item )
@@ -89,7 +89,11 @@ public class DefaultExpiringProxyingRepositoryLogic
                 }
                 catch ( RepositoryNotAvailableException ex )
                 {
-                    logger.info( "Repository unavailable, cannot delete expired item.", ex );
+                    logger.warn( "Repository unavailable, cannot delete expired item.", ex );
+                }
+                catch ( AccessDeniedException ex )
+                {
+                    logger.warn( "Access is denied, cannot delete expired item.", ex );
                 }
                 return null;
             }
@@ -104,7 +108,6 @@ public class DefaultExpiringProxyingRepositoryLogic
      * @param request the request
      * @param localItem the local item
      * @param remoteItem the remote item
-     * 
      * @return the item
      */
     public Item afterRemoteCopyFound( Repository repository, ProximityRequest request, Item localItem, Item remoteItem )

@@ -36,6 +36,7 @@ import org.abstracthorizon.proximity.Repository;
 import org.abstracthorizon.proximity.RepositoryNotAvailableException;
 import org.abstracthorizon.proximity.access.AccessManager;
 import org.abstracthorizon.proximity.access.OpenAccessManager;
+import org.abstracthorizon.proximity.access.RepositoryPermission;
 import org.abstracthorizon.proximity.events.ItemDeleteEvent;
 import org.abstracthorizon.proximity.events.ItemRetrieveEvent;
 import org.abstracthorizon.proximity.events.ItemStoreEvent;
@@ -405,7 +406,9 @@ public abstract class AbstractRepository
         {
             throw new RepositoryNotAvailableException( "The repository " + getId() + " is NOT available!" );
         }
-        getAccessManager().decide( request, null );
+
+        getAccessManager().decide( request, this, RepositoryPermission.RETRIEVE );
+        
         try
         {
             String requestKey = getRepositoryRequestAsKey( this, request );
@@ -461,12 +464,15 @@ public abstract class AbstractRepository
      */
     public void deleteItem( ProximityRequest request )
         throws RepositoryNotAvailableException,
-            StorageException
+            StorageException, AccessDeniedException
     {
         if ( !isAvailable() )
         {
             throw new RepositoryNotAvailableException( "The repository " + getId() + " is NOT available!" );
         }
+
+        getAccessManager().decide( request, this, RepositoryPermission.DELETE );
+        
         if ( getLocalStorage() != null )
         {
             try
@@ -503,12 +509,15 @@ public abstract class AbstractRepository
      */
     public void storeItem( ProximityRequest request, Item item )
         throws RepositoryNotAvailableException,
-            StorageException
+            StorageException, AccessDeniedException
     {
         if ( !isAvailable() )
         {
             throw new RepositoryNotAvailableException( "The repository " + getId() + " is NOT available!" );
         }
+        
+        getAccessManager().decide( request, this, RepositoryPermission.STORE );
+
         doStoreItem( request, item );
         notifyProximityRequestListeners( new ItemStoreEvent( request, item.getProperties() ) );
     }
@@ -520,12 +529,15 @@ public abstract class AbstractRepository
      */
     public List listItems( ProximityRequest request )
         throws RepositoryNotAvailableException,
-            StorageException
+            StorageException, AccessDeniedException
     {
         if ( !isAvailable() )
         {
             throw new RepositoryNotAvailableException( "The repository " + getId() + " is NOT available!" );
         }
+        
+        getAccessManager().decide( request, this, RepositoryPermission.LIST );
+
         List result = new ArrayList();
         if ( isListable() )
         {
@@ -547,6 +559,9 @@ public abstract class AbstractRepository
         }
         return result;
     }
+    
+    // ---------------------------------------------------------------------------------
+    // internal stuff
 
     /**
      * Do store item.
