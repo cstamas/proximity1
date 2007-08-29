@@ -40,9 +40,11 @@
 			<item name="Proximity Wiki"
 				href="http://trac.abstracthorizon.org/proximity/" />
 			<item name="Proximity Support Forum"
-				href="http://forum.abstracthorizon.org/index.php?c=9" />
+				href="http://forum.abstracthorizon.org/" />
+<!--
 			<item name="Proximity DEMO"
 				href="http://proximity.abstracthorizon.org:12000/px-webapp" />
+-->
 		</links>
 
 		<menu ref="parent" />
