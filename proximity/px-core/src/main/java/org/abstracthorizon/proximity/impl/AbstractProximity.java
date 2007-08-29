@@ -37,8 +37,6 @@ import org.abstracthorizon.proximity.ProximityRequest;
 import org.abstracthorizon.proximity.ProximityRequestListener;
 import org.abstracthorizon.proximity.Repository;
 import org.abstracthorizon.proximity.RepositoryNotAvailableException;
-import org.abstracthorizon.proximity.access.AccessManager;
-import org.abstracthorizon.proximity.access.OpenAccessManager;
 import org.abstracthorizon.proximity.events.ProximityRequestEvent;
 import org.abstracthorizon.proximity.mapping.GroupRequestMapper;
 import org.apache.commons.io.FilenameUtils;
@@ -68,9 +66,6 @@ public abstract class AbstractProximity
     /** Should Proximity emerge groupId's in front of real repos paths?. */
     protected boolean emergeGroups = true;
 
-    /** The access manager. */
-    private AccessManager accessManager = new OpenAccessManager();
-
     /** The group request mapper. */
     private GroupRequestMapper groupRequestMapper;
 
@@ -95,26 +90,6 @@ public abstract class AbstractProximity
     public void setEmergeRepositoryGroups( boolean emergeGroups )
     {
         this.emergeGroups = emergeGroups;
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.abstracthorizon.proximity.Proximity#getAccessManager()
-     */
-    public AccessManager getAccessManager()
-    {
-        return accessManager;
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.abstracthorizon.proximity.Proximity#setAccessManager(org.abstracthorizon.proximity.access.AccessManager)
-     */
-    public void setAccessManager( AccessManager accessManager )
-    {
-        this.accessManager = accessManager;
     }
 
     /*
@@ -285,7 +260,6 @@ public abstract class AbstractProximity
     {
 
         logger.debug( "Got retrieveItem with {}", request );
-        accessManager.decide( request, null );
 
         Item item = null;
 
@@ -349,8 +323,6 @@ public abstract class AbstractProximity
             RepositoryNotAvailableException
     {
         logger.debug( "Got copyItem with {} -> {}", source, target );
-        accessManager.decide( source, null );
-        accessManager.decide( target, null );
         Item item = retrieveItem( source );
         ItemProperties itemProps = item.getProperties();
         itemProps.setDirectoryPath( FilenameUtils.separatorsToUnix( FilenameUtils.getFullPathNoEndSeparator( target
@@ -373,7 +345,6 @@ public abstract class AbstractProximity
             RepositoryNotAvailableException
     {
         logger.debug( "Got deleteItem with {}", request );
-        accessManager.decide( request, null );
         Item item = retrieveItem( request );
         Repository repo = (Repository) repositories.get( item.getProperties().getRepositoryId() );
         repo.deleteItem( mangleItemRequest( request ) );
@@ -392,10 +363,16 @@ public abstract class AbstractProximity
             RepositoryNotAvailableException
     {
         logger.debug( "Got moveItem with {} -> {}", source, target );
-        accessManager.decide( source, null );
-        accessManager.decide( target, null );
         copyItem( source, target );
-        deleteItem( source );
+        try
+        {
+            deleteItem( source );
+        }
+        catch ( AccessDeniedException ex )
+        {
+            deleteItem( target );
+            throw ex;
+        }
     }
 
     /*
@@ -410,7 +387,6 @@ public abstract class AbstractProximity
             RepositoryNotAvailableException
     {
         logger.debug( "Got storeItem for {}", request );
-        accessManager.decide( request, null );
 
         String targetRepoId = request.getTargetedReposId();
         List pathList = ProximityUtils.explodePathToList( request.getPath() );
@@ -473,7 +449,6 @@ public abstract class AbstractProximity
             NoSuchRepositoryException
     {
         logger.debug( "Got listItems with {}", request );
-        accessManager.decide( request, null );
 
         List response = new ArrayList();
         List pathList = ProximityUtils.explodePathToList( request.getPath() );
@@ -683,9 +658,7 @@ public abstract class AbstractProximity
      * Retrieve item controller.
      * 
      * @param request the request
-     * 
      * @return the item
-     * 
      * @throws ItemNotFoundException the item not found exception
      * @throws AccessDeniedException the access denied exception
      * @throws NoSuchRepositoryException the no such repository exception
@@ -699,9 +672,7 @@ public abstract class AbstractProximity
      * Retrieve item by absolute order.
      * 
      * @param request the request
-     * 
      * @return the item
-     * 
      * @throws ItemNotFoundException the item not found exception
      * @throws AccessDeniedException the access denied exception
      * @throws NoSuchRepositoryException the no such repository exception
@@ -737,9 +708,7 @@ public abstract class AbstractProximity
      * 
      * @param groupId the group id
      * @param request the request
-     * 
      * @return the item
-     * 
      * @throws ItemNotFoundException the item not found exception
      * @throws AccessDeniedException the access denied exception
      * @throws NoSuchRepositoryException the no such repository exception
@@ -788,9 +757,7 @@ public abstract class AbstractProximity
      * 
      * @param repoId the repo id
      * @param request the request
-     * 
      * @return the item
-     * 
      * @throws ItemNotFoundException the item not found exception
      * @throws AccessDeniedException the access denied exception
      * @throws NoSuchRepositoryException the no such repository exception
@@ -829,7 +796,6 @@ public abstract class AbstractProximity
      * In all other cases, the same instance of request is returned!
      * 
      * @param request the request
-     * 
      * @return the proximity request
      */
     protected ProximityRequest mangleItemRequest( ProximityRequest request )

@@ -221,7 +221,7 @@ public interface Repository
      */
     void deleteItem( ProximityRequest request )
         throws RepositoryNotAvailableException,
-            StorageException;
+            StorageException, AccessDeniedException;
 
     /**
      * Stores item.
@@ -234,7 +234,7 @@ public interface Repository
      */
     void storeItem( ProximityRequest request, Item item )
         throws RepositoryNotAvailableException,
-            StorageException;
+            StorageException, AccessDeniedException;
 
     /**
      * List items on path. If not listable, an empty list.
@@ -248,6 +248,6 @@ public interface Repository
      */
     List listItems( ProximityRequest request )
         throws RepositoryNotAvailableException,
-            StorageException;
+            StorageException, AccessDeniedException;
 
 }

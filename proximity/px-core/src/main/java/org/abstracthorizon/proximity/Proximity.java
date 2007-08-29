@@ -20,7 +20,6 @@ package org.abstracthorizon.proximity;
 import java.util.List;
 import java.util.Map;
 
-import org.abstracthorizon.proximity.access.AccessManager;
 import org.abstracthorizon.proximity.mapping.GroupRequestMapper;
 
 // TODO: Auto-generated Javadoc
@@ -32,20 +31,6 @@ import org.abstracthorizon.proximity.mapping.GroupRequestMapper;
 public interface Proximity
     extends ProximityRequestMulticaster
 {
-
-    /**
-     * Retrieve Proximity-level AccessManager.
-     * 
-     * @return the access manager
-     */
-    AccessManager getAccessManager();
-
-    /**
-     * Sets Proximity level AccessManager.
-     * 
-     * @param accessManager the access manager
-     */
-    void setAccessManager( AccessManager accessManager );
 
     /**
      * Adds single repository to Proximity.
