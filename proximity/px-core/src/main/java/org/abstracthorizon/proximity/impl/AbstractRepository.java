@@ -521,7 +521,6 @@ public abstract class AbstractRepository
         getAccessManager().decide( request, this, RepositoryPermission.STORE );
 
         doStoreItem( request, item );
-        notifyProximityRequestListeners( new ItemStoreEvent( request, item.getProperties() ) );
     }
 
     /*
@@ -590,6 +589,7 @@ public abstract class AbstractRepository
             {
                 notFoundCache.remove( requestKey );
             }
+            notifyProximityRequestListeners( new ItemStoreEvent( request, item.getProperties() ) );
         }
         else
         {

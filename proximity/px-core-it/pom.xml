@@ -28,6 +28,10 @@
 			<groupId>org.abstracthorizon.proximity</groupId>
 			<artifactId>px-core</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.abstracthorizon.proximity</groupId>
+			<artifactId>px-core-maven</artifactId>
+		</dependency>
 
 		<!-- Testing -->
 		<dependency>
@@ -63,6 +67,13 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-mock</artifactId>
 			<scope>test</scope>
+		</dependency>
+
+		<!-- Plexus -->
+		<dependency>
+			<groupId>org.codehaus.plexus</groupId>
+			<artifactId>plexus-container-default</artifactId>
+			<version>1.0-alpha-24</version>
 		</dependency>
 
 	</dependencies>
@@ -105,5 +116,5 @@
 			</plugin>
 		</plugins>
 	</reporting>
-	
+
 </project>
