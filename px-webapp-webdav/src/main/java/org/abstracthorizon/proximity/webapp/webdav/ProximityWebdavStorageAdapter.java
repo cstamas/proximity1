@@ -14,7 +14,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-*/
+ */
 package org.abstracthorizon.proximity.webapp.webdav;
 
 import java.io.InputStream;
@@ -75,57 +75,75 @@ public class ProximityWebdavStorageAdapter
         this.proximity = proximity;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see net.sf.webdav.WebdavStore#begin(java.security.Principal)
      */
     public void begin( Principal principal )
         throws WebdavException
     {
         // nothing
+        logger.debug( "begin" );
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see net.sf.webdav.WebdavStore#checkAuthentication()
      */
     public void checkAuthentication()
         throws SecurityException
     {
         // nothing
+        logger.debug( "checkAuthentication" );
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see net.sf.webdav.WebdavStore#commit()
      */
     public void commit()
         throws WebdavException
     {
         // nothing
+        logger.debug( "commit" );
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see net.sf.webdav.WebdavStore#rollback()
      */
     public void rollback()
         throws WebdavException
     {
         // nothing
+        logger.debug( "rollback" );
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see net.sf.webdav.WebdavStore#createFolder(java.lang.String)
      */
     public void createFolder( String folderUri )
         throws WebdavException
     {
         // nothing
+        logger.debug( "createFolder" );
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see net.sf.webdav.WebdavStore#createResource(java.lang.String)
      */
     public void createResource( String resourceUri )
         throws WebdavException
     {
+        logger.debug( "createResource" );
         createdButNotStoredResources.put( resourceUri, Boolean.TRUE );
         /*
          * try { ProximityRequest request = createRequest(resourceUri, false); Item item = new Item(); ItemProperties
@@ -139,12 +157,15 @@ public class ProximityWebdavStorageAdapter
          */
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see net.sf.webdav.WebdavStore#getChildrenNames(java.lang.String)
      */
     public String[] getChildrenNames( String folderUri )
         throws WebdavException
     {
+        logger.debug( "getChildrenNames" );
         try
         {
             if ( objectExists( folderUri ) && isFolder( folderUri ) )
@@ -170,21 +191,27 @@ public class ProximityWebdavStorageAdapter
         }
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see net.sf.webdav.WebdavStore#getCreationDate(java.lang.String)
      */
     public Date getCreationDate( String uri )
         throws WebdavException
     {
+        logger.debug( "getCreationDate" );
         return getLastModified( uri );
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see net.sf.webdav.WebdavStore#getLastModified(java.lang.String)
      */
     public Date getLastModified( String uri )
         throws WebdavException
     {
+        logger.debug( "getLastModified" );
         Item result = makeRequest( uri, true );
         if ( result == null )
         {
@@ -200,12 +227,15 @@ public class ProximityWebdavStorageAdapter
         }
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see net.sf.webdav.WebdavStore#getResourceContent(java.lang.String)
      */
     public InputStream getResourceContent( String resourceUri )
         throws WebdavException
     {
+        logger.debug( "getResourceContent" );
         Item result = makeRequest( resourceUri, true );
         if ( result == null )
         {
@@ -214,12 +244,15 @@ public class ProximityWebdavStorageAdapter
         return result.getStream();
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see net.sf.webdav.WebdavStore#getResourceLength(java.lang.String)
      */
     public long getResourceLength( String resourceUri )
         throws WebdavException
     {
+        logger.debug( "getResourceLength" );
         Item result = makeRequest( resourceUri, true );
         if ( result == null )
         {
@@ -228,13 +261,17 @@ public class ProximityWebdavStorageAdapter
         return result.getProperties().getSize();
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see net.sf.webdav.WebdavStore#isFolder(java.lang.String)
      */
     public boolean isFolder( String uri )
         throws WebdavException
     {
+        logger.debug( "isFolder" );
         Item result = makeRequest( uri, true );
+        System.err.println( result );
         if ( result == null )
         {
             return false;
@@ -242,12 +279,15 @@ public class ProximityWebdavStorageAdapter
         return result.getProperties().isDirectory();
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see net.sf.webdav.WebdavStore#isResource(java.lang.String)
      */
     public boolean isResource( String uri )
         throws WebdavException
     {
+        logger.debug( "isResource" );
         Item result = makeRequest( uri, true );
         if ( result == null )
         {
@@ -256,22 +296,28 @@ public class ProximityWebdavStorageAdapter
         return result.getProperties().isFile();
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see net.sf.webdav.WebdavStore#objectExists(java.lang.String)
      */
     public boolean objectExists( String uri )
         throws WebdavException
     {
+        logger.debug( "objectExists" );
         Item result = makeRequest( uri, true );
         return result != null;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see net.sf.webdav.WebdavStore#removeObject(java.lang.String)
      */
     public void removeObject( String uri )
         throws WebdavException
     {
+        logger.debug( "removeObject" );
         try
         {
             ProximityRequest request = createRequest( uri, false );
@@ -283,13 +329,17 @@ public class ProximityWebdavStorageAdapter
         }
     }
 
-    /* (non-Javadoc)
-     * @see net.sf.webdav.WebdavStore#setResourceContent(java.lang.String, java.io.InputStream, java.lang.String, java.lang.String)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see net.sf.webdav.WebdavStore#setResourceContent(java.lang.String, java.io.InputStream, java.lang.String,
+     *      java.lang.String)
      */
     public void setResourceContent( String resourceUri, InputStream content, String contentType,
         String characterEncoding )
         throws WebdavException
     {
+        logger.debug( "setResourceContent" );
         try
         {
             createdButNotStoredResources.remove( resourceUri );
@@ -318,7 +368,6 @@ public class ProximityWebdavStorageAdapter
      * 
      * @param uri the uri
      * @param propsOnly the props only
-     * 
      * @return the proximity request
      */
     protected ProximityRequest createRequest( String uri, boolean propsOnly )
@@ -333,9 +382,7 @@ public class ProximityWebdavStorageAdapter
      * 
      * @param uri the uri
      * @param propsOnly the props only
-     * 
      * @return the item
-     * 
      * @throws WebdavException the webdav exception
      */
     protected Item makeRequest( String uri, boolean propsOnly )
@@ -349,15 +396,20 @@ public class ProximityWebdavStorageAdapter
         }
         catch ( ItemNotFoundException ex )
         {
+            logger.error( "Proximity reported exception on makeRequest:", ex );
+            logger.debug( "createdButNotStoredResources:", createdButNotStoredResources );
             return null;
         }
         catch ( AccessDeniedException ex )
         {
+            logger.error( "Proximity reported exception on makeRequest:", ex );
+            logger.debug( "createdButNotStoredResources:", createdButNotStoredResources );
             return null;
         }
         catch ( ProximityException ex )
         {
             logger.error( "Proximity thrown exception", ex );
+            logger.debug( "createdButNotStoredResources:", createdButNotStoredResources );
             throw new WebdavException( "Proximity reported exception " + ex.getMessage() );
         }
     }
