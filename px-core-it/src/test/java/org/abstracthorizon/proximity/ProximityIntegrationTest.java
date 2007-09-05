@@ -101,6 +101,27 @@ public class ProximityIntegrationTest
         {
             logger.error( "Good, got exception", ex );
         }
+        try
+        {
+            Item item = proximity.retrieveItem( getRequest( "/public/antlr/antlr/2.7.5/" ) );
+            logger.info( "Got response of type " + item.getClass() + ":" + item );
+            assertEquals( true, item.getProperties().isDirectory() );
+            assertEquals( false, item.getProperties().isFile() );
+        }
+        catch ( ProximityException ex )
+        {
+            logger.error( "Got exception", ex );
+            fail();
+        }
+        try
+        {
+            proximity.deleteItem( getRequest( "/public/antlr/antlr/2.7.5/" ) );
+        }
+        catch ( ProximityException ex )
+        {
+            logger.error( "Got exception", ex );
+            fail();
+        }
     }
 
     /**
