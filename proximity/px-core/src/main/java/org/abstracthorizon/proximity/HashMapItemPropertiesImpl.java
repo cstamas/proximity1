@@ -448,7 +448,7 @@ public class HashMapItemPropertiesImpl
      */
     public String toString()
     {
-        return getName();
+        return getPath() + " " + getMetadataMap().toString();
     }
 
     /*
@@ -641,5 +641,5 @@ public class HashMapItemPropertiesImpl
     {
         return new String( Hex.encodeHex( data ) );
     }
-
+    
 }

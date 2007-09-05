@@ -30,6 +30,7 @@ import org.abstracthorizon.proximity.Item;
 import org.abstracthorizon.proximity.ItemProperties;
 import org.abstracthorizon.proximity.logic.DefaultExpiringProxyingRepositoryLogic;
 import org.abstracthorizon.proximity.storage.StorageException;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 
 // TODO: Auto-generated Javadoc
@@ -116,9 +117,23 @@ public class WritableFileSystemStorage
         File file = new File( getStorageBaseDir(), path );
         if ( file.exists() )
         {
-            if ( !file.delete() )
+            if ( file.isFile() )
             {
-                throw new StorageException( "Unable to delete file " + file.getPath() );
+                if ( !file.delete() )
+                {
+                    throw new StorageException( "Unable to delete file " + file.getPath() );
+                }
+            }
+            else
+            {
+                try
+                {
+                    FileUtils.deleteDirectory( file );
+                }
+                catch ( IOException ex )
+                {
+                    throw new StorageException( "Unable to delete file " + file.getPath(), ex );
+                }
             }
             if ( isMetadataAware() )
             {
@@ -131,7 +146,6 @@ public class WritableFileSystemStorage
      * Delete item properties.
      * 
      * @param path the path
-     * 
      * @throws StorageException the storage exception
      */
     public void deleteItemProperties( String path )
@@ -139,9 +153,24 @@ public class WritableFileSystemStorage
     {
         logger.debug( "Deleting [{}] metadata from metadata directory {}", path, getMetadataBaseDir() );
         File file = new File( getMetadataBaseDir(), path );
-        if ( file.exists() && !file.delete() )
+        if ( file.isFile() )
         {
-            throw new StorageException( "Unable to delete file " + file.getPath() );
+            if ( file.exists() && !file.delete() )
+            {
+                throw new StorageException( "Unable to delete file " + file.getPath() );
+            }
+
+        }
+        else
+        {
+            try
+            {
+                FileUtils.deleteDirectory( file );
+            }
+            catch ( IOException ex )
+            {
+                throw new StorageException( "Unable to delete file " + file.getPath(), ex );
+            }
         }
     }
 
