@@ -62,6 +62,40 @@ public class LuceneIndexer
     /** The index directory. */
     private Directory indexDirectory;
 
+    private IndexReader reader;
+
+    private IndexSearcher searcher;
+    
+    // reader and searcher handling
+
+    protected IndexReader getIndexReader()
+        throws IOException
+    {
+        if ( reader == null || !reader.isCurrent() )
+        {
+            if ( reader != null )
+            {
+                reader.close();
+            }
+            reader = IndexReader.open( indexDirectory );
+        }
+        return reader;
+    }
+
+    protected IndexSearcher getIndexSearcher()
+        throws IOException
+    {
+        if ( searcher == null || !searcher.getIndexReader().isCurrent() )
+        {
+            if ( searcher != null )
+            {
+                searcher.close();
+            }
+            searcher = new IndexSearcher( getIndexReader() );
+        }
+        return searcher;
+    }
+    
     /** The analyzer. */
     private Analyzer analyzer = new StandardAnalyzer();
 
@@ -89,7 +123,6 @@ public class LuceneIndexer
      * Sets the index directory.
      * 
      * @param path the new index directory
-     * 
      * @throws IOException Signals that an I/O exception has occurred.
      */
     public void setIndexDirectory( String path )
@@ -115,7 +148,7 @@ public class LuceneIndexer
                 throw new IllegalArgumentException( "The supplied parameter " + path + " is not a directory!" );
             }
         }
-        this.indexDirectory = FSDirectory.getDirectory( pathFile, false );
+        this.indexDirectory = FSDirectory.getDirectory( pathFile );
     }
 
     /*
@@ -127,6 +160,12 @@ public class LuceneIndexer
     {
         try
         {
+            // check is the index locked
+            if ( IndexReader.indexExists( indexDirectory ) && IndexReader.isLocked( indexDirectory ) )
+            {
+                logger.warn( "The index directory was locked, unlocking it." );
+                IndexReader.unlock( indexDirectory );
+            }
             IndexWriter writer = new IndexWriter( indexDirectory, analyzer, isRecreateIndexes()
                 || !IndexReader.indexExists( indexDirectory ) );
             writer.optimize();
@@ -149,13 +188,9 @@ public class LuceneIndexer
         logger.debug( "Adding item to index" );
         try
         {
-            // prevent duplication on idx
-            IndexReader reader = IndexReader.open( indexDirectory );
-            int deleted = reader.deleteDocuments( new Term( "UID", getItemUid( item ) ) );
-            dirtyItems = dirtyItems + deleted;
-            reader.close();
             IndexWriter writer = new IndexWriter( indexDirectory, analyzer, false );
             addItemToIndex( writer, getItemUid( item ), item );
+            dirtyItems = dirtyItems + 1;
             writer.close();
         }
         catch ( IOException ex )
@@ -175,20 +210,12 @@ public class LuceneIndexer
         logger.debug( "Adding batch items to index" );
         try
         {
-            IndexReader reader = IndexReader.open( indexDirectory );
-            for ( Iterator i = items.iterator(); i.hasNext(); )
-            {
-                ItemProperties ip = (ItemProperties) i.next();
-                // prevent duplication on idx
-                int deleted = reader.deleteDocuments( new Term( "UID", getItemUid( ip ) ) );
-                dirtyItems = dirtyItems + deleted;
-            }
-            reader.close();
             IndexWriter writer = new IndexWriter( indexDirectory, analyzer, false );
             for ( Iterator i = items.iterator(); i.hasNext(); )
             {
                 ItemProperties ip = (ItemProperties) i.next();
                 addItemToIndex( writer, getItemUid( ip ), ip );
+                dirtyItems = dirtyItems + 1;
             }
             // forcing optimize after a batch addition
             writer.optimize();
@@ -212,20 +239,18 @@ public class LuceneIndexer
         logger.debug( "Deleting item from index" );
         try
         {
-            IndexReader reader = IndexReader.open( indexDirectory );
-            int deleted = reader.deleteDocuments( new Term( "UID", getItemUid( ip ) ) );
-            reader.close();
-            logger.debug( "Deleted {} items from index for UID={}", Integer.toString( deleted ), getItemUid( ip ) );
-            dirtyItems = dirtyItems + deleted;
+            IndexWriter writer = new IndexWriter( indexDirectory, analyzer, false );
+            writer.deleteDocuments( new Term( "UID", getItemUid( ip ) ) );
+            logger.debug( "Deleted item from index for UID={}", getItemUid( ip ) );
+            dirtyItems = dirtyItems + 1;
 
             if ( dirtyItems > dirtyItemTreshold )
             {
-                IndexWriter writer = new IndexWriter( indexDirectory, analyzer, false );
                 logger.debug( "Optimizing Lucene index as dirtyItemTreshold is exceeded." );
                 writer.optimize();
                 dirtyItems = 0;
-                writer.close();
             }
+            writer.close();
 
         }
         catch ( IOException ex )
@@ -288,7 +313,6 @@ public class LuceneIndexer
      * Gets the item uid.
      * 
      * @param ip the ip
-     * 
      * @return the item uid
      */
     protected String getItemUid( ItemProperties ip )
@@ -302,7 +326,6 @@ public class LuceneIndexer
      * @param writer the writer
      * @param UID the UID
      * @param item the item
-     * 
      * @throws IOException Signals that an I/O exception has occurred.
      */
     protected void addItemToIndex( IndexWriter writer, String UID, ItemProperties item )
@@ -310,7 +333,7 @@ public class LuceneIndexer
     {
         Document ipDoc = itemProperties2Document( item );
         ipDoc.add( new Field( "UID", UID, Field.Store.YES, Field.Index.UN_TOKENIZED ) );
-        writer.addDocument( ipDoc );
+        writer.updateDocument( new Term( "UID", UID ), ipDoc );
         dirtyItems++;
         if ( dirtyItems > dirtyItemTreshold )
         {
@@ -324,7 +347,6 @@ public class LuceneIndexer
      * Item properties2 document.
      * 
      * @param item the item
-     * 
      * @return the document
      */
     protected Document itemProperties2Document( ItemProperties item )
@@ -353,15 +375,13 @@ public class LuceneIndexer
      * Search.
      * 
      * @param query the query
-     * 
      * @return the list
      */
     protected List search( Query query )
     {
         try
         {
-            IndexSearcher searcher = new IndexSearcher( indexDirectory );
-            Hits hits = searcher.search( query );
+            Hits hits = getIndexSearcher().search( query );
             List result = new ArrayList( hits.length() );
             for ( int i = 0; i < hits.length(); i++ )
             {
@@ -373,7 +393,6 @@ public class LuceneIndexer
                 rip.setRepositoryGroupId( doc.getField( DOC_GROUP ).stringValue() );
                 result.add( rip );
             }
-            searcher.close();
             return result;
         }
         catch ( IOException ex )
