@@ -126,7 +126,7 @@ public class DefaultProxyingRepositoryLogic
     {
         if ( remoteItem != null )
         {
-            if ( localItem != null )
+            if ( localItem != null && localItem.getStream() != null )
             {
                 try
                 {
