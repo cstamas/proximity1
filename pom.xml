@@ -6,8 +6,8 @@
 	<!-- Parent POM -->
 	<parent>
 		<groupId>org.abstracthorizon</groupId>
-		<artifactId>abstracthorizon-parent</artifactId>
-		<version>1.0.1</version>
+		<artifactId>abstracthorizon-dev</artifactId>
+		<version>1.0.0</version>
 	</parent>
 
 	<!-- the version of maven's project object model -->
@@ -458,11 +458,11 @@
 		<snapshotRepository>
 			<id>abstracthorizon.snapshot</id>
 			<name>Abstract Horizon Central Development Repository</name>
-			<!-- 
+<!--
 				<url>
-				dav:http://localhost:8080/proximity/dav/inhouse.snapshot
+				dav:http://localhost:12000/proximity-maven2/dav/inhouse.snapshot
 				</url>
-			-->
+-->
 			<url>
 				scp://213.232.95.19/srv/repository.abstracthorizon.org/html/repository/maven2/abstracthorizon.snapshot
 			</url>

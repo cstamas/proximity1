@@ -14,7 +14,7 @@
             Download
           </a>
           Proximity
-          <small>(current is 1.0.0)</small>
+          <small>(current is RC9)</small>
         <ul>
           <li>
             Read <a href="quick-start.html">Quick Start</a>
@@ -30,21 +30,21 @@
 
 <section name="About Proximity">
 
-<p>Proximity is in function somewhere between http-proxy and
-proactive-mirror: it is Maven proxy. Proximity <b>is not</b> a HTTP Proxy (something like Squid is). 
-Proximity requires Java 1.4.2 platform and is a standard J2EE Web Application
-(altough, the px-core, the engine is pure J2SE application).</p>
+<p>In short: Proximity is in function somewhere between http-proxy and
+proactive-mirror. Proximity <b>is not</b> a HTTP Proxy (something like Squid is). 
+It requires Java 1.4.2 platform and is a standard J2EE Web Application
+(altough, the px-core engine is pure J2SE application).</p>
 
 <p>One of it's primary use is as Java web application to serve as Maven proxy on our
 company's intranet. As for reducing outgoing traffic (caching central and other
 maven repos), aggregating more repositories (reducing project config) with acting
 as one logical repository and for publishing in-house and other external maven 
-artifacts which are not uploadable to ibiblio (like commercial projects, J2EE
+artifacts which are not uploadable to "central" (like commercial projects, J2EE
 Jars, etc...).</p>
 
-<h3>What is Proximity?</h3>
+<h3>What is Proximity? (long version)</h3>
 
-<p>Proximity (px-core) is a generic fetch-and-cache engine with various extra capabilities like
+<p>Proximity (px-core) is a modular fetch-and-cache engine with various extra capabilities like
 indexing. The Px-Core module is driven by Maven bindings (px-core-maven) to implement a Maven 
 Proxy application behaviour.</p>
 
