@@ -28,6 +28,30 @@
         </ul>
       </div>
 
+<section name="Latest news">
+
+<p>"Bad" news first: Proximity, aka. "Proximity1 line" or "Proximity RCx line" is deprecated. It will be not developed further,
+only bugfixed in very special circumstances (Proximity RCx instences already works flawlessly on many places, so this is next to
+unbelievable to happen). User sent patches are accepted, of course.</p>
+
+<p>Heh, and now...</p>
+
+<p><b>The good news:</b> <a href="http://blogs.sonatype.com/jvanzyl/2007/11/21.html">Proximity Lives 
+on as Sonatype Nexus for Maven Users</a> (Yes, it remains ASL 2.0 licensed!).</p>
+
+<p>Proximity2, more precisely the "core" engine, will continue to be a heavily customizable "proactive mirror" thingie, but it's 
+main "goal" will not be Maven Proxy anymore.</p>
+
+<p>I am an old SuSE/SUSE/openSUSE Linux distro user, and also frustrated that this distro still has no proper Installation
+Server (Yes, YaST can do it, but it is not what I want). So, the new px-core engine "appliance" will be just as Proximity1 was for
+Maven: openSUSE installation server, RPM-MD repository hosting and proxying and extensive package search engine.</p>
+
+<p>So, existing Proximity Maven Proxy users, you are <b>encouraged</b> to switch to Sonatype Nexus, while others will have to
+wait for px2-core engine and Proximity2 openSUSE (codenames Liza, Px2 for Lizards) application till end of this or beginning of the
+next 2008. year. Have fun!</p>
+
+</section>
+
 <section name="About Proximity">
 
 <p>In short: Proximity is in function somewhere between http-proxy and

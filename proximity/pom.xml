@@ -449,14 +449,14 @@
 
 	<distributionManagement>
 		<repository>
-			<id>abstracthorizon</id>
+			<id>abstracthorizon-releases</id>
 			<name>Abstract Horizon Central Repository</name>
 			<url>
 				scp://213.232.95.19/srv/repository.abstracthorizon.org/html/repository/maven2/abstracthorizon
 			</url>
 		</repository>
 		<snapshotRepository>
-			<id>abstracthorizon.snapshot</id>
+			<id>abstracthorizon-snapshots</id>
 			<name>Abstract Horizon Central Development Repository</name>
 <!--
 				<url>
@@ -468,9 +468,9 @@
 			</url>
 		</snapshotRepository>
 		<site>
-			<id>abstracthorizon.site</id>
+			<id>abstracthorizon-site</id>
 			<url>
-				scp://213.232.95.19/srv/www.abstracthorizon.org/html/proximity
+				scp://213.232.95.19/srv/www.abstracthorizon.org/html/proximity/px1
 				<!--
 					file:/home/cstamas/tmp/px-site
 				-->

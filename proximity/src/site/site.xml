@@ -12,8 +12,8 @@
 		<src>images/logo.png</src>
 		<href>http://proximity.abstracthorizon.org/</href>
 	</bannerRight>
-
-	<publishDate format="dd MMM yyyy" position="left" />
+        
+	<publishDate position="bottom" />
 
 	<skin>
 		<groupId>org.abstracthorizon</groupId>
